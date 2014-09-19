@@ -81,7 +81,7 @@ class NFe200(FiscalDocument):
             if inv.partner_shipping_id:
                 if inv.partner_id.id != inv.partner_shipping_id.id:
                     if nfe.infNFe.ide.tpNF.valor == '0':
-                        nfe.infNFe.retirada.CNPJ.valor = inv.partner_shipping_id.cnpj_cpf or ''
+                        nfe.infNFe.retirada.CNPJ.valor = re.sub('[%s]' % re.escape(string.punctuation), '', inv.partner_shipping_id.cnpj_cpf or '')
                         nfe.infNFe.retirada.xLgr.valor = inv.partner_shipping_id.street or ''
                         nfe.infNFe.retirada.nro.valor = inv.partner_shipping_id.number or ''
                         nfe.infNFe.retirada.xCpl.valor = inv.partner_shipping_id.street2 or ''
@@ -90,7 +90,7 @@ class NFe200(FiscalDocument):
                         nfe.infNFe.retirada.xMun.valor = inv.partner_shipping_id.l10n_br_city_id.name or ''
                         nfe.infNFe.retirada.UF.valor = inv.address_invoice_id.state_id.code or ''
                     else:
-                        nfe.infNFe.entrega.CNPJ.valor = inv.partner_shipping_id.cnpj_cpf or ''
+                        nfe.infNFe.entrega.CNPJ.valor = re.sub('[%s]' % re.escape(string.punctuation), '', inv.partner_shipping_id.cnpj_cpf or '')
                         nfe.infNFe.entrega.xLgr.valor = inv.partner_shipping_id.street or ''
                         nfe.infNFe.entrega.nro.valor = inv.partner_shipping_id.number or ''
                         nfe.infNFe.entrega.xCpl.valor = inv.partner_shipping_id.street2 or ''
@@ -116,14 +116,14 @@ class NFe200(FiscalDocument):
                 elif inv_related.document_type == 'nfrural':
                     nfref.refNFP.cUF.valor = inv_related.state_id and inv_related.state_id.ibge_code or '',
                     nfref.refNFP.AAMM.valor = datetime.strptime(inv_related.date, '%Y-%m-%d').strftime('%y%m') or ''
-                    nfref.refNFP.IE.valor = inv_related.inscr_est or ''
+                    nfref.refNFP.IE.valor = re.sub('[%s]' % re.escape(string.punctuation), '', inv_related.inscr_est or '')
                     nfref.refNFP.mod.valor = inv_related.fiscal_document_id and inv_related.fiscal_document_id.code or ''
                     nfref.refNFP.serie.valor = inv_related.serie or ''
                     nfref.refNFP.nNF.valor = inv_related.internal_number or ''
                     if inv_related.cpfcnpj_type == 'cnpj':
-                        nfref.refNFP.CNPJ.valor = inv_related.cnpj_cpf or ''
+                        nfref.refNFP.CNPJ.valor = re.sub('[%s]' % re.escape(string.punctuation), '', inv_related.cnpj_cpf or '')
                     else:
-                        nfref.refNFP.CPF.valor = inv_related.cnpj_cpf or ''
+                        nfref.refNFP.CPF.valor = re.sub('[%s]' % re.escape(string.punctuation), '', inv_related.cnpj_cpf or '')
                 elif inv_related.document_type == 'nfe':
                     nfref.refNFe.valor = inv_related.access_key or ''
                 elif inv_related.document_type == 'cte':
@@ -132,6 +132,8 @@ class NFe200(FiscalDocument):
                     nfref.refECF.mod.valor = inv_related.fiscal_document_id and inv_related.fiscal_document_id.code or ''
                     nfref.refECF.nECF.valor = inv_related.internal_number
                     nfref.refECF.nCOO.valor = inv_related.serie
+
+                nfe.infNFe.ide.NFref.append(nfref)
 
             #
             # Emitente

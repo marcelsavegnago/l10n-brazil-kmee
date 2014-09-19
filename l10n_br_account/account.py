@@ -80,8 +80,8 @@ class account_tax(orm.Model):
 
     def compute_all(self, cr, uid, taxes, price_unit, quantity,
                     product=None, partner=None, force_excluded=False,
-                    fiscal_position=False, insurance_value=0.0,
-                    freight_value=0.0, other_costs_value=0.0):
+                    fiscal_position=False, insurance_value=0.00,
+                    freight_value=0.00, other_costs_value=0.00):
         """Compute taxes
 
         Returns a dict of the form::
@@ -141,12 +141,13 @@ class account_tax(orm.Model):
 
         # Calcula ICMS
         specific_icms = [tx for tx in result['taxes'] if tx['domain'] == 'icms']
+
+
         if fiscal_position and fiscal_position.asset_operation:
             total_base = result['total'] + insurance_value + \
             freight_value + other_costs_value + ipi_value
         else:
-            total_base = result['total'] + insurance_value + \
-            freight_value + other_costs_value
+            total_base = ( result['total'] or 0.00 ) + (insurance_value or 0.00) + (freight_value or 0.00) + (other_costs_value or 0.00)
 
         result_icms = self._compute_tax(cr, uid, specific_icms, total_base,
                                         product, quantity, precision)

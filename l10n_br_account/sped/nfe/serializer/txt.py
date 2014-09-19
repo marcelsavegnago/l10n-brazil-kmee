@@ -319,6 +319,14 @@ def nfe_export(cr, uid, ids, nfe_environment='1',
                 CProd = unicode(i).strip().rjust(4, u'0')
                 XProd = normalize('NFKD', unicode(inv_line.name or '')).encode('ASCII','ignore')
 
+	    if inv_line.discount_value :
+                discount_value = str("%.2f" % inv_line.discount_value)
+	    else:
+	        discount_value = ''
+
+            
+
+
             StrRegI = {
                    'CProd': CProd,
                    'CEAN': inv_line.product_id.ean13 or '',
@@ -335,7 +343,8 @@ def nfe_export(cr, uid, ids, nfe_environment='1',
                    'VUnTrib': str("%.7f" % inv_line.price_unit),
                    'VFrete': freight_value,
                    'VSeg': insurance_value,
-                   'VDesc': str("%.2f" % inv_line.discount_value),
+#                   'VDesc': str("%.2f" % inv_line.discount_value or ''),
+                   'VDesc': discount_value,
                    'vOutro': other_costs_value,
                    'indTot': '1',
                    'xPed': '',

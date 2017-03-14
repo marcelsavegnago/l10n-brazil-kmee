@@ -74,7 +74,7 @@
     </record>
 
     <menuitem
-        parent="menu_cadastro_tabela"
+        parent="menu_cadastro_tabelas"
         sequence="4"
         id="menu_sped_estado"
         name="Estado"

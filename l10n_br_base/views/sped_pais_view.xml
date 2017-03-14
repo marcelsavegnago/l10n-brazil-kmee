@@ -76,7 +76,7 @@
     </record>
 
     <menuitem
-        parent="menu_sped_tabela"
+        parent="sped_impost.menu_sped_tabela"
         sequence="9"
         id="menu_sped_pais"
         name="País"

@@ -14,21 +14,29 @@
         'base_setup',
     ],
     'data': [
-        'data/l10n_br_base.city.csv',
-        'data/l10n_br_base_data.xml',
+
+        # 'data/l10n_br_base.city.csv',
+        # 'data/l10n_br_base_data.xml',
+        'data/sped_pais_data.xml',
+        'data/sped_estado_data.xml',
+        'data/sped_municipio_data.xml',
+        'data/sped_municipio_exterior_data.xml',
+
         'views/l10n_br_base_view.xml',
         'views/res_bank_view.xml',
         'views/res_country_view.xml',
         'views/res_partner_view.xml',
         'views/res_company_view.xml',
         'security/ir.model.access.csv',
-        'data/sped_pais_data.xml',
-        'views/sped_view.xml',
+
+        'views/cadastro_view.xml',
+        'views/sped_estado_view.xml',
+        'views/sped_municipio_view.xml',
         'views/sped_pais_view.xml',
     ],
     'demo': [
-        'demo/l10n_br_base_demo.xml',
-        'demo/res_partner_demo.xml',
+        # 'demo/l10n_br_base_demo.xml',
+        # 'demo/res_partner_demo.xml',
     ],
     'test': [
         'test/base_inscr_est_valid.yml',

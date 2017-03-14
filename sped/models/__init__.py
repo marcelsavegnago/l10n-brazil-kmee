@@ -18,7 +18,6 @@ from . import sped_base
 #
 # Tabelas Geográficas
 #
-from . import sped_pais
 from . import sped_estado
 from . import sped_municipio
 #

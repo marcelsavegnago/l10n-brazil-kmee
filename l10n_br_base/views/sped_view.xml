@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2016 Taŭga Tecnologia - Aristides Caldeira <aristides.caldeira@tauga.com.br>
+    License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
+-->
+<odoo>
+
+    <menuitem
+        parent="menu_l10n_br_account"
+        sequence="-98"
+        id="menu_sped"
+        name="SPED"
+        web_icon="sped,static/description/icon.png"
+        />
+
+    <menuitem
+        parent="menu_sped"
+        sequence="100"
+        id="menu_sped_configuracao"
+        name="Configuração"
+        />
+
+    <menuitem
+        parent="menu_sped_configuracao"
+        sequence="6"
+        id="menu_sped_tabela"
+        name="Tabelas"
+        />
+
+</odoo>

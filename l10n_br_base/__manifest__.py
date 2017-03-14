@@ -22,6 +22,9 @@
         'views/res_partner_view.xml',
         'views/res_company_view.xml',
         'security/ir.model.access.csv',
+        'data/sped_pais_data.xml',
+        'views/sped_view.xml',
+        'views/sped_pais_view.xml',
     ],
     'demo': [
         'demo/l10n_br_base_demo.xml',

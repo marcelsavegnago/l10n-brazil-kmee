@@ -367,7 +367,7 @@ class Unidade(models.Model):
             category_id = self.env.ref('product.uom_categ_length').id
 
         elif self.tipo == self.TIPO_UNIDADE_AREA:
-            category_id = self.env.ref('sped.product_uom_categ_area').id
+            category_id = self.env.ref('sped_imposto.product_uom_categ_area').id
 
         elif self.tipo == self.TIPO_UNIDADE_TEMPO:
             category_id = self.env.ref('product.uom_categ_wtime').id
@@ -414,7 +414,7 @@ class Unidade(models.Model):
 
         elif dados['tipo'] == self.TIPO_UNIDADE_AREA:
             dados['category_id'] = self.env.ref(
-                'sped.product_uom_categ_area').id
+                'sped_imposto.product_uom_categ_area').id
 
         elif dados['tipo'] == self.TIPO_UNIDADE_TEMPO:
             dados['category_id'] = self.env.ref('product.uom_categ_wtime').id
@@ -472,7 +472,7 @@ class Unidade(models.Model):
                 json.dumps(symbol), format_number_str)
             function += "if (arguments[1] === %s) { %s }" % (
                 unidade.id, return_str)
-            if unidade == self.env.ref('sped.UNIDADE_UNIDADE'):
+            if unidade == self.env.ref('sped_imposto.UNIDADE_UNIDADE'):
                 company_currency_format = return_str
         function = "if (" \
                    "arguments[1] === false || arguments[1] === undefined" \

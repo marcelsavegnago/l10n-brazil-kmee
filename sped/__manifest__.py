@@ -25,15 +25,7 @@
         #
         # Valores padrão
         #
-        'data/inherited_res_currency_data.xml',
-        'data/inherited_decimal_precision_data.xml',
-        'data/inherited_product_uom_category_data.xml',
-        # 'data/inherited_product_uom_data.xml',
-        'data/sped_estado_data.xml',
-        'data/sped_municipio_data.xml',
-        'data/sped_municipio_exterior_data.xml',
 
-        'data/sped_unidade_data.xml',
 
         #
         # Menus principais
@@ -42,8 +34,7 @@
 
 
 
-        'views/sped_estado_view.xml',
-        'views/sped_municipio_view.xml',
+
 
         #
         # Módulo Cadastro: participantes, produtos etc.

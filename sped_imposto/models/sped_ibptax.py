@@ -6,8 +6,11 @@
 #
 
 import logging
-from odoo import api, fields, models
 _logger = logging.getLogger(__name__)
+
+from odoo import api, fields, models, modules
+from odoo.addons import decimal_precision as dp
+
 
 try:
     from pybrasil.data import parse_datetime
@@ -23,14 +26,35 @@ class IBPTax(models.Model):
     _order = 'estado_id'
     _rec_name = 'estado_id'
 
-    estado_id = fields.Many2one('sped.estado', 'Estado')
-    versao = fields.Char('Versão', size=20)
-    data_validade = fields.Date('Válida até')
-    ncm_ids = fields.One2many('sped.ibptax.ncm', 'ibptax_id', 'NCMs')
-    nbs_ids = fields.One2many('sped.ibptax.nbs', 'ibptax_id', 'NBSs')
+    estado_id = fields.Many2one(
+        comodel_name='sped.estado',
+        string=u'Estado'
+    )
+    versao = fields.Char(
+        string=u'Versão',
+        size=20
+    )
+    data_validade = fields.Date(
+        string=u'Válida até'
+    )
+    ncm_ids = fields.One2many(
+        comodel_name='sped.ibptax.ncm',
+        inverse_name='ibptax_id',
+        string=u'NCMs'
+    )
+    nbs_ids = fields.One2many(
+        comodel_name='sped.ibptax.nbs',
+        inverse_name='ibptax_id',
+        string=u'NBSs'
+    )
     servico_ids = fields.One2many(
-        'sped.ibptax.servico', 'ibptax_id', 'Serviços')
+        comodel_name='sped.ibptax.servico',
+        inverse_name='ibptax_id',
+        string=u'Serviços'
+    )
 
+    # TODO Usar o webservice em l10n_br_account_product/sped/ibpt
+    # TODO Criar um wizard para importar o arquivo
     @api.multi
     def atualizar_tabela(self):
         self.ensure_one()
@@ -44,9 +68,12 @@ class IBPTax(models.Model):
         ibptax_servico = self.env['sped.ibptax.servico']
 
         versao = '17.1.A'
-        arquivo = '/home/ari/tauga/odoo_br/sped/data/ibptax/' \
-            'TabelaIBPTax{uf}{versao}.csv'.format(
-                uf=self.estado_id.uf, versao=versao)
+
+        
+        arquivo = modules.get_module_resource(
+            'sped',
+            'data/ibptax/TabelaIBPTax{uf}{versao}.csv'.format(
+                uf=self.estado_id.uf, versao=versao))
 
         ncm_ids = ibptax_ncm.search([('ibptax_id', '=', self.id)])
         ncm_ids.unlink()
@@ -136,23 +163,40 @@ class IBPTaxNCM(models.Model):
     _inherit = 'sped.base'
     _name = 'sped.ibptax.ncm'
 
-    ibptax_id = fields.Many2one('sped.ibptax', 'IBPTax', ondelete='cascade')
+    ibptax_id = fields.Many2one(
+        comodel_name='sped.ibptax',
+        string=u'IBPTax',
+        ondelete='cascade'
+    )
     estado_id = fields.Many2one(
-        'sped.estado', 'Estado', related='ibptax_id.estado_id', store=True)
-    ncm_id = fields.Many2one('sped.ncm', 'NCM')
+        comodel_name='sped.estado',
+        string=u'Estado',
+        related='ibptax_id.estado_id',
+        store=True
+    )
+    ncm_id = fields.Many2one(
+        comodel_name='sped.ncm',
+        string='NCM'
+    )
     al_ibpt_nacional = fields.Monetary(
-        'Nacional',
-        digits=(5, 2),
-        currency_field='currency_aliquota_id')
+        string=u'Nacional',
+        digits=dp.get_precision('SPED - Valores'),
+        currency_field='currency_aliquota_id'
+    )
     al_ibpt_internacional = fields.Monetary(
-        'Internacional',
-        digits=(5, 2),
-        currency_field='currency_aliquota_id')
+        string='Internacional',
+        digits=dp.get_precision('SPED - Valores'),
+        currency_field='currency_aliquota_id'
+    )
     al_ibpt_estadual = fields.Monetary(
-        'Estadual',
-        digits=(5, 2),
-        currency_field='currency_aliquota_id')
-    al_icms_id = fields.Many2one('sped.aliquota.icms.proprio', 'Estadual')
+        string=u'Estadual',
+        digits=dp.get_precision('SPED - Valores'),
+        currency_field='currency_aliquota_id'
+    )
+    al_icms_id = fields.Many2one(
+        comodel_name='sped.aliquota.icms.proprio',
+        string=u'Estadual'
+    )
 
 
 class IBPTaxNBS(models.Model):
@@ -160,22 +204,36 @@ class IBPTaxNBS(models.Model):
     _inherit = 'sped.base'
     _name = 'sped.ibptax.nbs'
 
-    ibptax_id = fields.Many2one('sped.ibptax', 'IBPTax', ondelete='cascade')
+    ibptax_id = fields.Many2one(
+        comodel_name='sped.ibptax',
+        string=u'IBPTax',
+        ondelete='cascade'
+    )
     estado_id = fields.Many2one(
-        'sped.estado', 'Estado', related='ibptax_id.estado_id', store=True)
-    nbs_id = fields.Many2one('sped.nbs', 'NBS')
+        comodel_name='sped.estado',
+        string=u'Estado',
+        related='ibptax_id.estado_id',
+        store=True
+    )
+    nbs_id = fields.Many2one(
+        comodel_name='sped.nbs',
+        string=u'NBS'
+    )
     al_ibpt_nacional = fields.Monetary(
-        'Nacional',
-        digits=(5, 2),
-        currency_field='currency_aliquota_id')
+        string=u'Nacional',
+        digits=dp.get_precision('SPED - Valores'),
+        currency_field='currency_aliquota_id'
+    )
     al_ibpt_internacional = fields.Monetary(
-        'Internacional',
-        digits=(5, 2),
-        currency_field='currency_aliquota_id')
+        string=u'Internacional',
+        digits=dp.get_precision('SPED - Valores'),
+        currency_field='currency_aliquota_id'
+    )
     al_ibpt_municipal = fields.Monetary(
-        'Municipal',
-        digits=(5, 2),
-        currency_field='currency_aliquota_id')
+        string=u'Municipal',
+        digits=dp.get_precision('SPED - Valores'),
+        currency_field='currency_aliquota_id'
+    )
 
 
 class IBPTaxServico(models.Model):
@@ -183,19 +241,33 @@ class IBPTaxServico(models.Model):
     _inherit = 'sped.base'
     _name = 'sped.ibptax.servico'
 
-    ibptax_id = fields.Many2one('sped.ibptax', 'IBPTax', ondelete='cascade')
+    ibptax_id = fields.Many2one(
+        comodel_name='sped.ibptax',
+        string=u'IBPTax',
+        ondelete='cascade'
+    )
     estado_id = fields.Many2one(
-        'sped.estado', 'Estado', related='ibptax_id.estado_id', store=True)
-    servico_id = fields.Many2one('sped.servico', 'Serviço')
+        comodel_name='sped.estado',
+        string=u'Estado',
+        related='ibptax_id.estado_id',
+        store=True
+    )
+    servico_id = fields.Many2one(
+        comodel_name='sped.servico',
+        string=u'Serviço'
+    )
     al_ibpt_nacional = fields.Monetary(
-        'Nacional',
-        digits=(5, 2),
-        currency_field='currency_aliquota_id')
+        string=u'Nacional',
+        digits=dp.get_precision('SPED - Valores'),
+        currency_field='currency_aliquota_id'
+    )
     al_ibpt_internacional = fields.Monetary(
-        'Internacional',
-        digits=(5, 2),
-        currency_field='currency_aliquota_id')
+        string='Internacional',
+        digits=dp.get_precision('SPED - Valores'),
+        currency_field='currency_aliquota_id'
+    )
     al_ibpt_municipal = fields.Monetary(
-        'Municipal',
-        digits=(5, 2),
-        currency_field='currency_aliquota_id')
+        string=u'Municipal',
+        digits=dp.get_precision('SPED - Valores'),
+        currency_field='currency_aliquota_id'
+    )

@@ -7,6 +7,8 @@
             <field name="address_format" eval="'%(street)s, %(number)s - %(street2)s\n%(district)s\n%(zip)s - %(l10n_br_city_name)s - %(state_code)s\n%(country_name)s'" />
         </record>
 
+        <menuitem id="menu_l10n_br_account" icon="terp-crm" name="Fiscal" sequence="45"/>
+
         <record id="view_general_configuration_cnpj" model="ir.ui.view">
             <field name="name">base.config.settings.cnpj</field>
             <field name="model">base.config.settings</field>

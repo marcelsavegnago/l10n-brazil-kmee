@@ -32,14 +32,6 @@ from . import inherited_res_partner
 from . import sped_unidade
 from . import inherited_product_uom
 #
-# Alíquotas
-#
-from . import sped_aliquota_icms_proprio
-from . import sped_aliquota_icms_st
-from . import sped_aliquota_ipi
-from . import sped_aliquota_pis_cofins
-from . import sped_aliquota_simples
-#
 # Tabelas Fiscais
 #
 from . import sped_cest
@@ -52,8 +44,6 @@ from . import sped_ibptax
 from . import sped_ncm_cest
 from . import sped_ncm_ibptax
 
-from . import sped_aliquota_iss
-from . import sped_protocolo_icms
 from . import sped_ncm_protocolo
 #
 # Produtos e serviços

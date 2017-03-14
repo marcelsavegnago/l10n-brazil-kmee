@@ -7,7 +7,7 @@
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
-from ..constante_tributaria import (
+from odoo.addons.sped_imposto.constante_tributaria import (
     AMBIENTE_NFE,
     INDICADOR_IE_DESTINATARIO_CONTRIBUINTE,
     REGIME_TRIBUTARIO_LUCRO_PRESUMIDO,

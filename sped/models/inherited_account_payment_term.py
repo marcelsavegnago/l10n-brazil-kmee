@@ -8,9 +8,10 @@
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
+from odoo.addons.sped_imposto.constante_tributaria import *
 from dateutil.relativedelta import relativedelta
 from pybrasil.valor.decimal import Decimal as D
-from ..constante_tributaria import *
+
 
 
 class AccountPaymentTerm(models.Model):

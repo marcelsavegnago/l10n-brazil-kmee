@@ -7,7 +7,7 @@
 
 
 from odoo import api, fields, models
-from ..constante_tributaria import *
+from odoo.addons.sped_imposto.constante_tributaria import *
 import logging
 _logger = logging.getLogger(__name__)
 

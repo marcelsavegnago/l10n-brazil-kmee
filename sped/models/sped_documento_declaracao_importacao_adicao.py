@@ -9,8 +9,8 @@ from odoo import api, fields, models
 
 
 class DocumentoItemDeclaracaoImportacaoAdicao(models.Model):
-    _description = u'Adição da Declaração de Importação do Item do Documento '
-                    'Fiscal'
+    _description = u"""Adição da Declaração de Importação do Item do
+        Documento Fiscal"""
     _inherit = 'sped.base'
     _name = 'sped.documento.item.declacarao.importacao.adicao'
 

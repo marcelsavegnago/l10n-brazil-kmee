@@ -7,7 +7,7 @@
 
 
 from odoo import fields, models
-from ..constante_tributaria import *
+from odoo.addons.sped_imposto.constante_tributaria import *
 
 
 class OperacaoFiscal(models.Model):

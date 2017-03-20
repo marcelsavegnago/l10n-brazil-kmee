@@ -41,6 +41,56 @@ class FinancialMove(models.Model):
              "ref desc, ref_item desc, document_number, id desc"
     _rec_name = 'ref'
 
+#    _columns = {
+#        'date_from': fields.function(
+#            lambda *a, **k: {}, method=True, type='date',
+#            string="Emissão Inicial"
+#        ),
+#        'date_to':fields.function(lambda *a,**k:{}, method=True, type='date',string="Emissão Final"),
+#        'due_date_from':fields.function(lambda *a,**k:{}, method=True, type='date',string="Vencimento Inicial"),
+#        'due_date_to':fields.function(lambda *a,**k:{}, method=True, type='date',string="Vencimento Final"),
+#    }
+
+                # <field name="date_business_maturity" string="Maturity"/>
+                # <field name="date_issue" string="Issue"/>
+                # <field name="display_name"/>
+                # <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                # <field name="partner_id"/>
+                # <field name="document_number" string="Ref."/>
+                # <field name="document_item" string=""/>
+                # <field name="payment_mode_id" string="Payment method"/>
+                # <field name="currency_id" groups="base.group_multi_currency"/>
+                # <field name="amount" string="Amount" sum="Amount"/>
+                # <field name="amount_discount" sum="Discount"/>
+                # <field name="amount_interest" sum="Interest"/>
+                # <field name="amount_refund" sum="Refund"/>
+                # <field name="amount_cancel" sum="Cancel"/>
+                # <field name="amount_total" sum="Total"/>
+                # <field name="date_payment"/>
+                # <field name="amount_paid" sum="Paid"/>
+                # <field name="amount_residual" sum="Residual"/>
+                # <field name="state"/>
+
+    date_payment_from = fields.Date(
+        string="Payment date from",
+        # compute=lambda a,*k:{}
+#        compute=lambda *a, **k: {},
+        compute='date_payment_from_filter'
+    )
+
+    date_payment_to = fields.Date(
+        string="Payment date to",
+        # compute=lambda a,*k:{}
+#        compute=lambda *a, **k: {},
+        compute='date_payment_to_filter'
+    )
+
+    def date_payment_from_filter(self):
+        return self
+
+    def date_payment_to_filter(self):
+        return self
+
     def _readonly_state(self):
         return {'draft': [('readonly', False)]}
 

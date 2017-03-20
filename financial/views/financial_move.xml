@@ -32,6 +32,7 @@
         </field>
     </record>
 
+
     <record model="ir.ui.view" id="financial_move_form_view">
         <field name="name">financial.move.form (in financial)</field>
         <field name="model">financial.move</field>
@@ -143,9 +144,21 @@
         <field name="name">financial.move.search (in financial)</field>
         <field name="model">financial.move</field>
         <field name="arch" type="xml">
-            <search>
-                <!-- TODO -->
-            </search>
+            <search string="Search Moves">
+               <group col='10' colspan='4'>
+										<filter icon="terp-sale" string="State"
+												context="{'group_by': 'state'}"
+												help="State"
+										/>
+										<filter string="Draft status" domain="[('status','is','draft')]" help="Draft status" name="draft-status"/>
+										<filter name="due_today" string="Due today" domain="[('date_business_maturity','&lt;',time.strftime('%%Y-%%m-%%d'))]" help="Payments due today"/>
+										<field name="date_payment_from" filter_domain="[('date_payment', '&lt;', self)]" help="Payment date less than"/>
+										<field name="date_payment_to" filter_domain="[('date_payment', '&gt;', self)]" help="Payment date greater than"/>
+               </group>
+                <newline/>
+                <group expand="0" string="Group By...">
+               </group>
+           </search>
         </field>
     </record>
 

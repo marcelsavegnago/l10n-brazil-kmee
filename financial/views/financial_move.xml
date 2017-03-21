@@ -170,6 +170,7 @@
 													('date_business_maturity', '&lt;=', (context_today() + relativedelta(months=1, day=1, days=-1)).strftime('%Y-%m-%d')),
 											]"
                     />
+										<field name="date_payment_from" filter_domain="[('date_business_maturity', '&gt;', self)]" help="Payment date less than"/>
                </group>
                 <newline/>
                 <group expand="0" string="Group By...">

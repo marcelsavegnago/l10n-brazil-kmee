@@ -72,23 +72,30 @@ class FinancialMove(models.Model):
                 # <field name="state"/>
 
     date_payment_from = fields.Date(
-        string="Payment date from",
+#        string="Payment date from",
         # compute=lambda a,*k:{}
 #        compute=lambda *a, **k: {},
-        compute='date_payment_from_filter'
+        compute='date_payment_from_filter',
+        store=True,
     )
 
     date_payment_to = fields.Date(
-        string="Payment date to",
+#        string="Payment date to",
         # compute=lambda a,*k:{}
 #        compute=lambda *a, **k: {},
-        compute='date_payment_to_filter'
+        compute='date_payment_to_filter',
+        store=True,
     )
 
+#    def search(self):
+#        import ipdb; ipdb.set_trace() # BREAKPOINT
+
     def date_payment_from_filter(self):
-        return self
+        import pdb; pdb.set_trace() # BREAKPOINT
+        return self.date_business_maturity
 
     def date_payment_to_filter(self):
+        import pdb; pdb.set_trace() # BREAKPOINT
         return self
 
     def _readonly_state(self):

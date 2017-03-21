@@ -150,10 +150,10 @@
 												context="{'group_by': 'state'}"
 												help="State"
 										/>
-										<filter string="Draft status" domain="[('status','is','draft')]" help="Draft status" name="draft-status"/>
-										<filter name="due_today" string="Due today" domain="[('date_business_maturity','&lt;',time.strftime('%%Y-%%m-%%d'))]" help="Payments due today"/>
-										<field name="date_payment_from" filter_domain="[('date_payment', '&lt;', self)]" help="Payment date less than"/>
-										<field name="date_payment_to" filter_domain="[('date_payment', '&gt;', self)]" help="Payment date greater than"/>
+										<filter name="state_draft" string="Status is Draft" domain="[('state','=','draft')]" help="Status is Draft"/>
+										<filter name="state_open" string="Status is Open" domain="[('state','=','open')]" help="Status is Open"/>
+										<filter name="state_paid" string="Status is Paid" domain="[('state','=','paid')]" help="Status is Paid"/>
+										<filter name="state_cancel" string="Status is Canceled" domain="[('state','=','cancel')]" help="Status is Canceled"/>
                </group>
                 <newline/>
                 <group expand="0" string="Group By...">

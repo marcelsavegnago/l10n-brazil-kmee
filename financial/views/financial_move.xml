@@ -163,6 +163,13 @@
 													('date_business_maturity', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),
 											]"
                     />
+                    <filter name="due_this_month" string="Payments due this month"
+											domain="[
+													'&amp;',
+													('date_business_maturity', '>=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')),
+													('date_business_maturity', '&lt;=', (context_today() + relativedelta(months=1, day=1, days=-1)).strftime('%Y-%m-%d')),
+											]"
+                    />
                </group>
                 <newline/>
                 <group expand="0" string="Group By...">

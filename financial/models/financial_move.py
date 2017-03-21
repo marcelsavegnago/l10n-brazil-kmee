@@ -87,6 +87,12 @@ class FinancialMove(models.Model):
         store=True,
     )
 
+    partner_search = fields.Many2one(
+        comodel_name='res.partner',
+        compute='partner_search_filter',
+        store=True,
+    )
+
 #    def search(self):
 #        import ipdb; ipdb.set_trace() # BREAKPOINT
 
@@ -96,6 +102,9 @@ class FinancialMove(models.Model):
 
     def date_payment_to_filter(self):
         import pdb; pdb.set_trace() # BREAKPOINT
+        return self
+
+    def partner_search_filter(self):
         return self
 
     def _readonly_state(self):

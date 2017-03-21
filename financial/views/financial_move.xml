@@ -155,6 +155,7 @@
 										<filter name="state_paid" string="Status is Paid" domain="[('state','=','paid')]" help="Status is Paid"/>
 										<filter name="state_cancel" string="Status is Canceled" domain="[('state','=','cancel')]" help="Status is Canceled"/>
 										<filter name="payment_due_today" string="Due today Payments" domain="[('date_business_maturity','=',time.strftime('%%Y-%%m-%%d'))]" help="Payments due today"/>
+										<filter name="payment_overdue" string="Overdue Payments" domain="[('date_business_maturity','&lt;',time.strftime('%%Y-%%m-%%d'))]" help="Payments overdue"/>
                </group>
                 <newline/>
                 <group expand="0" string="Group By...">

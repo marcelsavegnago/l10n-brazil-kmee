@@ -156,6 +156,13 @@
 										<filter name="state_cancel" string="Status is Canceled" domain="[('state','=','cancel')]" help="Status is Canceled"/>
 										<filter name="payment_due_today" string="Due today Payments" domain="[('date_business_maturity','=',time.strftime('%%Y-%%m-%%d'))]" help="Payments due today"/>
 										<filter name="payment_overdue" string="Overdue Payments" domain="[('date_business_maturity','&lt;',time.strftime('%%Y-%%m-%%d'))]" help="Payments overdue"/>
+                    <filter name="due_this_week" string="Payments due this week"
+											domain="[
+													'&amp;',
+													('date_business_maturity', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
+													('date_business_maturity', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),
+											]"
+                    />
                </group>
                 <newline/>
                 <group expand="0" string="Group By...">

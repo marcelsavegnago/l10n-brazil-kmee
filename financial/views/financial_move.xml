@@ -170,8 +170,8 @@
 													('date_business_maturity', '&lt;=', (context_today() + relativedelta(months=1, day=1, days=-1)).strftime('%Y-%m-%d')),
 											]"
                     />
-										<field name="date_business_maturity_search" filter_domain="[('date_business_maturity', '&gt;', self)]" string="Maturity from"/>
-										<field name="date_business_maturity_search" filter_domain="[('date_business_maturity', '&lt;', self)]" string="Maturity to"/>
+										<field name="date_business_maturity_search" filter_domain="[('date_business_maturity', '&gt;=', self)]" string="Maturity from"/>
+										<field name="date_business_maturity_search" filter_domain="[('date_business_maturity', '&lt;=', self)]" string="Maturity to"/>
 										<field name="date_business_maturity_search" filter_domain="[('date_business_maturity', '=', self)]" string="Maturity is"/>
 										<field name="date_issue_search" filter_domain="[('date_issue', '&gt;=', self)]" string="Issue from"/>
 										<field name="date_issue_search" filter_domain="[('date_issue', '&lt;=', self)]" string="Issue to"/>

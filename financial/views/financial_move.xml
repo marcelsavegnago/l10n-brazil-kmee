@@ -174,6 +174,7 @@
 										<field name="date_payment_to" filter_domain="[('date_business_maturity', '&lt;', self)]" help="Payment date greater than"/>
 										<field name="partner_search" filter_domain="[('partner_id', 'ilike', self)]" help="Partner is"/>
 										<field name="account_analytic_search" filter_domain="[('account_analytic_id', 'ilike', self)]" help="Analytic account is"/>
+										<field name="payment_mode_search" filter_domain="[('payment_mode_id', 'ilike', self)]" help="Payment mode is"/>
                </group>
                 <newline/>
                 <group expand="0" string="Group By...">

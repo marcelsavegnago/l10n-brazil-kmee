@@ -99,6 +99,12 @@ class FinancialMove(models.Model):
         store=True,
     )
 
+    payment_mode_search = fields.Many2one(
+        comodel_name='account.payment.mode',
+        compute='payment_mode_search_filter',
+        store=True,
+    )
+
 #    def search(self):
 #        import ipdb; ipdb.set_trace() # BREAKPOINT
 
@@ -114,6 +120,9 @@ class FinancialMove(models.Model):
         return self
 
     def account_analytic_search_filter(self):
+        return self
+
+    def payment_mode_search_filter(self):
         return self
 
     def _readonly_state(self):

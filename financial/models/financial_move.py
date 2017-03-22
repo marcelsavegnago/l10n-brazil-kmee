@@ -47,18 +47,6 @@ class FinancialMove(models.Model):
         store=True,
     )
 
-#    date_payment_to = fields.Date(
-#        # string="Payment date to",
-#        compute='date_payment_to_filter',
-#        store=True,
-#    )
-#
-#    date_payment_search = fields.Date(
-#        # string="Payment date is",
-#        compute='date_payment_search_filter',
-#        store=True,
-#    )
-
     date_issue_search = fields.Date(
         # string="Payment date from",
         compute='date_issue_search_filter',
@@ -90,12 +78,6 @@ class FinancialMove(models.Model):
 
     def date_business_maturity_search_filter(self):
         return self
-
-#    def date_payment_to_filter(self):
-#        return self
-#
-#    def date_payment_search_filter(self):
-#        return self
 
     def date_issue_search_filter(self):
         return self

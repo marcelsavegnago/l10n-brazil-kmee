@@ -171,6 +171,7 @@
 											]"
                     />
 										<field name="document_number_search" filter_domain="[('document_number', 'ilike', self)]" string="Document number is"/>
+										<field name="document_item_search" filter_domain="[('document_item', 'ilike', self)]" string="Document item is"/>
 										<field name="partner_search" filter_domain="[('partner_id', 'ilike', self)]" string="Partner is"/>
 										<field name="date_issue_search" filter_domain="[('date_issue', '&gt;=', self)]" string="Issue from"/>
 										<field name="date_issue_search" filter_domain="[('date_issue', '&lt;=', self)]" string="Issue to"/>

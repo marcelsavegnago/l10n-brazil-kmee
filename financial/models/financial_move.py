@@ -76,6 +76,11 @@ class FinancialMove(models.Model):
         store=True,
     )
 
+    document_item_search = fields.Char(
+        compute='document_item_search_filter',
+        store=True,
+    )
+
     def date_business_maturity_search_filter(self):
         return self
 
@@ -92,6 +97,9 @@ class FinancialMove(models.Model):
         return self
 
     def document_number_search_filter(self):
+        return self
+
+    def document_item_search_filter(self):
         return self
 
     def _readonly_state(self):

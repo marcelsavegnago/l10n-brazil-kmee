@@ -41,27 +41,27 @@ class FinancialMove(models.Model):
              "ref desc, ref_item desc, document_number, id desc"
     _rec_name = 'ref'
 
-    date_payment_from = fields.Date(
+    date_business_maturity_search = fields.Date(
         # string="Payment date from",
-        compute='date_payment_from_filter',
+        compute='date_business_maturity_search_filter',
         store=True,
     )
 
-    date_payment_to = fields.Date(
-        # string="Payment date to",
-        compute='date_payment_to_filter',
-        store=True,
-    )
+#    date_payment_to = fields.Date(
+#        # string="Payment date to",
+#        compute='date_payment_to_filter',
+#        store=True,
+#    )
+#
+#    date_payment_search = fields.Date(
+#        # string="Payment date is",
+#        compute='date_payment_search_filter',
+#        store=True,
+#    )
 
-    date_payment_search = fields.Date(
-        # string="Payment date is",
-        compute='date_payment_search_filter',
-        store=True,
-    )
-
-    date_issue_from = fields.Date(
+    date_issue_search = fields.Date(
         # string="Payment date from",
-        compute='date_issue_from_filter',
+        compute='date_issue_search_filter',
         store=True,
     )
 
@@ -88,16 +88,16 @@ class FinancialMove(models.Model):
         store=True,
     )
 
-    def date_payment_from_filter(self):
+    def date_business_maturity_search_filter(self):
         return self
 
-    def date_payment_to_filter(self):
-        return self
+#    def date_payment_to_filter(self):
+#        return self
+#
+#    def date_payment_search_filter(self):
+#        return self
 
-    def date_payment_search_filter(self):
-        return self
-
-    def date_issue_from_filter(self):
+    def date_issue_search_filter(self):
         return self
 
     def partner_search_filter(self):

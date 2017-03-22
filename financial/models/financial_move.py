@@ -59,6 +59,12 @@ class FinancialMove(models.Model):
         store=True,
     )
 
+    date_issue_from = fields.Date(
+        # string="Payment date from",
+        compute='date_issue_from_filter',
+        store=True,
+    )
+
     partner_search = fields.Many2one(
         comodel_name='res.partner',
         compute='partner_search_filter',
@@ -89,6 +95,9 @@ class FinancialMove(models.Model):
         return self
 
     def date_payment_search_filter(self):
+        return self
+
+    def date_issue_from_filter(self):
         return self
 
     def partner_search_filter(self):

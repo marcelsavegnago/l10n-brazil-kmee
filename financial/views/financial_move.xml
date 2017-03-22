@@ -178,6 +178,7 @@
 										<field name="payment_mode_search" filter_domain="[('payment_mode_id', 'ilike', self)]" help="Payment mode is"/>
 										<field name="document_number_search" filter_domain="[('document_number', 'ilike', self)]" help="Document number is"/>
 										<filter name="group_partner" string="By Partner" context="{'group_by': 'partner_id'}"/>
+										<filter name="group_date_payment" string="By Date" context="{'group_by': 'date_business_maturity'}"/>
                </group>
                 <newline/>
                 <group expand="0" string="Group By...">

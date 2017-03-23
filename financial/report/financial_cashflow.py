@@ -82,13 +82,20 @@ class FinancialCashflow(models.Model):
         string=u'Account',
     )
     journal_id = fields.Many2one(
-        'account.journal',
+        comodel_name='account.journal',
         string=u'Payment Journal',
     )
     bank_id = fields.Many2one(
-        'res.partner.bank',
+        comodel_name='res.partner.bank',
         string=u'Bank Account',
     )
+
+#    def bank_id_search_filter(self):
+#        return self
+#
+#    def date_maturity_search_filter(self):
+#        return self
+
 
     @api.model
     def search_read(self, domain=None, fields=None, offset=0, limit=None,
@@ -99,6 +106,13 @@ class FinancialCashflow(models.Model):
     @api.model_cr
     def init(self):
         tools.drop_view_if_exists(self.env.cr, self._table)
+        self.env.cr.execute("""
+            DROP VIEW IF EXISTS financial_cashflow;
+            DROP VIEW IF EXISTS financial_cashflow_base;
+            DROP VIEW IF EXISTS financial_cashflow_debit;
+            DROP VIEW IF EXISTS financial_cashflow_bank;
+            DROP VIEW IF EXISTS financial_cashflow_credit;
+        """)
         self.env.cr.execute("""
             CREATE OR REPLACE VIEW financial_cashflow_credit AS
                 SELECT

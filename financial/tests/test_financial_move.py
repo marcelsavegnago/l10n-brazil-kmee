@@ -316,5 +316,10 @@ class TestFinancialMove(TransactionCase):
         self.assertEqual(fm_2.due_date, expected_2[0])
 
         # Amounts verification
+<<<<<<< HEAD
         self.assertEqual(fm_1.amount_document, expected_1[1])
         self.assertEqual(fm_2.amount_document, expected_2[1])
+=======
+        self.assertEqual(fm_1.amount, expected_1[1])
+        self.assertEqual(fm_2.amount, expected_2[1])
+>>>>>>> 4b3e4d3... [WIP-FIX] Credit control + pylint/flake8

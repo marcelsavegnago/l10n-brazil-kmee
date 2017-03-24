@@ -9,7 +9,7 @@
             <xpath expr="//field[@name='tax_calculation_rounding_method']"
                    position="after">
                 <group name="credit_control" string="Credit Control">
-                    <field name="sale_installed" />
+                    <field name="sale_installed" invisible="1"/>
                     <field name="draft_invoices" type="checkbox"/>
                     <field name="confirmed_orders" type="checkbox"
                            attrs="{'invisible': [('sale_installed', '=', False)]}"/>

@@ -5,7 +5,6 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_is_zero
-from odoo.tools.safe_eval import safe_eval
 
 
 FINANCIAL_MOVE = [
@@ -464,4 +463,3 @@ class FinancialMove(models.Model):
         else:
             action = {'type': 'ir.actions.act_window_close'}
         return action
-

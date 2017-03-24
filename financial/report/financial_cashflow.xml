@@ -36,6 +36,8 @@
                <group col='10' colspan='4'>
                     <field name="bank_id" filter_domain="[('bank_id', 'ilike', self)]" string="Bank account is"/>
                     <field name="date_business_maturity" filter_domain="[('date_business_maturity', '=', self)]" string="Business maturity is"/>
+                    <field name="date_business_maturity" filter_domain="[('date_business_maturity', '&gt;=', self)]" string="Business maturity from"/>
+                    <field name="date_business_maturity" filter_domain="[('date_business_maturity', '&lt;=', self)]" string="Business maturity to"/>
                </group>
                 <newline/>
                 <group expand="0" string="Group By...">

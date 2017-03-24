@@ -17,23 +17,27 @@ class ResPartner(models.Model):
         compute='_compute_available_credit_limit',
     )
     credit = fields.Monetary()
+    confirmed_orders = fields.Boolean()
+    draft_invoices = fields.Boolean()
 
     @api.depends('credit_limit', 'credit')
     def _compute_available_credit_limit(self):
         # FIXME
         config = self.env['account.config.settings'].search([
-            ('company_id', '=', 'self.env.user.company_id')])
+            ('company_id', '=', 1)])[-1]
         draft_inv = 0
         sale_ord = 0
         for record in self:
             record.available_credit_limit = record.credit_limit - record.credit
+            print record.available_credit_limit
             if config.confirmed_orders:
                 sale_env = self.env['sale.order'].search([(
                     'partner_id', '=', record.id)])
                 for records in sale_env:
-                    if records.state == 'sale':
+                    if (records.state == 'sale' and records.  # FIXME
+                            invoice_status == 'no'):
                         sale_ord += records.amount_total
-                    record.available_credit_limit -= sale_ord
+                record.available_credit_limit -= sale_ord
             if config.draft_invoices:
                 invoice_env = self.env['account.invoice'].search([(
                     'commercial_partner_id', '=', record.id)])
@@ -41,6 +45,3 @@ class ResPartner(models.Model):
                     if records.state == 'draft':
                         draft_inv += records.amount_total_signed
                 record.available_credit_limit -= draft_inv
-            print 'draft_inv' + draft_inv
-            print 'sale_ord' + sale_ord
-            print record.available_credit_limit

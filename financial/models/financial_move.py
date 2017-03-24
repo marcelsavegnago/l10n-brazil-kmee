@@ -62,7 +62,7 @@ class FinancialMove(models.Model):
             if record.date_maturity:
                 record.date_business_maturity = self.env[
                     'resource.calendar'].proximo_dia_util_bancario(
-                    fields.Date.from_string(record.date_maturity))
+                        fields.Date.from_string(record.date_maturity))
 
     @api.model
     def _avaliable_transition(self, old_state, new_state):
@@ -84,8 +84,7 @@ class FinancialMove(models.Model):
                  'amount_interest',
                  'amount_discount',
                  'amount_refund',
-                 'amount_cancel',
-                 )
+                 'amount_cancel',)
     def _compute_totals(self):
         for record in self:
             amount_total = (
@@ -405,6 +404,7 @@ class FinancialMove(models.Model):
             action = {'type': 'ir.actions.act_window_close'}
         return action
 
+<<<<<<< HEAD
     # @api.onchange(payment_method_id)
     # def _compute_interest(self):
     #     for record in self:
@@ -625,3 +625,31 @@ class FinancialMove(models.Model):
         #         self._prepare_aml())
         #     aml_obj.action_invoice_open()
         #     return True
+=======
+    def cron_interest(self):
+        if self.env['resource.calendar'].\
+                data_eh_dia_util_bancario(datetime.today()):
+            record = self.search([
+                ('state', '=', 'open'),
+                ('date_business_maturity', '<', datetime.today())])
+            record.compute_interest()
+
+    @api.depends('payment_mode_id', 'amount', 'date_business_maturity')
+    def compute_interest(self):
+        for record in self:
+            if self.env['resource.calendar']. \
+                    data_eh_dia_util_bancario(datetime.today()) and record. \
+                    state == 'open' and \
+                    (datetime.today() > datetime.strptime
+                     (record.date_business_maturity, '%Y-%m-%d')):
+                day = (
+                    datetime.today() - datetime.strptime(
+                        record.date_maturity, '%Y-%m-%d'))
+                interest = record.amount * (record.payment_mode_id.
+                                            interest_percent * day.days) / 100
+
+                delay_fee = (record.payment_mode_id.
+                             delay_fee_percent / 100) * record.amount
+                record.amount_interest = interest + delay_fee
+        pass
+>>>>>>> 4b3e4d3... [WIP-FIX] Credit control + pylint/flake8

@@ -183,11 +183,10 @@ class FinancialCashflow(models.Model):
                     NULL as analytic_account_id,
                     coalesce(res_partner_bank.initial_balance, 0)
                     as amount_paid,
-                    coalesce(res_partner_bank.initial_balance, 0)
-                    as amount_balance,
+                    0 as amount_balance,
                     0 as amount_total,
-                    0 as amount_credit,
-                        0 as amount_debit
+                    coalesce(res_partner_bank.initial_balance, 0) as amount_credit,
+                    0 as amount_debit
                 FROM public.res_partner_bank
                 INNER JOIN public.res_company
                 ON res_partner_bank.partner_id = res_company.partner_id;

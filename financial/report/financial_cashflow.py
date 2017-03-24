@@ -90,18 +90,30 @@ class FinancialCashflow(models.Model):
         string=u'Bank Account',
     )
 
-#    def bank_id_search_filter(self):
-#        return self
-#
-#    def date_maturity_search_filter(self):
-#        return self
+    def recalculate_balance(self, res):
+        balance = 0
+        for record in res:
+            credit = record['amount_credit']
+            debit = record['amount_debit']
+            if debit == 0 and credit == 0:
+                balance += record['amount_cumulative_balance']
+            balance += credit + debit
+            record['amount_cumulative_balance'] = balance
 
+    @api.model
+    def read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
+        res = super(FinancialCashflow, self).read_group(domain, fields, groupby, offset=offset, limit=limit, orderby=orderby,
+                                                   lazy=lazy)
+        self.recalculate_balance(res)
+        return res
 
     @api.model
     def search_read(self, domain=None, fields=None, offset=0, limit=None,
                     order=None):
-        return super(FinancialCashflow, self).search_read(
+        res = super(FinancialCashflow, self).search_read(
             domain, fields, offset, limit, order=False)
+        self.recalculate_balance(res)
+        return res
 
     @api.model_cr
     def init(self):

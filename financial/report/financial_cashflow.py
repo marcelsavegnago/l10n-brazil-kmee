@@ -101,17 +101,19 @@ class FinancialCashflow(models.Model):
             record['amount_cumulative_balance'] = balance
 
     @api.model
-    def read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
-        res = super(FinancialCashflow, self).read_group(domain, fields, groupby, offset=offset, limit=limit, orderby=orderby,
-                                                   lazy=lazy)
+    def read_group(self, domain, fields, groupby, offset=0,
+                   limit=None, orderby=False, lazy=True):
+        res = super(FinancialCashflow, self)\
+            .read_group(domain, fields, groupby, offset=offset,
+                        limit=limit, orderby=orderby, lazy=lazy)
         self.recalculate_balance(res)
         return res
 
     @api.model
-    def search_read(self, domain=None, fields=None, offset=0, limit=None,
-                    order=None):
-        res = super(FinancialCashflow, self).search_read(
-            domain, fields, offset, limit, order=False)
+    def search_read(self, domain=None, fields=None, offset=0,
+                    limit=None, order=None):
+        res = super(FinancialCashflow, self)\
+            .search_read(domain, fields, offset, limit, order=False)
         self.recalculate_balance(res)
         return res
 
@@ -185,7 +187,8 @@ class FinancialCashflow(models.Model):
                     as amount_paid,
                     0 as amount_balance,
                     0 as amount_total,
-                    coalesce(res_partner_bank.initial_balance, 0) as amount_credit,
+                    coalesce(res_partner_bank.initial_balance, 0)
+                        as amount_credit,
                     0 as amount_debit
                 FROM public.res_partner_bank
                 INNER JOIN public.res_company
@@ -394,8 +397,8 @@ class FinancialCashflow(models.Model):
             domain += ['|', (
                 'analytic_account_id.tag_ids', 'in',
                 context['analytic_tag_ids'].ids),
-                       ('analytic_tag_ids', 'in',
-                        context['analytic_tag_ids'].ids)]
+                ('analytic_tag_ids', 'in',
+                    context['analytic_tag_ids'].ids)]
 
         if context.get('analytic_account_ids'):
             domain += [

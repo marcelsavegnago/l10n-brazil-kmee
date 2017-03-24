@@ -22,7 +22,6 @@ class ResPartner(models.Model):
 
     @api.depends('credit_limit', 'credit')
     def _compute_available_credit_limit(self):
-        # FIXME
         config = self.env['account.config.settings'].search([
             ('company_id', '=', 1)])[-1]
         draft_inv = 0
@@ -34,8 +33,8 @@ class ResPartner(models.Model):
                 sale_env = self.env['sale.order'].search([(
                     'partner_id', '=', record.id)])
                 for records in sale_env:
-                    if (records.state == 'sale' and records.  # FIXME
-                            invoice_status == 'no'):
+                    if (records.state == 'sale' and records.
+                            invoice_status == 'to invoice'):
                         sale_ord += records.amount_total
                 record.available_credit_limit -= sale_ord
             if config.draft_invoices:

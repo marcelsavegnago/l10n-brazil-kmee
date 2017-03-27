@@ -14,3 +14,7 @@ class AccountPaymentMode(models.Model):
     delay_fee_percent = fields.Float(
         store=True
     )
+    liquidity = fields.Boolean(
+        string=_('Included in credit limit'),
+        store=True,
+    )

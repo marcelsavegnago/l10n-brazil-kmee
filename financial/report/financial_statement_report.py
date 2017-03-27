@@ -55,7 +55,6 @@ class FinancialStatementReport(models.Model):
             comparison_res = self.with_context(
                 data.get('comparison_context'))._compute_report_balance(
                 child_reports)
-
             for report_id, value in comparison_res.items():
                 res[report_id]['comp_bal'] = value['balance']
                 report_acc = res[report_id].get('account')
@@ -113,6 +112,7 @@ class FinancialStatementReport(models.Model):
                         if (not account.company_id.currency_id.is_zero(
                             vals['debit']) or not
                                 account.company_id.currency_id.is_zero(
+                                vals['credit'])):
                             flag = True
                     if not account.company_id.currency_id.is_zero(
                             vals['balance']):
@@ -131,12 +131,12 @@ class FinancialStatementReport(models.Model):
     def _compute_report_balance(self, reports):
         """ Returns a dictionary with key=the ID of a record and value=the
         credit, debit and balance amount computed for this record.
-        If the record is of type :
-               'accounts' : it's the sum of the linked accounts
-               'account_type' : it's the sum of leaf accoutns with
+        If the record is of type :
+               'accounts' : it's the sum of the linked accounts
+               'account_type' : it's the sum of leaf accoutns with
            such an account_type
-               'account_report' : it's the amount of the related report
-               'sum' : it's the sum of the children of this record (aka a
+               'account_report' : it's the amount of the related report
+               'sum' : it's the sum of the children of this record (aka a
            'view' record)
         """
         res = {}

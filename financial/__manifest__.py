@@ -25,20 +25,17 @@
         'wizards/financial_create.xml',
         'wizards/financial_pay_receive.xml',
         'views/financial_move.xml',
-<<<<<<< HEAD
-=======
         'views/res_partner_bank.xml',
         'report/financial_cashflow.xml',
         'report/financial_statement_report.xml',
         'report/report_financial.xml',
         'views/res_partner.xml',
         'views/credit_limit_included.xml',
->>>>>>> 961d214... [WIP] credit control
         'views/payment_mode.xml',
-        'report/financial_cashflow.xml',
+        'views/res_partner_bank.xml',
+
     ],
     'demo': [
-        'demo/financial_move_history.xml',
         'demo/financial_move.xml',
     ],
 }

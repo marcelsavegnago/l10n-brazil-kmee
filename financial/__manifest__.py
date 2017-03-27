@@ -32,6 +32,7 @@
         'views/res_partner.xml',
         'views/credit_limit_included.xml',
         'views/payment_mode.xml',
+        'views/res_partner_bank.xml',
     ],
     'demo': [
         'demo/financial_move.xml',

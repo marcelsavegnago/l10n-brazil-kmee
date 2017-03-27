@@ -492,4 +492,3 @@ class FinancialMove(models.Model):
                              delay_fee_percent / 100) * record.amount
                 record.amount_interest = interest + delay_fee
         pass
-

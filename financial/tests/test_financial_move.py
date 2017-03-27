@@ -24,11 +24,6 @@ class TestFinancialMove(TransactionCase):
         self.financial_edit = self.env['financial.edit']
         self.partner_agrolait = self.env.ref("base.res_partner_2")
         self.partner_axelor = self.env.ref("base.res_partner_2")
-<<<<<<< HEAD
-        # self.financial_move.create = self.env['financial.move.create.']
-
-        print "oaisdoam"
-=======
         self.payment_term_id_30_70 = self.env.\
             ref("account.account_payment_term_advance")
         self.payment_mode_1 = self.env.\
@@ -51,37 +46,15 @@ class TestFinancialMove(TransactionCase):
             account_id=44,
         ))
 
->>>>>>> 2d44494a222b4505033f34438c848ea5b456b41b
     # """US1 # Como um operador de cobrança, eu gostaria de cadastrar uma conta
     #  a receber/pagar para manter controle sobre o fluxo de caixa.
     # """
     def test_us_1_ac_1(self):
         """ DADO a data de vencimento de 12/02/2017
         QUANDO criado um lançamento de contas a receber
-<<<<<<< HEAD
-        ENTÃO a data de vencimento útil deve ser de 01/03/2017"""
-        self.cr_1 = self.financial_move_create.create(dict(
-            date_maturity='2017-02-27',
-            company_id=self.main_company.id,
-            currency_id=self.currency_euro.id,
-            amount=100.00,
-            partner_id=self.partner_agrolait.id,
-            document_date=time.strftime('%Y') + '-01-01',
-            document_number='1111',
-            move_type='r',
-            account_id=44,
-            financial_type='r',
-            journal_id=6,
-
-        ))
-        self.cr_1.compute()
-        self.assertEqual(self.financial_move_line_create.date_maturity,
-                         '2017-03-01')
-=======
         ENTÃO a data de vencimento útil deve ser de 14/03/2017"""
 
         self.assertEqual(self.cr_1.date_business_maturity, '2018-02-14')
->>>>>>> 2d44494a222b4505033f34438c848ea5b456b41b
 
     def test_us_1_ac_2(self):
         """DADO uma conta a pagar ou receber
@@ -358,15 +331,5 @@ class TestFinancialMove(TransactionCase):
         self.assertEqual(fm_2.date_maturity, expected_2[0])
 
         # Amounts verification
-<<<<<<< HEAD
-<<<<<<< HEAD
-        self.assertEqual(fm_1.amount_document, expected_1[1])
-        self.assertEqual(fm_2.amount_document, expected_2[1])
-=======
         self.assertEqual(fm_1.amount, expected_1[1])
         self.assertEqual(fm_2.amount, expected_2[1])
->>>>>>> 4b3e4d3... [WIP-FIX] Credit control + pylint/flake8
-=======
-        self.assertEqual(fm_1.amount, expected_1[1])
-        self.assertEqual(fm_2.amount, expected_2[1])
->>>>>>> 2d44494a222b4505033f34438c848ea5b456b41b

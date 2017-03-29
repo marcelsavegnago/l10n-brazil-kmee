@@ -38,6 +38,7 @@ class FinancialPayreceive(models.TransientModel):
     bank_id = fields.Many2one(
         'res.partner.bank',
         string=u'Bank Account',
+        required=True,
     )
 
     @api.model
@@ -50,6 +51,7 @@ class FinancialPayreceive(models.TransientModel):
             res['currency_id'] = fm.currency_id.id
             res['amount'] = fm.amount
             res['company_id'] = fm.company_id.id
+            res['bank_id'] = fm.bank_id.id
         return res
 
     @api.multi
@@ -65,7 +67,7 @@ class FinancialPayreceive(models.TransientModel):
             else:
                 financial_type = 'rr'
 
-            vals = account_financial._prepare_payment(
+            values = account_financial._prepare_financial_move(
                 bank_id=wizard.bank_id.id,
                 company_id=wizard.company_id.id,
                 currency_id=wizard.currency_id.id,
@@ -76,7 +78,7 @@ class FinancialPayreceive(models.TransientModel):
                 date_maturity=financial_to_pay.date_maturity,
                 amount=wizard.amount,
                 account_id=financial_to_pay.account_id.id,
+                financial_payment_id=active_id,
             )
-
-            vals['financial_payment_id'] = active_id
-            account_financial.create(vals)
+            financial = account_financial.create(values)
+            financial.action_confirm()

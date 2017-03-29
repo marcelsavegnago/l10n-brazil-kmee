@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<<<<<<< HEAD
 <odoo>
     <record id="account_payment_mode_financial_form" model="ir.ui.view">
         <field name="name">account.payment.mode.form</field>
@@ -15,3 +16,19 @@
         </field>
     </record>
 </odoo>
+=======
+<openerp>
+<record id="account_payment_mode_form" model="ir.ui.view">
+    <field name="name">account.payment.mode.form</field>
+    <field name="model">account.payment.mode</field>
+    <field name="inherit_id"
+           ref="account_payment_mode.account_payment_mode_form"/>
+    <field name="arch" after="payment_type">
+        <group name="main" position="inside">
+            <field name="interest_percent"/>
+            <field name="delay_fee_percent"/>
+        </group>
+    </field>
+</record>
+</openerp>
+>>>>>>> 557ab5f0e4440e23e8e01ba2d83d5c6dbe348b4f

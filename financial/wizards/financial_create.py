@@ -10,7 +10,6 @@ from ..models.financial_move import (
 
 
 class FinancialMoveCreate(models.TransientModel):
-
     _name = 'financial.move.create'
     _inherit = ['account.abstract.payment']
 
@@ -79,13 +78,19 @@ class FinancialMoveCreate(models.TransientModel):
         'res.partner.bank',
         string=u'Bank Account',
     )
+    payment_mode_domain = fields.Char(
+        compute='_mount_domain'
+    )
+    payment_term_domain = fields.Char(
+        compute='_mount_domain'
+    )
 
     @api.onchange('payment_term_id', 'document_number',
                   'date', 'amount')
     def onchange_fields(self):
         res = {}
-        if not (self.payment_term_id and self.document_number and
-                self.date and self.amount > 0.00):
+        if not (self.payment_term_id and self.document_number and self.date
+                and self.amount > 0.00):
             return res
 
         computations = \
@@ -107,9 +112,51 @@ class FinancialMoveCreate(models.TransientModel):
         financial_type = financial_move and financial_move[0].financial_type
         return financial_move.action_view_financial(financial_type)
 
+    @api.depends('payment_mode_id', 'payment_term_id', 'amount_total',
+                 'partner_id', 'financial_type')
+    def _mount_domain(self):
+        if self.financial_type == 'receivable':
+            payment_mode_ids = []
+            payment_term_ids = []
+            mode = self.env['account.payment.mode'].search([
+                ('liquidity', '=', False)])
+            payment_mode_ids.extend(mode.ids)
+
+            term = self.env['account.payment.term'].search([
+                ('installments', '=', False)])
+            payment_term_ids.extend(term.ids)
+
+            if self.amount_total <= self.partner_id.available_credit_limit:
+                mode = self.env['account.payment.mode'].search([
+                    ('liquidity', '=', True)])
+                payment_mode_ids.extend(mode.ids)
+                term = self.env['account.payment.term'].search([
+                    ('installments', '=', True)])
+                payment_term_ids.extend(term.ids)
+
+            term_domain = "[('id','in',(%s))]" % ''.join(str(e) + ',' for e in
+                                                         payment_term_ids)
+            mode_domain = "[('id','in',(%s))]" % ''.join(str(e) + ',' for e in
+                                                         payment_term_ids)
+
+            # self.payment_term_domain = ''.join(str(e)+','
+            # for e in payment_term_ids)
+            # self.payment_mode_domain = ''.join(str(e)+','
+            # for e in payment_mode_ids)
+            payment_term_domain = term_domain
+            payment_mode_domain = mode_domain
+
+            for pay in payment_term_ids:
+                pay.write(
+                {'domain': payment_term_domain})
+            for mode in payment_mode_ids:
+                mode.write(
+                {'domain': payment_mode_domain})
+            return {'payment_term_id': payment_term_domain,
+                    'payment_mode_id': payment_mode_domain}
+
 
 class FinancialMoveLineCreate(models.TransientModel):
-
     _name = 'financial.move.line.create'
 
     currency_id = fields.Many2one(

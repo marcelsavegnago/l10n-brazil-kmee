@@ -28,7 +28,6 @@ class ResPartner(models.Model):
         sale_ord = 0
         for record in self:
             record.available_credit_limit = record.credit_limit - record.credit
-            print record.available_credit_limit
             if config.confirmed_orders:
                 sale_env = self.env['sale.order'].search([(
                     'partner_id', '=', record.id)])

@@ -15,6 +15,7 @@
         'account_payment_mode',
         'account',
         'mail',
+        'account_payment_partner',
     ],
     'data': [
         'data/ir_sequence_data.xml',
@@ -31,9 +32,9 @@
         'report/report_financial.xml',
         'views/res_partner.xml',
         'views/credit_limit_included.xml',
-        'views/payment_mode.xml',
-        # 'views/res_partner.xml',
+        'views/res_partner.xml',
         'views/res_partner_bank.xml',
+        'views/payment_term.xml',
     ],
     'demo': [
         'demo/financial_move.xml',

@@ -9,12 +9,17 @@ class AccountPaymentMode(models.Model):
     _inherit = 'account.payment.mode'
 
     interest_percent = fields.Float(
-        store=True
+        store=True,
     )
     delay_fee_percent = fields.Float(
-        store=True
+        store=True,
     )
     liquidity = fields.Boolean(
         string=_('Included in credit limit'),
+        store=True,
+    )
+
+    allow_installments = fields.Boolean(
+        string=_('Allow Installments'),
         store=True,
     )

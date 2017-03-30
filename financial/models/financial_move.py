@@ -335,8 +335,8 @@ class FinancialMove(models.Model):
                     ('document_number', '=', record.document_number),
                 ], order='date_business_maturity')
                 if self.search_count([
-                    ('document_number', '=', record.document_number),
-                    ('ref', '=', _('New')),
+                        ('document_number', '=', record.document_number),
+                        ('ref', '=', _('New')),
                 ]) == len(sequencial_ids.ids):
                     sequencial_ids.write({
                         'ref': self.env['ir.sequence'].next_by_code(
@@ -488,7 +488,7 @@ class FinancialMove(models.Model):
                     data_eh_dia_util_bancario(datetime.today()) and record. \
                     state == 'open' and \
                     (datetime.today() > datetime.strptime
-                        (record.date_business_maturity, '%Y-%m-%d')):
+                     (record.date_business_maturity, '%Y-%m-%d')):
                 day = (
                     datetime.today() - datetime.strptime(
                         record.date_maturity,

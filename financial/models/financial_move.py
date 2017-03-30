@@ -142,6 +142,26 @@ class FinancialMove(models.Model):
             raise ValidationError(
                 'The payment amount must be strictly positive.')
 
+    @api.depends('payment_mode_id', 'amount', 'date_business_maturity')
+    def compute_interest(self):
+        for record in self:
+            if self.env['resource.calendar']. \
+                    data_eh_dia_util_bancario(datetime.today()) and record. \
+                    state == 'open' and \
+                    (datetime.today() > datetime.strptime
+                     (record.date_business_maturity, '%Y-%m-%d')):
+                day = (
+                    datetime.today() - datetime.strptime(
+                        record.date_maturity,
+                        '%Y-%m-%d'))
+                interest = record.amount * (record.payment_mode_id.
+                                            interest_percent * day.days) / 100
+
+                delay_fee = (record.payment_mode_id.
+                             delay_fee_percent / 100) * record.amount
+                record.amount_interest = interest + delay_fee
+        pass
+
     @api.depends('amount',
                  'amount_interest',
                  'amount_discount',
@@ -266,11 +286,16 @@ class FinancialMove(models.Model):
         string=u'Credit debit date',
         readonly=True,
     )
+    amount_interest = fields.Monetary(
+        string=u'Interest',
+        readonly=True,
+        compute='compute_interest',
+    )
     amount_total = fields.Monetary(
         string=u'Total',
         readonly=True,
         compute='_compute_totals',
-        store=True,
+        # store=True,
         index=True
     )
     amount_paid = fields.Monetary(
@@ -281,11 +306,6 @@ class FinancialMove(models.Model):
     )
     amount_discount = fields.Monetary(
         string=u'Discount',
-    )
-    amount_interest = fields.Monetary(
-        string=u'Interest',
-        readonly=True,
-        compute='compute_interest',
     )
     amount_refund = fields.Monetary(
         string=u'Refund',
@@ -480,26 +500,6 @@ class FinancialMove(models.Model):
                 ('state', '=', 'open'),
                 ('date_business_maturity', '<', datetime.today())])
             record.compute_interest()
-
-    @api.depends('payment_mode_id', 'amount', 'date_business_maturity')
-    def compute_interest(self):
-        for record in self:
-            if self.env['resource.calendar']. \
-                    data_eh_dia_util_bancario(datetime.today()) and record. \
-                    state == 'open' and \
-                    (datetime.today() > datetime.strptime
-                     (record.date_business_maturity, '%Y-%m-%d')):
-                day = (
-                    datetime.today() - datetime.strptime(
-                        record.date_maturity,
-                        '%Y-%m-%d'))
-                interest = record.amount * (record.payment_mode_id.
-                                            interest_percent * day.days) / 100
-
-                delay_fee = (record.payment_mode_id.
-                             delay_fee_percent / 100) * record.amount
-                record.amount_interest = interest + delay_fee
-        pass
 
     def create_contract(self, financial_create):
         financial_move = self.env['financial.move']

@@ -6,6 +6,10 @@ from odoo import api, fields, models
 import datetime
 
 
+def data_proxima_util(data_inicial, dias_uteis):
+    pass
+
+
 class FinancialPayreceive(models.TransientModel):
 
     _name = 'financial.pay_receive'
@@ -44,13 +48,48 @@ class FinancialPayreceive(models.TransientModel):
         comodel_name='account.payment.mode',
         string=u'Payment mode',
     )
+#    payment_term_id = fields.Many2one(
+#        comodel_name='account.payment.term',
+#        string=u'Payment term',
+#    )
+
+#    @api.depends('payment_mode_id', 'amount', 'date_business_maturity')
+#    def compute_interest(self):
+#        for record in self:
+#            if self.env['resource.calendar']. \
+#                    data_eh_dia_util_bancario(datetime.today()) and record. \
+#                    state == 'open' and \
+#                    (datetime.today() > datetime.strptime
+#                        (record.date_business_maturity, '%Y-%m-%d')):
+#                day = (
+#                    datetime.today() - datetime.strptime(
+#                        record.date_maturity,
+#                        '%Y-%m-%d'))
+#                interest = record.amount * (record.payment_mode_id.
+#                                            interest_percent * day.days) / 100
+#
+#                delay_fee = (record.payment_mode_id.
+#                             delay_fee_percent / 100) * record.amount
+#                record.amount_interest = interest + delay_fee
 
     @api.onchange('payment_mode_id', 'date_payment')
     def _compute_date_credit_debit(self):
-        date_payment = datetime.datetime.strptime(self.date_payment,
-                                                  "%Y-%m-%d")
-        self.date_credit_debit = date_payment + datetime.timedelta(
-            days=self.payment_mode_id.compensation_days)
+        compensation_days = self.payment_mode_id.compensation_days
+        date_base = datetime.datetime.strptime(self.date_payment, '%Y-%m-%d')
+        while compensation_days > 0:
+            if self.env['resource.calendar'].data_eh_dia_util(date_base):
+                compensation_days -= 1
+            date_base = date_base + datetime.timedelta(days=1)
+
+#        computations = \
+#            self.payment_term_id.compute(self.amount, self.date_payment)
+#        business_date_payment = computations[0][0][0]
+#        date_payment = \
+#            datetime.datetime.strptime(business_date_payment, "%Y-%m-%d")
+#
+#        self.date_credit_debit = date_payment + datetime.timedelta(
+#            days=self.payment_mode_id.compensation_days)
+        self.date_credit_debit = date_base
 
     @api.model
     def default_get(self, vals):
@@ -62,6 +101,7 @@ class FinancialPayreceive(models.TransientModel):
             res['currency_id'] = fm.currency_id.id
             res['amount'] = fm.amount
             res['payment_mode_id'] = fm.payment_mode_id.id
+            # res['payment_term_id'] = fm.payment_term_id.id
             res['company_id'] = fm.company_id.id
             res['bank_id'] = fm.bank_id.id
         return res

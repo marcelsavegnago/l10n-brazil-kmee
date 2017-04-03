@@ -51,15 +51,22 @@ OPERATION_PURPOSE = [
 MOVE_TYPE = [
     ('receita', 'Receita'),
 ]
-class AccountMoveTemplateRule(models.Model):
-    _name = 'account.move.template.rule'
 
+
+class AccountMoveTemplate(models.Model):
+    _name = 'account.move.template'
+
+    company_id = fields.Many2one(
+        comodel_name='res.company',
+    )
     fiscal_document_id = fields.Many2one(
         comodel_name='l10n_br_account.fiscal.document',
         string=u'Tipo do documento'
     )
     # TODO: verificar origem desse campo
-    account_move_category_id = fields.Char()
+    account_type = fields.Many2one(
+        comodel_name='account.account.type', string=u'Tipo de conta'
+    )
     operation_nature = fields.Selection(selection=OPERATION_NATURE)
     operation_position = fields.Selection(selection=OPERATION_POSITION)
     # TODO: verificar se sera criado modelo para o tipo de produto
@@ -70,28 +77,58 @@ class AccountMoveTemplateRule(models.Model):
     # operation_purpose = fields.Selection(selection=OPERATION_PURPOSE)
     account_move_type = fields.Selection(selection=MOVE_TYPE)
     credit_account_id = fields.Many2one(
-        comodel_name='acccount.account', string=u'Conta de credito'
+        comodel_name='account.account', string=u'Conta de credito'
     )
     debit_account_id = fields.Many2one(
-        comodel_name='acccount.account', string=u'Conta de debito'
+        comodel_name='account.account', string=u'Conta de debito'
     )
     debit_compensation_account_id = fields.Many2one(
-        comodel_name='acccount.account', string=u'Conta de compensaçao de '
+        comodel_name='account.account', string=u'Conta de compensaçao de '
                                                 u'debito'
     )
 
-    def _map_domain(self):
-        pass
+    # def _map_line_tax_domain(self, **kwargs):
+    #     domain = []
+    #     for key, value in kwargs.iteritems():
+    #         domain.append((str(key), '=', str(value)))
+    #     return domain
 
-    def map_account(self, **kwargs):
+    def _map_invoice_domain(self, move_line):
+        domain = []
+        #
+        invoice = self.env['account.invoice'].browse(
+            move_line.get('invoice_id'))
+        company_id = invoice.company_id.id
+        fiscal_document_id = invoice.fiscal_document_id.id
+        account_type = invoice.account_id.account_type.id
+        # operation_nature
+        # operation_position
+        # product_type
+        # product_origin
+        # term
+        # account_move_type
+        return domain
+
+    def map_account(self, move_line):
         """ Parametros da tabela de decisão:
          - company_id, document_type_id,
-                    account_move_category_id, operation_nature,
+                    account_type, operation_nature,
                     operation_position, product_type, product_origin, term,
                     operation_purpose, account_move_type
         :return: o objeto account.account
         """
-        return True
-        # search ?
-        #
-        # ret
+        if move_line.get('invl_id'):
+            domain = self._map_invoice_domain(move_line)
+        elif move_line.get('invoice_tax_line_id'):
+            domain = self._map_tax_domain(move_line)
+        else:
+            return move_line
+
+        # rule = self.search(domain)
+        rule = False
+
+        if rule:
+            return move_line.update({'account_id': rule.debit_account_id.id or
+                                                   rule.credit_account_id.id})
+        else:
+            return move_line

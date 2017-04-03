@@ -31,14 +31,14 @@ class TestAccountMoveTemplate(TransactionCase):
         """
         kwargs = {
             'company_id': self.main_company,
-            'document_type_id': self.fiscal_document_55,
-            'account_move_category_id': 'receita',
+            'fiscal_document_id': self.fiscal_document_55,
+            'account_type': 'receita',
             'operation_nature': 'revenda',
             'operation_position': 'dentro_estado',
             'product_type': 'mercadoria_revenda',
             'product_origin': 'nacional',
             'term': 'curto',
             'account_move_type': 'receita'
-
         }
-        debit, credit = self.amt.map_account(kwargs)
+        debit, credit = self.amt.map_account(**kwargs)
+        print (debit, credit)

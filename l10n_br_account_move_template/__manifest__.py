@@ -12,10 +12,11 @@
     'website': 'www.kmee.com.br',
     'depends': [
         'l10n_br_account',
-        'sped'
+        # 'sped'
     ],
     'data': [
         'views/account_move_template_view.xml',
+        'views/res_config_view.xml',
         #'data/account.move.template.csv', # TODO exportar dados
     ],
     'demo': [

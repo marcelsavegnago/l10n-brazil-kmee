@@ -180,6 +180,25 @@ class WizardMultiChartsAccounts(models.TransientModel):
 class AccountAccount(models.Model):
     _inherit = 'account.account'
 
+    _checked_fields = {'company_id', 'active', 'type', 'code'}
+
+    @api.multi
+    def write(self, vals):
+        """
+        Hack to implement the PR below until it's approved:
+        https://github.com/odoo/odoo/pull/16188
+
+        Allows reload of accounts from CSV files.
+        """
+        vals = dict(vals)
+        checked_fields = self._checked_fields.intersection(vals)
+        records = self.read(fields=checked_fields)
+        for field in checked_fields:
+            if {record[field] for record in records} == {vals[field]}:
+                # don't try to write unchanged fields.
+                del vals[field]
+        return super(AccountAccount, self).write(vals)
+
     @api.v7
     def _check_allow_type_change(self, cr, uid, ids, new_type, context=None):
         """Hack to allow re-shaping demo chart of account in demo mode"""

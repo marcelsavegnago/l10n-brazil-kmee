@@ -42,6 +42,11 @@ class AccountFiscalPosition(models.Model):
     ], u'Operação com Consumidor final', readonly=True,
         states={'draft': [('readonly', False)]}, required=False,
         help=u'Indica operação com Consumidor final.', default='0')
+    exclude_product_from_totals = fields.Boolean(
+        string=u'Remover valor de produtos do total?',
+        default=False,
+    )
+
 
     @api.v7
     def map_tax(self, cr, uid, fposition_id, taxes, context=None):

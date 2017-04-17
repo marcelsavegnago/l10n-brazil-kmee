@@ -39,6 +39,9 @@
                     <field name="tax_ipi_guideline_id"/>
                     <field name="tax_icms_relief_id"/>
                 </xpath>
+                <xpath expr="//field[@name='asset_operation']" position="after">
+                    <field name="exclude_product_from_totals"/>
+                </xpath>
             </field>
         </record>
 

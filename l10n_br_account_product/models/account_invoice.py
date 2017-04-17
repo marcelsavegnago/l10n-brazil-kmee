@@ -1806,6 +1806,20 @@ class AccountInvoiceLine(models.Model):
     # def write(self, vals):
     #    vals.update(self._validate_taxes(vals))
     #    return super(AccountInvoiceLine, self).write(vals)
+    @api.model
+    def move_line_get_item(self, line):
+        """
+            Overrrite core to fix invoice total account.move
+        :param line:
+        :return:
+        """
+        res = super(AccountInvoiceLine, self).move_line_get_item(line)
+        price = line.price_tax_discount
+        if line.fiscal_position.exclude_product_from_totals:
+            price = 0.0
+        res['price'] = price
+        print res['price']
+        return res
 
 
 class AccountInvoiceTax(models.Model):

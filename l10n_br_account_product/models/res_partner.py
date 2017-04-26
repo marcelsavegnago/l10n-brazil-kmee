@@ -38,6 +38,11 @@ class AccountFiscalPosition(models.Model):
     ], u'Operação com Consumidor final', readonly=True,
         states={'draft': [('readonly', False)]}, required=False,
         help=u'Indica operação com Consumidor final.', default='0')
+    exclude_product_from_totals = fields.Boolean(
+        string=u'Remover valor de produtos do total?',
+        default=False,
+    )
+
 
     @api.v7
     def map_tax(self, cr, uid, fposition_id, taxes, context=None):
@@ -130,8 +135,11 @@ class AccountFiscalPosition(models.Model):
         map_taxes_ncm = self.env['account.fiscal.position.tax'].browse()
         for tax in taxes:
             for map in self.tax_ids:
-                if map.tax_src_id.id == tax.id or \
-                        map.tax_code_src_id.id == tax.tax_code_id.id:
+#                if map.tax_src_id.id == tax.id or \
+#                        map.tax_code_src_id.id == tax.tax_code_id.id:
+                if (map.tax_src_id.id == tax.id or
+                        map.tax_dest_id == tax or
+                        map.tax_code_src_id.id == tax.tax_code_id.id):
                     if map.tax_dest_id.id or tax.tax_code_id.id:
                         if map.fiscal_classification_id.id == \
                                 product.fiscal_classification_id.id:

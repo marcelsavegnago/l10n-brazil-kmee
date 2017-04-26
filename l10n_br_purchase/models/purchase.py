@@ -74,31 +74,34 @@ class PurchaseOrder(models.Model):
 
     @api.model
     def _fiscal_position_map(self, result, **kwargs):
-        """Método para chamar a definição de regras fiscais"""
-        ctx = dict(self._context)
-        kwargs['fiscal_category_id'] = ctx.get('fiscal_category_id')
+        ctx = dict(self.env.context)
+        if not kwargs.get('fiscal_category_id'):
+            kwargs['fiscal_category_id'] = ctx.get('fiscal_category_id')
+        ctx.update({
+            'use_domain': ('use_purchase', '=', True),
+            'fiscal_category_id': ctx.get('fiscal_category_id')})
+        return self.env['account.fiscal.position.rule'].with_context(
+            ctx).apply_fiscal_mapping(result, **kwargs)
 
-        ctx.update({'use_domain': ('use_purchase', '=', True)})
-        return self.env[
-            'account.fiscal.position.rule'].with_context(
-                ctx).apply_fiscal_mapping(result, **kwargs)
-
-    @api.onchange('fiscal_category_id', 'fiscal_position')
+    @api.onchange('fiscal_category_id')
     def onchange_fiscal(self):
-
-        result = {'value': {'fiscal_position': False}}
-
-        if self.partner_id and self.company_id:
+        """Método chamado ao mudar a categoria fiscal
+        para refinir a posição fiscal de acordo com as
+        regras de posição fiscal"""
+        if self.company_id and self.partner_id and self.fiscal_category_id:
+            result = {'value': {'fiscal_position': False}}
             kwargs = {
-                'company_id': self.company_id.id,
                 'partner_id': self.partner_id.id,
                 'partner_invoice_id': self.partner_id.id,
                 'fiscal_category_id': self.fiscal_category_id.id,
-                'partner_shipping_id': self.dest_address_id.id,
+                'company_id': self.company_id.id,
+                'context': self.env.context
             }
-            result = self._fiscal_position_map(result, **kwargs)
+            result = self.env[
+                'account.fiscal.position.rule'].apply_fiscal_mapping(
+                    result, **kwargs)
+            self.fiscal_position = result['value'].get('fiscal_position')
 
-        self.fiscal_position = result['value'].get('fiscal_position')
 
     # TODO migrate to new API
     def _prepare_inv_line(self, cr, uid, account_id, order_line, context=None):
@@ -201,37 +204,64 @@ class PurchaseOrderLine(models.Model):
 
     @api.model
     def _fiscal_position_map(self, result, **kwargs):
-        ctx = dict(self.env.context)
-        ctx.update({'use_domain': ('use_purchase', '=', True)})
-        obj_fp_rule = self.env['account.fiscal.position.rule']
+#        ctx = dict(self.env.context)
+#        ctx.update({'use_domain': ('use_purchase', '=', True)})
+#        obj_fp_rule = self.env['account.fiscal.position.rule']
 
-        product_id = kwargs.get('product_id')
-        fiscal_position = kwargs.get('fiscal_position')
+#        product_id = kwargs.get('product_id')
+#        fiscal_position = kwargs.get('fiscal_position')
 
-        partner = self.env['res.partner'].browse(
-            kwargs.get('partner_id'))
-        product_fc_id = obj_fp_rule.product_fiscal_category_map(
-            product_id, kwargs.get('fiscal_position'), partner.state_id.id)
+#        partner = self.env['res.partner'].browse(
+#            kwargs.get('partner_id'))
+#        product_fc_id = obj_fp_rule.product_fiscal_category_map(
+#            product_id, kwargs.get('fiscal_position'), partner.state_id.id)
+        context = dict(self.env.context)
+        context.update({'use_domain': ('use_purchase', '=', True)})
+        fp_rule_obj = self.env['account.fiscal.position.rule']
+  
+        partner_invoice = self.env['res.partner'].browse(
+            kwargs.get('partner_invoice_id'))
+
+        product_fc_id = fp_rule_obj.with_context(
+            context).product_fiscal_category_map(
+            kwargs.get('product_id'),
+            kwargs.get('fiscal_category_id'),
+            partner_invoice.state_id.id)
 
         if product_fc_id:
-            kwargs.get['fiscal_category_id'] = product_fc_id
+#            kwargs.get['fiscal_category_id'] = product_fc_id
 
-        result['value']['fiscal_category_id'] = kwargs['fiscal_category_id']
+#        result['value']['fiscal_category_id'] = kwargs['fiscal_category_id']
+            kwargs['fiscal_category_id'] = product_fc_id
+
+        result['value']['fiscal_category_id'] = kwargs.get(
+            'fiscal_category_id')
+  
+        result.update(fp_rule_obj.with_context(context).apply_fiscal_mapping(
+            result, **kwargs))
+        fiscal_position = result['value'].get('fiscal_position')
+        product_id = kwargs.get('product_id')
 
         if product_id and fiscal_position:
             obj_fposition = self.env['account.fiscal.position'].browse(
                 fiscal_position)
             obj_product = self.env['product.product'].browse(product_id)
-            ctx = dict(self.env.context)
-            ctx.update({'fiscal_type': obj_product.fiscal_type,
-                        'type_tax_use': 'purchase'})
+#            ctx = dict(self.env.context)
+#            ctx.update({'fiscal_type': obj_product.fiscal_type,
+#                        'type_tax_use': 'purchase'})
+            context.update({
+                'fiscal_type': obj_product.fiscal_type,
+                'type_tax_use': 'purchase', 'product_id': product_id})
             taxes = obj_product.supplier_taxes_id
-            taxes_ids = obj_fposition.with_context(ctx).map_tax(taxes)
-            result['value']['taxes_id'] = taxes_ids
-
-        result_rule = obj_fp_rule.with_context(
-            ctx).apply_fiscal_mapping(result, **kwargs)
-        return result_rule
+#            taxes_ids = obj_fposition.with_context(ctx).map_tax(taxes)
+#            result['value']['taxes_id'] = taxes_ids
+#
+#        result_rule = obj_fp_rule.with_context(
+#            ctx).apply_fiscal_mapping(result, **kwargs)
+#        return result_rule
+            tax_ids = obj_fposition.with_context(context).map_tax(taxes)
+            result['value']['taxes_id'] = tax_ids
+        return result
 
     @api.multi
     def onchange_product_id(self, pricelist_id, product_id, qty, uom_id,
@@ -285,17 +315,26 @@ class PurchaseOrderLine(models.Model):
     @api.onchange('fiscal_category_id', 'fiscal_position')
     def onchange_fiscal(self):
         result = {'value': {}}
-        if self.order_id.company_id or self.order_id.partner_id:
+#        if self.order_id.company_id or self.order_id.partner_id:
+        if (self.product_id and self.order_id.company_id or
+                self.order_id.partner_id and self.fiscal_category_id):
             kwargs = {
                 'company_id': self.order_id.company_id.id,
                 'product_id': self.product_id.id,
                 'partner_id': self.order_id.partner_id.id,
-                'partner_invoice_id': self.order_id.partner_id.id,
-                'partner_shipping_id': self.order_id.dest_address_id.id,
+#                'partner_invoice_id': self.order_id.partner_id.id,
+#                'partner_shipping_id': self.order_id.dest_address_id.id,
                 'fiscal_category_id': self.fiscal_category_id.id,
+                'taxes_id': [(6, 0, self.taxes_id.ids)],
             }
             result = self._fiscal_position_map(result, **kwargs)
-            self.fiscal_position = result['value'].get('fiscal_position')
-            self.taxes_id = result['value'].get('taxes_id')
-            self.fiscal_category_id = result['value'].get(
-                'fiscal_category_id')
+#            self.fiscal_position = result['value'].get('fiscal_position')
+#            self.taxes_id = result['value'].get('taxes_id')
+#            self.fiscal_category_id = result['value'].get(
+#                'fiscal_category_id')
+            kwargs.update({
+                'fiscal_category_id': self.fiscal_category_id.id,
+                'fiscal_position': self.fiscal_position.id,
+                'taxes_id': [(6, 0, self.taxes_id.ids)],
+            })
+            self.update(result['value'])

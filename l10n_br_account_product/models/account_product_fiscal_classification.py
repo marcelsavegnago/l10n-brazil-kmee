@@ -256,6 +256,52 @@ class AccountProductFiscalClassification(models.Model):
         return True
 
 
+    def button_update_products(self, cr, uid, ids, context=None):
+
+        result = True
+        if not context:
+            context = {}
+
+        obj_product = self.pool.get('product.template')
+
+        for fiscal_classification in self.browse(cr, uid, ids):
+            product_ids = obj_product.search(
+                cr, uid, [('fiscal_classification_id', '=', fiscal_classification.id)],
+                context=context)
+
+            current_company_id = self.pool.get('res.users').browse(
+                cr, uid, uid).company_id.id
+
+            for product in obj_product.browse(cr, uid, product_ids, context):
+                to_keep_sale_tax_ids = self.pool.get('account.tax').search(
+                    cr, uid, [('id', 'in', [x.id for x in product.taxes_id]),
+                              ('company_id', '!=', current_company_id)])
+
+                to_keep_purchase_tax_ids = self.pool.get('account.tax').search(
+                    cr, uid, [('id', 'in', [x.id for x in product.supplier_taxes_id]),
+                    ('company_id', '!=', current_company_id)])
+
+                vals = {
+                    'taxes_id':
+                    [(6,
+                      0,
+                      list(set(to_keep_sale_tax_ids +
+                           [x.id for x in
+                            fiscal_classification.sale_tax_ids])))],
+                    'supplier_taxes_id':
+                    [(6,
+                      0,
+                      list(set(to_keep_purchase_tax_ids +
+                           [x.id for x in
+                            fiscal_classification.purchase_tax_ids])))],
+                }
+
+                obj_product.write(cr, uid, product.id, vals, context)
+
+        return result
+
+
+
 class L10nBrTaxDefinitionModel(L10nBrTaxDefinition):
     _name = 'l10n_br_tax.definition.model'
 

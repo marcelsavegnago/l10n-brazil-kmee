@@ -7,6 +7,7 @@
         <field name="model">account.move.template</field>
         <field name="arch" type="xml">
             <tree string="Move Template" editable="top">   <!--decoration-info="state == 'draft'" decoration-muted="state == 'cancel'"-->
+                <field name="sequence" widget="handle"/>
                 <field name="company_id"/>
                 <field name="type"/>
                 <field name="fiscal_document_id"/>
@@ -30,6 +31,7 @@
         <field name="arch" type="xml">
             <form><!--decoration-info="state == 'draft'" decoration-muted="state == 'cancel'"-->
                 <group>
+                    <field name="sequence" widget="handle"/>
                     <field name="company_id"/>
                     <field name="type"/>
                     <field name="fiscal_document_id"/>

@@ -36,7 +36,11 @@ TYPE = [
 
 class AccountMoveTemplate(models.Model):
     _name = 'account.move.template'
+    _order = 'sequence asc'
 
+    sequence = fields.Integer(
+        string=u'Sequence',
+    )
     company_id = fields.Many2one(
         comodel_name='res.company',
     )

@@ -6,10 +6,14 @@
         <field name="name">account.move.template.tree.view</field>
         <field name="model">account.move.template</field>
         <field name="arch" type="xml">
-            <tree string="Move Template" editable="top">   <!--decoration-info="state == 'draft'" decoration-muted="state == 'cancel'"-->
+            <tree string="Move Template" >   <!--decoration
+            -info
+            ="state ==
+            'draft'" decoration-muted="state == 'cancel'"-->
                 <field name="sequence" widget="handle"/>
                 <field name="company_id"/>
                 <field name="fiscal_category_ids"/>
+                <field name="move_template_ids"/>
             </tree>
         </field>
     </record>
@@ -22,7 +26,8 @@
                 <group>
                     <field name="sequence" widget="handle"/>
                     <field name="company_id"/>
-                    <field name="fiscal_category_ids"/>
+                    <field name="fiscal_category_ids" widget="many2many_tags"/>
+                    <field name="move_template_ids"/>
                 </group>
             </form>
         </field>

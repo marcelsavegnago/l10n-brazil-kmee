@@ -25,8 +25,8 @@ EXIGIBILIDADE = [
 PRODUCT_FISCAL_TYPE = [
     ('revenda', u'Mercadoria para Revenda'),
     ('prima', u'Matéria - Prima'),
-    ('embalagem', u'Embalagem'),
     ('processo', u'Produto em Processo'),
+    ('embalagem', u'Embalagem'),
     ('acabado', u'Produto Acabado'),
     ('subproduto', u'Subproduto'),
     ('intermediario', u'Produto Intermediário'),

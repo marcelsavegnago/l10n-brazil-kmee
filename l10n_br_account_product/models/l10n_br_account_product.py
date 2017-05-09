@@ -31,7 +31,7 @@ PRODUCT_FISCAL_TYPE = [
     ('subproduto', u'Subproduto'),
     ('intermediario', u'Produto Intermediário'),
     ('consumo', u'Material de Uso e Consumo'),
-    ('atiivo', u'Ativo Imobilizado'),
+    ('ativo', u'Ativo Imobilizado'),
     ('insumos', u'Outros Insumos'),
     ('outro', u'Outras'),
 ]

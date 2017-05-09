@@ -23,7 +23,17 @@ EXIGIBILIDADE = [
 ]
 
 PRODUCT_FISCAL_TYPE = [
-    ('product', 'Produto')
+    ('revenda', u'Mercadoria para Revenda'),
+    ('prima', u'Matéria - Prima'),
+    ('embalagem', u'Embalagem'),
+    ('processo', u'Produto em Processo'),
+    ('acabado', u'Produto Acabado'),
+    ('subproduto', u'Subproduto'),
+    ('intermediario', u'Produto Intermediário'),
+    ('consumo', u'Material de Uso e Consumo'),
+    ('atiivo', u'Ativo Imobilizado'),
+    ('insumos', u'Outros Insumos'),
+    ('outro', u'Outras'),
 ]
 
 PRODUCT_FISCAL_TYPE_DEFAULT = PRODUCT_FISCAL_TYPE[0][0]

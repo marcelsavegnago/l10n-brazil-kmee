@@ -40,7 +40,6 @@ class AccountMoveTemplate(models.Model):
         'template_id',
         'category_id',
         string=u'Categoria da operação',
-        # domain="[('tem_account_template', '=', False)]",
     )
     use_cost = fields.Boolean(
         default=False,
@@ -101,7 +100,9 @@ class AccountMoveLineTemplate(models.Model):
     )
     term = fields.Selection(selection=TERM)
     credit_account_id = fields.Many2one(
-        comodel_name='account.account', string=u'Conta de credito'
+        comodel_name='account.account',
+        string=u'Conta de credito',
+        # domain=[('company_id', '=', template_id.company_id)]
     )
     debit_account_id = fields.Many2one(
         comodel_name='account.account', string=u'Conta de debito'

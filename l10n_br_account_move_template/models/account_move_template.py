@@ -69,6 +69,12 @@ class AccountMoveTemplate(models.Model):
             if len(category.move_template_ids) >= 2:
                 raise Warning(u'A categoria %s já tem roteiro' % category.name)
 
+    @api.onchange('company_id')
+    def _onchange_company(self):
+        for record in self.move_template_ids:
+            print self.company_id
+            record.company_id = self.company_id
+
 
 class AccountMoveLineTemplate(models.Model):
     _name = 'account.move.line.template'
@@ -102,14 +108,27 @@ class AccountMoveLineTemplate(models.Model):
     credit_account_id = fields.Many2one(
         comodel_name='account.account',
         string=u'Conta de credito',
-        # domain=[('company_id', '=', template_id.company_id)]
+        domain="[('company_id', '=', company_id)]"
     )
     debit_account_id = fields.Many2one(
-        comodel_name='account.account', string=u'Conta de debito'
+        comodel_name='account.account', string=u'Conta de debito',
+        domain="[('company_id', '=', company_id)]",
     )
     debit_compensation_account_id = fields.Many2one(
         comodel_name='account.account', string=u'Conta de compensaçao de '
-                                               u'debito'
+                                               u'debito',
+        domain="[('company_id', '=', company_id)]",
+    )
+
+    @api.model
+    def _default_company(self):
+        print self
+        print self.template_id
+        print self.template_id.company_id
+        return self.template_id.company_id
+
+    company_id = fields.Many2one(
+        comodel_name='res.company',
     )
 
 

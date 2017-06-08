@@ -12,7 +12,7 @@
                 <field name="product_fiscal_type"/>
                 <field name="product_origin"/>
                 <field name="term"/>
-                <!--<field name="operation_purpose"/>-->
+                <field name="company_id" invisible="1"/>
                 <field name="credit_account_id"/>
                 <field name="debit_account_id"/>
                 <field name="debit_compensation_account_id"/>

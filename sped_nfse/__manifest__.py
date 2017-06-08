@@ -11,21 +11,19 @@
     'author': 'KMEE,Odoo Community Association (OCA)',
     'website': 'www.kmee.com.br',
     'depends': [
-        'l10n_br_base',
-        'sped_imposto',
-        'sped',
+        'sped_nfe',
     ],
     'installable': True,
     'application': False,
     'data': [
         'views/sped_documento_item.xml',
-        'views/sped_documento.xml',
+        'views/inherited_sped_documento_emissao_nfse_view.xml',
     ],
     'demo': [
     ],
     'external_dependencies': {
         'python': [
-            'pytrustnfe.nfse.paulistana', 'pytrustnfe.certificado'
+             'pytrustnfe',
         ],
     },
 }

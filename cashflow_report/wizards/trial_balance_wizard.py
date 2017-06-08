@@ -5,10 +5,7 @@
 
 from odoo import models, fields, api
 
-
-
-retorno = {u'meses': [u'Junho2017', u'Julho2017', u'Agosto2017'], u'resumo': [[u'1', u'ATIVO ', 165553.0, 86763.0, 0.0], [u'2', u'PASSIVO', -12320.0, -42340.0, 0.0]], u'contas': [[u'1', u'ATIVO ', 165553.0, 86763.0, 0.0], [u'1.1', u'CIRCULANTE', 165553.0, 86763.0, 0.0], [u'1.1.1', u'DISPON\xcdVEL', 165553.0, 86763.0, 0.0], [u'1.1.1.2', u'BANCOS CONTA MOVIMENTO', 165553.0, 86763.0, 0.0], [u'1.1.1.2.01', u'Banco \u201cexemplo\u201d', 165553.0, 86763.0, 0.0], [u'2', u'PASSIVO', -12320.0, -42340.0, 0.0], [u'2.1', u'CIRCULANTE', -12320.0, -42340.0, 0.0], [u'2.1.1', u'CONTAS A PAGAR', -12320.0, -42340.0, 0.0], [u'2.1.1.1', u'SAL\xc1RIOS A PAGAR', -12320.0, -42340.0, 0.0], [u'2.1.1.1.02', u'F\xe9rias a Pagar', -42340.0, 0.0, 0.0], [u'2.1.1.1.03', u'13\xba Sal\xe1rio a Pagar', -12320.0, 0.0, 0.0]]}
-
+retorno = {u'meses': [u'Junho2017', u'Julho2017', u'Agosto2017', u'Setembro2017'], u'saldo_acumulado': [153233.0, 197656.0, 197656.0, 197656.0], u'resumo': [[u'1', u'ATIVO ', 165553.0, 86763.0, 0.0, 0.0], [u'2', u'PASSIVO', -12320.0, -42340.0, 0.0, 0.0]], u'contas': [[u'1', u'ATIVO ', 165553.0, 86763.0, 0.0, 0.0], [u'1.1', u'CIRCULANTE', 165553.0, 86763.0, 0.0, 0.0], [u'1.1.1', u'DISPON\xcdVEL', 165553.0, 86763.0, 0.0, 0.0], [u'1.1.1.2', u'BANCOS CONTA MOVIMENTO', 165553.0, 86763.0, 0.0, 0.0], [u'1.1.1.2.01', u'Banco \u201cexemplo\u201d', 165553.0, 86763.0, 0.0, 0.0], [u'2', u'PASSIVO', -12320.0, -42340.0, 0.0, 0.0], [u'2.1', u'CIRCULANTE', -12320.0, -42340.0, 0.0, 0.0], [u'2.1.1', u'CONTAS A PAGAR', -12320.0, -42340.0, 0.0, 0.0], [u'2.1.1.1', u'SAL\xc1RIOS A PAGAR', -12320.0, -42340.0, 0.0, 0.0], [u'2.1.1.1.02', u'F\xe9rias a Pagar', -42340.0, 0.0, 0.0, 0.0], [u'2.1.1.1.03', u'13\xba Sal\xe1rio a Pagar', -12320.0, 0.0, 0.0, 0.0]], u'saldo_final': [153233.0, 44423.0, 0.0, 0.0]}
 
 
 class TrialBalanceReportWizard(models.TransientModel):

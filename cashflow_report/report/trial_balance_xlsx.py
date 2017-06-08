@@ -25,13 +25,13 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
         result ={
             0: {'header': _('Conta'), 'field': '0', 'width': 12},
 
-            1: {'header': _('Name'), 'field': '1', 'type': 'amount', 'width': 20},
+            1: {'header': _('Name'), 'field': '1', 'type': 'amount', 'width': 25},
 
         }
 
         for mes in self.env.context['fluxo_de_caixa']['meses']:
             result.update({
-                row_mes: {'header': mes, 'field': row_mes, 'type': 'float', 'width': 10},
+                row_mes: {'header': mes, 'field': row_mes, 'type': 'float', 'width': 15},
             })
 
             row_mes += 1
@@ -43,14 +43,15 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
             row_mes = 2
 
             result = {
+                0: {'header': _('Conta'), 'field': '0', 'width': 12},
                 1: {'header': _('Resumo'), 'field': '1', 'type': 'amount',
-                    'width': 20},
+                    'width': 25},
             }
 
             for mes in self.env.context['fluxo_de_caixa']['meses']:
                 result.update({
                     row_mes: {'header': mes, 'field': row_mes, 'type': 'float',
-                              'width': 10},
+                              'width': 15},
                 })
 
                 row_mes += 1
@@ -100,10 +101,6 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
             else:
                 self.sheet.write_string(self.row_pos, col_pos, value or '')
 
-            # cell_type = column.get('type', 'string')
-            # if column.get('field') == 'relacional':
-            #     self.sheet.write_string(self.row_pos, col_pos, value or '')
-            # else:
         self.row_pos += 1
 
     def _get_col_count_filter_name(self):
@@ -126,7 +123,10 @@ class TrialBalanceXslx(abstract_report_xlsx.AbstractReportXslx):
 
         for resumo in self.env.context['fluxo_de_caixa']['resumo']:
             # Display account lines
-            self.write_line_resumo(resumo[1:])
+            self.write_line_resumo(resumo)
+
+        self.write_line_resumo(['','Saldo Final'] + self.env.context['fluxo_de_caixa']['saldo_final'])
+        self.write_line_resumo(['','Saldo Acumulado'] + self.env.context['fluxo_de_caixa']['saldo_acumulado'])
 
     # def write_account_footer(self, account, name_value):
     #     """Specific function to write account footer for Trial Balance"""

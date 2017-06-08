@@ -8,7 +8,7 @@
     <record model="ir.ui.view" id="sped_documento_form_view">
         <field name="name">sped.documento.form (in sped_nfse)</field>
         <field name="model">sped.documento</field>
-        <field name="inherit_id" ref="sped_documento_emissao_nfse_form"/>
+        <field name="inherit_id" ref="sped.sped_documento_emissao_nfse_form"/>
         <field name="arch" type="xml">
             <xpath expr="//sheet[1]" position="before">
                 <header>
@@ -63,7 +63,7 @@
     <record model="ir.ui.view" id="sped_documento_tree_view">
         <field name="name">sped.documento.tree (in sped_nfse)</field>
         <field name="model">sped.documento</field>
-        <field name="inherit_id" ref="sped_documento_emissao_nfse_tree"/>
+        <field name="inherit_id" ref="sped.sped_documento_emissao_nfse_tree"/>
         <field name="arch" type="xml">
              <xpath expr="//tree[1]" position="attributes">
                 <!-- Muda a cor para:

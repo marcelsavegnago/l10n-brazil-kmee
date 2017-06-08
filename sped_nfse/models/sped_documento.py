@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models, _
+import re
 import mock
 import os.path
 import unittest
@@ -46,42 +47,48 @@ class SpedDocumento(models.Model):
         participante = self.participante_id
 
         return {
-            'tipo_cpfcnpj': '1',
-            'cpf_cnpj': participante.cnpj_cpf,
-            'inscricao_municipal': participante.im,
-            'razao_social': participante.razao_social,
-            'tipo_logradouro': '1',
-            'logradouro': participante.endereco,
-            'numero': participante.numero,
-            'bairro': participante.bairro,
-            'cidade': participante.cidade,
-            'uf': participante.estado,
-            'cep': participante.cep,
+            'tipo_cpfcnpj': 2 if participante.is_company else 1,,
+            'cpf_cnpj': re.sub('[^0-9]', '', participante.cnpj_cpf or ''),
+            'razao_social': participante.razao_social or '',
+            'logradouro': participante.endereco or '',
+            'numero': participante.numero or '',
+            'complemento': participante.complemento or '',
+            'bairro': participante.bairro or 'Sem Bairro',
+            'cidade': '%s%s' % (participante.municipio_id.estado_id.codigo_ibge,
+                                participante.municipio_id.codigo_ibge),
+            'cidade_descricao': participante.cidade or '',
+            'uf': participante.estado or '',
+            'cep': re.sub('[^0-9]', '', participante.cep),
+            'inscricao_municipal': re.sub('[^0-9]', '', participante.im),
+            'email': participante.email or '',
         }
 
     def monta_nfse(self):
+        empresa = self.empresa_id
+        itens = self.item_ids
         rps = [
             {
-                'assinatura': '123',
-                'serie': '1',
-                'numero': '1',
-                'data_emissao': '2016-08-29',
-                'codigo_atividade': '07498',
-                'total_servicos': '2.00',
-                'total_deducoes': '3.00',
+                'assinatura': '123-faltando',
+                'serie': self.serie,
+                'numero': self.numero,
+                'data_emissao': self.data_emissao,
+                'codigo_atividade': item.produto_id.servico_id.codigo,
+                'total_servicos': item.valor_produtos,
+                'total_deducoes': '3.00-faltando',
                 'prestador': {
-                    'inscricao_municipal': '123456'
+                    'inscricao_municipal': self.empresa_id.im
                 },
-                'tomador': self._monta_nfse_tomador(),
-                'codigo_atividade': '07498',
-                'aliquota_atividade': '5.00',
-                'descricao': 'Venda de servico'
+                'tomador': self._monta_nfse_tomador(self),
+                'codigo_atividade': '07498-faltando',
+                'aliquota_atividade': '5.00-faltando',
+                'descricao': 'Venda de servico-faltando'
             }
         ]
+
         nfse = {
-            'cpf_cnpj': '12345678901234',
-            'data_inicio': '2016-08-29',
-            'data_fim': '2016-08-29',
+            'cpf_cnpj': empresa.cnpj_cpf,
+            'data_inicio': self.data_entrada_saida,
+            'data_fim': self.data_entrada_saida,
             'lista_rps': rps
         }
         return nfse

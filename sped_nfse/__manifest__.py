@@ -23,7 +23,7 @@
     ],
     'external_dependencies': {
         'python': [
-             'pytrustnfe',
+            'pytrustnfe',
         ],
     },
 }

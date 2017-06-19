@@ -145,10 +145,6 @@ class AccountInvoice(models.Model):
             account_id = amlt.credit_account_id
         else:
             account_id = amlt.debit_account_id
-        # elif line_type == 'tax':
-        #     if move_line.get('debit', False):
-        #         account_id = amlt.debit_account_id
-        #     else:
 
         # Se definir uma conta no mapeamento, seta a conta,
         # senão fica com a conta padrão
@@ -181,18 +177,22 @@ class AccountInvoice(models.Model):
                     move_line.get('invl_id', False))
                 # Adiciona o valor dos impostos no lançamento de receita para
                 # gerar a receita bruta
-                move_line['credit'] += invl.ipi_value
-                move_line['credit'] += invl.icms_value
-                move_line['credit'] += invl.pis_value
-                move_line['credit'] += invl.cofins_value
-                move_line['credit'] += invl.ir_value
-                move_line['credit'] += invl.issqn_value
-                move_line['credit'] += invl.csll_value
-                move_line['credit'] += invl.inss_value
-                move_line['credit'] += invl.ii_value
-                move_line['credit'] += invl.icms_fcp_value
-                move_line['credit'] += invl.icms_dest_value
-                move_line['credit'] += invl.icms_st_value
+                if move_line.get('debit', False):
+                    cred_deb = 'debit'
+                else:
+                    cred_deb = 'credit'
+                move_line[cred_deb] += invl.ipi_value
+                move_line[cred_deb] += invl.icms_value
+                move_line[cred_deb] += invl.pis_value
+                move_line[cred_deb] += invl.cofins_value
+                move_line[cred_deb] += invl.ir_value
+                move_line[cred_deb] += invl.issqn_value
+                move_line[cred_deb] += invl.csll_value
+                move_line[cred_deb] += invl.inss_value
+                move_line[cred_deb] += invl.ii_value
+                move_line[cred_deb] += invl.icms_fcp_value
+                move_line[cred_deb] += invl.icms_dest_value
+                move_line[cred_deb] += invl.icms_st_value
 
             elif move_line.get('tax_amount', False):
                 line_type = 'tax'

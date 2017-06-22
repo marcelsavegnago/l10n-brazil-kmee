@@ -91,6 +91,12 @@ class SpedIBPTax(models.Model):
                 estadual, municipal, vigenciainicio, vigenciafim, chave, \
                 versao, fonte = linha.decode('iso-8859-1').split(';')
 
+            if descricao[0] == '"':
+                descricao = descricao[1:]
+
+            if descricao[-1] == '"':
+                descricao = descricao[0:-1]
+
             if tipo == '0':
                 ncm_ids = sped_ncm.search(
                     [('codigo', '=', codigo), ('ex', '=', ex)])

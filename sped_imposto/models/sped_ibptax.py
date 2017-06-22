@@ -8,8 +8,10 @@
 from __future__ import division, print_function, unicode_literals
 
 import logging
+import os
 from odoo.addons.l10n_br_base.models.sped_base import SpedBase
 from odoo import api, fields, models
+
 
 _logger = logging.getLogger(__name__)
 
@@ -58,6 +60,9 @@ class SpedIBPTax(models.Model):
     def atualizar_tabela(self):
         self.ensure_one()
 
+        local_dir = os.path.dirname(__file__)
+        local_dir = os.path.join(local_dir, '../data/ibpt/')
+
         sped_ncm = self.env['sped.ncm']
         sped_nbs = self.env['sped.nbs']
         sped_servico = self.env['sped.servico']
@@ -66,9 +71,8 @@ class SpedIBPTax(models.Model):
         ibptax_nbs = self.env['sped.ibptax.nbs']
         ibptax_servico = self.env['sped.ibptax.servico']
 
-        versao = '17.1.A'
-        arquivo = '/home/ari/tauga/tauga_addons/sped/data/ibptax/' \
-            'TabelaIBPTax{uf}{versao}.csv'.format(
+        versao = '17.2.A'
+        arquivo = local_dir + 'TabelaIBPTax{uf}{versao}.csv'.format(
                 uf=self.estado_id.uf, versao=versao)
 
         ncm_ids = ibptax_ncm.search([('ibptax_id', '=', self.id)])

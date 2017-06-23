@@ -201,6 +201,13 @@ class SpedEmpresa(models.Model):
     ultimo_lote_rps = fields.Integer(
         string='Último lote de RPS'
     )
+    #
+    # Consulta à API do IPBT
+    #
+    token_ibpt = fields.Char(
+        string='Token IBPT',
+        size=64,
+    )
 
     @api.depends('simples_anexo_id', 'simples_anexo_servico_id',
                  'simples_teto_id')

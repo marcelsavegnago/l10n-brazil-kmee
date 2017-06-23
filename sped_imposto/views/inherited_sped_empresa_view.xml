@@ -25,6 +25,10 @@
                     <field name="cnae_id" colspan="4" options="{'no_open': True, 'no_create': True}" />
                     <newline />
                     <field name="protocolo_id" colspan="4" options="{'no_open': True, 'no_create': True}" />
+                    <newline />
+                </group>
+                <group col="4" colspan="4">
+                    <field name="token_ibpt" colspan="4" />
                 </group>
             </xpath>
             <xpath expr="//page[@name='fiscal_geral']" position="after">

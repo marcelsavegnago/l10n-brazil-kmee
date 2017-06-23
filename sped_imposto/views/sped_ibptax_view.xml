@@ -11,6 +11,10 @@
         <field name="priority">1</field>
         <field name="arch" type="xml">
             <form string="IBPTax" delete="true" create="true" edit="true">
+                <header>
+                    <button type="object" name="atualizar_tabela_local" string="Atualizar tabela" />
+                    <!--<button type="object" name="atualizar_tabela_webservice" string="Atualizar tabela (webservice)" />-->
+                </header>
                 <sheet>
                     <div class="oe_title">
                         <h1>
@@ -20,7 +24,6 @@
                             Versão <field name="versao" readonly="1" /> — válida até <field name="data_validade" readonly="1" />
                         </h2>
                     </div>
-                    <button type="object" name="atualizar_tabela" string="Atualizar tabela" />
                     <notebook>
                         <page string="Alíquotas por NCM">
                             <field name="ncm_ids" nolabel="1" colspan="4">

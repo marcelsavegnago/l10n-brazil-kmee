@@ -12,7 +12,8 @@
     'website': 'www.odoobrasil.org.br',
     'external_dependencies': {
         'python': [
-            'pybrasil'
+            'pybrasil',
+            'requests',
         ],
     },
     'depends': [

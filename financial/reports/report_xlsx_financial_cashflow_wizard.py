@@ -49,9 +49,11 @@ class ReportXlsxFinancialCashflowWizard(models.TransientModel):
         default=datetime.now().strftime('%Y-12-31'),
     )
 
+    @api.multi
     def generate_report(self):
         self.ensure_one()
+
         return self.env['report'].get_action(
-            docids=self.ids,
+            self,
             report_name='report_xlsx_financial_cashflow'
         )

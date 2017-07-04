@@ -250,8 +250,8 @@ class TestFinancialMove(TransactionCase):
         """
         Como um operador de cobrança, eu gostaria de criar multiplas
         contas a receber/pagar de forma automatica dependendo do termo de
-        pagamento. 
-     
+        pagamento.
+
         DADO o lancamento de uma parcela via assistente
         QUANDO especificado algum termo de pagamento
         ENTÃO devem ser registradas uma ou mais parcelas em funcao do termo de

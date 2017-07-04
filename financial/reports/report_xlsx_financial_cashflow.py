@@ -7,15 +7,14 @@
 
 from __future__ import division, print_function, unicode_literals
 
-import psycopg2
-
 from psycopg2.extensions import AsIs
 
-from .report_xlsx_financial_base import ReportXlsxFinancialBase
-from openerp.report import report_sxw
+from dateutil.relativedelta import relativedelta
 from openerp import _
 from openerp import fields
-from dateutil.relativedelta import relativedelta
+from openerp.report import report_sxw
+
+from .report_xlsx_financial_base import ReportXlsxFinancialBase
 
 
 class ReportXslxFinancialCashflow(ReportXlsxFinancialBase):

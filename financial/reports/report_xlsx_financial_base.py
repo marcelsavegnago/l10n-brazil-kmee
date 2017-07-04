@@ -317,11 +317,12 @@ class ReportXlsxFinancialBase(ReportXlsx):
                 value = column.get('formula', value)
                 value = value.format(**change)
                 value = '{' + value + '}'
-                self.sheet.write_formula(self.current_row, current_column,
-                                         value, style)
+                self.sheet.write_formula(
+                    self.current_row, current_column, value, style)
 
-            elif column.get('type', 'string') in ('int', 'float', 'decimal',
-                                                  'Decimal', 'currency', 'amount') or \
+            elif column.get('type', 'string') in \
+                    ('int', 'float', 'decimal', 'Decimal',
+                     'currency', 'amount') or \
                     isinstance(value, (int, float, Decimal)):
                 self.sheet.write_number(self.current_row, current_column,
                                         value, style)

@@ -44,8 +44,8 @@ class ReportXlsxFinancialBase(ReportXlsx):
 
     def __init__(self, name, table, rml=False, parser=report_sxw.rml_parse,
                  header=True, store=False):
-        super(ReportXlsxFinancialBase, self).__init__(name, table, rml=rml,
-                                                      parser=parser, header=header, store=store)
+        super(ReportXlsxFinancialBase, self).__init__(
+            name, table, rml=rml, parser=parser, header=header, store=store)
         self.current_row = 1
         #
         # # main sheet which will contains report
@@ -77,7 +77,8 @@ class ReportXlsxFinancialBase(ReportXlsx):
 
         self.current_row = 0
         self.title = self.define_title()
-        self.sheet = self.workbook.add_worksheet(self.title[:31])
+        self.sheet = \
+            self.workbook.add_worksheet(self.title[:31])
         self.define_styles()
         self.report_data = self.prepare_data()
         self.columns = self.define_columns()

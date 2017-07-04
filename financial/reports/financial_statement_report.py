@@ -199,14 +199,13 @@ class FinancialStatementReport(models.Model):
             if where_clause.strip():
                 wheres.append(where_clause.strip())
             filters = " AND ".join(wheres)
-            request = "SELECT account_type_id as id, " + ', '.join(
-                mapping.values()) + \
-                " FROM " + tables + \
-                " WHERE account_type_id IN %s " \
-                + filters + \
-                " GROUP BY account_type_id"
+            request = "SELECT account_type_id as id, " + \
+                      ', '.join(mapping.values()) + \
+                      " FROM %s " \
+                      " WHERE account_type_id IN %s %s" \
+                      " GROUP BY account_type_id"
             params = (tuple(accounts._ids),) + tuple(where_params)
-            self.env.cr.execute(request, params)
+            self.env.cr.execute(request, tables, params, filters)
             for row in self.env.cr.dictfetchall():
                 res[row['id']] = row
         return res

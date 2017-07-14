@@ -67,6 +67,13 @@ class AccountInvoice(models.Model):
                               if not tax.tax_code_id.tax_discount)
         self.amount_total = self.amount_tax + self.amount_untaxed
 
+        self.vr_custo_comercial = sum(
+            line.vr_custo_comercial for line in self.invoice_line)
+        self.vr_custo_estoque = sum(
+            line.vr_custo_estoque for line in self.invoice_line)
+        self.vr_operacao = sum(
+            line.vr_operacao for line in self.invoice_line)
+
         for line in self.invoice_line:
             if line.icms_cst_id.code not in (
                     '101', '102', '201', '202', '300', '500'):
@@ -553,8 +560,44 @@ class AccountInvoice(models.Model):
         store=True,
         digits_compute=dp.get_precision('Account'))
     amount_net = fields.Float(
-        string=u'Total Líquido', compute='_amount_net',
-        digits_compute=dp.get_precision('Account'))
+        string=u'Valor Fatura', compute='_amount_net',
+        digits_compute=dp.get_precision('Account'),
+        help=u'Valor dos produtos\n'
+             u' + frete\n'
+             u' + outros custos\n'
+             u' + seguro\n'
+             u' - desconto'
+    )
+    vr_custo_comercial = fields.Float(
+        string=u'Valor custo comercial',
+        store=True,
+        compute='_compute_amount',
+        digits=dp.get_precision('Account'),
+        help=u'Valor dos produtos\n'
+             u' + impostos pagos\n'
+             u' - impostos creditados\n'
+             u'Determinados durante a contabilização da compra'
+    )
+    vr_custo_estoque = fields.Float(
+        string=u'Valor custo estoque',
+        store=True,
+        compute='_compute_amount',
+        digits=dp.get_precision('Account'),
+        help=u'Custo do produto aplicado nas operações de vendas:\n'
+             u' - calculado com base no metodo de formação de custo'
+             u'configurado no cadastro do produto'
+    )
+    vr_operacao = fields.Float(
+        string=u'Valor Operação',
+        store=True,
+        compute='_compute_amount',
+        digits=dp.get_precision('Account'),
+        help=u'Valor dos produtos\n'
+             u' + frete\n'
+             u' + outros custos\n'
+             u' + seguro\n'
+             u' - desconto'
+    )
 
     @api.one
     @api.constrains('number')
@@ -890,6 +933,10 @@ class AccountInvoiceLine(models.Model):
         self.price_subtotal = 0.0
         self.price_gross = 0.0
         self.discount_value = 0.0
+        self.vr_custo_comercial = 0.00  # TODO: Não implementado
+        self.vr_custo_estoque = 0.0  # TODO: Não implementado
+        self.vr_operacao = 0.00
+
         if self.invoice_id:
             self.price_tax_discount = self.invoice_id.currency_id.round(
                 taxes['total'] - taxes['total_tax_discount'])
@@ -899,6 +946,14 @@ class AccountInvoiceLine(models.Model):
                 self.price_unit * self.quantity)
             self.discount_value = self.invoice_id.currency_id.round(
                 self.price_gross - taxes['total'])
+
+            self.vr_operacao = (
+                self.price_subtotal +
+                self.insurance_value +
+                self.freight_value +
+                self.other_costs_value -
+                self.discount_value
+            )
 
     code = fields.Char(
         u'Código do Produto', size=60)
@@ -1173,6 +1228,36 @@ class AccountInvoiceLine(models.Model):
                                  digits_compute=dp.get_precision('Discount'))
     inss_wh_value = fields.Float('Valor INSS retido', default=0.0,
                                  digits_compute=dp.get_precision('Discount'))
+    vr_custo_comercial = fields.Float(
+        string=u'Valor custo comercial',
+        store=True,
+        compute='_compute_price',
+        digits=dp.get_precision('Account'),
+        help=u'Valor dos produtos\n'
+             u' + impostos pagos\n'
+             u' - impostos creditados\n'
+             u'Determinados durante a contabilização da compra'
+    )
+    vr_custo_estoque = fields.Float(
+        string=u'Valor custo estoque',
+        store=True,
+        compute='_compute_price',
+        digits=dp.get_precision('Account'),
+        help=u'Custo do produto aplicado nas operações de vendas:\n'
+             u' - calculado com base no metodo de formação de custo'
+             u'configurado no cadastro do produto'
+    )
+    vr_operacao = fields.Float(
+        string=u'Valor operação',
+        store=True,
+        compute='_compute_price',
+        digits=dp.get_precision('Account'),
+        help=u'Valor dos produtos\n'
+             u' + frete\n'
+             u' + outros custos\n'
+             u' + seguro\n'
+             u' - desconto'
+    )
 
     @api.onchange("partner_order_line")
     def _check_partner_order_line(self):

@@ -562,11 +562,9 @@ class AccountInvoice(models.Model):
     amount_net = fields.Float(
         string=u'Valor Fatura', compute='_amount_net',
         digits_compute=dp.get_precision('Account'),
-        help=u'Valor dos produtos\n'
-             u' + frete\n'
-             u' + outros custos\n'
-             u' + seguro\n'
-             u' - desconto'
+        help=u'Quanto o parceiro deve pagar:\n'
+             u'Valor da nota fiscal\n'
+             u'- retenções\n'
     )
     vr_custo_comercial = fields.Float(
         string=u'Valor custo comercial',
@@ -592,7 +590,8 @@ class AccountInvoice(models.Model):
         store=True,
         compute='_compute_amount',
         digits=dp.get_precision('Account'),
-        help=u'Valor dos produtos\n'
+        help=u'Valor da operação = '
+             u'valor dos produtos\n'
              u' + frete\n'
              u' + outros custos\n'
              u' + seguro\n'

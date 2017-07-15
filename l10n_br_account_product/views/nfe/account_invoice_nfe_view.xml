@@ -145,30 +145,81 @@
                                     <field name="price_subtotal"/>
                                 </tree>
                             </field>
-                            <group col="6" string="Totais">
-                                <button name="button_reset_taxes" states="draft,proforma2"
-                                        string="(update)" class="oe_link oe_edit_only"
-                                        type="object" help="Recompute taxes and total"/>
-                                <newline/>
-                                <field name="icms_base" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="icms_base_other" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="icms_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="icms_st_base" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="icms_st_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="ipi_base" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="ipi_base_other" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="ipi_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="pis_base" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="pis_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="cofins_base" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="cofins_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="ii_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="amount_insurance" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="amount_freight" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="amount_costs" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                <field name="amount_total" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                            </group>
+                            <notebook>
+                                <page string="Totais" name="page_invoice_totals">
+                                    <group string="Valores Principais">
+                                        <group>
+                                            <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            <field name="amount_freight" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            <field name="amount_insurance" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            <field name="amount_costs" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            <field name="amount_discount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            <field name="vr_operacao" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                        </group>
+                                        <group>
+                                            <button name="button_reset_taxes" states="draft,proforma2"
+                                                string="(update)" class="oe_link oe_edit_only"
+                                                type="object" help="Recompute taxes and total"/>
+                                            <newline/>
+                                            <field name="amount_total" string="Total da NF" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            <field name="amount_net" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            <newline/>
+                                        </group>
+                                    </group>
+                                </page>
+                                <page string="Impostos" name="page_invoice_taxes">
+                                     <notebook>
+                                        <page string="ICMS" name="page_invoice_taxes_icms">
+                                            <group>
+                                                <group string="ICMS">
+                                                    <field name="icms_base" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                    <field name="icms_base_other" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                    <field name="icms_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                </group>
+                                                <group string="ICMS ST">
+                                                    <field name="icms_st_base" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                    <field name="icms_st_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <group string="Diferencial de alíquota">
+                                                    <field name="icms_dest_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                    <field name="icms_origin_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                </group>
+                                                <group string="Fundo de combate a probreza">
+                                                    <field name="icms_fcp_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                </group>
+                                            </group>
+                                        </page>
+                                        <page string="IPI" name="page_invoice_taxes_ipi">
+                                            <group string="Detalhes do IPI">
+                                                <group>
+                                                    <field name="ipi_base" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                    <field name="ipi_base_other" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                    <field name="ipi_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                </group>
+                                            </group>
+                                        </page>
+                                        <page string="PIS-COFINS" name="page_invoice_taxes_pis_cofins">
+                                            <group>
+                                                <group string="PIS">
+                                                    <field name="pis_base" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                    <field name="pis_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                </group>
+                                                <group string="COFINS">
+                                                    <field name="cofins_base" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                    <field name="cofins_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                </group>
+                                            </group>
+                                        </page>
+                                        <page string="II" name="page_invoice_taxes_ii">
+                                            <group string="Imposto de Importação">
+                                                <field name="ii_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            </group>
+                                        </page>
+                                    </notebook>
+                                </page>
+                            </notebook>
                         </page>
                         <page string="Financeiro" groups="base.group_user">
                             <group>
@@ -399,6 +450,11 @@
                                     <field name="freight_value"/>
                                     <field name="insurance_value"/>
                                     <field name="other_costs_value"/>
+                                    <group string="Custos e Totais">
+                                        <field name="vr_custo_comercial"/>
+                                        <field name="vr_custo_estoque"/>
+                                        <field name="vr_operacao"/>
+                                    </group>
                                 </group>
                                 <group>
                                     <field name="product_type" attrs="{'readonly': [('product_id','!=', False)]}"/>

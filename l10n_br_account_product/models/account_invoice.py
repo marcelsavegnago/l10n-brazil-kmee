@@ -157,7 +157,7 @@ class AccountInvoice(models.Model):
         self.cfop_ids = (lines).sorted()
 
     @api.multi
-    def _get_financial_ids(self):
+    def _compute_financial_ids(self):
         for record in self:
             document_id = record._name + ',' + str(record.id)
             record.financial_ids = record.env['financial.move'].search(
@@ -860,7 +860,7 @@ class AccountInvoice(models.Model):
         return {
             'document_number': '/',
             'date_maturity': item['date_maturity'],
-            'amount': item['debit'] or item['credit'],
+            'amount_document': item['debit'] or item['credit'],
             'account_type_id': item['user_type_id'],
         }
 
@@ -868,18 +868,20 @@ class AccountInvoice(models.Model):
     def _prepare_financial_move(self, lines):
 
         return {
-            'date': self.date_invoice,
-            'financial_type': '2receive',
+            'date_document': self.date_invoice,
+            'type': '2receive',
             'partner_id': self.partner_id.id,
             'doc_source_id': self._name + ',' + str(self.id),
             'bank_id': 1,
             'company_id': self.company_id and self.company_id.id,
             'currency_id': self.currency_id.id,
             'payment_term_id':
-                self.payment_term_id and self.payment_term_id.id or False,
+                self.payment_term and self.payment_term.id or False,
             # 'analytic_account_id':
             # 'payment_mode_id:
             'lines': [self._prepare_move_item(item) for item in lines],
+            'account_id': 2, # TODO: tirar o hardcoded para pegar a conta financeira correta
+            'document_type_id': 1, # TODO: tirar o hardcoded para pegar o tipo de documento correto
         }
 
     @api.multi
@@ -890,8 +892,9 @@ class AccountInvoice(models.Model):
         for x, y, item in move_lines:
             account_id = self.env[
                 'account.account'].browse(item.get('account_id', []))
-            if account_id.internal_type in ('payable', 'receivable'):
-                item['user_type_id'] = account_id.user_type_id.id
+            if account_id.type in ('payable', 'receivable'):
+                item['user_type_id'] = account_id.user_type.id
+                item['user_type'] = account_id.user_type.id
                 to_financial.append(item)
 
         p = self._prepare_financial_move(to_financial)

@@ -13,6 +13,7 @@
     'depends': [
         'l10n_br_data_account',
         'account_product_fiscal_classification',
+        'financial_account',
     ],
     'data': [
         'l10n_br_account_product_sequence.xml',

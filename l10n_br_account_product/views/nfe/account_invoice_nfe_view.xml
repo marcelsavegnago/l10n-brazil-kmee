@@ -395,6 +395,9 @@
                                 <field name="fiscal_comment" nolabel="1"/>
                             </group>
                         </page>
+                        <page string="Financial" name="financial_page">
+                            <field name="financial_ids"/>
+                        </page>
                         <page string="Retenções">
                             <group string="Retenção Impostos sobre serviços:" >
                                 <group>

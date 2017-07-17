@@ -157,6 +157,14 @@ class AccountInvoice(models.Model):
         self.cfop_ids = (lines).sorted()
 
     @api.multi
+    def _get_financial_ids(self):
+        for record in self:
+            document_id = record._name + ',' + str(record.id)
+            record.financial_ids = record.env['financial.move'].search(
+                [['doc_source_id', '=', document_id]]
+            )
+
+    @api.multi
     @api.depends('invoice_line', 'tax_line.amount', 'issqn_wh', 'irrf_wh',
                  'inss_wh', 'csll_wh', 'pis_wh', 'cofins_wh')
     def _amount_all_service(self):
@@ -597,6 +605,13 @@ class AccountInvoice(models.Model):
              u' + seguro\n'
              u' - desconto'
     )
+    financial_ids = fields.One2many(
+        comodel_name='financial.move',
+        compute='_compute_financial_ids',
+        string=u'Financial Items',
+        readonly=True,
+        copy=False
+    )
 
     @api.one
     @api.constrains('number')
@@ -841,6 +856,48 @@ class AccountInvoice(models.Model):
         return result
 
     @api.multi
+    def _prepare_move_item(self, item):
+        return {
+            'document_number': '/',
+            'date_maturity': item['date_maturity'],
+            'amount': item['debit'] or item['credit'],
+            'account_type_id': item['user_type_id'],
+        }
+
+    @api.multi
+    def _prepare_financial_move(self, lines):
+
+        return {
+            'date': self.date_invoice,
+            'financial_type': '2receive',
+            'partner_id': self.partner_id.id,
+            'doc_source_id': self._name + ',' + str(self.id),
+            'bank_id': 1,
+            'company_id': self.company_id and self.company_id.id,
+            'currency_id': self.currency_id.id,
+            'payment_term_id':
+                self.payment_term_id and self.payment_term_id.id or False,
+            # 'analytic_account_id':
+            # 'payment_mode_id:
+            'lines': [self._prepare_move_item(item) for item in lines],
+        }
+
+    @api.multi
+    def action_financial_create(self, move_lines):
+        # TODO: Refatorar este método utilizando o campo:
+        # move_line_receivable_id
+        to_financial = []
+        for x, y, item in move_lines:
+            account_id = self.env[
+                'account.account'].browse(item.get('account_id', []))
+            if account_id.internal_type in ('payable', 'receivable'):
+                item['user_type_id'] = account_id.user_type_id.id
+                to_financial.append(item)
+
+        p = self._prepare_financial_move(to_financial)
+        self.env['financial.move']._create_from_dict(p)
+
+    @api.multi
     def finalize_invoice_move_lines(self, move_lines):
         move_lines = super(AccountInvoice, self).finalize_invoice_move_lines(
             move_lines)
@@ -907,6 +964,13 @@ class AccountInvoice(models.Model):
                     move[2]['debit'] += value_item
                 elif move[2]['credit']:
                     move[2]['credit'] += value_item
+
+        #
+        #  Geração dos lançamentos financeiros
+        #
+        financial_create = self.filtered(
+            lambda invoice: invoice.revenue_expense)
+        financial_create.action_financial_create(move_lines_new)
 
         return move_lines_new
 

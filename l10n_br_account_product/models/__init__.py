@@ -12,3 +12,5 @@ from . import account
 from . import product
 from . import res_country
 from . import l10n_br_base
+from . import sped_account_move_template_item
+

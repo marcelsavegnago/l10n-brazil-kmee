@@ -17,7 +17,8 @@ from .product import PRODUCT_ORIGIN
 from openerp.addons.l10n_br_account_product.sped.nfe.validator import txt
 from .l10n_br_account_product import EXIGIBILIDADE
 from ..constantes import (
-    CAMPO_DOCUMENTO_FISCAL_ITEM
+    CAMPO_DOCUMENTO_FISCAL,
+    CAMPO_DOCUMENTO_FISCAL_ITEM,
 )
 
 FIELD_STATE = {'draft': [('readonly', False)]}
@@ -907,6 +908,110 @@ class AccountInvoice(models.Model):
         self.env['financial.move']._create_from_dict(p)
 
     @api.multi
+    def gera_account_move_line(self, line_ids, template_nao_contabilizados):
+        campos_jah_contabilizados = []
+
+        if self.type in ('in_invoice', 'in_refund'):
+            ref = self.reference
+        else:
+            ref = self.number
+
+        for template_item in template_nao_contabilizados:
+        
+            if not getattr(self, template_item.campo, False):
+                continue
+
+            if template_item.campo in campos_jah_contabilizados:
+                #
+                # O que fazemos quando dois templates tentarem o contabilizar
+                # o mesmo campo?
+                #
+                continue
+
+            #
+            # Nas notas de entrada por compra ou devolução de venda, se
+            # não se vai aproveitar o crédito do imposto, ele não é
+            # contabilizado à parte
+            #
+            if self.type in ('in_invoice', 'out_refund'):
+                if (template_item.campo in
+                        ('icms_value', 'vr_icms_sn') and
+                        not self.credita_icms):
+                    continue
+                elif template_item.campo == 'icms_st_value' and \
+                        not self.credita_icms_st:
+                    continue
+                elif template_item.campo == 'ipi_value' and \
+                        not self.credita_ipi:
+                    continue
+                elif template_item.campo in (
+                        'pis_value', 'cofins_value') and \
+                        not self.credita_pis_cofins:
+                    continue
+
+            valor = getattr(self, template_item.campo, 0)
+
+            if not valor:
+                continue
+
+            dados = {
+                # 'move_id': account_move.id,
+                # 'sped_documento_item_id': self.id,
+                'name': ref or '/',
+                'narration': template_item.campo,
+                'debit': valor,
+                # 'currency_id': self.currency_id.id,
+            }
+
+            account_debito = None
+            if template_item.account_debito_id:
+                account_debito = template_item.account_debito_id
+            else:
+                partner = self.partner_id
+                if self.type in ('out_invoice', 'out_refund'):
+                    account_debito = \
+                        partner.property_account_receivable_id
+                elif self.type in ('in_invoice', 'in_refund'):
+                    account_debito = partner.property_account_payable_id
+
+            if account_debito is None:
+                # raise
+                pass
+            else:
+                dados['account_id'] = account_debito.id
+
+            line_ids.append((0, 0, dados))
+
+            dados = {
+                # 'move_id': account_move.id,
+                # 'sped_documento_item_id': self.id,
+                'name': ref or '/',
+                'narration': template_item.campo,
+                'credit': valor,
+                # 'currency_id': self.currency_id.id,
+            }
+
+            account_credito = None
+            if template_item.account_credito_id:
+                account_credito = template_item.account_credito_id
+            else:
+                partner = self.partner_id
+                if self.type in ('out_invoice', 'out_refund'):
+                    account_credito = \
+                        partner.property_account_receivable_id
+                elif self.type in ('in_invoice', 'in_refund'):
+                    account_credito = partner.property_account_payable_id
+
+            if account_credito is None:
+                # raise
+                pass
+            else:
+                dados['account_id'] = account_credito.id
+
+            line_ids.append((0, 0, dados))
+            campos_jah_contabilizados.append(template_item.campo)
+
+    @api.multi
     def action_move_create(self):
 
         account_invoice_tax = self.env['account.invoice.tax']
@@ -996,11 +1101,25 @@ class AccountInvoice(models.Model):
 
             }
 
-
+            template_nao_contabilizados = set()
+            #
+            # Contabiliza as linhas e retorna os templates não contabilizados
+            #
 
             inv.invoice_line.gera_account_move_line(
-                # account_move,
-                inv.account_move_template_id, line_id)
+                line_id, template_nao_contabilizados
+            )
+            #
+            # Contabiliza os campos do cabeçalho do documento
+            #
+
+            inv.gera_account_move_line(
+                line_id, template_nao_contabilizados
+            )
+
+            #
+            # Agrupa os laçamentos contábeis
+            #
 
             # line = inv.group_lines(iml, line)
 
@@ -2130,14 +2249,12 @@ class AccountInvoiceLine(models.Model):
     #    return super(AccountInvoiceLine, self).write(vals)
 
     @api.multi
-    def gera_account_move_line(self, move_template, line_ids):
+    def gera_account_move_line(self, line_ids, template_nao_contabilizados):
         for item in self:
             campos_jah_contabilizados = []
-            for template_item in move_template.item_ids:
-                if not (
-                    getattr(item.invoice_id, template_item.campo, False) or
-                    getattr(item, template_item.campo, False)
-                ):
+            for template_item in item.account_move_template_id.item_ids:
+                if not getattr(item, template_item.campo, False):
+                    template_nao_contabilizados.add(template_item)
                     continue
 
                 if template_item.campo in campos_jah_contabilizados:
@@ -2163,9 +2280,7 @@ class AccountInvoiceLine(models.Model):
                             'cofins_value') and not item.credita_pis_cofins:
                         continue
 
-                valor = getattr(item, template_item.campo,
-                                getattr(item.invoice_id, template_item.campo,
-                                        0))
+                valor = getattr(item, template_item.campo, 0)
 
                 if not valor:
                     continue

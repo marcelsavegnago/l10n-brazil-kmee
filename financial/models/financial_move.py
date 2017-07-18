@@ -29,6 +29,7 @@ class FinancialMove(models.Model):
              'ref desc, ref_item desc, document_number, id desc'
     _rec_name = 'ref'
 
+    @api.multi
     @api.depends('date_business_maturity')
     def _compute_date_state(self):
         for record in self:

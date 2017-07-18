@@ -616,7 +616,15 @@ class AccountInvoice(models.Model):
         readonly=True,
         copy=False
     )
-
+    account_move_template_id = fields.Many2one(
+        comodel_name='sped.account.move.template',
+        string='Modelo de partida dobrada',
+    )
+    duplicata_ids = fields.One2many(
+        comodel_name='sped.documento.duplicata',
+        inverse_name='documento_id',
+        string='Duplicatas',
+    )
 
     @api.one
     @api.constrains('number')
@@ -1238,9 +1246,11 @@ class AccountInvoice(models.Model):
         #
         #  Geração dos lançamentos financeiros
         #
-        financial_create = self.filtered(
-            lambda invoice: invoice.revenue_expense)
-        financial_create.action_financial_create(move_lines_new)
+        # financial_create = self.filtered(
+        #     lambda invoice: invoice.revenue_expense)
+        # financial_create.action_financial_create(move_lines_new)
+
+        self.gera_financial_move()
 
         return move_lines_new
 
@@ -1252,6 +1262,69 @@ class AccountInvoice(models.Model):
                 'document_number': invoice.name or
                                    invoice.move_id.name or '/'})
             invoice.financial_ids.action_confirm()
+
+    def gera_financial_move(self):
+        """ Cria o lançamento financeiro do documento fiscal
+        :return:
+        """
+        for documento in self:
+            if documento.state not in 'open':
+                continue
+
+            # if documento.emissao == TIPO_EMISSAO_PROPRIA and \
+            #     documento.entrada_saida == ENTRADA_SAIDA_ENTRADA:
+            #     continue
+
+            #
+            # Temporariamente, apagamos todos os lançamentos anteriores
+            #
+            self.financial_ids.unlink()
+
+            for duplicata in self.duplicata_ids:
+                dados = duplicata.prepara_financial_move()
+                financial_move = \
+                    self.env['financial.move'].create(dados)
+                financial_move.action_confirm()
+
+    @api.multi
+    @api.depends('payment_term_id', 'data_emissao', 'duplicata_ids')
+    def _onchange_payment_term(self):
+        res = {}
+        valores = {}
+        res['value'] = valores
+
+        if not (self.payment_term_id and (self.vr_fatura or self.vr_nf) and
+                    self.data_emissao):
+            return res
+
+        valor = self.amount_total or 0
+
+        #
+        # Para a compatibilidade com a chamada original (super), que usa
+        # o decorator deprecado api.one, pegamos aqui sempre o 1º elemento
+        # da lista que vai ser retornada
+        #
+        lista_vencimentos = self.payment_term_id.compute(
+            valor, self.date_hour_invoice
+        )[0]
+
+        duplicata_ids = [
+            [5, False, {}],
+        ]
+
+        parcela = 1
+        for data_vencimento, valor in lista_vencimentos:
+            duplicata = {
+                'numero': str(parcela),
+                'data_vencimento': data_vencimento,
+                'valor': valor,
+            }
+            duplicata_ids.append([0, False, duplicata])
+            parcela += 1
+
+        valores['duplicata_ids'] = duplicata_ids
+
+        return res
 
 
 class AccountInvoiceLine(models.Model):

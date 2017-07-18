@@ -40,6 +40,11 @@ class SpedAccountMoveTemplate(models.Model):
         inverse_name='template_id',
         string='Itens',
     )
+    fiscal_category_ids = fields.One2many(
+        comodel_name='l10n_br_account.fiscal.category',
+        inverse_name='account_move_template_id',
+        string='Categorias Fiscais Relacionadas'
+    )
 
     # @api.constrains('operacao_ids')
     # def _constraints_operacao_ids(self):

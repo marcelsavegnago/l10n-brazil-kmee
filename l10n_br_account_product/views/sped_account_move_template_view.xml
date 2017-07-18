@@ -30,6 +30,8 @@
                                     <field name="account_credito_id" />
                                 </tree>
                             </field>
+                            <separator string="Categorias Fiscais Relacionadas" colspan="4" />
+                            <field name="fiscal_category_ids" nolabel="1"/>
                         </group>
                     </sheet>
                 </form>

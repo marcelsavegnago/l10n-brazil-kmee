@@ -880,8 +880,9 @@ class AccountInvoice(models.Model):
             # 'analytic_account_id':
             # 'payment_mode_id:
             'lines': [self._prepare_move_item(item) for item in lines],
-            'account_id': 2, # TODO: tirar o hardcoded para pegar a conta financeira correta
-            'document_type_id': 1, # TODO: tirar o hardcoded para pegar o tipo de documento correto
+            'account_id': self.fiscal_category_id.financial_account_id.id,
+            'document_type_id':
+                self.fiscal_category_id.financial_document_type_id.id,
         }
 
     @api.multi

@@ -28,6 +28,18 @@ class L10nBrAccountFiscalCategory(models.Model):
 
     purpose = fields.Selection(FISCAL_CATEGORY_PURPOSE, u'Finalidade')
 
+    financial_document_type_id = fields.Many2one(
+        comodel_name='financial.document.type',
+        string='Tipo de documento',
+        ondelete='restrict',
+    )
+    financial_account_id = fields.Many2one(
+        comodel_name='financial.account',
+        string='Conta financeira',
+        ondelete='restrict',
+        domain=[('type', '=', 'A')],
+    )
+
 
 class L10nBrAccountDocumentSerie(models.Model):
     _inherit = 'l10n_br_account.document.serie'

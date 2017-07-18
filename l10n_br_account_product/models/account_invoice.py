@@ -910,28 +910,6 @@ class AccountInvoice(models.Model):
         self.env['financial.move']._create_from_dict(p)
 
     @api.multi
-    def gera_account_move(self):
-        for invoice in self:
-            dados = {
-                'journal_id': invoice.journal_id.id,
-                'ref': invoice.internal_number,
-                'partner_id': invoice.partner_id.id,
-                'company_id': invoice.company_id.id,
-                'date': invoice.date_in_out,
-            }
-
-            account_move = self.env['account.move'].create(dados)
-            invoice.move_id = account_move
-
-            line_id = [(5, 0, {})]
-
-            invoice.invoice_line.gera_account_move_line(
-                account_move,
-                invoice.account_move_template_id, line_id)
-
-            account_move.write({'line_id': line_id})
-
-    @api.multi
     def action_move_create(self):
 
         account_invoice_tax = self.env['account.invoice.tax']
@@ -985,8 +963,84 @@ class AccountInvoice(models.Model):
                         'Please verify the price of the invoice!\nThe encoded'
                         ' total does not match the computed total.'))
 
-            inv.gera_account_move()
+            # Force recomputation of tax_amount, since the rate potentially changed between creation
+            # and validation of the invoice
+            inv._recompute_tax_amount()
 
+            if inv.type in ('in_invoice', 'in_refund'):
+                ref = inv.reference
+            else:
+                ref = inv.number
+
+            diff_currency = inv.currency_id != company_currency
+            # create one move line for the total and possibly adjust the other lines amount
+            total, total_currency, iml = inv.with_context(
+                ctx).compute_invoice_totals(company_currency, ref, iml)
+
+            name = inv.supplier_invoice_number or inv.name or '/'
+
+            date = date_invoice
+
+            part = self.env['res.partner']._find_accounting_partner(
+                inv.partner_id)
+
+            line_id = [(5, 0, {})]
+
+            move_vals = {
+                'ref': inv.reference or inv.supplier_invoice_number or inv.name,
+                'line_id': line_id,
+                'journal_id': inv.journal_id.id,
+                'partner_id': inv.partner_id.id,
+                'date': inv.date_invoice,
+                # 'date': inv.date_in_out,
+                'company_id': inv.company_id.id,
+                'narration': inv.comment,
+                'company_id': inv.company_id.id,
+
+            }
+
+            inv.invoice_line.gera_account_move_line(
+                # account_move,
+                inv.account_move_template_id, line_id)
+
+            # line = inv.group_lines(iml, line)
+
+            journal = inv.journal_id.with_context(ctx)
+            if journal.centralisation:
+                raise ValidationError(
+                    _('User Error!'),
+                    _('You cannot create an invoice on a centralized journal.'
+                      ' Uncheck the centralized counterpart box in the related'
+                      ' journal from the configuration menu.'))
+
+            # line = inv.finalize_invoice_move_lines(line)
+
+            ctx['company_id'] = inv.company_id.id
+            period = inv.period_id
+            # if not period:
+            #     period = period.with_context(ctx).find(date_invoice)[:1]
+            # if period:
+            #     move_vals['period_id'] = period.id
+            #     for i in line:
+            #         i[2]['period_id'] = period.id
+
+            ctx['invoice'] = inv
+            ctx_nolang = ctx.copy()
+            ctx_nolang.pop('lang', None)
+            move = account_move.with_context(ctx_nolang).create(move_vals)
+
+            # make the invoice point to that move
+            vals = {
+                'move_id': move.id,
+                'period_id': period.id,
+                'move_name': move.name,
+            }
+            inv.with_context(ctx).write(vals)
+            # Pass invoice in context in method post: used if you want to
+            # get the same
+            # account move reference when creating the same invoice after
+            #  a cancelled one:
+            move.post()
 
         #
         # Chamamos o action_move_create para manter a chamadas de outros
@@ -2063,7 +2117,7 @@ class AccountInvoiceLine(models.Model):
     #    return super(AccountInvoiceLine, self).write(vals)
 
     @api.multi
-    def gera_account_move_line(self, account_move, move_template, line_ids,
+    def gera_account_move_line(self, move_template, line_ids,
                                campos_jah_contabilizados=[]):
         for item in self:
             for template_item in move_template.item_ids:
@@ -2104,7 +2158,7 @@ class AccountInvoiceLine(models.Model):
                     continue
 
                 dados = {
-                    'move_id': account_move.id,
+                    # 'move_id': account_move.id,
                     # 'sped_documento_item_id': item.id,
                     'name': item.product_id.name,
                     'narration': template_item.campo,
@@ -2117,16 +2171,16 @@ class AccountInvoiceLine(models.Model):
                     account_debito = template_item.account_debito_id
                 elif template_item.campo in CAMPO_DOCUMENTO_FISCAL_ITEM:
                     product = item.produto_id
-                    if item.documento_id.eh_venda:
+                    if item.invoice_id.type in ('out_invoice', 'out_refund'):
                         account_debito = product.property_account_income_id
-                    elif item.documento_id.eh_compra:
+                    elif item.invoice_id.type in ('in_invoice', 'in_refund'):
                         account_debito = product.property_account_expense_id
                 else:
-                    partner = item.documento_id.participante_id.partner_id
-                    if item.documento_id.eh_venda:
+                    partner = item.invoice_id.partner_id
+                    if item.invoice_id.type in ('out_invoice', 'out_refund'):
                         account_debito = \
                             partner.property_account_receivable_id
-                    elif item.documento_id.eh_compra:
+                    elif item.invoice_id.type in ('in_invoice', 'in_refund'):
                         account_debito = partner.property_account_payable_id
 
                 if account_debito is None:
@@ -2138,7 +2192,7 @@ class AccountInvoiceLine(models.Model):
                 line_ids.append([0, 0, dados])
 
                 dados = {
-                    'move_id': account_move.id,
+                    # 'move_id': account_move.id,
                     # 'sped_documento_item_id': item.id,
                     'name': item.product_id.name,
                     'narration': template_item.campo,

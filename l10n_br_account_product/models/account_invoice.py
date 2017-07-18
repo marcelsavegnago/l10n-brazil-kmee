@@ -977,6 +977,15 @@ class AccountInvoice(models.Model):
 
         return move_lines_new
 
+    @api.multi
+    def invoice_validate(self):
+        super(AccountInvoice, self).invoice_validate()
+        for invoice in self:
+            invoice.financial_ids.write({
+                'document_number': invoice.name or
+                                   invoice.move_id.name or '/'})
+            invoice.financial_ids.action_confirm()
+
 
 class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'

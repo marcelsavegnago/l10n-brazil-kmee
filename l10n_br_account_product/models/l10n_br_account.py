@@ -39,6 +39,10 @@ class L10nBrAccountFiscalCategory(models.Model):
         ondelete='restrict',
         domain=[('type', '=', 'A')],
     )
+    account_move_template_id = fields.Many2one(
+        comodel_name='sped.account.move.template',
+        string='Modelo de partida dobrada',
+    )
 
 
 class L10nBrAccountDocumentSerie(models.Model):

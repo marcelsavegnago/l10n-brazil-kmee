@@ -107,7 +107,6 @@
                             <field name="date_in_out" string="Data de Entrada/Saida"/>
                             <field name="fiscal_category_id" domain="[('type','in',{'out_invoice': ['output'], 'out_refund': ['input'], 'in_refund': ['output'], 'in_invoice': ['input']}.get(type, [])),('fiscal_type','=','product')]" required="1"/>
                             <field name="fiscal_position" required="1" domain="[('fiscal_category_id', '=', fiscal_category_id)]" groups="base.group_extended,base.group_user"/>
-                            <field name="account_move_template_id" required="1"/>
                             <field name="ind_final" string="Operação com Consumidor final" attrs="{'required': [('nfe_version', '>', '3.00')]}"/>
                             <field name="ind_pres" string="Tipo de operação" attrs="{'required': [('nfe_version', '>', '3.00')]}"/>
                             <field name="check_total" groups="account.group_supplier_inv_check_total" attrs="{'invisible': [('type', 'in', ('out_invoice', 'out_refund'))]}"/>
@@ -468,6 +467,7 @@
                                     <field name="fci" attrs="{'readonly': [('product_id','!=', False)]}"/>
                                     <field name="fiscal_category_id" required="1" domain="[('journal_type', '=', 'sale')]"/>
                                     <field name="fiscal_position" required="1" domain="[('fiscal_category_id', '=', fiscal_category_id)]"/>
+                                    <field name="account_move_template_id" required="1"/>
                                     <field name="cfop_id"/>
                                     <field domain="[('journal_id', '=', parent.journal_id), ('type', '&lt;&gt;', 'view')]" name="account_id" on_change="onchange_account_id(product_id, parent.partner_id, parent.type, parent.fiscal_position,account_id, context)" groups="account.group_account_user"/>
                                     <field name="invoice_line_tax_id" context="{'type':parent.type}" domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]" widget="many2many_tags"/>

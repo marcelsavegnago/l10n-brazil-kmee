@@ -615,10 +615,7 @@ class AccountInvoice(models.Model):
         readonly=True,
         copy=False
     )
-    account_move_template_id = fields.Many2one(
-        comodel_name='sped.account.move.template',
-        string='Modelo de partida dobrada',
-    )
+
 
     @api.one
     @api.constrains('number')
@@ -999,6 +996,8 @@ class AccountInvoice(models.Model):
 
             }
 
+
+
             inv.invoice_line.gera_account_move_line(
                 # account_move,
                 inv.account_move_template_id, line_id)
@@ -1178,6 +1177,13 @@ class AccountInvoiceLine(models.Model):
                 self.other_costs_value -
                 self.discount_value
             )
+
+    @api.multi
+    @api.depends('fiscal_category_id')
+    def _compute_move_template(self):
+        for record in self:
+            record.account_move_template_id = \
+                record.fiscal_category_id.account_move_template_id
 
     code = fields.Char(
         u'Código do Produto', size=60)
@@ -1481,6 +1487,12 @@ class AccountInvoiceLine(models.Model):
              u' + outros custos\n'
              u' + seguro\n'
              u' - desconto'
+    )
+    account_move_template_id = fields.Many2one(
+        comodel_name='sped.account.move.template',
+        string='Modelo de partida dobrada',
+        compute='_compute_move_template',
+        store=True
     )
 
     @api.onchange("partner_order_line")

@@ -2118,9 +2118,9 @@ class AccountInvoiceLine(models.Model):
     #    return super(AccountInvoiceLine, self).write(vals)
 
     @api.multi
-    def gera_account_move_line(self, move_template, line_ids,
-                               campos_jah_contabilizados=[]):
+    def gera_account_move_line(self, move_template, line_ids):
         for item in self:
+            campos_jah_contabilizados = []
             for template_item in move_template.item_ids:
                 if not (
                     getattr(item.invoice_id, template_item.campo, False) or

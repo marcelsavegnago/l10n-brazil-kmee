@@ -984,7 +984,7 @@ class AccountInvoice(models.Model):
             part = self.env['res.partner']._find_accounting_partner(
                 inv.partner_id)
 
-            line_id = [(5, 0, {})]
+            line_id = []
 
             move_vals = {
                 'ref': inv.reference or inv.supplier_invoice_number or inv.name,
@@ -1013,7 +1013,7 @@ class AccountInvoice(models.Model):
                       ' Uncheck the centralized counterpart box in the related'
                       ' journal from the configuration menu.'))
 
-            # line = inv.finalize_invoice_move_lines(line)
+            # line = inv.finalize_invoice_move_lines(line_id)
 
             ctx['company_id'] = inv.company_id.id
             period = inv.period_id
@@ -1027,6 +1027,7 @@ class AccountInvoice(models.Model):
             ctx['invoice'] = inv
             ctx_nolang = ctx.copy()
             ctx_nolang.pop('lang', None)
+
             move = account_move.with_context(ctx_nolang).create(move_vals)
 
             # make the invoice point to that move
@@ -2189,7 +2190,7 @@ class AccountInvoiceLine(models.Model):
                 else:
                     dados['account_id'] = account_debito.id
 
-                line_ids.append([0, 0, dados])
+                line_ids.append((0, 0, dados))
 
                 dados = {
                     # 'move_id': account_move.id,
@@ -2223,7 +2224,7 @@ class AccountInvoiceLine(models.Model):
                 else:
                     dados['account_id'] = account_credito.id
 
-                line_ids.append([0, 0, dados])
+                line_ids.append((0, 0, dados))
                 campos_jah_contabilizados.append(template_item.campo)
 
 

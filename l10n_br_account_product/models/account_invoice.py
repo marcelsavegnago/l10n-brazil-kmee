@@ -16,6 +16,9 @@ from .l10n_br_account_product import (
 from .product import PRODUCT_ORIGIN
 from openerp.addons.l10n_br_account_product.sped.nfe.validator import txt
 from .l10n_br_account_product import EXIGIBILIDADE
+from ..constantes import (
+    CAMPO_DOCUMENTO_FISCAL_ITEM
+)
 
 FIELD_STATE = {'draft': [('readonly', False)]}
 
@@ -922,7 +925,8 @@ class AccountInvoice(models.Model):
 
             line_id = [(5, 0, {})]
 
-            invoice.invoice_line.gera_account_move_line(account_move,
+            invoice.invoice_line.gera_account_move_line(
+                account_move,
                 invoice.account_move_template_id, line_id)
 
             account_move.write({'line_id': line_id})
@@ -2063,7 +2067,10 @@ class AccountInvoiceLine(models.Model):
                                campos_jah_contabilizados=[]):
         for item in self:
             for template_item in move_template.item_ids:
-                if not getattr(item, template_item.campo, False):
+                if not (
+                    getattr(item.invoice_id, template_item.campo, False) or
+                    getattr(item, template_item.campo, False)
+                ):
                     continue
 
                 if template_item.campo in campos_jah_contabilizados:
@@ -2074,40 +2081,42 @@ class AccountInvoiceLine(models.Model):
                 # não se vai aproveitar o crédito do imposto, ele não é
                 # contabilizado à parte
                 #
-                if item.documento_id.eh_compra or \
-                        item.documento_id.eh_devolucao_venda:
-                    if template_item.campo in ('vr_icms', 'vr_icms_sn') and \
-                            not item.credita_icms:
+                if item.invoice_id.type in ('in_invoice', 'out_refund'):
+                    if (template_item.campo in
+                            ('icms_value', 'vr_icms_sn')
+                            and not item.credita_icms):
                         continue
-                    elif template_item.campo == 'vr_icms_st' and \
+                    elif template_item.campo == 'icms_st_value' and \
                             not item.credita_icms_st:
                         continue
-                    elif template_item.campo == 'vr_ipi' and \
+                    elif template_item.campo == 'ipi_value' and \
                             not item.credita_ipi:
                         continue
-                    elif template_item.campo in ('vr_pis_proprio',
-                        'vr_cofins_proprio') and not item.credita_pis_cofins:
+                    elif template_item.campo in ('pis_value',
+                            'cofins_value') and not item.credita_pis_cofins:
                         continue
 
-                valor = getattr(item, template_item.campo, 0)
+                valor = getattr(item, template_item.campo,
+                                getattr(item.invoice_id, template_item.campo,
+                                        0))
 
                 if not valor:
                     continue
 
                 dados = {
                     'move_id': account_move.id,
-                    'sped_documento_item_id': item.id,
-                    'name': item.produto_id.nome,
+                    # 'sped_documento_item_id': item.id,
+                    'name': item.product_id.name,
                     'narration': template_item.campo,
                     'debit': valor,
-                    'currency_id': item.currency_id.id,
+                    # 'currency_id': item.invoice_id.currency_id.id,
                 }
 
                 account_debito = None
                 if template_item.account_debito_id:
                     account_debito = template_item.account_debito_id
                 elif template_item.campo in CAMPO_DOCUMENTO_FISCAL_ITEM:
-                    product = item.produto_id.product_id
+                    product = item.produto_id
                     if item.documento_id.eh_venda:
                         account_debito = product.property_account_income_id
                     elif item.documento_id.eh_compra:
@@ -2130,28 +2139,28 @@ class AccountInvoiceLine(models.Model):
 
                 dados = {
                     'move_id': account_move.id,
-                    'sped_documento_item_id': item.id,
-                    'name': item.produto_id.nome,
+                    # 'sped_documento_item_id': item.id,
+                    'name': item.product_id.name,
                     'narration': template_item.campo,
                     'credit': valor,
-                    'currency_id': item.currency_id.id,
+                    # 'currency_id': item.invoice_id.currency_id.id,
                 }
 
                 account_credito = None
                 if template_item.account_credito_id:
                     account_credito = template_item.account_credito_id
                 elif template_item.campo in CAMPO_DOCUMENTO_FISCAL_ITEM:
-                    product = item.produto_id.product_id
-                    if item.documento_id.eh_venda:
+                    product = item.product_id
+                    if item.invoice_id.type in ('out_invoice', 'out_refund'):
                         account_credito = product.property_account_income_id
-                    elif item.documento_id.eh_compra:
+                    elif item.invoice_id.type in ('in_invoice', 'in_refund'):
                         account_credito = product.property_account_expense_id
                 else:
-                    partner = item.documento_id.participante_id.partner_id
-                    if item.documento_id.eh_venda:
+                    partner = item.invoice_id.partner_id
+                    if item.invoice_id.type in ('out_invoice', 'out_refund'):
                         account_credito = \
                             partner.property_account_receivable_id
-                    elif item.documento_id.eh_compra:
+                    elif item.invoice_id.type in ('in_invoice', 'in_refund'):
                         account_credito = partner.property_account_payable_id
 
                 if account_credito is None:

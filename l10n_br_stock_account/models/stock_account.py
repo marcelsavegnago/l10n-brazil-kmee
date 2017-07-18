@@ -68,7 +68,7 @@ class StockPicking(models.Model):
             comment += ' - ' + picking.note
 
         fiscal_doc_ref = self._context.get('fiscal_doc_ref', False)
-        if vals.get('type', False) == 'out_refund' and fiscal_doc_ref \
+        if vals.get('type', False).endswith('_refund') and fiscal_doc_ref \
                 and fiscal_doc_ref._name == 'account.invoice':
             result['fiscal_document_related_ids'] = [
                 (0, False,

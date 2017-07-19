@@ -1113,10 +1113,10 @@ class AccountInvoice(models.Model):
             #
             # Contabiliza as linhas e retorna os templates não contabilizados
             #
-
-            inv.invoice_line.gera_account_move_line(
-                line_id, template_nao_contabilizados
-            )
+            for invoice_line in inv.invoice_line:
+                move_template = invoice_line.account_move_template_id
+                invoice_line.gera_account_move_line(
+                    line_id, template_nao_contabilizados, move_template)
             #
             # Contabiliza os campos do cabeçalho do documento
             #
@@ -2322,110 +2322,123 @@ class AccountInvoiceLine(models.Model):
     #    return super(AccountInvoiceLine, self).write(vals)
 
     @api.multi
-    def gera_account_move_line(self, line_ids, template_nao_contabilizados):
-        for item in self:
+    def gera_account_move_line(
+            self, line_ids, template_nao_contabilizados, 
+            move_template, campos_jah_contabilizados=False):
+        self.ensure_one()
+        
+        if not campos_jah_contabilizados:
             campos_jah_contabilizados = []
-            for template_item in item.account_move_template_id.item_ids:
-                if not getattr(item, template_item.campo, False):
-                    template_nao_contabilizados.add(template_item)
+
+        for template_item in move_template.item_ids:
+            if not getattr(self, template_item.campo, False):
+                template_nao_contabilizados.add(template_item)
+                continue
+
+            if template_item.campo in campos_jah_contabilizados:
+                continue
+
+            #
+            # Nas notas de entrada por compra ou devolução de venda, se
+            # não se vai aproveitar o crédito do imposto, ele não é
+            # contabilizado à parte
+            #
+            if self.invoice_id.type in ('in_invoice', 'out_refund'):
+                if (template_item.campo in
+                        ('icms_value', 'vr_icms_sn')
+                        and not self.credita_icms):
+                    continue
+                elif template_item.campo == 'icms_st_value' and \
+                        not self.credita_icms_st:
+                    continue
+                elif template_item.campo == 'ipi_value' and \
+                        not self.credita_ipi:
+                    continue
+                elif template_item.campo in ('pis_value',
+                        'cofins_value') and not self.credita_pis_cofins:
                     continue
 
-                if template_item.campo in campos_jah_contabilizados:
-                    continue
+            valor = getattr(self, template_item.campo, 0)
 
-                #
-                # Nas notas de entrada por compra ou devolução de venda, se
-                # não se vai aproveitar o crédito do imposto, ele não é
-                # contabilizado à parte
-                #
-                if item.invoice_id.type in ('in_invoice', 'out_refund'):
-                    if (template_item.campo in
-                            ('icms_value', 'vr_icms_sn')
-                            and not item.credita_icms):
-                        continue
-                    elif template_item.campo == 'icms_st_value' and \
-                            not item.credita_icms_st:
-                        continue
-                    elif template_item.campo == 'ipi_value' and \
-                            not item.credita_ipi:
-                        continue
-                    elif template_item.campo in ('pis_value',
-                            'cofins_value') and not item.credita_pis_cofins:
-                        continue
+            if not valor:
+                continue
 
-                valor = getattr(item, template_item.campo, 0)
+            dados = {
+                # 'move_id': account_move.id,
+                # 'sped_documento_item_id': self.id,
+                'name': self.product_id.name,
+                'narration': template_item.campo,
+                'debit': valor,
+                # 'currency_id': self.invoice_id.currency_id.id,
+            }
 
-                if not valor:
-                    continue
+            account_debito = None
+            if template_item.account_debito_id:
+                account_debito = template_item.account_debito_id
+            elif template_item.campo in CAMPO_DOCUMENTO_FISCAL_ITEM:
+                product = self.produto_id
+                if self.invoice_id.type in ('out_invoice', 'out_refund'):
+                    account_debito = product.property_account_income_id
+                elif self.invoice_id.type in ('in_invoice', 'in_refund'):
+                    account_debito = product.property_account_expense_id
+            else:
+                partner = self.invoice_id.partner_id
+                if self.invoice_id.type in ('out_invoice', 'out_refund'):
+                    account_debito = \
+                        partner.property_account_receivable_id
+                elif self.invoice_id.type in ('in_invoice', 'in_refund'):
+                    account_debito = partner.property_account_payable_id
 
-                dados = {
-                    # 'move_id': account_move.id,
-                    # 'sped_documento_item_id': item.id,
-                    'name': item.product_id.name,
-                    'narration': template_item.campo,
-                    'debit': valor,
-                    # 'currency_id': item.invoice_id.currency_id.id,
-                }
+            if account_debito is None:
+                # raise
+                pass
+            else:
+                dados['account_id'] = account_debito.id
 
-                account_debito = None
-                if template_item.account_debito_id:
-                    account_debito = template_item.account_debito_id
-                elif template_item.campo in CAMPO_DOCUMENTO_FISCAL_ITEM:
-                    product = item.produto_id
-                    if item.invoice_id.type in ('out_invoice', 'out_refund'):
-                        account_debito = product.property_account_income_id
-                    elif item.invoice_id.type in ('in_invoice', 'in_refund'):
-                        account_debito = product.property_account_expense_id
-                else:
-                    partner = item.invoice_id.partner_id
-                    if item.invoice_id.type in ('out_invoice', 'out_refund'):
-                        account_debito = \
-                            partner.property_account_receivable_id
-                    elif item.invoice_id.type in ('in_invoice', 'in_refund'):
-                        account_debito = partner.property_account_payable_id
+            line_ids.append((0, 0, dados))
 
-                if account_debito is None:
-                    # raise
-                    pass
-                else:
-                    dados['account_id'] = account_debito.id
+            dados = {
+                # 'move_id': account_move.id,
+                # 'sped_documento_item_id': self.id,
+                'name': self.product_id.name,
+                'narration': template_item.campo,
+                'credit': valor,
+                # 'currency_id': self.invoice_id.currency_id.id,
+            }
 
-                line_ids.append((0, 0, dados))
+            account_credito = None
+            if template_item.account_credito_id:
+                account_credito = template_item.account_credito_id
+            elif template_item.campo in CAMPO_DOCUMENTO_FISCAL_ITEM:
+                product = self.product_id
+                if self.invoice_id.type in ('out_invoice', 'out_refund'):
+                    account_credito = product.property_account_income_id
+                elif self.invoice_id.type in ('in_invoice', 'in_refund'):
+                    account_credito = product.property_account_expense_id
+            else:
+                partner = self.invoice_id.partner_id
+                if self.invoice_id.type in ('out_invoice', 'out_refund'):
+                    account_credito = \
+                        partner.property_account_receivable_id
+                elif self.invoice_id.type in ('in_invoice', 'in_refund'):
+                    account_credito = partner.property_account_payable_id
 
-                dados = {
-                    # 'move_id': account_move.id,
-                    # 'sped_documento_item_id': item.id,
-                    'name': item.product_id.name,
-                    'narration': template_item.campo,
-                    'credit': valor,
-                    # 'currency_id': item.invoice_id.currency_id.id,
-                }
+            if account_credito is None:
+                # raise
+                pass
+            else:
+                dados['account_id'] = account_credito.id
 
-                account_credito = None
-                if template_item.account_credito_id:
-                    account_credito = template_item.account_credito_id
-                elif template_item.campo in CAMPO_DOCUMENTO_FISCAL_ITEM:
-                    product = item.product_id
-                    if item.invoice_id.type in ('out_invoice', 'out_refund'):
-                        account_credito = product.property_account_income_id
-                    elif item.invoice_id.type in ('in_invoice', 'in_refund'):
-                        account_credito = product.property_account_expense_id
-                else:
-                    partner = item.invoice_id.partner_id
-                    if item.invoice_id.type in ('out_invoice', 'out_refund'):
-                        account_credito = \
-                            partner.property_account_receivable_id
-                    elif item.invoice_id.type in ('in_invoice', 'in_refund'):
-                        account_credito = partner.property_account_payable_id
+            line_ids.append((0, 0, dados))
+            campos_jah_contabilizados.append(template_item.campo)
 
-                if account_credito is None:
-                    # raise
-                    pass
-                else:
-                    dados['account_id'] = account_credito.id
-
-                line_ids.append((0, 0, dados))
-                campos_jah_contabilizados.append(template_item.campo)
+        if move_template.parent_id:
+            self.gera_account_move_line(
+                line_ids=line_ids,
+                template_nao_contabilizados=template_nao_contabilizados,
+                move_template=move_template.parent_id,
+                campos_jah_contabilizados=campos_jah_contabilizados,
+            )
 
 
 class AccountInvoiceTax(models.Model):

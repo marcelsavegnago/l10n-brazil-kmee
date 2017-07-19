@@ -1369,6 +1369,12 @@ class AccountInvoiceLine(models.Model):
                 self.other_costs_value -
                 self.discount_value
             )
+            amount_tax = 0.0
+            for computed in taxes['taxes']:
+                tax = self.env['account.tax'].browse(computed['id'])
+                if not tax.tax_code_id.tax_discount:
+                    amount_tax += computed.get('amount', 0.0)
+            self.price_total = self.price_subtotal + amount_tax
 
     @api.multi
     @api.depends('fiscal_category_id')
@@ -1406,6 +1412,9 @@ class AccountInvoiceLine(models.Model):
         digits=dp.get_precision('Account'))
     price_gross = fields.Float(
         string='Vlr. Bruto', store=True, compute='_compute_price',
+        digits=dp.get_precision('Account'))
+    price_total = fields.Float(
+        string='Vlr. Total', store=True, compute='_compute_price',
         digits=dp.get_precision('Account'))
     price_tax_discount = fields.Float(
         string='Vlr. s/ Impostos', store=True, compute='_compute_price',

@@ -143,6 +143,7 @@
                                     <field name="invoice_line_tax_id" invisible="1" widget="many2many_tags" context="{'type':parent.type}"
                                         domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]"/>
                                     <field name="price_subtotal"/>
+                                    <field name="price_total"/>
                                 </tree>
                             </field>
                             <notebook>
@@ -464,6 +465,8 @@
                                         <field name="vr_custo_comercial"/>
                                         <field name="vr_custo_estoque"/>
                                         <field name="vr_operacao"/>
+                                        <field name="price_subtotal"/>
+                                        <field name="price_total"/>
                                     </group>
                                 </group>
                                 <group>

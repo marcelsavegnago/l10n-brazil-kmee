@@ -6,8 +6,10 @@
 #
 
 from openerp import api, fields, models
-from openerp.addons.financial.constants import FINANCIAL_DEBT_2RECEIVE, \
-    FINANCIAL_DEBT_2PAY
+from openerp.addons.financial.constants import (
+    FINANCIAL_DEBT_2PAY,
+    FINANCIAL_DEBT_2RECEIVE
+)
 
 
 class SpedDocumentoDuplicata(models.Model):
@@ -62,7 +64,7 @@ class SpedDocumentoDuplicata(models.Model):
 
     def prepara_financial_move(self):
         dados = {
-            'date_document': self.invoice_id.data_emissao,
+            'date_document': self.invoice_id.date_invoice,
             # 'participante_id': self.invoice_id.participante_id,
             'partner_id': self.invoice_id.partner_id.id,
             # 'empresa_id': self.invoice_id.empresa_id.id,
@@ -72,16 +74,22 @@ class SpedDocumentoDuplicata(models.Model):
             'sped_invoice_id': self.invoice_id.id,
             'sped_documento_duplicata_id': self.id,
             'document_type_id':
-                self.invoice_id.financial_document_type_id.id,
-            'account_id': self.invoice_id.financial_account_id.id,
+                self.invoice_id.fiscal_category_id.
+                    financial_document_type_id.id,
+            'account_id': self.invoice_id.fiscal_category_id.
+                financial_account_id.id,
             'date_maturity': self.data_vencimento,
             'amount_document': self.valor,
-            'document_number':
-                '{0.serie}-{0.numero:0.0f}-{1.numero}/{2}'.format(
-                    self.invoice_id, self,
-                    len(self.invoice_id.duplicata_ids)),
+            'document_number': self.invoice_id.internal_number,
+            # '{0.serie}-{0.numero:0.0f}-{1.numero}/{2}'.format(
+            #     self.invoice_id, self,
+            #     len(self.invoice_id.duplicata_ids)),
+            'account_move_id': self.invoice_id.move_id.id,
+            'journal_id': self.invoice_id.journal_id.id,
         }
 
-        dados['type'] = FINANCIAL_DEBT_2PAY
-
+        if self.invoice_id.type in ('out_invoice', 'out_refund'):
+            dados['type'] = FINANCIAL_DEBT_2RECEIVE
+        else:
+            dados['type'] = FINANCIAL_DEBT_2PAY
         return dados

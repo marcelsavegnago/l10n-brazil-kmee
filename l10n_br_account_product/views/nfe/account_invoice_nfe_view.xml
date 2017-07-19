@@ -255,7 +255,8 @@
                         <page string="Financeiro" groups="base.group_user">
                             <group>
                                 <group>
-                                    <field name="payment_term" class="oe_inline" on_change="onchange_payment_term_date_invoice(payment_term, date_invoice)"/>
+                                    <field name="payment_term" class="oe_inline"/>
+
                                     <field domain="[('partner_id.ref_companies', 'in', [company_id])]" name="partner_bank_id"/>
                                 </group>
                                 <group>
@@ -264,7 +265,7 @@
                                     <field name="reconciled" invisible="1"/>
                                 </group>
                             </group>
-                            <group string="Vencimentos">
+                            <group string="Duplicatas">
                                 <!--<field nolabel="1" name="move_line_receivable_id">-->
                                     <!--<tree string="Vencimentos">-->
                                         <!--<field name="journal_id"/>-->

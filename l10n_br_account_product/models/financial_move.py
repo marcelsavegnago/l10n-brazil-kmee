@@ -9,9 +9,9 @@ from openerp import api, fields, models
 
 
 class FinancialMove(models.Model):
-    _name = 'financial.move'
+    _inherit = 'financial.move'
 
     sped_documento_duplicata_id = fields.Many2one(
-        comodel_name="financial.move",
+        comodel_name="sped.documento.duplicata",
         string="Financial move"
     )

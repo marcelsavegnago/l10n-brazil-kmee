@@ -622,7 +622,7 @@ class AccountInvoice(models.Model):
     )
     duplicata_ids = fields.One2many(
         comodel_name='sped.documento.duplicata',
-        inverse_name='documento_id',
+        inverse_name='invoice_id',
         string='Duplicatas',
     )
 

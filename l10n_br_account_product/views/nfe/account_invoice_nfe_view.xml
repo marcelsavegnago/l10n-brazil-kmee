@@ -218,7 +218,37 @@
                                                 <field name="ii_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                             </group>
                                         </page>
+                                        <page string="IBPT" name="page_invoice_taxes_ii">
+                                            <group string="Valor aproximado dos tributos">
+                                                <field name="amount_total_taxes" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            </group>
+                                        </page>
                                     </notebook>
+                                </page>
+                                <page string="Retenções">
+                                    <group string="Retenção Impostos sobre serviços:" >
+                                        <group>
+                                            <field name="issqn_wh" />
+                                            <field name="pis_wh" />
+                                            <field name="cofins_wh" />
+                                            <field name="csll_wh" />
+                                            <field name="irrf_wh" />
+                                            <field name="inss_wh" />
+                                        </group>
+                                        <group>
+                                            <field name="amount_pis_cofins_csll" invisible="1"/>
+                                            <field name="issqn_value_wh" />
+                                            <field name="pis_value_wh" />
+                                            <field name="cofins_value_wh" />
+                                            <field name="csll_value_wh" />
+                                            <field name="irrf_base_wh" />
+                                            <field name="irrf_value_wh" />
+                                            <field name="inss_base_wh" />
+                                            <field name="inss_value_wh" />
+                                            <newline/>
+                                            <field name="amount_wh" />
+                                        </group>
+                                    </group>
                                 </page>
                             </notebook>
                         </page>
@@ -379,10 +409,6 @@
                                         <field name="vehicle_plate"/>
                                         <field name="vehicle_state_id"/>
                                         <field name="vehicle_l10n_br_city_id"/>
-                                        <field name="amount_freight"/>
-                                        <field name="amount_insurance"/>
-                                        <field name="amount_costs"/>
-                                        <field name="amount_total_taxes"/>
                                     </group>
                                     <group name="package_info">
                                         <field name="weight"/>
@@ -405,31 +431,6 @@
                         </page>
                         <page string="Financial" name="financial_page">
                             <field name="financial_ids"/>
-                        </page>
-                        <page string="Retenções">
-                            <group string="Retenção Impostos sobre serviços:" >
-                                <group>
-                                    <field name="issqn_wh" />
-                                    <field name="pis_wh" />
-                                    <field name="cofins_wh" />
-                                    <field name="csll_wh" />
-                                    <field name="irrf_wh" />
-                                    <field name="inss_wh" />
-                                </group>
-                                <group>
-                                    <field name="amount_pis_cofins_csll" invisible="1"/>
-                                    <field name="issqn_value_wh" />
-                                    <field name="pis_value_wh" />
-                                    <field name="cofins_value_wh" />
-                                    <field name="csll_value_wh" />
-                                    <field name="irrf_base_wh" />
-                                    <field name="irrf_value_wh" />
-                                    <field name="inss_base_wh" />
-                                    <field name="inss_value_wh" />
-                                    <newline/>
-                                    <field name="amount_wh" />
-                                </group>
-                            </group>
                         </page>
                     </notebook>
                 </sheet>

@@ -1327,6 +1327,8 @@ class AccountInvoice(models.Model):
         computations = self.payment_term.compute(
             valor, self.date_invoice)[0]
 
+        self.duplicata_ids = False
+
         payment_ids = []
         for idx, item in enumerate(computations):
             payment = dict(
@@ -1334,7 +1336,7 @@ class AccountInvoice(models.Model):
                 data_vencimento=item[0],
                 valor=item[1],
             )
-            payment_ids.append((0, False, payment))
+            payment_ids.append(payment)
         self.duplicata_ids = payment_ids
 
     @api.one

@@ -69,9 +69,9 @@ class NFe200(FiscalDocument):
                 self.nfe.infNFe.det.append(self.det)
 
             if invoice.journal_id.revenue_expense:
-                for move_line in invoice.move_line_receivable_id:
+                for dup in invoice.duplicata_ids:
                     self.dup = self._get_Dup()
-                    self._encashment_data(invoice, move_line)
+                    self._encashment_data(invoice, dup)
                     self.nfe.infNFe.cobr.dup.append(self.dup)
 
             try:
@@ -542,19 +542,13 @@ class NFe200(FiscalDocument):
         self.di_line.vDescDI.valor = str(
             "%.2f" % invoice_line_di.amount_discount)
 
-    def _encashment_data(self, invoice, move_line):
+    def _encashment_data(self, invoice, dup):
         """Dados de Cobrança"""
-
-        if invoice.type in ('out_invoice', 'in_refund'):
-            value = move_line.debit
-        else:
-            value = move_line.credit
-
-        self.dup.nDup.valor = move_line.name
-        self.dup.dVenc.valor = (move_line.date_maturity or
+        self.dup.nDup.valor = dup.numero
+        self.dup.dVenc.valor = (dup.data_vencimento or
                                 invoice.date_due or
                                 invoice.date_invoice)
-        self.dup.vDup.valor = str("%.2f" % value)
+        self.dup.vDup.valor = str("%.2f" % dup.valor)
 
     def _carrier_data(self, invoice):
         """Dados da Transportadora e veiculo"""

@@ -5,6 +5,8 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
+from __future__ import division, print_function, unicode_literals
+
 from openerp import api, fields, models
 from openerp.addons.financial.constants import (
     FINANCIAL_DEBT_2PAY,
@@ -13,7 +15,7 @@ from openerp.addons.financial.constants import (
 
 
 class SpedDocumentoDuplicata(models.Model):
-    _name = 'sped.documento.duplicata'
+    _name = b'sped.documento.duplicata'
     _description = 'Duplicatas do Documento Fiscal'
     _order = 'invoice_id, data_vencimento'
     # _rec_name = 'numero'
@@ -80,11 +82,10 @@ class SpedDocumentoDuplicata(models.Model):
                 financial_account_id.id,
             'date_maturity': self.data_vencimento,
             'amount_document': self.valor,
-            'document_number': self.invoice_id.internal_number \
-                + '/' + self.numero,
-            # '{0.serie}-{0.numero:0.0f}-{1.numero}/{2}'.format(
-            #     self.invoice_id, self,
-            #     len(self.invoice_id.duplicata_ids)),
+            'document_number':
+                '{0.serie_nfe}-{0.number}-{1.numero}/{2}'.format(
+                    self.invoice_id, self,
+                    unicode(len(self.invoice_id.duplicata_ids))),
             'account_move_id': self.invoice_id.move_id.id,
             'journal_id': self.invoice_id.journal_id.id,
         }

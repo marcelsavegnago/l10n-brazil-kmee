@@ -28,6 +28,20 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
     _order = 'date_hour_invoice DESC, internal_number DESC'
 
+    @api.model
+    def _amount_line_tax(self, line):
+        value = 0.0
+        price = line.price_unit
+        qty = line.quantity
+        for computed in line.invoice_line_tax_id.compute_all(
+                price, qty, product=line.product_id,
+                partner=line.partner_id,
+                fiscal_position=line.fiscal_position)['taxes']:
+            tax = self.env['account.tax'].browse(computed['id'])
+            if not tax.tax_code_id.tax_discount:
+                value += computed.get('amount', 0.0)
+        return value
+
     @api.one
     @api.depends('invoice_line', 'tax_line.amount')
     def _compute_amount(self):
@@ -66,9 +80,13 @@ class AccountInvoice(models.Model):
         self.amount_tax_discount = 0.0
         self.amount_untaxed = sum(
             line.price_subtotal for line in self.invoice_line)
-        self.amount_tax = sum(tax.amount
-                              for tax in self.tax_line
-                              if not tax.tax_code_id.tax_discount)
+        if self.tax_line:
+            self.amount_tax = sum(tax.amount
+                                  for tax in self.tax_line
+                                  if not tax.tax_code_id.tax_discount)
+        else:
+            self.amount_tax = sum(self._amount_line_tax(line)
+                                  for line in self.invoice_line)
         self.amount_total = self.amount_tax + self.amount_untaxed
 
         self.vr_custo_comercial = sum(

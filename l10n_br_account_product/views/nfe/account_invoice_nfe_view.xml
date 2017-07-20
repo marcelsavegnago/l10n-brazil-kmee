@@ -213,6 +213,43 @@
                                                 </group>
                                             </group>
                                         </page>
+                                        <page string="ISSQN" name="page_invoice_taxes_iss">
+                                            <group string="ISSQN">
+                                                <field name="issqn_base" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                <field name="issqn_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            </group>
+                                        </page>
+                                         <!-- EXIBIR OS CAMPOS RELACIONADOS A TODOS OS IMPOSTOS DE SERVIÇO???? -->
+                                        <!--<page string="Serviço" name="page_invoice_taxes_serviço">-->
+                                            <!--<group>-->
+                                                <!--<group string="ISSQN">-->
+                                                    <!--<field name="issqn_base" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+                                                    <!--<field name="issqn_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+                                                <!--</group>-->
+                                                <!--<group string="CSLL">-->
+                                                    <!--<field name="csll_base" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+                                                    <!--<field name="csll_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+                                                <!--</group>-->
+                                            <!--</group>-->
+                                            <!--<group>-->
+                                                <!--<group string="PIS">-->
+                                                    <!--<field name="service_pis_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+                                                <!--</group>-->
+                                                <!--<group string="COFINS">-->
+                                                    <!--<field name="service_cofins_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+                                                <!--</group>-->
+                                            <!--</group>-->
+                                            <!--<group>-->
+                                                <!--<group string="IR">-->
+                                                    <!--<field name="ir_base" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+                                                    <!--<field name="ir_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+                                                <!--</group>-->
+                                                <!--<group string="INSS">-->
+                                                    <!--<field name="inss_base" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+                                                    <!--<field name="inss_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+                                                <!--</group>-->
+                                            <!--</group>-->
+                                        <!--</page>-->
                                         <page string="II" name="page_invoice_taxes_ii">
                                             <group string="Imposto de Importação">
                                                 <field name="ii_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>

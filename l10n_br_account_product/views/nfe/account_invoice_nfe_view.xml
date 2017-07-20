@@ -537,7 +537,7 @@
                                     <group string="Detalhes do ICMS">
                                         <group>
                                             <field name="icms_manual" invisible="True"/>
-                                            <field name="icms_cst_id" attrs="{'required': [('product_type','=', 'product')]}"/>
+                                            <field name="icms_cst_id"/>
                                             <field name="icms_origin"/>
                                             <field name="icms_base_type"/>
                                             <field name="icms_base"/>
@@ -582,7 +582,7 @@
                                     <group string="Detalhes do IPI">
                                         <group>
                                             <field name="ipi_manual" invisible="True"/>
-                                            <field name="ipi_cst_id" attrs="{'required': [('product_type','=', 'product')]}"/>
+                                            <field name="ipi_cst_id"/>
                                             <field name="ipi_type"/>
                                             <field name="ipi_base"/>
                                         </group>

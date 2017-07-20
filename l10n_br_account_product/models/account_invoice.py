@@ -1319,6 +1319,18 @@ class AccountInvoice(models.Model):
             payment_ids.append((0, False, payment))
         self.duplicata_ids = payment_ids
 
+    @api.one
+    @api.depends('financial_ids.state')
+    def _compute_reconciled(self):
+        self.reconciled = self.test_paid()
+
+    @api.multi
+    def test_paid(self):
+        line_ids = self.financial_ids
+        if not line_ids:
+            return False
+        return all(line.state == 'paid' for line in line_ids)
+
 
 class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'

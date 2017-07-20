@@ -267,8 +267,8 @@ class AccountInvoice(models.Model):
     type = fields.Selection(
         states={'draft': [('readonly', False)]}
     )
-    vendor_serie = fields.Char(
-        'Série NF Entrada', size=12, readonly=True,
+    serie_nfe = fields.Char(
+        'Série NF', size=12, readonly=True, oldname='vendor_serie',
         states={'draft': [('readonly', False)]},
         help=u"Série do número da Nota Fiscal do Fornecedor")
     nfe_version = fields.Selection(
@@ -664,7 +664,7 @@ class AccountInvoice(models.Model):
             else:
                 domain.extend([
                     ('partner_id', '=', self.partner_id.id),
-                    ('vendor_serie', '=', self.vendor_serie),
+                    ('serie_nfe', '=', self.serie_nfe),
                     ('issuer', '=', '1')])
 
             invoices = self.env['account.invoice'].search(domain)
@@ -765,9 +765,11 @@ class AccountInvoice(models.Model):
                 date_in_out = invoice.date_in_out or fields.datetime.now()
                 self.write(
                     {'internal_number': seq_number,
+                     'serie_nfe': invoice.document_serie_id.code,
                      'number': seq_number,
                      'date_hour_invoice': date_time_invoice,
-                     'date_in_out': date_in_out}
+                     'date_in_out': date_in_out
+                     }
                 )
         return True
 

@@ -80,7 +80,8 @@ class SpedDocumentoDuplicata(models.Model):
                 financial_account_id.id,
             'date_maturity': self.data_vencimento,
             'amount_document': self.valor,
-            'document_number': self.invoice_id.internal_number,
+            'document_number': self.invoice_id.internal_number \
+                + '/' + self.numero,
             # '{0.serie}-{0.numero:0.0f}-{1.numero}/{2}'.format(
             #     self.invoice_id, self,
             #     len(self.invoice_id.duplicata_ids)),

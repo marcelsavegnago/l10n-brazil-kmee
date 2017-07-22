@@ -27,6 +27,7 @@
         'views/l10n_br_account_product_view.xml',
         'views/l10n_br_account_view.xml',
         'views/sped_account_move_template_view.xml',
+        'views/sped_forma_pagamento_view.xml',
         'views/l10n_br_account_product_view.xml',
         'views/account_view.xml',
         'views/account_invoice_view.xml',

@@ -46,6 +46,7 @@
         'security/ir.model.access.csv',
         'report/account_invoice_report_view.xml',
         'views/l10n_br_base_view.xml',
+        'views/financial_move.xml',
     ],
     'demo': [
         'demo/account_tax_code_demo.xml',

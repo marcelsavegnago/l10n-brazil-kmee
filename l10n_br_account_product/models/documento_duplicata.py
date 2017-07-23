@@ -88,6 +88,9 @@ class SpedDocumentoDuplicata(models.Model):
                     unicode(len(self.invoice_id.duplicata_ids))),
             'account_move_id': self.invoice_id.move_id.id,
             'journal_id': self.invoice_id.journal_id.id,
+            'payment_term_id': self.invoice_id.payment_term.id,
+            'sped_forma_pagamento_id':
+                self.invoice_id.payment_term.sped_forma_pagamento_id.id,
         }
 
         if self.invoice_id.type in ('out_invoice', 'out_refund'):

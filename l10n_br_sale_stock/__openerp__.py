@@ -17,7 +17,6 @@
     ],
     'data': [
         'views/sale_stock_view.xml',
-        'security/ir.model.access.csv',
     ],
     'demo': [
         'demo/l10n_br_sale_stock_demo.xml'

@@ -12,7 +12,7 @@
     fiscal_category_id: fc_b7aafa9c3056c3f020ceae63d7312504
     issuer: '1'
     internal_number: '2001'
-    serie_nfe: '1'
+    vendor_serie: '1'
     reference_type: none
     name: 'NFe Invoice Test'
     invoice_line:

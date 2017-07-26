@@ -271,7 +271,7 @@ class L10nbrAccountDocumentRelated(models.Model):
                 result['value']['serie'] = inv_related.document_serie_id and \
                     inv_related.document_serie_id.code or False
             else:
-                result['value']['serie'] = inv_related.serie_nfe
+                result['value']['serie'] = inv_related.vendor_serie
 
             result['value']['internal_number'] = inv_related.internal_number
             result['value']['state_id'] = inv_related.partner_id and \

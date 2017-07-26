@@ -131,7 +131,7 @@ class L10nBrDocumentEvent(models.Model):
 
     _order = 'write_date desc'
 
-    @api.one
+    @api.multi
     @api.depends('company_id.name', 'origin')
     def _compute_display_name(self):
         self.ensure_one()

@@ -41,7 +41,3 @@
 "l10n_br_tax_definition_company_purchase_product_manager","l10n_br_tax.definition.company.purchase_product","model_l10n_br_tax_definition_company_purchase_product","account.group_account_manager",1,1,1,1
 "l10n_br_tax_definition_company_purchase_product_user","l10n_br_tax.definition.company.purchase_product","model_l10n_br_tax_definition_company_purchase_product","account.group_account_invoice",1,0,0,0
 "l10n_br_tax_definition_service_type_account_user","l10n_br_tax_definition_service_type_account_user","model_l10n_br_tax_definition_service_type","account.group_account_user",1,0,0,0
-"sped_account_move_template_item_user","access_sped_account_move_template_item","model_sped_account_move_template_item","account.group_account_user",1,0,0,0
-"sped_account_move_template_item_manager","access_sped_account_move_template_item","model_sped_account_move_template_item","account.group_account_manager",1,1,1,1
-"sped_account_move_template_user","access_sped_account_move_template","model_sped_account_move_template","account.group_account_user",1,0,0,0
-"sped_account_move_template_manager","access_sped_account_move_template","model_sped_account_move_template","account.group_account_manager",1,1,1,1

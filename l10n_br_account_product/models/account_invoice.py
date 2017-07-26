@@ -1000,7 +1000,7 @@ class AccountInvoice(models.Model):
                     account_debito = \
                         partner.property_account_receivable_id
                 elif self.type in ('in_invoice', 'in_refund'):
-                    account_debito = partner.property_account_payable_id
+                    account_debito = partner.property_account_payable
 
             if account_debito is None:
                 # raise
@@ -1028,7 +1028,7 @@ class AccountInvoice(models.Model):
                     account_credito = \
                         partner.property_account_receivable_id
                 elif self.type in ('in_invoice', 'in_refund'):
-                    account_credito = partner.property_account_payable_id
+                    account_credito = partner.property_account_payable
 
             if account_credito is None:
                 # raise
@@ -2414,16 +2414,16 @@ class AccountInvoiceLine(models.Model):
             elif template_item.campo in CAMPO_DOCUMENTO_FISCAL_ITEM:
                 product = self.produto_id
                 if self.invoice_id.type in ('out_invoice', 'out_refund'):
-                    account_debito = product.property_account_income_id
+                    account_debito = product.property_account_income
                 elif self.invoice_id.type in ('in_invoice', 'in_refund'):
-                    account_debito = product.property_account_expense_id
+                    account_debito = product.property_account_expense
             else:
                 partner = self.invoice_id.partner_id
                 if self.invoice_id.type in ('out_invoice', 'out_refund'):
                     account_debito = \
-                        partner.property_account_receivable_id
+                        partner.property_account_receivable
                 elif self.invoice_id.type in ('in_invoice', 'in_refund'):
-                    account_debito = partner.property_account_payable_id
+                    account_debito = partner.property_account_payable
 
             if account_debito is None:
                 # raise
@@ -2448,16 +2448,16 @@ class AccountInvoiceLine(models.Model):
             elif template_item.campo in CAMPO_DOCUMENTO_FISCAL_ITEM:
                 product = self.product_id
                 if self.invoice_id.type in ('out_invoice', 'out_refund'):
-                    account_credito = product.property_account_income_id
+                    account_credito = product.property_account_income
                 elif self.invoice_id.type in ('in_invoice', 'in_refund'):
-                    account_credito = product.property_account_expense_id
+                    account_credito = product.property_account_expense
             else:
                 partner = self.invoice_id.partner_id
                 if self.invoice_id.type in ('out_invoice', 'out_refund'):
                     account_credito = \
-                        partner.property_account_receivable_id
+                        partner.property_account_receivable
                 elif self.invoice_id.type in ('in_invoice', 'in_refund'):
-                    account_credito = partner.property_account_payable_id
+                    account_credito = partner.property_account_payable
 
             if account_credito is None:
                 # raise

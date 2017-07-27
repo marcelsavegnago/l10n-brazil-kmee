@@ -68,7 +68,7 @@ def totais_por_intervalo(movimentacoes, data_inicial, status, intervalo=30):
             })
 
     for movimentacao in movimentacoes:
-        periodos[dicionario_datas_periodos[data_inicial]]['total_periodo'] += movimentacao[3]
+        periodos[dicionario_datas_periodos[movimentacao[2]]]['total_periodo'] += movimentacao[3]
 
     return periodos
 

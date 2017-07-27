@@ -7,6 +7,7 @@ from . import financial_account
 from . import financial_account_tree_analysis
 from . import financial_document_type
 from . import inherited_res_partner_bank
+from . import res_company
 from . import financial_move
 from . import financial_installment
 from . import financial_installment_simulation

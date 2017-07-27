@@ -43,6 +43,7 @@
         'wizards/report_xlsx_financial_cashflow_wizard_view.xml',
         'wizards/report_xlsx_financial_moves_states_wizard.xml',
         'views/financial_move_payment_one2many_base_view.xml',
+        'views/res_company.xml',
         'views/financial_move_debt_base_view.xml',
         'views/financial_move_debt_2receive_view.xml',
         'views/financial_move_debt_2pay_view.xml',

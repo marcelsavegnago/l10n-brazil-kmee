@@ -16,6 +16,7 @@
                     <group>
                         <group name="general" colspan="4" col="2">
                             <field name="name" required="1" colspan="2" />
+                            <field name="adiantar_dia_pagamento_util"/>
                         </group>
                     </group>
                 </sheet>

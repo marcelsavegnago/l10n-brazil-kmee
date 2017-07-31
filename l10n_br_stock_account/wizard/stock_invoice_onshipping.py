@@ -32,21 +32,22 @@ class StockInvoiceOnShipping(models.TransientModel):
         """
         return self._fiscal_doc_ref_default()
 
+    def active_picking_ids(self):
+        context = self.env.context
+        return self.env['stock.picking'].browse(context.get('active_ids'))
+
+    @api.model
+    def get_returned_picking_ids(self):
+        return self.active_picking_ids().mapped(
+            'move_lines.origin_returned_move_id.picking_id'
+        )
+
     @api.multi
     def _fiscal_doc_ref_default(self):
-        ref_id = False
-        picking_obj = self.env['stock.picking']
-        for record in picking_obj.browse(
-                self._context.get('active_ids', False)):
-            move = record.move_lines[0]
-            if move.origin_returned_move_id:
-                ref_id = self.env['account.invoice'].search([
-                    ('nfe_access_key', '=',
-                     move.origin_returned_move_id.picking_id.
-                     fiscal_document_access_key)
-                ], limit=1).id
-            res = 'account.invoice,%d' % ref_id
-            return res
+        return_picking_ids = self.get_returned_picking_ids()
+        ref_id = return_picking_ids.mapped('invoice_ids')[:1].id
+        res = 'account.invoice,%d' % ref_id
+        return res
 
     journal_id = fields.Many2one(
         'account.journal', 'Destination Journal',
@@ -79,9 +80,8 @@ class StockInvoiceOnShipping(models.TransientModel):
     def create_invoice(self):
         self.ensure_one()
         context = dict(self.env.context)
-        active_ids = context.get('active_ids', [])
 
-        picking = self.env['stock.picking'].browse(active_ids)
+        picking = self.active_picking_ids()
         #
         # Permite o faturamento com usuário de outra empresa, desde que o mesmo
         # tenha acesso a outra empresa, mas no momento não esteja logado com

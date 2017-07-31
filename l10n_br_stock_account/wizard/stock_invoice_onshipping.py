@@ -16,7 +16,24 @@ class StockInvoiceOnShipping(models.TransientModel):
     _inherit = 'stock.invoice.onshipping'
 
     @api.multi
+    def _fiscal_doc_ref_selection(self):
+        return FISCAL_DOC_REF
+
+    @api.multi
     def _compute_fiscal_doc_ref(self):
+        """
+        Delegate calculation of fiscal_doc_ref default.
+
+        A string argument to fields.Reference(default=...) is interpreted as
+        the actual default value instead of method to look up the default.
+
+        Here we delegate to self._fiscal_doc_ref_default() so inheriting models
+        can override it.
+        """
+        return self._fiscal_doc_ref_default()
+
+    @api.multi
+    def _fiscal_doc_ref_default(self):
         ref_id = False
         picking_obj = self.env['stock.picking']
         for record in picking_obj.browse(
@@ -37,7 +54,8 @@ class StockInvoiceOnShipping(models.TransientModel):
     fiscal_category_journal = fields.Boolean(
         u'Diário da Categoria Fiscal', default=True)
 
-    fiscal_doc_ref = fields.Reference(selection=FISCAL_DOC_REF, readonly=False,
+    fiscal_doc_ref = fields.Reference(selection="_fiscal_doc_ref_selection",
+                                      readonly=False,
                                       default=_compute_fiscal_doc_ref,
                                       string=u'Documento Fiscal Relacionado')
 

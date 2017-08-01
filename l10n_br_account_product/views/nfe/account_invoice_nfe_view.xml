@@ -284,6 +284,7 @@
                                             <field name="inss_value_wh" />
                                             <newline/>
                                             <field name="amount_wh" />
+                                            <button name="button_reset_taxes" states="draft,proforma2" string="(update)" class="oe_link oe_edit_only" type="object" help="Recompute taxes and total"/>
                                         </group>
                                     </group>
                                 </page>

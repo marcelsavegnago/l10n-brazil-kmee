@@ -20,6 +20,8 @@ from ..constantes import (
     CAMPO_DOCUMENTO_FISCAL,
     CAMPO_DOCUMENTO_FISCAL_ITEM,
 )
+from openerp.addons.l10n_br_base.tools.misc import calc_price_ratio
+
 
 FIELD_STATE = {'draft': [('readonly', False)]}
 
@@ -244,6 +246,78 @@ class AccountInvoice(models.Model):
             inv.amount_wh = (inv.issqn_value_wh + inv.pis_value_wh + inv.
                              cofins_value_wh + inv.csll_value_wh + inv.
                              irrf_value_wh + inv.inss_value_wh)
+
+    @api.one
+    def _set_irrf_wh(self):
+        for line in self.invoice_line:
+            line.write({
+                'ir_wh_value': calc_price_ratio(
+                    line.price_gross,
+                    self.irrf_value_wh,
+                    line.invoice_id.amount_total
+                )
+            })
+        return True
+
+    @api.one
+    def _set_csll_wh(self):
+        for line in self.invoice_line:
+            line.write({
+                'csll_wh_value': calc_price_ratio(
+                    line.price_gross,
+                    self.csll_value_wh,
+                    line.invoice_id.amount_total
+                )
+            })
+        return True
+
+    @api.one
+    def _set_inss_wh(self):
+        for line in self.invoice_line:
+            line.write({
+                'inss_wh_value': calc_price_ratio(
+                    line.price_gross,
+                    self.inss_value_wh,
+                    line.invoice_id.amount_total
+                )
+            })
+        return True
+
+    @api.one
+    def _set_pis_wh(self):
+        for line in self.invoice_line:
+            line.write({
+                'pis_wh_value': calc_price_ratio(
+                    line.price_gross,
+                    self.pis_value_wh,
+                    line.invoice_id.amount_total
+                )
+            })
+        return True
+
+    @api.one
+    def _set_cofins_wh(self):
+        for line in self.invoice_line:
+            line.write({
+                'cofins_wh_value': calc_price_ratio(
+                    line.price_gross,
+                    self.cofins_value_wh,
+                    line.invoice_id.amount_total
+                )
+            })
+        return True
+
+    @api.one
+    def _set_issqn_wh(self):
+        for line in self.invoice_line:
+            line.write({
+                'issqn_wh_value': calc_price_ratio(
+                    line.price_gross,
+                    self.issqn_value_wh,
+                    line.invoice_id.amount_total
+                )
+            })
+        return True
 
     @api.multi
     @api.depends('amount_total', 'amount_wh')
@@ -504,25 +578,25 @@ class AccountInvoice(models.Model):
     issqn_value_wh = fields.Float(
         u'Valor da retenção do ISSQN', readonly=True,
         compute='_amount_all_service', states=FIELD_STATE,
-        digits_compute=dp.get_precision('Account'))
+        digits_compute=dp.get_precision('Account'), inverse=_set_issqn_wh)
     pis_wh = fields.Boolean(
         u'Retém PIS', readonly=True, states=FIELD_STATE)
     pis_value_wh = fields.Float(
         u'Valor da retenção do PIS', readonly=True,
         compute='_amount_all_service', states=FIELD_STATE,
-        digits_compute=dp.get_precision('Account'))
+        digits_compute=dp.get_precision('Account'), inverse=_set_pis_wh)
     cofins_wh = fields.Boolean(
         u'Retém COFINS', readonly=True, states=FIELD_STATE)
     cofins_value_wh = fields.Float(
         u'Valor da retenção do Cofins', readonly=True,
         compute='_amount_all_service', states=FIELD_STATE,
-        digits_compute=dp.get_precision('Account'))
+        digits_compute=dp.get_precision('Account'), inverse=_set_cofins_wh)
     csll_wh = fields.Boolean(
         u'Retém CSLL', readonly=True, states=FIELD_STATE)
     csll_value_wh = fields.Float(
         u'Valor da retenção de CSLL', readonly=True,
         compute='_amount_all_service', states=FIELD_STATE,
-        digits_compute=dp.get_precision('Account'))
+        digits_compute=dp.get_precision('Account'), inverse=_set_csll_wh)
     irrf_wh = fields.Boolean(
         u'Retém IRRF', readonly=True, states=FIELD_STATE)
     irrf_base_wh = fields.Float(
@@ -532,7 +606,8 @@ class AccountInvoice(models.Model):
     irrf_value_wh = fields.Float(
         u'Valor da retenção de IRRF', readonly=True,
         compute='_amount_all_service', states=FIELD_STATE,
-        digits_compute=dp.get_precision('Account'))
+        digits_compute=dp.get_precision('Account'), inverse=_set_irrf_wh
+    )
     inss_wh = fields.Boolean(
         u'Retém INSS', readonly=True, states=FIELD_STATE)
     inss_base_wh = fields.Float(
@@ -542,7 +617,7 @@ class AccountInvoice(models.Model):
     inss_value_wh = fields.Float(
         u'Valor da Retenção da Previdência Social ', readonly=True,
         states=FIELD_STATE, digits_compute=dp.get_precision('Account'),
-        compute='_amount_all_service')
+        compute='_amount_all_service', inverse=_set_inss_wh)
     csll_base = fields.Float(
         string=u'Base CSLL', compute='_amount_all_service',
         digits_compute=dp.get_precision('Account'), store=True)

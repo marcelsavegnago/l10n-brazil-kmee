@@ -45,7 +45,9 @@
         # 'wizards/financial_pay_receive.xml',
         'wizards/report_xlsx_financial_cashflow_wizard_view.xml',
         'wizards/report_xlsx_financial_moves_states_wizard.xml',
+        'wizards/report_xlsx_financial_partner_statement_wizard.xml',
         'wizards/report_xlsx_financial_defaults_wizard.xml',
+
         'views/financial_move_payment_one2many_base_view.xml',
         'views/financial_move_debt_base_view.xml',
         'views/financial_move_debt_2receive_view.xml',
@@ -68,6 +70,7 @@
         # 'report/report_financial.xml',
         'reports/report_xlsx_financial_cashflow_data.xml',
         'reports/report_xlsx_financial_moves_states_data.xml',
+        'reports/report_xlsx_financial_partner_statement_data.xml',
         'reports/report_xlsx_financial_defaults_data.xml',
 
         # 'security/inherited_res_partner_bank_security.xml',

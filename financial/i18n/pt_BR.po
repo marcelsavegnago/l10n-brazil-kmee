@@ -1324,3 +1324,20 @@ msgstr "Movimentações Financeiras a receber por parceiros"
 #: model:ir.ui.menu,name:financial.report_xlsx_financial_moves_states_wizard_menu
 msgid "Moves State"
 msgstr "Movimentações Financeiras"
+
+#. module: financial
+#: model:ir.actions.act_window,name:financial.report_xlsx_financial_partner_statement_wizard_action
+#: model:ir.actions.report.xml,name:financial.report_xlsx_financial_partner_statement_action
+#: model:ir.ui.menu,name:financial.report_xlsx_financial_partner_statement_wizard_menu
+msgid "Financial Partner Statement"
+msgstr "Extrato de Cliente e Fornecedor"
+
+#. module: financial
+#: field:report.xlsx.financial.partner.statement.wizard,type:0
+msgid "Statement type"
+msgstr "Tipo de Extrato"
+
+#. module: financial
+#: field:report.xlsx.financial.partner.statement.wizard,partner_id:0
+msgid "Partner id"
+msgstr "Parceiro"

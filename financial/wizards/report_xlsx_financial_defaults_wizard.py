@@ -11,48 +11,21 @@ from datetime import datetime
 from openerp import fields, models, api, _
 
 
-class ReportXlsxFinancialFinancialMovesStatesWizard(models.TransientModel):
-    _name = b'report.xlsx.financial.moves.states.wizard'
-    _description = 'Report Xlsx Financial Moves States Wizard'
+class ReportXlsxFinancialDefaultsWizard(models.TransientModel):
+    _name = b'report.xlsx.financial.defaults.wizard'
+    _description = 'Report Xlsx Financial Defaults Wizard'
 
     company_id = fields.Many2one(
         comodel_name='res.company',
         default=lambda self: self.env.user.company_id,
         string='Company'
     )
-    group_by = fields.Selection(
-        string='Group By',
-        required=True,
-        selection=[
-            ('date_business_maturity', _('Maturity')),
-            ('partner_id', _('Partner')),
-        ],
-        default='date_business_maturity',
-    )
     selected_partners = fields.Many2many(
         comodel_name="res.partner",
-        relation="financial_move_partner",
+        relation="financial_move_partner_defaults",
         column1="wizard_id",
         column2="partner_id",
-    )
-    type = fields.Selection(
-        string=_('Type'),
         required=True,
-        selection=[
-            ('2receive', _('To Receive')),
-            ('2pay', _('To Pay'))
-        ],
-        default='2receive',
-    )
-    move_state = fields.Selection(
-        string=_('State'),
-        selection=[
-            ('open', 'Open'),
-            ('paid', 'Paid'),
-        ],
-        help=_(
-            "If none of the options was selected, all of them will be search!"
-        )
     )
     date_from = fields.Date(
         string=_("Date From"),
@@ -71,5 +44,5 @@ class ReportXlsxFinancialFinancialMovesStatesWizard(models.TransientModel):
 
         return self.env['report'].get_action(
             self,
-            report_name='report_xlsx_financial_moves_states'
+            report_name='report_xlsx_financial_defaults'
         )

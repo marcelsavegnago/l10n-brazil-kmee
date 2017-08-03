@@ -17,7 +17,7 @@ from .report_xlsx_financial_base import ReportXlsxFinancialBase
 
 class ReportXslxFinancialMovesCancelled(ReportXlsxFinancialBase):
     def define_title(self):
-        title = _('Relatório de Lançamentos Baixados')
+        title = _('Report Moves Cancelled')
 
         return title
 

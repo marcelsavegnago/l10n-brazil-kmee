@@ -20,21 +20,6 @@ class ReportXlsxFinancialFinancialMovesCancelledWizard(models.TransientModel):
         default=lambda self: self.env.user.company_id,
         string='Company'
     )
-    group_by = fields.Selection(
-        string='Group By',
-        required=True,
-        selection=[
-            ('date_business_maturity', _('Maturity')),
-            ('partner_id', _('Partner')),
-        ],
-        default='date_business_maturity',
-    )
-    selected_partners = fields.Many2many(
-        comodel_name="res.partner",
-        relation="financial_move_partner",
-        column1="wizard_id",
-        column2="partner_id",
-    )
     type = fields.Selection(
         string=_('Type'),
         required=True,

@@ -15,10 +15,6 @@
                     <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
                 </group>
                 <group>
-                    <field name="group_by"/>
-                    <field name="selected_partners" attrs="{'invisible': [('group_by', '!=', 'partner_id')]}" />
-                </group>
-                <group>
                     <field name="type" />
                 </group>
                 <group string="Period">

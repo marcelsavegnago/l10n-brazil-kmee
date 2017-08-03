@@ -10,6 +10,7 @@ from openerp import api, fields, models
 from ..constantes import (
     CAMPO_DOCUMENTO_FISCAL,
     CAMPO_DOCUMENTO_FISCAL_ITEM,
+    ACCOUNT_AUTOMATICO,
 )
 
 
@@ -37,4 +38,12 @@ class SpedAccountMoveTemplateItem(models.Model):
         comodel_name='account.account',
         string='Crédito',
         domain=[('type', '!=', 'view')],
+    )
+    account_automatico_debito = fields.Selection(
+        selection=ACCOUNT_AUTOMATICO,
+        string='Trazer débito do',
+    )
+    account_automatico_credito = fields.Selection(
+        selection=ACCOUNT_AUTOMATICO,
+        string='Trazer crédito do',
     )

@@ -42,6 +42,13 @@ CAMPO_DOCUMENTO_FISCAL_ITEM = (
     'price_total',
 )
 
+ACCOUNT_AUTOMATICO = (
+    ('CF', 'Cliente/fornecedor'),
+    ('PS', 'Produto/serviço'),
+)
+ACCOUNT_AUTOMATICO_PARTICIPANTE = 'CF'
+ACCOUNT_AUTOMATICO_PRODUTO = 'PS'
+
 
 FORMA_PAGAMENTO = (
     ('01', u'Dinheiro'),

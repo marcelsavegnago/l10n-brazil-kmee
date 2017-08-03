@@ -19,6 +19,8 @@ from .l10n_br_account_product import EXIGIBILIDADE
 from ..constantes import (
     CAMPO_DOCUMENTO_FISCAL,
     CAMPO_DOCUMENTO_FISCAL_ITEM,
+    ACCOUNT_AUTOMATICO_PARTICIPANTE,
+    ACCOUNT_AUTOMATICO_PRODUTO,
 )
 from openerp.addons.l10n_br_base.tools.misc import calc_price_ratio
 
@@ -1069,21 +1071,17 @@ class AccountInvoice(models.Model):
             account_debito = None
             if template_item.account_debito_id:
                 account_debito = template_item.account_debito_id
-            else:
+            elif template_item.account_automatico_debito == ACCOUNT_AUTOMATICO_PARTICIPANTE:
                 partner = self.partner_id
                 if self.type in ('out_invoice', 'out_refund'):
                     account_debito = \
-                        partner.property_account_receivable_id
+                        partner.property_account_receivable
                 elif self.type in ('in_invoice', 'in_refund'):
                     account_debito = partner.property_account_payable
 
-            if account_debito is None:
-                # raise
-                pass
-            else:
+            if account_debito is not None:
                 dados['account_id'] = account_debito.id
-
-            line_ids.append((0, 0, dados))
+                line_ids.append((0, 0, dados))
 
             dados = {
                 # 'move_id': account_move.id,
@@ -1097,21 +1095,18 @@ class AccountInvoice(models.Model):
             account_credito = None
             if template_item.account_credito_id:
                 account_credito = template_item.account_credito_id
-            else:
+            elif template_item.account_automatico_credito == ACCOUNT_AUTOMATICO_PARTICIPANTE:
                 partner = self.partner_id
                 if self.type in ('out_invoice', 'out_refund'):
                     account_credito = \
-                        partner.property_account_receivable_id
+                        partner.property_account_receivable
                 elif self.type in ('in_invoice', 'in_refund'):
                     account_credito = partner.property_account_payable
 
-            if account_credito is None:
-                # raise
-                pass
-            else:
+            if account_credito is not None:
                 dados['account_id'] = account_credito.id
+                line_ids.append((0, 0, dados))
 
-            line_ids.append((0, 0, dados))
             campos_jah_contabilizados.append(template_item.campo)
 
     @api.multi
@@ -2486,13 +2481,16 @@ class AccountInvoiceLine(models.Model):
             account_debito = None
             if template_item.account_debito_id:
                 account_debito = template_item.account_debito_id
-            elif template_item.campo in CAMPO_DOCUMENTO_FISCAL_ITEM:
-                product = self.produto_id
+
+            #elif template_item.campo in CAMPO_DOCUMENTO_FISCAL_ITEM:
+            elif template_item.account_automatico_debito == ACCOUNT_AUTOMATICO_PRODUTO:
+                product = self.product_id
                 if self.invoice_id.type in ('out_invoice', 'out_refund'):
                     account_debito = product.property_account_income
                 elif self.invoice_id.type in ('in_invoice', 'in_refund'):
                     account_debito = product.property_account_expense
-            else:
+
+            elif template_item.account_automatico_debito == ACCOUNT_AUTOMATICO_PARTICIPANTE:
                 partner = self.invoice_id.partner_id
                 if self.invoice_id.type in ('out_invoice', 'out_refund'):
                     account_debito = \
@@ -2500,13 +2498,9 @@ class AccountInvoiceLine(models.Model):
                 elif self.invoice_id.type in ('in_invoice', 'in_refund'):
                     account_debito = partner.property_account_payable
 
-            if account_debito is None:
-                # raise
-                pass
-            else:
+            if account_debito is not None:
                 dados['account_id'] = account_debito.id
-
-            line_ids.append((0, 0, dados))
+                line_ids.append((0, 0, dados))
 
             dados = {
                 # 'move_id': account_move.id,
@@ -2520,13 +2514,16 @@ class AccountInvoiceLine(models.Model):
             account_credito = None
             if template_item.account_credito_id:
                 account_credito = template_item.account_credito_id
-            elif template_item.campo in CAMPO_DOCUMENTO_FISCAL_ITEM:
+
+            #elif template_item.campo in CAMPO_DOCUMENTO_FISCAL_ITEM:
+            elif template_item.account_automatico_credito == ACCOUNT_AUTOMATICO_PRODUTO:
                 product = self.product_id
                 if self.invoice_id.type in ('out_invoice', 'out_refund'):
                     account_credito = product.property_account_income
                 elif self.invoice_id.type in ('in_invoice', 'in_refund'):
                     account_credito = product.property_account_expense
-            else:
+
+            elif template_item.account_automatico_credito == ACCOUNT_AUTOMATICO_PARTICIPANTE:
                 partner = self.invoice_id.partner_id
                 if self.invoice_id.type in ('out_invoice', 'out_refund'):
                     account_credito = \
@@ -2534,13 +2531,10 @@ class AccountInvoiceLine(models.Model):
                 elif self.invoice_id.type in ('in_invoice', 'in_refund'):
                     account_credito = partner.property_account_payable
 
-            if account_credito is None:
-                # raise
-                pass
-            else:
+            if account_credito is not None:
                 dados['account_id'] = account_credito.id
+                line_ids.append((0, 0, dados))
 
-            line_ids.append((0, 0, dados))
             campos_jah_contabilizados.append(template_item.campo)
 
         if move_template.parent_id:

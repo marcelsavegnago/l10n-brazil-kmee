@@ -11,7 +11,8 @@ from . import inherited_mail_compose_message
 from . import sped_certificado
 from . import inherited_sped_empresa
 from . import inherited_sped_operacao
-from . import inherited_sped_documento
+# from . import inherited_sped_documento_import
+from . import inherited_sped_documento_export
 from . import inherited_sped_documento_item
 from . import inherited_sped_documento_item_declaracao_importacao
 from . import inherited_sped_documento_referenciado

@@ -40,8 +40,8 @@ except (ImportError, IOError) as err:
     _logger.debug(err)
 
 
-class SpedDocumentoImport(models.Model):
-    _inherit = 'sped.documento.import'
+class SpedDocumentoImport(models.TransientModel):
+    _name = b'sped.documento.import'
 
     #
     # Os campos de anexos abaixo servem para que os anexos não possam
@@ -55,13 +55,33 @@ class SpedDocumentoImport(models.Model):
         copy=False,
     )
 
+    nfe_id = fields.Many2one(
+        comodel_name='sped.documento',
+        string=u'NF-e',
+        ondelete='set null',
+    )
+    edoc_input = fields.Binary(
+        string=u'Arquivo do documento eletrônico',
+        help=u'Somente arquivos no formato TXT e XML'
+    )
+    file_name = fields.Char('File Name', size=128)
+    create_partner = fields.Boolean(
+        string=u'Criar fornecedor automaticamente?',
+        default=True,
+        help=u'Cria o fornecedor automaticamente caso não esteja cadastrado'
+    )
+    supplier_partner_id = fields.Many2one(
+        comodel_name='res.partner',
+        string=u"Parceiro",
+    )
+
     def parse_edoc(self, filebuffer):
         filebuffer = base64.standard_b64decode(filebuffer)
         edoc_file = tempfile.NamedTemporaryFile()
         edoc_file.write(filebuffer)
         edoc_file.flush()
 
-        nfe = self.get_NFe()
+        nfe = NFe_310()
         nfe.set_xml(edoc_file.name)
 
         return nfe
@@ -74,9 +94,9 @@ class SpedDocumentoImport(models.Model):
         self.env = None
 
     def importa_xml(self):
-        self.nfe = self.parse_edoc(self.arquivo_xml_id)
+        nfe = self.parse_edoc(self.edoc_input)
         # TODO Buscar o protocolo da nota
-        self.protNFe = ProtNFe()
+        protNFe = ProtNFe()
         nfref = NFRef_310()
         nfref.xml = nfe.xml
         self.nfref = nfref

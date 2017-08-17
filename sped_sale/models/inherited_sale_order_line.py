@@ -125,7 +125,8 @@ class SaleOrderLine(SpedCalculoImpostoItem, models.Model):
         string='Permite alteração?',
         compute='_compute_permite_alteracao',
     )
-    tipo_produto_servico = fields.Selection(
+
+    tipo_item = fields.Selection(
         selection=[
             ('P', 'Produto'),
             ('S', 'Serviço'),

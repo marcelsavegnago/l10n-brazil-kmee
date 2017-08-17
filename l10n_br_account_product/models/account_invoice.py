@@ -1059,15 +1059,6 @@ class AccountInvoice(models.Model):
             if not valor:
                 continue
 
-            dados = {
-                # 'move_id': account_move.id,
-                # 'sped_documento_item_id': self.id,
-                'name': ref or '/',
-                'narration': template_item.campo,
-                'debit': valor,
-                # 'currency_id': self.currency_id.id,
-            }
-
             account_debito = None
             if template_item.account_debito_id:
                 account_debito = template_item.account_debito_id
@@ -1080,17 +1071,16 @@ class AccountInvoice(models.Model):
                     account_debito = partner.property_account_payable
 
             if account_debito is not None:
-                dados['account_id'] = account_debito.id
+                dados = {
+                    # 'move_id': account_move.id,
+                    # 'sped_documento_item_id': self.id,
+                    'account_id': account_debito.id,
+                    'name': ref or '/',
+                    'narration': template_item.campo,
+                    'debit': valor,
+                    # 'currency_id': self.currency_id.id,
+                }
                 line_ids.append((0, 0, dados))
-
-            dados = {
-                # 'move_id': account_move.id,
-                # 'sped_documento_item_id': self.id,
-                'name': ref or '/',
-                'narration': template_item.campo,
-                'credit': valor,
-                # 'currency_id': self.currency_id.id,
-            }
 
             account_credito = None
             if template_item.account_credito_id:
@@ -1104,7 +1094,15 @@ class AccountInvoice(models.Model):
                     account_credito = partner.property_account_payable
 
             if account_credito is not None:
-                dados['account_id'] = account_credito.id
+                dados = {
+                    'account_id': account_credito.id,
+                    # 'move_id': account_move.id,
+                    # 'sped_documento_item_id': self.id,
+                    'name': ref or '/',
+                    'narration': template_item.campo,
+                    'credit': valor,
+                    # 'currency_id': self.currency_id.id,
+                }
                 line_ids.append((0, 0, dados))
 
             campos_jah_contabilizados.append(template_item.campo)
@@ -1207,10 +1205,11 @@ class AccountInvoice(models.Model):
                 move_template = invoice_line.account_move_template_id
                 invoice_line.gera_account_move_line(
                     line_id, template_nao_contabilizados, move_template)
+
+            #import ipdb; ipdb.set_trace();
             #
             # Contabiliza os campos do cabeçalho do documento
             #
-
             inv.gera_account_move_line(
                 line_id, template_nao_contabilizados
             )
@@ -2469,15 +2468,6 @@ class AccountInvoiceLine(models.Model):
             if not valor:
                 continue
 
-            dados = {
-                # 'move_id': account_move.id,
-                # 'sped_documento_item_id': self.id,
-                'name': self.product_id.name,
-                'narration': template_item.campo,
-                'debit': valor,
-                # 'currency_id': self.invoice_id.currency_id.id,
-            }
-
             account_debito = None
             if template_item.account_debito_id:
                 account_debito = template_item.account_debito_id
@@ -2499,17 +2489,16 @@ class AccountInvoiceLine(models.Model):
                     account_debito = partner.property_account_payable
 
             if account_debito is not None:
-                dados['account_id'] = account_debito.id
+                dados = {
+                    'account_id': account_debito.id,
+                    # 'move_id': account_move.id,
+                    # 'sped_documento_item_id': self.id,
+                    'name': self.product_id.name,
+                    'narration': template_item.campo,
+                    'debit': valor,
+                    # 'currency_id': self.invoice_id.currency_id.id,
+                }
                 line_ids.append((0, 0, dados))
-
-            dados = {
-                # 'move_id': account_move.id,
-                # 'sped_documento_item_id': self.id,
-                'name': self.product_id.name,
-                'narration': template_item.campo,
-                'credit': valor,
-                # 'currency_id': self.invoice_id.currency_id.id,
-            }
 
             account_credito = None
             if template_item.account_credito_id:
@@ -2532,7 +2521,15 @@ class AccountInvoiceLine(models.Model):
                     account_credito = partner.property_account_payable
 
             if account_credito is not None:
-                dados['account_id'] = account_credito.id
+                dados = {
+                    'account_id': account_credito.id,
+                    # 'move_id': account_move.id,
+                    # 'sped_documento_item_id': self.id,
+                    'name': self.product_id.name,
+                    'narration': template_item.campo,
+                    'credit': valor,
+                    # 'currency_id': self.invoice_id.currency_id.id,
+                }
                 line_ids.append((0, 0, dados))
 
             campos_jah_contabilizados.append(template_item.campo)

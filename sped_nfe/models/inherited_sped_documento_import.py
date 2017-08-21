@@ -54,7 +54,12 @@ class SpedDocumentoImport(models.TransientModel):
         ondelete='restrict',
         copy=False,
     )
-
+    state = fields.Selection(
+        selection=[
+            ('draft', 'Draft'),
+            ('confirmed', 'Confirmed'),
+        ]
+    )
     nfe_id = fields.Many2one(
         comodel_name='sped.documento',
         string=u'NF-e',
@@ -86,7 +91,8 @@ class SpedDocumentoImport(models.TransientModel):
 
         return nfe
 
-    def __init__(self):
+    def __init__(self, pool, cr):
+        super(SpedDocumentoImport, self).__init__(pool, cr)
         self.nfe = None
         self.nfref = None
         self.det = None
@@ -94,19 +100,28 @@ class SpedDocumentoImport(models.TransientModel):
         self.env = None
 
     def importa_xml(self):
-        nfe = self.parse_edoc(self.edoc_input)
+        self.nfe = self.parse_edoc(self.edoc_input)
         # TODO Buscar o protocolo da nota
-        protNFe = ProtNFe()
+        protNFe = consrecinfe_310.ProtNFe()
         nfref = NFRef_310()
-        nfref.xml = nfe.xml
+        nfref.xml = self.nfe.xml
         self.nfref = nfref
         self.dup = Dup_310()
-        self.dup.xml = nfe.xml
+        self.dup.xml = self.nfe.xml
+        vals = {}
 
         participantes = self.get_participantes()
         identificacao = self.get_identificacao()
+        duplicatas = self.get_duplicatas()
+        # itens = self.get_itens()
 
-        return
+        vals.update(participantes)
+        vals.update(identificacao)
+        vals['duplicatas_ids'] = duplicatas
+
+        result = self.env['sped.documento'].create(vals)
+
+        return result
 
     def get_participantes(self):
         """
@@ -150,13 +165,16 @@ class SpedDocumentoImport(models.TransientModel):
         identificacao['data_hora_emissao'] = self.nfe.infNFe.ide.dhEmi.valor
         identificacao['serie'] = self.nfe.infNFe.ide.serie.valor
         identificacao['numero'] = self.nfe.infNFe.ide.nNF.valor
-        identificacao['entrada_saida'] = self.nfe.infNFe.ide.tpNF.valor
-        identificacao['ambiente_nfe'] = self.nfe.infNFe.ide.tpAmb.valor
-        identificacao['ind_forma_pagamento'] = self.nfe.infNFe.ide.indPag.valor
-        identificacao['finalidade_nfe'] = self.nfe.infNFe.ide.finNFe.valor
-        identificacao['consumidor_final'] = self.nfe.infNFe.ide.indFinal.valor
-        identificacao['presenca_comprador'] = self.nfe.infNFe.ide.indPres.valor
-        identificacao['chave'] = self.nfe.infNFe.Id.valor
+        identificacao['entrada_saida'] = str(self.nfe.infNFe.ide.tpNF.valor)
+        identificacao['ambiente_nfe'] = str(self.nfe.infNFe.ide.tpAmb.valor)
+        identificacao['ind_forma_pagamento'] = str(
+            self.nfe.infNFe.ide.indPag.valor)
+        identificacao['finalidade_nfe'] = str(self.nfe.infNFe.ide.finNFe.valor)
+        identificacao['consumidor_final'] = str(
+            self.nfe.infNFe.ide.indFinal.valor)
+        identificacao['presenca_comprador'] = str(
+            self.nfe.infNFe.ide.indPres.valor)
+        identificacao['chave'] = str(self.nfe.infNFe.Id.valor)
 
         domain_municipio = [
             ('codigo_ibge', '=', self.nfe.infNFe.ide.cMunFG.valor)]
@@ -171,3 +189,84 @@ class SpedDocumentoImport(models.TransientModel):
         # todo: campos abaixo do campo chave no arquivo sped_documento
 
         return identificacao
+
+    def get_duplicatas(self):
+        dups = []
+        for dup in self.nfe.infNFe.cobr.dup:
+            dups.append(
+                (0, 0, {
+                    'numero': dup.nDup.valor,
+                    'data_vencimento': dup.dVenc.valor,
+                    'valor': dup.vDup.valor,
+                })
+            )
+        return dups
+
+    def get_itens(self):
+        sped_prod = self.env['sped.produto']
+        sped_doc_item = self.env['sped.documento.item']
+        itens = []
+
+        for item in self.nfe.infNFe.det:
+            novo_item = {}
+            produto = sped_prod.search(
+                ['|', '|',
+                 ('codigo', '=', item.prod.cProd.valor),
+                 ('nome', '=', item.prod.xProd.valor),
+                 ('codigo_barras', '=', item.prod.cEAN.valor),
+                 ])
+            if produto:
+                novo_item.update({'produto_id': produto.id})
+            else:
+                novo_item.update(
+                    {'produto_id': (0, 0, {
+                        'codigo': item.prod.cProd.valor,
+                        'nome': item.prod.xProd.valor,
+                        'codigo_barras': item.prod.cEAN.valor,
+                        'ncm_id': self.env['sped.ncm'].search(
+                            [('codigo', '=', item.prod.NCM.valor)],
+                            limit=1).id,
+                        'preco_custo': item.prod.vUnCom})})
+
+            novo_item.update(
+                {
+                'unidade_id': self.env['sped.unidade'].search(
+                    [('codigo', '=', item.prod.uCom.valor)]
+                ).id,
+                'cfop_id': self.env['sped.cfop'].search(
+                    [('codigo', '=', item.prod.CFOP.valor)]
+                ),
+                'quantidade': item.prod.qCom.valor,
+                'vr_produtos': item.prod.vProd.valor,
+                'vr_frete': item.prod.vFrete.valor,
+                'vr_seguro': item.prod.vSeg.valor,
+                'vr_outras': item.prod.vOutro.valor,
+                'vr_desconto': item.prod.vDesc.valor,
+                'numero_pedido': item.prod.xPed.valor,
+                'numero_item_pedido': item.prod.nItemPed.valor,
+                'compoe_total': item.prod.indTot.valor,
+                # 'declaracao_ids': item.prod.indTot.valor,
+                'vr_ibpt': item.prod.vTotTrib.valor,
+                # 'documento_id.regime_tributario': item.imposto.ICMS.regime_tributario.valor,
+                'org_icms': item.imposto.ICMS.orig.valor,
+                'cst_icms': item.imposto.ICMS.CST.valor,
+                'cst_icms_sn': item.imposto.ICMS.CSOSN.valor,
+                'al_icms_sn': item.imposto.ICMS.pCredSN.valor,
+                'vr_icms_sn': item.imposto.ICMS.vCredICMSSN.valor,
+                'md_icms_proprio': item.imposto.ICMS.modBC.valor,
+                'rd_icms_proprio': item.imposto.ICMS.pRedBC.valor,
+                'bc_icms_proprio': item.imposto.ICMS.vBC.valor,
+                'al_icms_proprio': item.imposto.ICMS.pICMS.valor,
+                'vr_icms_proprio': item.imposto.ICMS.vICMS.valor,
+                'md_icms_st': item.imposto.ICMS.modBCST.valor,
+                'pr_icms_st': item.imposto.ICMS.pMVAST.valor,
+                'rd_icms_st': item.imposto.ICMS.pRedBCST.valor,
+                'bc_icms_st': item.imposto.ICMS.vBCST.valor,
+                'al_icms_st': item.imposto.ICMS.pICMSST.valor,
+                'vr_icms_st': item.imposto.ICMS.vICMSST.valor,
+                'cst_pis': item.imposto.PIS.CST.valor,
+                'bc_pis_proprio': item.imposto.PIS.vBC.valor,
+                'al_pis_proprio': item.imposto.PIS.pPIS.valor,
+            }
+        )
+        return itens

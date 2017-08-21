@@ -19,7 +19,7 @@
                     </group>
                 </group>
                 <footer>
-                    <button string="Importar" name="import_edoc"
+                    <button string="Importar" name="importa_xml"
                             type="object"
                             class="oe_highlight"/>
                     ou

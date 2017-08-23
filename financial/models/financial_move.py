@@ -4,7 +4,7 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from openerp import api, fields, models, _
 from openerp.exceptions import ValidationError
@@ -512,9 +512,28 @@ class FinancialMove(models.Model):
         # # TODO: refactory for global OCA use avoiding l10n_br_resource
         for record in self:
             if record.date_maturity:
-                record.date_business_maturity = self.env[
-                    'resource.calendar'].proximo_dia_util_bancario(
-                    fields.Date.from_string(record.date_maturity))
+                if record.document_type_id.adiantar_dia_pagamento_util or \
+                        record.company_id.adiantar_dia_pagamento_util:
+                    record.date_business_maturity = self.\
+                        dia_util_bancario_anterior(fields.Date.from_string(
+                            record.date_maturity))
+                else:
+                    record.date_business_maturity = self.env[
+                        'resource.calendar'].proximo_dia_util_bancario(
+                        fields.Date.from_string(record.date_maturity))
+
+    @api.multi
+    def dia_util_bancario_anterior(self, data_referencia=datetime.now()):
+        """Retornar o próximo dia util.
+        :param datetime data_referencia: Se nenhuma data referencia for passada
+                                   verifique se amanha é dia útil.
+        :return datetime Proximo dia util apartir da data referencia
+        """
+        if self.env['resource.calendar'].data_eh_dia_util_bancario(
+                data_referencia):
+            return data_referencia
+        data_referencia += timedelta(days=-1)
+        return self.dia_util_bancario_anterior(data_referencia)
 
     @api.depends('date_business_maturity', 'amount_total', 'amount_document',
                  'amount_residual', 'amount_paid_document', 'date_cancel')

@@ -661,7 +661,7 @@ class FinancialMove(models.Model):
         allowed = [
             ('draft', 'open'),
             ('open', 'paid'),
-            ('open', 'cancel'),
+            ('open', 'cancelled'),
             ('paid', 'open'),
         ]
         return (old_state, new_state) in allowed
@@ -758,7 +758,7 @@ class FinancialMove(models.Model):
     @api.multi
     def action_cancel(self, motivo_id, obs):
         for record in self:
-            record.change_state('cancel')
+            record.change_state('cancelled')
             if record.note:
                 new_note = record.note + '\n' + obs
             else:
@@ -766,7 +766,8 @@ class FinancialMove(models.Model):
             record.write({
                 'motivo_cancelamento_id': motivo_id,
                 'amount_cancel': record.amount_document,
-                'note': new_note
+                'note': new_note,
+                'date_cancel': fields.Date.today(),
             })
             record.with_context(no_email=True).message_post(body=new_note)
 

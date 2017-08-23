@@ -329,8 +329,11 @@ class FinancialMove(models.Model):
         return result
 
     @api.multi
-    def action_cancel(self, reason):
-        super(FinancialMove, self).action_cancel(reason)
+    def action_cancel(self, motivo_id, obs):
+        if isinstance(motivo_id, int):
+            super(FinancialMove, self).action_cancel(motivo_id, obs)
+        else:
+            super(FinancialMove, self).action_cancel(motivo_id)
         moves = self.env['account.move']
         for record in self:
             if record.account_move_id:

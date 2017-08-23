@@ -10,4 +10,4 @@ from . import report_xlsx_financial_cashflow
 from . import report_xlsx_financial_moves_states
 from . import report_xlsx_financial_partner_statement
 from . import report_xlsx_financial_defaults
-
+from . import report_xlsx_financial_moves_cancelled

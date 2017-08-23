@@ -47,31 +47,22 @@ class SpedStockPicking(SpedCalculoImposto, models.Model):
 
     @api.multi
     def action_criar_sped_documento(self):
-        documentos_criados = []
         for record in self:
             vals = record._prepare_sped(record.sped_operacao_produto_id)
+            vals['item_ids'] = []
+            for item in self.move_lines:
+                vals['item_ids'].append((0, 0, item._prepare_sped_line()))
             documento = self.env['sped.documento'].create(vals)
+            documento.item_ids.calcula_impostos()
+            action = {
+                'type': 'ir.actions.act_window',
+                'name': 'Documento Gerado',  # TODO
+                'res_model': 'sped.documento',  # TODO
+                'domain': [('id', '=', documento.id)],  # TODO
+                'view_mode': 'tree,form',
+            }
+            return action
 
-            itens_ids = self._criar_documento_itens(self.move_lines, documento)
-            documento.item_ids = itens_ids
-
-            for item in documento.item_ids:
-                item.calcula_impostos()
-
-            documentos_criados.append(documento.id)
-            if documento.id:
-                documento.stock_picking_id = record
-                record.documento_fiscal_criado = True
-                record.documento_id = documento
-
-        action = {
-            'type': 'ir.actions.act_window',
-            'name': 'Documento Gerado',
-            'res_model': 'sped.documento',
-            'domain': [('id', 'in', documentos_criados)],
-            'view_mode': 'tree,form',
-        }
-        return action
 
 class SpedStockPickingType(models.Model):
     _inherit = 'stock.picking.type'

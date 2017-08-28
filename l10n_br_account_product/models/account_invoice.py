@@ -1065,10 +1065,21 @@ class AccountInvoice(models.Model):
             elif template_item.account_automatico_debito == ACCOUNT_AUTOMATICO_PARTICIPANTE:
                 partner = self.partner_id
                 if self.type in ('out_invoice', 'out_refund'):
-                    account_debito = \
-                        partner.property_account_receivable
+                    if partner.property_account_receivable:
+                        account_debito = \
+                            partner.property_account_receivable
+                    else:
+                        raise UserError(
+                            u'Conta de Recebimento não '
+                            u'selecionada no parceiro.'
+                        )
                 elif self.type in ('in_invoice', 'in_refund'):
-                    account_debito = partner.property_account_payable
+                    if partner.property_account_payable:
+                        account_debito = partner.property_account_payable
+                    else:
+                        raise UserError(
+                            u'Conta de Pagamento não selecionada no parceiro.'
+                        )
 
             if account_debito is not None:
                 dados = {
@@ -1088,10 +1099,20 @@ class AccountInvoice(models.Model):
             elif template_item.account_automatico_credito == ACCOUNT_AUTOMATICO_PARTICIPANTE:
                 partner = self.partner_id
                 if self.type in ('out_invoice', 'out_refund'):
-                    account_credito = \
-                        partner.property_account_receivable
+                    if partner.property_account_receivable:
+                        account_credito = \
+                            partner.property_account_receivable
+                    else:
+                        raise UserError(
+                            u'Conta de Pagamento não selecionada no parceiro.'
+                        )
                 elif self.type in ('in_invoice', 'in_refund'):
-                    account_credito = partner.property_account_payable
+                    if partner.property_account_payable:
+                        account_credito = partner.property_account_payable
+                    else:
+                        raise UserError(
+                            u'Conta de Pagamento não selecionada no parceiro.'
+                        )
 
             if account_credito is not None:
                 dados = {
@@ -2483,10 +2504,19 @@ class AccountInvoiceLine(models.Model):
             elif template_item.account_automatico_debito == ACCOUNT_AUTOMATICO_PRODUTO:
                 product = self.product_id
                 if self.invoice_id.type in ('out_invoice', 'out_refund'):
-                    account_debito = product.property_account_income
+                    if product.property_account_income:
+                        account_debito = product.property_account_income
+                    else:
+                        raise UserError(
+                            u'Conta de receita não selecionada no produto.'
+                        )
                 elif self.invoice_id.type in ('in_invoice', 'in_refund'):
-                    account_debito = product.property_account_expense
-
+                    if product.property_account_expense:
+                        account_debito = product.property_account_expense
+                    else:
+                        raise UserError(
+                            u'Conta de Despesas não selecionada no produto.'
+                        )
             elif template_item.account_automatico_debito == ACCOUNT_AUTOMATICO_PARTICIPANTE:
                 partner = self.invoice_id.partner_id
                 if self.invoice_id.type in ('out_invoice', 'out_refund'):
@@ -2515,17 +2545,38 @@ class AccountInvoiceLine(models.Model):
             elif template_item.account_automatico_credito == ACCOUNT_AUTOMATICO_PRODUTO:
                 product = self.product_id
                 if self.invoice_id.type in ('out_invoice', 'out_refund'):
-                    account_credito = product.property_account_income
+                    if product.property_account_income:
+                        account_credito = product.property_account_income
+                    else:
+                        raise UserError(
+                            u'Conta de Recebimento não selecionada no produto.'
+                        )
                 elif self.invoice_id.type in ('in_invoice', 'in_refund'):
-                    account_credito = product.property_account_expense
+                    if product.property_account_expense:
+                        account_credito = product.property_account_expense
+                    else:
+                        raise UserError(
+                            u'Conta de Despesas não selecionada no produto.'
+                        )
 
             elif template_item.account_automatico_credito == ACCOUNT_AUTOMATICO_PARTICIPANTE:
                 partner = self.invoice_id.partner_id
                 if self.invoice_id.type in ('out_invoice', 'out_refund'):
-                    account_credito = \
-                        partner.property_account_receivable
+                    if partner.property_account_receivable:
+                        account_credito = \
+                            partner.property_account_receivable
+                    else:
+                        raise UserError(
+                            u'Conta de Recebimento'
+                            u' não selecionada no parceiro.'
+                        )
                 elif self.invoice_id.type in ('in_invoice', 'in_refund'):
-                    account_credito = partner.property_account_payable
+                    if partner.property_account_payable:
+                        account_credito = partner.property_account_payable
+                    else:
+                        raise UserError(
+                            u'Conta de Pagamento não selecionada no parceiro.'
+                        )
 
             if account_credito is not None:
                 dados = {

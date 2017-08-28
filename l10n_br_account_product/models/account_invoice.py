@@ -1422,6 +1422,13 @@ class AccountInvoice(models.Model):
             return False
         return all(line.state == 'paid' for line in line_ids)
 
+    @api.model
+    def create(self, vals):
+        res = super(AccountInvoice, self).create(vals)
+        if res.payment_term and not res.duplicata_ids:
+            res.onchange_duplicatas()
+        return res
+
 
 class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'

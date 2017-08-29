@@ -46,6 +46,11 @@ class SpedStockMove(SpedCalculoImpostoItem, models.Model):
         related='picking_id.sped_operacao_produto_id',
         readonly=True,
     )
+    documento_item_id = fields.Many2one(
+        comodel_name='sped.documento.item',
+        string='Item do documento',
+        copy=False
+    )
 
     @api.onchange('produto_id')
     def _onchange_produto_id(self):

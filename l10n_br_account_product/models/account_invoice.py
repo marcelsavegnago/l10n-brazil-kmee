@@ -845,7 +845,8 @@ class AccountInvoice(models.Model):
                      'serie_nfe': invoice.document_serie_id.code,
                      'number': seq_number,
                      'date_hour_invoice': date_time_invoice,
-                     'date_in_out': date_in_out
+                     'date_in_out': date_in_out,
+                     'ref': seq_number,
                      }
                 )
         return True
@@ -1206,7 +1207,7 @@ class AccountInvoice(models.Model):
             line_id = []
 
             move_vals = {
-                'ref': inv.reference or inv.supplier_invoice_number or inv.name,
+                'ref': inv.internal_number or inv.name,
                 'line_id': line_id,
                 'journal_id': inv.journal_id.id,
                 'partner_id': inv.partner_id.id,
@@ -1214,8 +1215,7 @@ class AccountInvoice(models.Model):
                 # 'date': inv.date_in_out,
                 'company_id': inv.company_id.id,
                 'narration': inv.comment,
-                'company_id': inv.company_id.id,
-
+                'name': inv.internal_number,
             }
 
             template_nao_contabilizados = set()

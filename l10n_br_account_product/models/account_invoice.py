@@ -1432,16 +1432,19 @@ class AccountInvoice(models.Model):
         self.duplicata_ids = payment_ids
 
     @api.one
-    @api.depends('financial_ids.state')
+    @api.depends('financial_ids.state', 'account_id',
+                 'move_id.line_id.account_id', 'move_id.line_id.reconcile_id')
     def _compute_reconciled(self):
-        self.reconciled = self.test_paid()
+        if self.company_id == self.user_id.company_id:
+            self.reconciled = self.test_paid()
 
     @api.multi
     def test_paid(self):
         line_ids = self.financial_ids
-        if not line_ids:
-            return False
-        return all(line.state == 'paid' for line in line_ids)
+        if line_ids:
+            return all(line.state == 'paid' for line in line_ids)
+        else:
+            return super(AccountInvoice, self).test_paid()
 
     @api.model
     def create(self, vals):

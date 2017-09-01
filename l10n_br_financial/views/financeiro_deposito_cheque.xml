@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017 KMEE
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="financeiro_deposito_cheque_form_view">
+        <field name="name">financeiro.deposito.cheque.form (in l10n_br_financial)</field>
+        <field name="model">financeiro.movimentacao.cheque</field>
+        <field name="arch" type="xml">
+            <form >
+            <header>
+                <button name="button_depositar_cheque" class="oe_highlight" type="object" string="Efetuar Depósito"/>
+            </header>
+            <sheet>
+                <div class="oe_button_box" name="button_box">
+                    <button class="oe_stat_button" name="button_ver_entradas" type="object" icon="fa-usd" >
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value"><field name="qtd_financeiro_moves_in"/></span>
+                            <span class="o_stat_text">Entradas</span>
+                        </div>
+                    </button>
+                    <button class="oe_stat_button" name="button_ver_saidas" type="object" icon="fa-usd" >
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value"><field name="qtd_financeiro_moves_out"/></span>
+                            <span class="o_stat_text">Saídas</span>
+                        </div>
+                    </button>
+                </div>
+                <div class="oe_title">
+                    <h1><label style="font-size:20px" string="Depósito de Cheque" class="oe_edit_only"/></h1>
+                </div>
+                <group>
+                    <group>
+                        <field name="financial_account_id" />
+                    </group>
+                    <group>
+                        <field name="data_deposito" />
+                    </group>
+
+                    <group colspan="4">
+                        <field name="partner_bank_from_id" string="Caixa"/>
+                        <field name="partner_bank_to_id" />
+                    </group>
+                </group>
+                <group>
+                        <field name="cheque_ids" domain="[('partner_bank_id', '=', partner_bank_from_id),('state', 'in', ['recebido', 'devolvidos_b'])]" required="True" />
+                </group>
+                <group>
+                        <field name="financial_ids" />
+                </group>
+            </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--<record model="ir.ui.view" id="financeiro_cheque_search_view">-->
+        <!--<field name="name">financeiro.cheque.search (in l10n_br_financial)</field>-->
+        <!--<field name="model">financeiro.cheque</field>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<search>-->
+                <!--&lt;!&ndash; TODO &ndash;&gt;-->
+            <!--</search>-->
+        <!--</field>-->
+    <!--</record>-->
+
+    <record model="ir.ui.view" id="financeiro_deposito_cheque_tree_view">
+        <field name="name">financeiro.deposito.cheque.tree (in l10n_br_financial)</field>
+        <field name="model">financeiro.movimentacao.cheque</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="cheque_ids" />
+                <field name="partner_bank_from_id"/>
+                <field name="partner_bank_to_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="financeiro_cheque_deposito_act_window">
+        <field name="name">Depósitos</field>
+        <field name="res_model">financeiro.movimentacao.cheque</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('type','=','deposito')]</field>
+        <field name="context" >{'default_type': 'deposito'}</field>
+    </record>
+    <record model="ir.actions.act_window.view"
+            id="financeiro_cheque_deposito_form_action">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="financeiro_deposito_cheque_form_view"/>
+        <field name="act_window_id" ref="financeiro_cheque_deposito_act_window"/>
+    </record>
+    <record model="ir.actions.act_window.view"
+            id="financeiro_cheque_deposito_tree_action">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="financeiro_deposito_cheque_tree_view"/>
+        <field name="act_window_id" ref="financeiro_cheque_deposito_act_window"/>
+    </record>
+    <record model="ir.ui.menu" id="deposito_cheque_menu">
+        <field name="name">Depósitos</field>
+        <field name="parent_id" ref="financeiro_cheque_menu"/>
+        <field name="action" ref="financeiro_cheque_deposito_act_window"/>
+        <field name="sequence" eval="2"/>
+    </record>
+
+</odoo>

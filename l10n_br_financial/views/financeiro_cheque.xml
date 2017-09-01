@@ -3,7 +3,6 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
-<data>
 
     <record model="ir.ui.view" id="financeiro_cheque_form_view">
         <field name="name">financeiro.cheque.form (in l10n_br_financial)</field>
@@ -11,22 +10,26 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="verificar_cheque" class="oe_highlight" type="object" states="novo" string="Verificar"/>
-                    <button name="cheque_recebido" class="oe_highlight" type="object" states="verificado" string="Recebido"/>
-                    <button name="cheque_descontado" class="oe_highlight" type="object" states="recebido" string="Descontado"/>
-                    <button name="cheque_repassado" class="oe_highlight" type="object" states="recebido" string="Repassado"/>
-                    <button name="cheque_devolvido_banco" class="oe_highlight" type="object" states="recebido" string="Devolvido pelo banco"/>
-                    <button name="cheque_devolvido_parceiro" class="oe_highlight" type="object" states="devolvido_b" string="Devolvido ao Parceiro"/>
-                    <field name="state" widget="statusbar" statusbar_visible="novo,verificado,recebido"/>
+                    <button name="button_receber_cheque" class="oe_highlight" type="object" states="novo" string="Receber"/>
+                    <button name="button_depositar_cheque" class="oe_highlight" type="object" states="recebido" string="Depositar"/>
+                    <button name="button_repassar_cheque" class="oe_highlight" type="object" states="recebido" string="Repassar"/>
+                    <button name="button_devolver_cheque_banco" class="oe_highlight" type="object" states="recebido" string="Devolvido pelo banco"/>
+                    <button name="button_devolver_cheque_parceiro" class="oe_highlight" type="object" states="devolvido_b" string="Devolvido ao Parceiro"/>
+                    <field name="state" widget="statusbar" statusbar_visible="novo,recebido,depositado,devolvido_b"/>
                 </header>
                 <sheet>
                     <group>
                         <field name="name" invisible="True"/>
                         <field name="codigo"/>
-                        <field name="data_recebimento"
-                               attrs="{'invisible': [('state', 'in', ['novo','verificado'])]}"/>
-                        <field name="partner_id"
-                               attrs="{'invisible': [('state', 'in', ['novo','verificado'])]}"/>
+                        <field name="participante_id" />
+
+                        <group>
+                            <field name="partner_bank_id" />
+                        </group>
+                        <group>
+                            <field name="data_recebimento" />
+                        </group>
+                        <field name="empresa_id" />
                     </group>
                     <group>
                         <group>
@@ -45,6 +48,7 @@
                 </sheet>
                 <footer>
                     <field name="financial_move_ids"/>
+                    <field name="notes"/>
                 </footer>
             </form>
         </field>
@@ -96,5 +100,4 @@
         <field name="sequence" eval="1"/>
     </record>
 
-</data>
 </odoo>

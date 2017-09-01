@@ -16,6 +16,8 @@
     'data': [
         'security/financeiro_cheque.xml',
         'views/financeiro_cheque.xml',
+        'views/financeiro_deposito_cheque.xml',
+        'views/financeiro_estorno_cheque.xml',
         'views/res_bank_agencia.xml',
         'views/financial_move.xml',
     ],

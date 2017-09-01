@@ -2,6 +2,9 @@
 # Copyright 2017 KMEE
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from __future__ import (division, print_function, unicode_literals,
+                        absolute_import)
+
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 
@@ -11,7 +14,10 @@ class FinanceiroCheque(models.Model):
     _name = b'financeiro.cheque'
     _description = 'Cadastrar Cheques'
 
-    name = fields.Char()
+    name = fields.Char(
+        compute='_compute_name'
+    )
+    notes = fields.Text()
 
     financial_move_ids = fields.One2many(
         string=u'Pagamentos',
@@ -19,9 +25,9 @@ class FinanceiroCheque(models.Model):
         inverse_name='cheque_id',
         readonly=True,
     )
-    partner_id = fields.Many2one(
-        comodel_name='res.partner',
-        string='Partner',
+    participante_id = fields.Many2one(
+        comodel_name='sped.participante',
+        string='Pagador',
         ondelete='set null',
         index=True,
     )
@@ -56,55 +62,67 @@ class FinanceiroCheque(models.Model):
         string=u'Pré datado para'
     )
     data_recebimento = fields.Date(
-        string=u'Data do recebimento'
+        string=u'Data do recebimento',
+        default=fields.Date.today,
     )
     state = fields.Selection(
         selection=[
             ('novo', u'Novo'),
-            ('verificado', u'Verificado'),
             ('recebido', u'Recebido'),
-            ('descontado', u'Descontado'),
+            ('depositado', u'Depositado'),
             ('repassado', u'Repassado'),
             ('devolvido_b', u'Devolvido pelo banco'),
             ('devolvido_p', u'Devolvido ao parceiro'),
         ],
         string='Status',
-        default='novo'
+        default='novo',
     )
 
     valor_residual = fields.Float(
         string=u'Valor residual',
     )
 
-    def verificar_cheque(self):
-        self.mudar_estado('verificado')
+    empresa_id = fields.Many2one(
+        comodel_name='sped.empresa',
+        string='Empresa',
+        ondelete='restrict',
+        compute='_compute_empresa',
+    )
 
-    def cheque_recebido(self):
-        self.mudar_estado('recebido')
-
-    def cheque_descontado(self):
-        self.mudar_estado('descontado')
-
-    def cheque_repassado(self):
-        self.mudar_estado('repassado')
-
-    def cheque_devolvido_banco(self):
-        self.mudar_estado('devolvido_b')
-
-    def cheque_devolvido_parceiro(self):
-        self.mudar_estado('devolvido_p')
+    partner_bank_id = fields.Many2one(
+        string='Conta atual',
+        comodel_name='res.partner.bank',
+        required=True,
+    )
 
     def mudar_estado(self, estado):
         permitido = [
-            ('novo', 'verificado'),
-            ('verificado', 'recebido'),
-            ('recebido', 'descontado'),
+            ('novo', 'recebido'),
+            ('recebido', 'depositado'),
             ('recebido', 'repassado'),
             ('recebido', 'devolvido_b'),
             ('devolvido_b', 'devolvido_p')
         ]
         if (self.state, estado) in permitido:
             self.state = estado
+        else:
+            raise UserError(_("Mudança do estado \"%s\" para estado \"%s\" "
+                              "não permitida.") % (self.state, estado))
+
+    def button_receber_cheque(self):
+        self.mudar_estado('recebido')
+
+    def button_depositar_cheque(self):
+        self.mudar_estado('depositado')
+
+    def button_repassar_cheque(self):
+        self.mudar_estado('repassado')
+
+    def button_devolver_cheque_banco(self):
+        self.mudar_estado('devolvido_b')
+
+    def button_devolver_cheque_parceiro(self):
+        self.mudar_estado('devolvido_p')
 
     @api.onchange('codigo')
     def onchange_codigo(self):
@@ -128,3 +146,17 @@ class FinanceiroCheque(models.Model):
     @api.onchange('valor')
     def _set_valor_residual(self):
         self.valor_residual = self.valor
+
+    @api.depends('partner_bank_id')
+    def _compute_empresa(self):
+        for record in self:
+            if self.partner_bank_id:
+                self.empresa_id = \
+                    self.partner_bank_id.company_id.sped_empresa_id
+
+    @api.depends('participante_id')
+    def _compute_name(self):
+        for record in self:
+            if record.participante_id and record.numero_cheque:
+                record.name = 'CHQ - ' + record.numero_cheque or '' + \
+                              ' - ' + record.participante_id.display_name or ''

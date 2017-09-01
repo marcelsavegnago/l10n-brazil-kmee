@@ -32,7 +32,7 @@
         <field name="name">Entradas</field>
         <field name="res_model">financial.move</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('financial_type','=','money_in')]</field>
+        <field name="domain">[('type','=','money_in')]</field>
         <field name="context" >{'default_type': 'money_in'}</field>
     </record>
 
@@ -40,7 +40,7 @@
         <field name="name">Saídas</field>
         <field name="res_model">financial.move</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('financial_type','=','money_out')]</field>
+        <field name="domain">[('type','=','money_out')]</field>
         <field name="context" >{'default_type': 'money_out'}</field>
     </record>
 

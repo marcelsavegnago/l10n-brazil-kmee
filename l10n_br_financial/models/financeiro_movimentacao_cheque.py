@@ -64,15 +64,24 @@ class FinanceiroMovimentacaoCheque(models.Model):
 
     qtd_financeiro_moves_in = fields.Integer(
         string="Entradas do Financeiro",
-        compute=lambda self: len(self.financial_ids)
+        compute='_compute_qtd_financials',
     )
 
     qtd_financeiro_moves_out = fields.Integer(
         string="Saídas do Financeiro",
-        compute=lambda self: len(self.financial_ids)
+        compute='_compute_qtd_financials',
     )
 
-    
+    def _compute_qtd_financials(self):
+        qtd_financeiro_moves_in = 0
+        qtd_financeiro_moves_out = 0
+        for financial_move in self.financial_ids:
+            if financial_move.type == 'money_in':
+                qtd_financeiro_moves_in += 1
+            if financial_move.type == 'money_out':
+                qtd_financeiro_moves_out += 1
+        self.qtd_financeiro_moves_in = qtd_financeiro_moves_in
+        self.qtd_financeiro_moves_out = qtd_financeiro_moves_out
 
     def prepare_financial_move(self, type, cheque):
         """
@@ -141,3 +150,43 @@ class FinanceiroMovimentacaoCheque(models.Model):
                 type = '2receive'
                 vals_a_receber = self.prepare_financial_move(type, cheque)
                 financial_move.create(vals_a_receber)
+
+    def button_ver_saidas(self):
+        financial_ids = []
+        for financial_move_id in self.financial_ids:
+            if financial_move_id.type == 'money_out':
+                financial_ids.append(financial_move_id.id)
+
+        view_id = \
+            self.env.ref('financial.financial_move_payment_receipt_item_form')
+
+        return {
+            'name': 'Saídas',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': view_id.id,
+            'res_model': 'financial.move',
+            'type': 'ir.actions.act_window',
+            'res_id': financial_ids[0],
+            'context': self.env.context
+        }
+
+    def button_ver_entradas(self):
+        financial_ids = []
+        for financial_move_id in self.financial_ids:
+            if financial_move_id.type == 'money_in':
+                financial_ids.append(financial_move_id.id)
+
+        view_id = \
+            self.env.ref('financial.financial_move_payment_payment_item_form')
+
+        return {
+            'name': 'Entradas',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': view_id.id,
+            'res_model': 'financial.move',
+            'type': 'ir.actions.act_window',
+            'res_id': financial_ids[0],
+            'context': self.env.context
+        }

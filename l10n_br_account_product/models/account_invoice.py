@@ -186,9 +186,56 @@ class AccountInvoice(models.Model):
     def _compute_financial_ids(self):
         for record in self:
             document_id = record._name + ',' + str(record.id)
-            record.financial_ids = record.env['financial.move'].search(
-                [['doc_source_id', '=', document_id]]
-            )
+
+            financials = record.env['financial.move'].search(
+                [['doc_source_id', '=', document_id]])
+            record.financial_ids = financials
+            #
+            # paid = all(finan.state == 'paid' for finan in financials)
+            # if paid:
+            #     record.financial_paid = paid
+
+    @api.multi
+    @api.depends('financial_ids.state')
+    def _compute_financial_paid(self):
+        for record in self.sudo():
+            paid = False
+            if record.financial_ids:
+                paid = all(finan.state == 'paid' for
+                           finan in record.financial_ids)
+            record.financial_paid = paid
+
+    @api.one
+    @api.depends('financial_paid', 'account_id',
+                 'move_id.line_id.account_id',
+                 'move_id.line_id.reconcile_id')
+    def _compute_reconciled(self):
+        self.sudo()
+        reconciled = self.test_paid() or self.financial_paid
+        print ('%s: %s\n' % (self.id, reconciled))
+        self.reconciled = reconciled
+
+                # @api.multi
+                # def financial_line_id_payment_get(self):
+                #     if not self.id:
+                #         return []
+                #     query = """SELECT fm.id
+                #                FROM financial_move fm
+                #                WHERE fm.doc_source_id = %s
+                #                AND fm.company_id = %s
+                #     """
+                #     document_id = self._name + ',' + str(self.id)
+                #     self._cr.execute(query, (document_id, self.company_id.id))
+                #     return [row[0] for row in self._cr.fetchall()]
+
+                # @api.multi
+                # def test_paid_financial(self):
+                #     line_ids = self.financial_line_id_payment_get()
+                #     if line_ids:
+                #         lines = self.sudo().env['financial.move'].browse(line_ids)
+                #         return all(line.state == 'paid' for line in lines)
+                #     else:
+                #         return False
 
     @api.multi
     @api.depends('invoice_line', 'tax_line.amount', 'issqn_wh', 'irrf_wh',
@@ -719,6 +766,12 @@ class AccountInvoice(models.Model):
         comodel_name='sped.documento.duplicata',
         inverse_name='invoice_id',
         string=u'Duplicatas',
+    )
+    financial_paid = fields.Boolean(
+        string='Duplicatas pagas',
+        compute='_compute_financial_paid',
+        store=True,
+        copy=False,
     )
 
     @api.one
@@ -1430,21 +1483,6 @@ class AccountInvoice(models.Model):
             )
             payment_ids.append(payment)
         self.duplicata_ids = payment_ids
-
-    @api.one
-    @api.depends('financial_ids.state', 'account_id',
-                 'move_id.line_id.account_id', 'move_id.line_id.reconcile_id')
-    def _compute_reconciled(self):
-        if self.company_id == self.user_id.company_id:
-            self.reconciled = self.test_paid()
-
-    @api.multi
-    def test_paid(self):
-        line_ids = self.financial_ids
-        if line_ids:
-            return all(line.state == 'paid' for line in line_ids)
-        else:
-            return super(AccountInvoice, self).test_paid()
 
     @api.model
     def create(self, vals):

@@ -14,13 +14,13 @@
             </header>
             <sheet>
                 <div class="oe_button_box" name="button_box">
-                    <button class="oe_stat_button" name="button_ver_entradas" type="object" icon="fa-usd" >
+                    <button class="oe_stat_button" name="button_ver_entradas" type="object" icon="fa-usd" attrs="{'invisible': [('qtd_financeiro_moves_in', '=', 0)]}">
                         <div class="o_form_field o_stat_info">
                             <span class="o_stat_value"><field name="qtd_financeiro_moves_in"/></span>
                             <span class="o_stat_text">Entradas</span>
                         </div>
                     </button>
-                    <button class="oe_stat_button" name="button_ver_saidas" type="object" icon="fa-usd" >
+                    <button class="oe_stat_button" name="button_ver_saidas" type="object" icon="fa-usd" attrs="{'invisible': [('qtd_financeiro_moves_out', '=', 0)]}">
                         <div class="o_form_field o_stat_info">
                             <span class="o_stat_value"><field name="qtd_financeiro_moves_out"/></span>
                             <span class="o_stat_text">Saídas</span>
@@ -47,7 +47,7 @@
                         <field name="cheque_ids" domain="[('partner_bank_id', '=', partner_bank_from_id),('state', 'in', ['recebido', 'devolvidos_b'])]" required="True" />
                 </group>
                 <group>
-                        <field name="financial_ids" />
+                        <field name="financial_ids" invisible="1" />
                 </group>
             </sheet>
             </form>

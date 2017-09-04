@@ -27,7 +27,6 @@
     </record>
 
 
-
     <record model="ir.actions.act_window" id="entradas_act_window">
         <field name="name">Entradas</field>
         <field name="res_model">financial.move</field>

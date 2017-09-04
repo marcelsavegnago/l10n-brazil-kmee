@@ -47,7 +47,7 @@
                         <field name="cheque_ids" domain="[('partner_bank_id', '=', partner_bank_from_id),('state', 'in', ['depositado'])]" required="True" />
                 </group>
                 <group>
-                        <field name="financial_ids" />
+                        <field name="financial_ids" invisible="1" />
                 </group>
             </sheet>
             </form>
@@ -89,10 +89,10 @@
         <field name="act_window_id" ref="financeiro_cheque_estorno_act_window"/>
     </record>
     <record model="ir.ui.menu" id="estorno_cheque_menu">
-        <field name="name">estornos</field>
+        <field name="name">Estornos</field>
         <field name="parent_id" ref="financeiro_cheque_menu"/>
         <field name="action" ref="financeiro_cheque_estorno_act_window"/>
-        <field name="sequence" eval="3"/>
+        <field name="sequence" eval="4"/>
     </record>
 
 </odoo>

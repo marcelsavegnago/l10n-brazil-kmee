@@ -14,16 +14,22 @@
             </header>
             <sheet>
                 <div class="oe_button_box" name="button_box">
-                    <button class="oe_stat_button" name="button_ver_entradas" type="object" icon="fa-usd" >
+                    <button class="oe_stat_button" name="button_ver_entradas" type="object" icon="fa-usd" attrs="{'invisible': [('qtd_financeiro_moves_in', '=', 0)]}">
                         <div class="o_form_field o_stat_info">
                             <span class="o_stat_value"><field name="qtd_financeiro_moves_in"/></span>
                             <span class="o_stat_text">Entradas</span>
                         </div>
                     </button>
-                    <button class="oe_stat_button" name="button_ver_saidas" type="object" icon="fa-usd" >
+                    <button class="oe_stat_button" name="button_ver_saidas" type="object" icon="fa-usd" attrs="{'invisible': [('qtd_financeiro_moves_out', '=', 0)]}">
                         <div class="o_form_field o_stat_info">
                             <span class="o_stat_value"><field name="qtd_financeiro_moves_out"/></span>
                             <span class="o_stat_text">Saídas</span>
+                        </div>
+                    </button>
+                    <button class="oe_stat_button" name="button_ver_2receive" type="object" icon="fa-usd" attrs="{'invisible': [('qtd_financeiro_moves_2receive', '=', 0)]}">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value"><field name="qtd_financeiro_moves_2receive"/></span>
+                            <span class="o_stat_text">Recebíveis</span>
                         </div>
                     </button>
                 </div>
@@ -74,6 +80,7 @@
         <field name="context" >{'default_type': 'estorno'}</field>
         <field name="view_id" eval="financeiro_estorno_cheque_form_view"/>
     </record>
+
     <record model="ir.actions.act_window.view"
             id="financeiro_cheque_estorno_form_action">
         <field eval="2" name="sequence"/>
@@ -81,13 +88,14 @@
         <field name="view_id" ref="financeiro_estorno_cheque_form_view"/>
         <field name="act_window_id" ref="financeiro_cheque_estorno_act_window"/>
     </record>
-    <record model="ir.actions.act_window.view"
-            id="financeiro_cheque_estorno_tree_action">
+
+    <record model="ir.actions.act_window.view" id="financeiro_cheque_estorno_tree_action">
         <field eval="1" name="sequence"/>
         <field name="view_mode">tree</field>
         <field name="view_id" ref="financeiro_estorno_cheque_tree_view"/>
         <field name="act_window_id" ref="financeiro_cheque_estorno_act_window"/>
     </record>
+
     <record model="ir.ui.menu" id="estorno_cheque_menu">
         <field name="name">Estornos</field>
         <field name="parent_id" ref="financeiro_cheque_menu"/>

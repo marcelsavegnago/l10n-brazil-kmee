@@ -101,6 +101,7 @@ class FinanceiroCheque(models.Model):
             ('recebido', 'depositado'),
             ('recebido', 'repassado'),
             ('recebido', 'devolvido_b'),
+            ('depositado', 'devolvido_b'),
             ('devolvido_b', 'devolvido_p')
         ]
         if (self.state, estado) in permitido:

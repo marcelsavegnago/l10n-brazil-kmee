@@ -72,16 +72,25 @@ class FinanceiroMovimentacaoCheque(models.Model):
         compute='_compute_qtd_financials',
     )
 
+    qtd_financeiro_moves_2receive = fields.Integer(
+        string="Saídas do Financeiro",
+        compute='_compute_qtd_financials',
+    )
+
     def _compute_qtd_financials(self):
         qtd_financeiro_moves_in = 0
         qtd_financeiro_moves_out = 0
+        qtd_financeiro_moves_2receive = 0
         for financial_move in self.financial_ids:
             if financial_move.type == 'money_in':
                 qtd_financeiro_moves_in += 1
             if financial_move.type == 'money_out':
                 qtd_financeiro_moves_out += 1
+            if financial_move.type == '2receive':
+                qtd_financeiro_moves_2receive += 1
         self.qtd_financeiro_moves_in = qtd_financeiro_moves_in
         self.qtd_financeiro_moves_out = qtd_financeiro_moves_out
+        self.qtd_financeiro_moves_2receive = qtd_financeiro_moves_2receive
 
     def prepare_financial_move(self, type, cheque):
         """
@@ -108,6 +117,7 @@ class FinanceiroMovimentacaoCheque(models.Model):
             type=type,
             movimentacoes_cheque_id=self.id,
             company_id=cheque.empresa_id.original_company_id.id,
+            date_payment=self.data_deposito,
             # currency_id=self.currency_euro.id,
             # account_type_id=self.type_receivable.id,
         ))
@@ -190,3 +200,24 @@ class FinanceiroMovimentacaoCheque(models.Model):
             'res_id': financial_ids[0],
             'context': self.env.context
         }
+
+    def button_ver_2receive(self):
+        financial_ids = []
+        for financial_move_id in self.financial_ids:
+            if financial_move_id.type == '2receive':
+                financial_ids.append(financial_move_id.id)
+
+        view_id = \
+            self.env.ref('financial.financial_move_payment_payment_item_form')
+
+        return {
+            'name': 'A receber',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': view_id.id,
+            'res_model': 'financial.move',
+            'type': 'ir.actions.act_window',
+            'res_id': financial_ids[0],
+            'context': self.env.context
+        }
+

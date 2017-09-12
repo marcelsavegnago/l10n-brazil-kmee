@@ -2,11 +2,11 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-=====================
-Financeiro brasileiro
-=====================
+=================================
+Controle de Cheques no Financeiro
+=================================
 
-Financeiro brasileiro (Tesouraria e Integracao Bancaria)
+Controle de Cheques no Financeiro
 
 Installation
 ============

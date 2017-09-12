@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017 KMEE
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="financial_cheque_form">
+        <field name="name">financial.cheque.form</field>
+        <field name="model">financial.cheque</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="currency_id" invisible="1" />
+                <header>
+<!--                    <button name="button_receber_cheque" class="oe_highlight" type="object" states="novo" string="Receber"/>
+                    <button name="button_depositar_cheque" class="oe_highlight" type="object" states="recebido" string="Depositar"/>
+                    <button name="button_repassar_cheque" class="oe_highlight" type="object" states="recebido" string="Repassar"/>
+                    <button name="button_devolver_cheque_banco" class="oe_highlight" type="object" states="recebido" string="Devolvido pelo banco"/>
+                    <button name="button_devolver_cheque_parceiro" class="oe_highlight" type="object" states="devolvido_b" string="Devolvido ao Parceiro"/>
+                    <field name="state" widget="statusbar" statusbar_visible="novo,recebido,depositado,devolvido_b"/>-->
+                </header>
+                <sheet>
+                    <group>
+                        <group name="identificacao" string="Identificação do Cheque" col="4" colspan="4">
+                            <field name="codigo_barras"/>
+                            <newline />
+                            <field name="participante_original_id" colspan="4" />
+                            <newline />
+                            <field name="bank_id" />
+                            <newline />
+                            <field name="agencia" />
+                            <field name="conta" />
+                            <newline />
+                            <field name="numero" string="Nº do cheque"/>
+                            <newline />
+                            <field name="municipio_id" colspan="4" />
+                            <newline />
+                            <field name="titular_nome" required="True"/>
+                            <field name="titular_cnpj_cpf" required="True"/>
+                            <newline />
+                            <field name="valor" required="True"/>
+                            <field name="data" required="True"/>
+                            <newline />
+                            <field name="valor_libera_limite" />
+                        </group>
+                        <group name="local" string="Situação atual">
+                            <field name="participante_atual_id" />
+                            <field name="empresa_atual_id" />
+                            <field name="partner_bank_atual_id" />
+                        </group>
+                        <group name="datas" string="Datas">
+                            <field name="data_pre_datado"/>
+                            <field name="data_entrada"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <field name="movimento_ids"/>
+<!--                     <field name="notes"/> -->
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!--<record model="ir.ui.view" id="financial_cheque_search_view">-->
+        <!--<field name="name">financial.cheque.search</field>-->
+        <!--<field name="model">financial.cheque</field>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<search>-->
+                <!--&lt;!&ndash; TODO &ndash;&gt;-->
+            <!--</search>-->
+        <!--</field>-->
+    <!--</record>-->
+
+    <record model="ir.ui.view" id="financial_cheque_tree">
+        <field name="name">financial.cheque.tree</field>
+        <field name="model">financial.cheque</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="titular_nome"/>
+                <field name="bank_id"/>
+                <field name="agencia"/>
+                <field name="conta"/>
+                <field name="data_pre_datado"/>
+                <field name="valor"/>
+                <field name="participante_atual_id"/>
+                <field name="partner_bank_atual_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="financial_cheque_action">
+        <field name="name">Cheque</field>
+        <field name="res_model">financial.cheque</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="financial_tesouraria_cheque_menu">
+        <field name="name">Cheques</field>
+        <field name="parent_id" ref="financial.financial_top_menu"/>
+        <field name="sequence" eval="16"/>
+    </record>
+
+    <record model="ir.ui.menu" id="financial_cheque_menu">
+        <field name="name">Cheques</field>
+        <field name="parent_id" ref="financial_tesouraria_cheque_menu"/>
+        <field name="action" ref="financial_cheque_action"/>
+        <field name="sequence" eval="1"/>
+    </record>
+
+</odoo>

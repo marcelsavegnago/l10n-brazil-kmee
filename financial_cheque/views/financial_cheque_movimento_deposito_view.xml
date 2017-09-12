@@ -4,8 +4,8 @@
 
 <odoo>
 
-    <record model="ir.ui.view" id="financeiro_deposito_cheque_form_view">
-        <field name="name">financeiro.deposito.cheque.form (in l10n_br_financial)</field>
+    <record model="ir.ui.view" id="financial_cheque_movimento_form">
+        <field name="name">financial_cheque_movimento.form</field>
         <field name="model">financeiro.movimentacao.cheque</field>
         <field name="arch" type="xml">
             <form >
@@ -54,8 +54,8 @@
         </field>
     </record>
 
-    <!--<record model="ir.ui.view" id="financeiro_cheque_search_view">-->
-        <!--<field name="name">financeiro.cheque.search (in l10n_br_financial)</field>-->
+    <!--<record model="ir.ui.view" id="financeiro_cheque_search">-->
+        <!--<field name="name">financeiro.cheque.search</field>-->
         <!--<field name="model">financeiro.cheque</field>-->
         <!--<field name="arch" type="xml">-->
             <!--<search>-->
@@ -64,8 +64,8 @@
         <!--</field>-->
     <!--</record>-->
 
-    <record model="ir.ui.view" id="financeiro_deposito_cheque_tree_view">
-        <field name="name">financeiro.deposito.cheque.tree (in l10n_br_financial)</field>
+    <record model="ir.ui.view" id="financial_cheque_movimento_tree">
+        <field name="name">financial_cheque_movimento.tree</field>
         <field name="model">financeiro.movimentacao.cheque</field>
         <field name="arch" type="xml">
             <tree>
@@ -76,31 +76,34 @@
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="financeiro_cheque_deposito_act_window">
+    <record model="ir.actions.act_window" id="financial_cheque_movimento_action">
         <field name="name">Depósitos</field>
         <field name="res_model">financeiro.movimentacao.cheque</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('type','=','deposito')]</field>
         <field name="context" >{'default_type': 'deposito'}</field>
     </record>
+
     <record model="ir.actions.act_window.view"
-            id="financeiro_cheque_deposito_form_action">
+            id="financial_cheque_movimento_form_action">
         <field eval="2" name="sequence"/>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="financeiro_deposito_cheque_form_view"/>
-        <field name="act_window_id" ref="financeiro_cheque_deposito_act_window"/>
+        <field name="view_id" ref="financial_cheque_movimento_form"/>
+        <field name="act_window_id" ref="financial_cheque_movimento_action"/>
     </record>
+
     <record model="ir.actions.act_window.view"
-            id="financeiro_cheque_deposito_tree_action">
+            id="financial_cheque_movimento_tree_action">
         <field eval="1" name="sequence"/>
         <field name="view_mode">tree</field>
-        <field name="view_id" ref="financeiro_deposito_cheque_tree_view"/>
-        <field name="act_window_id" ref="financeiro_cheque_deposito_act_window"/>
+        <field name="view_id" ref="financial_cheque_movimento_tree"/>
+        <field name="act_window_id" ref="financial_cheque_movimento_action"/>
     </record>
+
     <record model="ir.ui.menu" id="deposito_cheque_menu">
         <field name="name">Depósitos</field>
         <field name="parent_id" ref="financeiro_cheque_menu"/>
-        <field name="action" ref="financeiro_cheque_deposito_act_window"/>
+        <field name="action" ref="financial_cheque_movimento_action"/>
         <field name="sequence" eval="2"/>
     </record>
 

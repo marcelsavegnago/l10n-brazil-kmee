@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017 KMEE
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="financial_cheque_movimento_receber_form">
+        <field name="name">financial_cheque_movimento.receber.form</field>
+        <field name="model">financial.cheque.movimento</field>
+        <field name="priority">1</field>
+        <field name="mode">primary</field>
+        <field name="inherit_id" ref="financial_cheque_movimento_base_form" />
+        <field name="arch" type="xml">
+            <field name="participante_destino_id" position="attributes">
+                <attribute name="domain">[('eh_empresa', '=', True)]</attribute>
+            </field>
+            <field name="cheque_ids" position="attributes">
+                <attribute name="domain">['|', ('empresa_atual_id', '=', False), ('empresa_atual_id', '!=', empresa_destino_id)]</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="financial_cheque_movimento_receber_action">
+        <field name="name">Receber</field>
+        <field name="res_model">financial.cheque.movimento</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="financial_cheque_movimento_receber_form_action">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="financial_cheque_movimento_receber_form"/>
+        <field name="act_window_id" ref="financial_cheque_movimento_receber_action"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="financial_cheque_movimento_receber_tree_action">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="financial_cheque_movimento_base_tree"/>
+        <field name="act_window_id" ref="financial_cheque_movimento_receber_action"/>
+    </record>
+
+    <record model="ir.ui.menu" id="financial_cheque_movimento_receber_menu">
+        <field name="name">Receber</field>
+        <field name="parent_id" ref="financial_tesouraria_cheque_menu"/>
+        <field name="action" ref="financial_cheque_movimento_receber_action"/>
+        <field name="sequence" eval="3"/>
+    </record>
+
+</odoo>

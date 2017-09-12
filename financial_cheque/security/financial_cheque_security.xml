@@ -5,9 +5,9 @@
 <odoo>
 <data>
 
-    <record model="ir.model.access" id="financeiro_cheque_access_name"> <!-- TODO acl id -->
-        <field name="name">financeiro.cheque access name</field> <!-- TODO acl name -->
-        <field name="model_id" ref="model_financeiro_cheque"/>
+    <record model="ir.model.access" id="financial_cheque_all"> <!-- TODO acl id -->
+        <field name="name">financial.cheque all</field> <!-- TODO acl name -->
+        <field name="model_id" ref="model_financial_cheque"/>
         <!-- TODO review and adapt -->
         <field name="group_id" ref="base.group_user"/>
         <field name="perm_read" eval="1"/>

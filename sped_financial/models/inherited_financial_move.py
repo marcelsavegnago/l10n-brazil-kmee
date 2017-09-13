@@ -69,7 +69,6 @@ class FinancialMove(SpedBase, models.Model):
         dados = self._mantem_sincronia_cadastros(dados)
         return super(FinancialMove, self).create(dados)
 
-    @api.model
     def write(self, dados):
         dados = self._mantem_sincronia_cadastros(dados)
         return super(FinancialMove, self).write(dados)

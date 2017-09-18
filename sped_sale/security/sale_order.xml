@@ -4,19 +4,13 @@
 
 <odoo>
     <data>
-
-        <record model="ir.model.access"
-                id="sale_order_access_name"> <!-- TODO acl id -->
-            <field name="name">sale.order access name
-            </field> <!-- TODO acl name -->
-            <field name="model_id" ref="model_sale_order"/>
-            <!-- TODO review and adapt -->
-            <field name="group_id" ref="base.group_user"/>
-            <field name="perm_read" eval="1"/>
-            <field name="perm_create" eval="0"/>
-            <field name="perm_write" eval="0"/>
-            <field name="perm_unlink" eval="0"/>
+        <record id="group_discount_global" model="res.groups">
+            <field name="name">Desconto Global no pedido de vendas</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
         </record>
-
+        <record id="group_cumulative_discount_global" model="res.groups">
+            <field name="name">Desconto Global Cumulativo no pedido de vendas</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
     </data>
 </odoo>

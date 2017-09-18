@@ -19,6 +19,9 @@
         'sale_stock',
     ],
     'data': [
+        'security/sale_order.xml',
+
+        'views/sale_config_settings.xml',
         'views/inherited_sale_order_line_base_view.xml',
         'views/inherited_sale_order_line_produto_view.xml',
         'views/inherited_sale_order_line_servico_view.xml',

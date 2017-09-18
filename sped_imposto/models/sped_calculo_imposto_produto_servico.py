@@ -80,14 +80,14 @@ class SpedCalculoImpostoProdutoServico(SpedCalculoImposto):
         store=True,
         inverse='_inverse_rateio_produtos_vr_seguro',
     )
-    #produtos_al_desconto = fields.Monetary(
-        #string='Alíquota do desconto',
-        #currency_field='currency_aliquota_rateio_id',
-        #digits=(18, 11),
-        #compute='_compute_soma_itens',
-        #store=True,
-        #inverse='_inverse_rateio_produtos_al_desconto',
-    #)
+    produtos_al_desconto = fields.Monetary(
+        string='Desconto (%)',
+        currency_field='currency_aliquota_rateio_id',
+        digits=(18, 11),
+        compute='_compute_soma_itens',
+        store=True,
+        inverse='_inverse_rateio_produtos_al_desconto',
+    )
     produtos_vr_desconto = fields.Monetary(
         string='Valor do desconto',
         compute='_compute_soma_itens',
@@ -514,9 +514,9 @@ class SpedCalculoImpostoProdutoServico(SpedCalculoImposto):
         self.ensure_one()
         self._inverse_rateio_campo_total('vr_desconto', tipo_item='P')
 
-    #def _inverse_rateio_produtos_al_desconto(self):
-        #self.ensure_one()
-        #self._inverse_rateio_campo_al_desconto(tipo_item='P')
+    def _inverse_rateio_produtos_al_desconto(self):
+        self.ensure_one()
+        self._inverse_rateio_campo_total('produtos_al_desconto', tipo_item='P')
 
     # def _inverse_rateio_servicos_vr_frete(self):
     #     self.ensure_one()

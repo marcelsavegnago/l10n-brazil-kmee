@@ -101,6 +101,14 @@
                                    class="oe_subtotal_footer_separator" />
                         </group>
                     </group>
+                    <group name="produtos_desconto" groups="sped_sale.group_discount_global">
+                        <group>
+                            <field name="produtos_al_desconto" groups="base.group_user"/>
+                        </group>
+                        <group>
+
+                        </group>
+                    </group>
                 </page>
                 <page string="Servicos" name="servicos"
                       attrs="{'invisible': [('operacao_servico_id', '=', False)]}">
@@ -132,7 +140,6 @@
                     </group>
                 </page>
             </xpath>
-
             <xpath expr="//group[@name='sale_pay']" position="attributes">
                 <attribute name="groups">sales_team.group_sale_manager</attribute>
                 <attribute name="attrs">{'readonly': [('state', '!=', 'draft')]}</attribute>

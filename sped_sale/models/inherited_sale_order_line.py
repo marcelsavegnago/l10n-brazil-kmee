@@ -229,6 +229,7 @@ class SaleOrderLine(SpedCalculoImpostoItem, models.Model):
             item.name = item.produto_id.nome
             item.produto_descricao = item.produto_id.nome
             item.product_id = item.produto_id.product_id
+            item.vr_unitario = item.produto_id.preco_venda
             item.price_unit = item.vr_unitario
 
         super(SaleOrderLine, self)._onchange_produto_id()

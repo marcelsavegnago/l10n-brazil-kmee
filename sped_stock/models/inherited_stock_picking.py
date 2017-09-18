@@ -86,7 +86,7 @@ class StockPicking(SpedCalculoImposto, models.Model):
     @api.depends('documento_ids.situacao_fiscal')
     def _compute_quantidade_documentos_fiscais(self):
         for picking in self:
-            documento_ids = self.documento_ids.search(
+            documento_ids = picking.documento_ids.search(
                 [('stock_picking_id', '=', picking.id), ('situacao_fiscal', 'in',
                   SITUACAO_FISCAL_SPED_CONSIDERA_ATIVO)])
 

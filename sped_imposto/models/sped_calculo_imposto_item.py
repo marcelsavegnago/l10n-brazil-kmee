@@ -223,9 +223,9 @@ class SpedCalculoImpostoItem(SpedBase):
     al_desconto = fields.Monetary(
         string='Percentual de desconto',
         currency_field='currency_aliquota_rateio_id',
-        compute='_compute_al_desconto',
-        inverse='_inverse_al_desconto',
-        store=True,
+        # compute='_compute_al_desconto',
+        # inverse='_inverse_al_desconto',
+        # store=True,
     )
     vr_desconto = fields.Monetary(
         string='Valor do desconto',

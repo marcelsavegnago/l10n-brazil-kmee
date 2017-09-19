@@ -149,14 +149,14 @@ class SpedCalculoImposto(SpedBase):
         store=True,
         inverse='_inverse_rateio_vr_seguro',
     )
-    # al_desconto = fields.Monetary(
-    #     string='Alíquota do desconto',
-    #     currency_field='currency_aliquota_rateio_id',
-    #     digits=(18, 11),
-    #     compute='_compute_soma_itens',
-    #     store=True,
-    #     inverse='_inverse_rateio_al_desconto',
-    # )
+    al_desconto = fields.Monetary(
+        string='Alíquota do desconto',
+        # currency_field='currency_aliquota_rateio_id',
+        digits=(18, 11),
+        # compute='_compute_soma_itens',
+        # store=True,
+        # inverse='_inverse_rateio_al_desconto',
+    )
     vr_desconto = fields.Monetary(
         string='Valor do desconto',
         compute='_compute_soma_itens',

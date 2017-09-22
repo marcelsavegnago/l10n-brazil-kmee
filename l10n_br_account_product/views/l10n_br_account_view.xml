@@ -21,6 +21,7 @@
                     <group string="Financeiro">
                         <field name="financial_document_type_id"/>
                         <field name="financial_account_id"/>
+                        <field name="payment_term_required"/>
                     </group>
 
                 </xpath>

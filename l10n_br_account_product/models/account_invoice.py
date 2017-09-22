@@ -720,6 +720,9 @@ class AccountInvoice(models.Model):
         inverse_name='invoice_id',
         string=u'Duplicatas',
     )
+    payment_term_required = fields.Boolean(
+        related='fiscal_category_id.payment_term_required'
+    )
 
     @api.one
     @api.constrains('number')

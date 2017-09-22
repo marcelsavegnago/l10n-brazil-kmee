@@ -43,6 +43,9 @@ class L10nBrAccountFiscalCategory(models.Model):
         comodel_name='sped.account.move.template',
         string='Modelo de partida dobrada',
     )
+    payment_term_required = fields.Boolean(
+        string=u'Condição de pagamento obrigatória'
+    )
 
 
 class L10nBrAccountDocumentSerie(models.Model):

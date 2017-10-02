@@ -147,7 +147,8 @@ class PurchaseOrder(models.Model):
     def _fiscal_position_map(self, result, **kwargs):
         """Método para chamar a definição de regras fiscais"""
         ctx = dict(self._context)
-        kwargs['fiscal_category_id'] = ctx.get('fiscal_category_id')
+        if not kwargs.get('fiscal_category_id'):
+            kwargs['fiscal_category_id'] = ctx.get('fiscal_category_id')
 
         ctx.update({'use_domain': ('use_purchase', '=', True)})
         return self.env[

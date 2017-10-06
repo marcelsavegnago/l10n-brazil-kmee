@@ -1,5 +1,5 @@
 <!--
-    Copyright 2017 Taŭga Tecnologia - Ari Caldeira <ari.caldeira@tauga.com.br>
+    Copyright 2017 KMEE INFORMATICA LTDA 
     License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 -->
 <odoo>
@@ -12,8 +12,11 @@
         <field name="inherit_id" ref="sped_imposto.sped_operacao_base_form" />
         <field name="arch" type="xml">
             <xpath expr="//form[1]" position="attributes">
-                <attribute name="string">Operação Fiscal para Recebimento de NF-e</attribute>
+                <attribute name="string">Operação Fiscal para Emissão de NF-e</attribute>
             </xpath>
+            <field name="entrada_saida" position="attributes" >
+                <attribute name="attrs">{'invisible': [('emissao', '=', '1')]}</attribute>
+            </field>
         </field>
     </record>
 

@@ -28,7 +28,7 @@
         <field name="inherit_id" ref="sped_imposto.sped_operacao_base_tree" />
         <field name="arch" type="xml">
             <xpath expr="//tree[1]" position="attributes">
-                <attribute name="string">Operação Fiscal para Recebimento de NF-e</attribute>
+                <attribute name="string">Operação Fiscal para Emissão de NF-e</attribute>
             </xpath>
         </field>
     </record>
@@ -41,7 +41,7 @@
         <field name="inherit_id" ref="sped_imposto.sped_operacao_base_search" />
         <field name="arch" type="xml">
             <xpath expr="//search[1]" position="attributes">
-                <attribute name="string">Operação Fiscal para Recebimento de NF-e</attribute>
+                <attribute name="string">Operação Fiscal para Emissão de NF-e</attribute>
             </xpath>
         </field>
     </record>

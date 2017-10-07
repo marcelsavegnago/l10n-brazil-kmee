@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
@@ -18,54 +18,54 @@ class AccountPaymentTermLine(models.Model):
     _order = 'sequence, id'
 
     TYPE = [
-        ('balance', u'Balance'),
-        ('percent', u'Percent'),
-        ('fixed', u'Fixed Amount'),
+        ('balance', 'Balance'),
+        ('percent', 'Percent'),
+        ('fixed', 'Fixed Amount'),
     ]
 
     OPTIONS = [
-        ('day_after_invoice_date', u'Day(s) after the invoice date'),
+        ('day_after_invoice_date', 'Day(s) after the invoice date'),
         ('fix_day_following_month',
-         u'Day(s) after the end of the invoice month (Net EOM)'),
-        ('last_day_following_month', u'Last day of following month'),
-        ('last_day_current_month', u'Last day of current month'),
+         'Day(s) after the end of the invoice month (Net EOM)'),
+        ('last_day_following_month', 'Last day of following month'),
+        ('last_day_current_month', 'Last day of current month'),
     ]
 
     value = fields.Selection(
         selection=TYPE,
-        string=u'Type',
+        string='Type',
         required=True,
         default='balance',
-        help=u'Select here the kind of valuation related to this payment term '
-             u'line.',
+        help='Select here the kind of valuation related to this payment term '
+             'line.',
     )
     value_amount = fields.Float(
-        string=u'Value',
+        string='Value',
         digits=dp.get_precision('Payment Terms'),
-        help=u'For percent enter a ratio between 0-100.',
+        help='For percent enter a ratio between 0-100.',
     )
     days = fields.Integer(
-        string=u'Number of Days',
+        string='Number of Days',
         required=True,
         default=0,
     )
     option = fields.Selection(
         selection=OPTIONS,
-        string=u'Options',
+        string='Options',
         default='day_after_invoice_date',
         required=True,
     )
     payment_id = fields.Many2one(
         comodel_name='account.payment.term',
-        string=u'Payment Terms',
+        string='Payment Terms',
         required=True,
         index=True,
         ondelete='cascade',
     )
     sequence = fields.Integer(
         default=10,
-        help=u'Gives the sequence order when displaying a list of payment '
-             u'term lines.',
+        help='Gives the sequence order when displaying a list of payment '
+             'term lines.',
     )
 
     @api.constrains('value', 'value_amount')
@@ -75,7 +75,7 @@ class AccountPaymentTermLine(models.Model):
         if (self.value == 'percent' and
             (self.value_amount < 0.0 or
              self.value_amount > 100.0)):
-            raise ValidationError(_(u"""Percentages for Payment Terms Line
+            raise ValidationError(_("""Percentages for Payment Terms Line
             must be between 0 and 100."""))
 
     @api.onchange('option')

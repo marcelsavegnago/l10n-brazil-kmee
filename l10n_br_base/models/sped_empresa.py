@@ -6,7 +6,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
@@ -131,7 +131,7 @@ class SpedEmpresa(SpedBase, models.Model):
 
         if cnpj_cpf[:2] != 'EX':
             if not valida_cnpj(cnpj_cpf) and not valida_cpf(cnpj_cpf):
-                raise ValidationError(_(u'CNPJ/CPF inválido'))
+                raise ValidationError(_('CNPJ/CPF inválido'))
 
         if len(cnpj_cpf) == 14:
             valores.update(cnpj_cpf=formata_cnpj(cnpj_cpf))
@@ -161,7 +161,7 @@ class SpedEmpresa(SpedBase, models.Model):
             ])
 
         if len(cnpj_ids) > 0:
-            raise ValidationError(_(u'CNPJ/CPF já existe no cadastro!'))
+            raise ValidationError(_('CNPJ/CPF já existe no cadastro!'))
         return res
 
     @api.constrains('cnpj_cpf')
@@ -182,7 +182,7 @@ class SpedEmpresa(SpedBase, models.Model):
         if self.fone:
             if (not valida_fone_internacional(self.fone)) and (
                     not valida_fone_fixo(self.fone)):
-                raise ValidationError(_(u'Telefone fixo inválido!'))
+                raise ValidationError(_('Telefone fixo inválido!'))
 
             valores.update(fone=formata_fone(self.fone))
 
@@ -190,14 +190,14 @@ class SpedEmpresa(SpedBase, models.Model):
             if (not valida_fone_internacional(self.fone_comercial)) and (
                     not valida_fone_fixo(self.fone_comercial)) and (
                     not valida_fone_celular(self.fone_comercial)):
-                raise ValidationError(_(u'Telefone comercial inválido!'))
+                raise ValidationError(_('Telefone comercial inválido!'))
 
             valores.update(fone_comercial=formata_fone(self.fone_comercial))
 
         if self.celular:
             if (not valida_fone_internacional(self.celular)) and (
                     not valida_fone_celular(self.celular)):
-                raise ValidationError(_(u'Celular inválido!'))
+                raise ValidationError(_('Celular inválido!'))
 
             valores.update(celular=formata_fone(self.celular))
 
@@ -519,7 +519,7 @@ class SpedEmpresa(SpedBase, models.Model):
         if not data_referencia:
             return data_referencia
 
-        if isinstance(data_referencia, (str, unicode)):
+        if isinstance(data_referencia, str):
             #
             # Caso venha uma data e hora, assumimos que veio em UTC
             #

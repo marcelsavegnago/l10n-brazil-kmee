@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 from odoo import api, fields, models, _
@@ -115,7 +115,7 @@ class SpedParticipante(SpedBase, models.Model):
         string='CNPJ/CPF',
         size=18,
         index=True,
-        help=u"""Para participantes estrangeiros, usar EX9999,
+        help="""Para participantes estrangeiros, usar EX9999,
         onde 9999 é um número a sua escolha"""
     )
     cnpj_cpf_raiz = fields.Char(
@@ -472,7 +472,7 @@ class SpedParticipante(SpedBase, models.Model):
 
         if cnpj_cpf[:2] != 'EX':
             if not valida_cnpj(cnpj_cpf) and not valida_cpf(cnpj_cpf):
-                raise ValidationError(_(u'CNPJ/CPF inválido'))
+                raise ValidationError(_('CNPJ/CPF inválido'))
 
         if len(cnpj_cpf) == 14:
             valores['cnpj_cpf'] = formata_cnpj(cnpj_cpf)
@@ -503,7 +503,7 @@ class SpedParticipante(SpedBase, models.Model):
                  ('eh_grupo', '=', False)])
 
         if len(cnpj_ids) > 0:
-            raise ValidationError(_(u'CNPJ/CPF já existe no cadastro!'))
+            raise ValidationError(_('CNPJ/CPF já existe no cadastro!'))
 
         return res
 
@@ -525,7 +525,7 @@ class SpedParticipante(SpedBase, models.Model):
         if self.fone:
             if (not valida_fone_internacional(self.fone)) and (
                     not valida_fone_fixo(self.fone)):
-                raise ValidationError(_(u'Telefone fixo inválido!'))
+                raise ValidationError(_('Telefone fixo inválido!'))
 
             valores['fone'] = formata_fone(self.fone)
 
@@ -533,14 +533,14 @@ class SpedParticipante(SpedBase, models.Model):
             if (not valida_fone_internacional(self.fone_comercial)) and (
                     not valida_fone_fixo(self.fone_comercial)) and (
                     not valida_fone_celular(self.fone_comercial)):
-                raise ValidationError(_(u'Telefone comercial inválido!'))
+                raise ValidationError(_('Telefone comercial inválido!'))
 
             valores['fone_comercial'] = formata_fone(self.fone_comercial)
 
         if self.celular:
             if (not valida_fone_internacional(self.celular)) and (
                     not valida_fone_celular(self.celular)):
-                raise ValidationError(_(u'Celular inválido!'))
+                raise ValidationError(_('Celular inválido!'))
 
             valores['celular'] = formata_fone(self.celular)
 
@@ -566,7 +566,7 @@ class SpedParticipante(SpedBase, models.Model):
 
         cep = limpa_formatacao(self.cep)
         if (not cep.isdigit()) or len(cep) != 8:
-            raise ValidationError(_(u'CEP inválido!'))
+            raise ValidationError(_('CEP inválido!'))
 
         valores['cep'] = cep[:5] + '-' + cep[5:]
 
@@ -589,7 +589,7 @@ class SpedParticipante(SpedBase, models.Model):
 
         if self.suframa:
             if not valida_inscricao_estadual(self.suframa, 'SUFRAMA'):
-                raise ValidationError(_(u'Inscrição na SUFRAMA inválida!'))
+                raise ValidationError(_('Inscrição na SUFRAMA inválida!'))
 
             valores['suframa'] = formata_inscricao_estadual(self.suframa,
                                                             'SUFRAMA')
@@ -601,17 +601,17 @@ class SpedParticipante(SpedBase, models.Model):
             else:
                 if not self.municipio_id:
                     raise ValidationError(_(
-                        u"""Para validação da inscrição estadual é preciso
+                        """Para validação da inscrição estadual é preciso
                         informar o município!"""))
 
                 if self.ie.strip().upper()[
                    :6] == 'ISENTO' or self.ie.strip().upper()[:6] == 'ISENTA':
                     raise ValidationError(_(
-                        u'Inscrição estadual inválida para contribuinte!'))
+                        'Inscrição estadual inválida para contribuinte!'))
 
                 if not valida_inscricao_estadual(
                         self.ie, self.municipio_id.estado_id.uf):
-                    raise ValidationError(_(u'Inscrição estadual inválida!'))
+                    raise ValidationError(_('Inscrição estadual inválida!'))
 
                 valores['ie'] = formata_inscricao_estadual(
                     self.ie, self.municipio_id.estado_id.uf
@@ -649,7 +649,7 @@ class SpedParticipante(SpedBase, models.Model):
                     valido = validate_email(e.strip())
                     emails_validos.append(valido['email'])
                 except:
-                    raise ValidationError(_(u'Email %s inválido!' % e.strip()))
+                    raise ValidationError(_('Email %s inválido!' % e.strip()))
 
             valores['email'] = ','.join(emails_validos)
 
@@ -669,7 +669,7 @@ class SpedParticipante(SpedBase, models.Model):
                     emails_validos.append(valido['email'])
                 except:
                     raise ValidationError(
-                        _(u'Email %s inválido!' % e.strip()))
+                        _('Email %s inválido!' % e.strip()))
 
             valores['email_nfe'] = ','.join(emails_validos)
 

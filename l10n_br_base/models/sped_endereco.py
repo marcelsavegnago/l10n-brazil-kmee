@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 from odoo import api, fields, models, _
@@ -62,7 +62,7 @@ class SpedEndereco(models.Model):
         string='CNPJ/CPF',
         size=18,
         index=True,
-        help=u"""Para participantes estrangeiros, usar EX9999,
+        help="""Para participantes estrangeiros, usar EX9999,
         onde 9999 é um número a sua escolha"""
     )
     cnpj_cpf_raiz = fields.Char(
@@ -287,7 +287,7 @@ class SpedEndereco(models.Model):
 
         if cnpj_cpf[:2] != 'EX':
             if not valida_cnpj(cnpj_cpf) and not valida_cpf(cnpj_cpf):
-                raise ValidationError(_(u'CNPJ/CPF inválido'))
+                raise ValidationError(_('CNPJ/CPF inválido'))
 
         if len(cnpj_cpf) == 14:
             valores['cnpj_cpf'] = formata_cnpj(cnpj_cpf)
@@ -320,7 +320,7 @@ class SpedEndereco(models.Model):
         if self.fone:
             if (not valida_fone_internacional(self.fone)) and (
                     not valida_fone_fixo(self.fone)):
-                raise ValidationError(_(u'Telefone fixo inválido!'))
+                raise ValidationError(_('Telefone fixo inválido!'))
 
             valores['fone'] = formata_fone(self.fone)
 
@@ -328,14 +328,14 @@ class SpedEndereco(models.Model):
             if (not valida_fone_internacional(self.fone_comercial)) and (
                     not valida_fone_fixo(self.fone_comercial)) and (
                     not valida_fone_celular(self.fone_comercial)):
-                raise ValidationError(_(u'Telefone comercial inválido!'))
+                raise ValidationError(_('Telefone comercial inválido!'))
 
             valores['fone_comercial'] = formata_fone(self.fone_comercial)
 
         if self.celular:
             if (not valida_fone_internacional(self.celular)) and (
                     not valida_fone_celular(self.celular)):
-                raise ValidationError(_(u'Celular inválido!'))
+                raise ValidationError(_('Celular inválido!'))
 
             valores['celular'] = formata_fone(self.celular)
 
@@ -361,7 +361,7 @@ class SpedEndereco(models.Model):
 
         cep = limpa_formatacao(self.cep)
         if (not cep.isdigit()) or len(cep) != 8:
-            raise ValidationError(_(u'CEP inválido!'))
+            raise ValidationError(_('CEP inválido!'))
 
         valores['cep'] = cep[:5] + '-' + cep[5:]
 

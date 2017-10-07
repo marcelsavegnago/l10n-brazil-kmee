@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 
 import logging
@@ -59,7 +59,7 @@ class MailTemplate(models.Model):
                         post_process=False):
         multi_mode = True
 
-        if isinstance(res_ids, (int, long)):
+        if isinstance(res_ids, int):
             multi_mode = False
             res_ids = [res_ids]
 
@@ -85,7 +85,7 @@ class MailTemplate(models.Model):
         # prepare template variables
         #
         # filter to avoid browsing [None]
-        records = self.env[model].browse(filter(None, res_ids))
+        records = self.env[model].browse([_f for _f in res_ids if _f])
         res_to_rec = dict.fromkeys(res_ids, None)
 
         for record in records:
@@ -158,7 +158,7 @@ class MailTemplate(models.Model):
             'Decimal': Decimal,
         }
 
-        for res_id, record in res_to_rec.iteritems():
+        for res_id, record in res_to_rec.items():
             variables['object'] = record
             #
             # Traduz o nome das instâncias
@@ -186,7 +186,7 @@ class MailTemplate(models.Model):
             results[res_id] = render_result
 
         if post_process:
-            for res_id, result in results.iteritems():
+            for res_id, result in results.items():
                 results[res_id] = self.render_post_process(result)
 
         return multi_mode and results or results[res_ids[0]]
@@ -203,7 +203,7 @@ class MailTemplate(models.Model):
 
         multi_mode = True
 
-        if isinstance(res_ids, (int, long)):
+        if isinstance(res_ids, int):
             res_ids = [res_ids]
             multi_mode = False
 

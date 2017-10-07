@@ -6,7 +6,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
@@ -564,7 +564,7 @@ class SpedEmpresa(SpedBase, models.Model):
         if not data_referencia:
             return data_referencia
 
-        if isinstance(data_referencia, (str, unicode)):
+        if isinstance(data_referencia, str):
             #
             # Caso venha uma data e hora, assumimos que veio em UTC
             #

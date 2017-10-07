@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 from odoo import api, fields, models, _
@@ -664,6 +664,10 @@ class SpedParticipante(SpedBase, models.Model):
                     self.ie.strip().upper()[:6] == 'ISENTA':
                     raise ValidationError(
                         _('Inscrição estadual inválida para contribuinte!'))
+
+                if not valida_inscricao_estadual(
+                        self.ie, self.municipio_id.estado_id.uf):
+                    raise ValidationError(_('Inscrição estadual inválida!'))
 
                 self._valida_ie_estadual(valores)
 

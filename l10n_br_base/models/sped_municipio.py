@@ -11,7 +11,7 @@ from odoo import models, fields, api
 
 
 class SpedMunicipio(models.Model):
-    _name = b'sped.municipio'
+    _name = 'sped.municipio'
     _description = 'Municípios'
     _order = 'nome, estado'
 

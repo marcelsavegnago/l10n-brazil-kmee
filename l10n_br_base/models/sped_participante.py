@@ -32,7 +32,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedParticipante(SpedBase, models.Model):
-    _name = b'sped.participante'
+    _name = 'sped.participante'
     _description = 'Participantes'
     _inherits = {'res.partner': 'partner_id'}
     _inherit = 'mail.thread'

@@ -22,7 +22,7 @@ except (ImportError, IOError) as err:
 
 
 class DecimalPrecision(models.Model):
-    _inherit = b'decimal.precision'
+    _inherit = 'decimal.precision'
 
     @api.multi
     def write(self, dados):

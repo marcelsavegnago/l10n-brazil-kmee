@@ -13,7 +13,7 @@ import odoo.addons.decimal_precision as dp
 
 
 class AccountPaymentTermLine(models.Model):
-    _name = b'account.payment.term.line'
+    _name = 'account.payment.term.line'
     _description = 'Payment Term Line'
     _order = 'sequence, id'
 

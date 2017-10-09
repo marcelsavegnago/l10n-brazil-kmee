@@ -25,7 +25,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedUnidade(models.Model):
-    _name = b'sped.unidade'
+    _name = 'sped.unidade'
     _description = 'Unidade de medida'
     _inherits = {'product.uom': 'uom_id'}
     _order = 'codigo_unico'

@@ -11,7 +11,7 @@ from odoo import fields, models
 
 
 class SpedPais(models.Model):
-    _name = b'sped.pais'
+    _name = 'sped.pais'
     _description = 'Países'
     _rec_name = 'nome'
     _order = 'nome'

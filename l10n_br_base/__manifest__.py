@@ -36,8 +36,8 @@
         'data/inherited_res_currency_simbolo_data.xml',
         'data/inherited_res_currency_data.xml',
         'data/inherited_decimal_precision_data.xml',
-
-        'data/inherited_res_country_data.xml',
+        # FIXME: v11
+        # 'data/inherited_res_country_data.xml',
         'data/inherited_res_country_state_data.xml',
 
         'data/sped_pais_data.xml',
@@ -51,7 +51,8 @@
         #
         # Ajustes nas views padrão
         #
-        'views/inherited_res_currency_view.xml',
+        # FIXME: v11
+        # 'views/inherited_res_currency_view.xml',
         'views/inherited_res_company_view.xml',
 
         #
@@ -91,8 +92,9 @@
         'views/sped_account_payment_term_view.xml',
     ],
     'demo': [
-        'demo/sped_empresa_demo.xml',
-        'demo/l10n_br_base_demo.xml',
+        # FIXME: v11
+        # 'demo/sped_empresa_demo.xml',
+        # 'demo/l10n_br_base_demo.xml',
     ],
     'test': [
         'test/sped_participante_test.yml',

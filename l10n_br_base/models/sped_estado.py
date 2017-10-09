@@ -11,11 +11,11 @@ from openerp import models, fields, api
 
 
 class SpedEstado(models.Model):
-    _name = b'sped.estado'
+    _name = 'sped.estado'
     _description = 'Estados'
     _rec_name = 'uf'
     _order = 'uf'
-    _inherits = {'res.country.state': 'state_id'}
+    _inherits = {"res.country.state": "state_id"}
 
     state_id = fields.Many2one(
         comodel_name='res.country.state',

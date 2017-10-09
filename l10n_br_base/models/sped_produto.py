@@ -31,7 +31,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedProduto(SpedBase, models.Model):
-    _name = b'sped.produto'
+    _name = 'sped.produto'
     _description = 'Produtos e serviços'
     _inherits = {'product.product': 'product_id'}
     _inherit = ['mail.thread']

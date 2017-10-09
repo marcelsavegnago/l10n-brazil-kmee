@@ -48,7 +48,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedEmpresa(SpedBase, models.Model):
-    _name = b'sped.empresa'
+    _name = 'sped.empresa'
     _description = 'Empresas e filiais'
     _inherits = {'sped.participante': 'participante_id'} # , 'res.company': 'company_id'}
     _rec_name = 'nome'

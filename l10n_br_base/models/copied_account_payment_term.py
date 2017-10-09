@@ -14,7 +14,7 @@ from functools import reduce
 
 
 class AccountPaymentTerm(models.Model):
-    _name = b'account.payment.term'
+    _name = 'account.payment.term'
     _description = 'Payment Term'
     _order = 'name'
 

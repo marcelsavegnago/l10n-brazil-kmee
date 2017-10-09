@@ -42,7 +42,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedEndereco(models.Model):
-    _name = b'sped.endereco'
+    _name = 'sped.endereco'
     _description = 'Endereços de participantes'
     _inherit = 'mail.thread'
     _rec_name = 'endereco_completo'

@@ -42,7 +42,7 @@ except (ImportError, IOError) as err:
 
 
 class AccountPaymentTerm(SpedBase, models.Model):
-    _name = b'account.payment.term'
+    _name = 'account.payment.term'
     _inherit = ['account.payment.term']
     _rec_name = 'nome_comercial'
     _order = 'sequence, name'

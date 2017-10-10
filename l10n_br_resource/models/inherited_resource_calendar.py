@@ -24,8 +24,8 @@ class ResourceCalendar(models.Model):
 
         if not br_calendar_id:
             raise AccessError(
-                u"Calendário Brasileiro não encontrado, favor importa-lo "
-                u"manualmente"
+                "Calendário Brasileiro não encontrado, favor importa-lo "
+                "manualmente"
             )
             #  TODO: Importar o calendário
         return self.browse(int(br_calendar_id))
@@ -58,13 +58,13 @@ class ResourceCalendar(models.Model):
     parent_left = fields.Integer(index=True)
     parent_right = fields.Integer(index=True)
 
-    country_id = fields.Many2one('res.country', u'País')
+    country_id = fields.Many2one('res.country', 'País')
     state_id = fields.Many2one(
-        'res.country.state', u'Estado',
+        'res.country.state', 'Estado',
         domain="[('country_id','=',country_id)]")
     municipio_id = fields.Many2one(
         comodel_name='sped.municipio',
-        string=u'Municipio',
+        string='Municipio',
         domain="[('estado_id.state_id', '=', state_id)]"
     )
     leave_ids = fields.Many2many(

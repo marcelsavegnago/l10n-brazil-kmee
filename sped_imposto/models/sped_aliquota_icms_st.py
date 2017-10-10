@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -131,4 +131,4 @@ class SpedAliquotaICMSST(SpedBase, models.Model):
             al_icms_ids = self.search(busca)
 
             if al_icms_ids:
-                raise ValidationError(_(u'Alíquota de ICMS ST já existe!'))
+                raise ValidationError(_('Alíquota de ICMS ST já existe!'))

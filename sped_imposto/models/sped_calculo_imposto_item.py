@@ -7,7 +7,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -2352,7 +2352,7 @@ class SpedCalculoImpostoItem(SpedBase):
         valores = res['value']
         valores.pop('id', None)
         self.update({campo: valor for campo,
-                     valor in valores.iteritems() if campo in self._fields})
+                     valor in valores.items() if campo in self._fields})
 
     @api.depends('modelo', 'emissao')
     def _compute_permite_alteracao(self):

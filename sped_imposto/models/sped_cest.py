@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -69,7 +69,7 @@ class SpedCEST(models.Model):
                 cest_ids = self.search([('codigo', '=', cest.codigo)])
 
             if len(cest_ids) > 0:
-                raise ValidationError(_(u'Código CEST já existe na tabela!'))
+                raise ValidationError(_('Código CEST já existe na tabela!'))
 
     @api.model
     def name_search(self, name='', args=None, operator='ilike', limit=100):

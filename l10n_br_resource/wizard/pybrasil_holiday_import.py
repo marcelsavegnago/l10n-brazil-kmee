@@ -79,7 +79,7 @@ class PyBrasilHolidayImport(models.TransientModel):
         if not self.env['resource.calendar'].search_count(
                 [('country_id', '=', country.id)]):
             calendar = self.env['resource.calendar'].create({
-                'name': u'Calendário ' + country.name,
+                'name': 'Calendário ' + country.name,
                 'country_id': country.id
                 # '':u'N',
             })
@@ -100,7 +100,7 @@ class PyBrasilHolidayImport(models.TransientModel):
                  ('state_id', '=', state.id)]):
             parent_id = self.get_calendar_for_country()
             calendar_id = self.env['resource.calendar'].create({
-                'name': u'Calendário ' + state.name,
+                'name': 'Calendário ' + state.name,
                 'state_id': state.id,
                 'country_id': self.get_country_from_calendar(holiday).id,
                 'parent_id': parent_id.id,
@@ -120,7 +120,7 @@ class PyBrasilHolidayImport(models.TransientModel):
             parent_id = self.get_calendar_for_state(holiday)
 
             calendar_id = self.env['resource.calendar'].create({
-                'name': u'Calendário ' + holiday.municipio.nome,
+                'name': 'Calendário ' + holiday.municipio.nome,
                 'municipio_id': municipio.id,
                 'parent_id': parent_id.id,
                 'state_id': self.get_state_from_calendar(holiday).id,
@@ -142,8 +142,8 @@ class PyBrasilHolidayImport(models.TransientModel):
 
             while date_reference.year <= \
                     fields.Date.from_string(wiz.end_date).year:
-                all_holidays = feriado.monta_dicionario_datas(
-                    date_reference).items()
+                all_holidays = list(feriado.monta_dicionario_datas(
+                    date_reference).items())
                 for holiday in all_holidays:
                     if fields.Date.from_string(wiz.end_date) >= holiday[0] >= \
                             fields.Date.from_string(wiz.start_date):
@@ -165,11 +165,11 @@ class PyBrasilHolidayImport(models.TransientModel):
                     date_to = fields.Datetime.to_string(datetime_to)
 
                     for holiday in holidays[1]:
-                        if holiday.abrangencia == u'N':  # Tipo Nacional
+                        if holiday.abrangencia == 'N':  # Tipo Nacional
                             work_time = self.get_calendar_for_country()
-                        if holiday.abrangencia == u'E':  # Tipo Estadual
+                        if holiday.abrangencia == 'E':  # Tipo Estadual
                             work_time = self.get_calendar_for_state(holiday)
-                        if holiday.abrangencia == u'M':  # Tipo Municipal
+                        if holiday.abrangencia == 'M':  # Tipo Municipal
                             work_time = self.get_calendar_for_city(holiday)
                         if not leaves.search_count([
                                 ('resource_id', '=', False),

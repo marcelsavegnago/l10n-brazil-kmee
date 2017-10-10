@@ -34,7 +34,7 @@ from odoo.addons.l10n_br_base.constante_tributaria import (
 
 
 class SpedOperacaoFiscal(models.Model):
-    _name = b'sped.operacao'
+    _name = 'sped.operacao'
     _description = 'Operações Fiscais'
     _order = 'emissao, modelo, nome'
     _rec_name = 'nome'

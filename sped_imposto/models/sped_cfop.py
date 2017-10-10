@@ -31,7 +31,7 @@ from odoo.addons.l10n_br_base.constante_tributaria import (
 
 
 class SpedCFOP(models.Model):
-    _name = b'sped.cfop'
+    _name = 'sped.cfop'
     _description = 'CFOPs'
     _rec_name = 'codigo'
     _order = 'codigo'

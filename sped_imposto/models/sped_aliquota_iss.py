@@ -11,7 +11,7 @@ from odoo import fields, models
 
 
 class SpedAliquotaISS(SpedBase, models.Model):
-    _name = b'sped.aliquota.iss'
+    _name = 'sped.aliquota.iss'
     _description = 'Alíquotas do ISS'
     _rec_name = 'al_iss'
     _order = 'servico_id, municipio_id, al_iss'

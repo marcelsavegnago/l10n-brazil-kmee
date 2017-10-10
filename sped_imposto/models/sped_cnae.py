@@ -12,7 +12,7 @@ from odoo.exceptions import ValidationError
 
 
 class SpedCNAE(models.Model):
-    _name = b'sped.cnae'
+    _name = 'sped.cnae'
     _description = 'CNAEs'
     _order = 'codigo'
     _rec_name = 'cnae'

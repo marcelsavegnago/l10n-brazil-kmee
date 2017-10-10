@@ -22,7 +22,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedNCM(models.Model):
-    _name = b'sped.ncm'
+    _name = 'sped.ncm'
     _description = 'NCM'
     _order = 'codigo, ex'
     _rec_name = 'ncm'

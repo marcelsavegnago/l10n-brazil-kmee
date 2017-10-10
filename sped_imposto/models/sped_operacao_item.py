@@ -26,7 +26,7 @@ from odoo.exceptions import ValidationError
 
 
 class SpedOperacaoFiscalItem(models.Model):
-    _name = b'sped.operacao.item'
+    _name = 'sped.operacao.item'
     _description = 'Itens da Operação Fiscal'
     _order = 'operacao_id, protocolo_id, contribuinte, cfop_codigo'
     # _rec_name = 'nome'
@@ -163,7 +163,7 @@ class SpedOperacaoFiscalItem(models.Model):
 
 
 class SpedOperacaoFiscal(models.Model):
-    _name = b'sped.operacao'
+    _name = 'sped.operacao'
     _inherit = 'sped.operacao'
 
     item_ids = fields.One2many(

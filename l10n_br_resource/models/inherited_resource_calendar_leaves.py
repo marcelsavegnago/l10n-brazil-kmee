@@ -23,27 +23,27 @@ class ResourceCalendarLeaves(models.Model):
     _inherit = 'resource.calendar.leaves'
 
     country_id = fields.Many2one(
-        'res.country', string=u'País',
+        'res.country', string='País',
         related='calendar_id.country_id',
     )
     state_id = fields.Many2one(
-        'res.country.state', u'Estado',
+        'res.country.state', 'Estado',
         related='calendar_id.state_id',
         domain="[('country_id','=',country_id)]",
         readonly=True
     )
     municipio_id = fields.Many2one(
         comodel_name='sped.municipio',
-        string=u'Município',
+        string='Município',
         related='calendar_id.municipio_id',
         domain="[('estado_id.state_id', '=', state_id)]",
         readonly=True
     )
     leave_kind = fields.Selection(
-        string=u'Leave Kind',
-        selection=list(TIPO_FERIADO.iteritems()),
+        string='Leave Kind',
+        selection=list(TIPO_FERIADO.items()),
     )
     leave_scope = fields.Selection(
-        string=u'Leave Scope',
-        selection=list(ABRANGENCIA_FERIADO.iteritems()),
+        string='Leave Scope',
+        selection=list(ABRANGENCIA_FERIADO.items()),
     )

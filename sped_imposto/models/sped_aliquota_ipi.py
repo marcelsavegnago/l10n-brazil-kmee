@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -99,4 +99,4 @@ class SpedAliquotaIPI(SpedBase, models.Model):
             al_ipi_ids = self.search(busca)
 
             if al_ipi_ids:
-                raise ValidationError(_(u'Alíquota de IPI já existe!'))
+                raise ValidationError(_('Alíquota de IPI já existe!'))

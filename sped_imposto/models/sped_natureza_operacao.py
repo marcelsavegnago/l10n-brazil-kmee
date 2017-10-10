@@ -12,7 +12,7 @@ from odoo.exceptions import ValidationError
 
 
 class SpedNaturezaOperacao(models.Model):
-    _name = b'sped.natureza.operacao'
+    _name = 'sped.natureza.operacao'
     _description = 'Naturezas de Operação Fiscal'
     _rec_name = 'nome'
     _order = 'nome'

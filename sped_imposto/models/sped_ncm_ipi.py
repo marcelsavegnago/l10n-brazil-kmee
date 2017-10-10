@@ -11,7 +11,7 @@ from odoo import fields, models
 
 
 class SpedAliquotaIPI(models.Model):
-    _name = b'sped.aliquota.ipi'
+    _name = 'sped.aliquota.ipi'
     _inherit = 'sped.aliquota.ipi'
 
     ncm_ids = fields.One2many(

@@ -30,7 +30,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedAliquotaICMSProprio(SpedBase, models.Model):
-    _name = b'sped.aliquota.icms.proprio'
+    _name = 'sped.aliquota.icms.proprio'
     _description = 'Alíquotas do ICMS próprio'
     _rec_name = 'descricao'
     _order = 'al_icms, md_icms, pr_icms, rd_icms'

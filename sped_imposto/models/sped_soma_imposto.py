@@ -25,7 +25,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedSomaImposto(SpedBase, models.Model):
-    _name = b'sped.soma.imposto'
+    _name = 'sped.soma.imposto'
     _description = 'Soma dos Impostos Calculados'
     _abstract = True
     # _order = 'emissao, modelo, data_emissao desc, serie, numero'

@@ -11,7 +11,7 @@ from odoo import fields, models
 
 
 class SpedNCM(models.Model):
-    _name = b'sped.ncm'
+    _name = 'sped.ncm'
     _inherit = 'sped.ncm'
 
     ibptax_ids = fields.One2many(
@@ -22,7 +22,7 @@ class SpedNCM(models.Model):
 
 
 class SpedServico(models.Model):
-    _name = b'sped.servico'
+    _name = 'sped.servico'
     _inherit = 'sped.servico'
 
     ibptax_ids = fields.One2many(
@@ -33,7 +33,7 @@ class SpedServico(models.Model):
 
 
 class SpedNBS(models.Model):
-    _name = b'sped.nbs'
+    _name = 'sped.nbs'
     _inherit = 'sped.nbs'
 
     ibptax_ids = fields.One2many(

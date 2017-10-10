@@ -26,7 +26,7 @@ DIRNAME = os.path.dirname(__file__)
 
 
 class SpedIBPTax(models.Model):
-    _name = b'sped.ibptax'
+    _name = 'sped.ibptax'
     _description = 'IBPTax'
     _order = 'estado_id'
     _rec_name = 'estado_id'
@@ -163,7 +163,7 @@ class SpedIBPTax(models.Model):
 
 
 class SpedIBPTaxNCM(SpedBase, models.Model):
-    _name = b'sped.ibptax.ncm'
+    _name = 'sped.ibptax.ncm'
     _description = 'IBPTax por NCM'
 
     ibptax_id = fields.Many2one(
@@ -203,7 +203,7 @@ class SpedIBPTaxNCM(SpedBase, models.Model):
 
 
 class SpedIBPTaxNBS(SpedBase, models.Model):
-    _name = b'sped.ibptax.nbs'
+    _name = 'sped.ibptax.nbs'
     _description = 'IBPTax por NBS'
 
     ibptax_id = fields.Many2one(
@@ -239,7 +239,7 @@ class SpedIBPTaxNBS(SpedBase, models.Model):
 
 
 class SpedIBPTaxServico(SpedBase, models.Model):
-    _name = b'sped.ibptax.servico'
+    _name = 'sped.ibptax.servico'
     _description = 'IBPTax por Serviço'
 
     ibptax_id = fields.Many2one(

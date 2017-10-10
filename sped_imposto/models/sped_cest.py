@@ -22,7 +22,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedCEST(models.Model):
-    _name = b'sped.cest'
+    _name = 'sped.cest'
     _description = 'CESTs'
     _order = 'codigo'
     _rec_name = 'cest'

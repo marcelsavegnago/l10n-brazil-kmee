@@ -11,7 +11,7 @@ from odoo import api, fields, models
 
 
 class SpedNCM(models.Model):
-    _name = b'sped.ncm'
+    _name = 'sped.ncm'
     _inherit = 'sped.ncm'
 
     cest_ids = fields.Many2many(
@@ -24,7 +24,7 @@ class SpedNCM(models.Model):
 
 
 class SpedCEST(models.Model):
-    _name = b'sped.cest'
+    _name = 'sped.cest'
     _inherit = 'sped.cest'
 
     ncm_ids = fields.Many2many(

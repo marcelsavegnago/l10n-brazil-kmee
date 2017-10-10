@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -32,7 +32,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedAliquotaPISCOFINS(SpedBase, models.Model):
-    _name = b'sped.aliquota.pis.cofins'
+    _name = 'sped.aliquota.pis.cofins'
     _description = 'Alíquotas do PIS-COFINS'
     _rec_name = 'descricao'
     _order = 'al_pis, al_cofins'
@@ -139,5 +139,5 @@ class SpedAliquotaPISCOFINS(SpedBase, models.Model):
 
             if al_pis_cofins_ids:
                 raise ValidationError(
-                    _(u'Alíquotas de PIS e COFINS já existem!')
+                    _('Alíquotas de PIS e COFINS já existem!')
                 )

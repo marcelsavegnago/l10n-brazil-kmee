@@ -5,13 +5,13 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 from odoo.addons.l10n_br_base.models.sped_base import SpedBase
 from odoo import fields, models
 
 
 class SpedAliquotaISS(SpedBase, models.Model):
-    _name = b'sped.aliquota.iss'
+    _name = 'sped.aliquota.iss'
     _description = 'Alíquotas do ISS'
     _rec_name = 'al_iss'
     _order = 'servico_id, municipio_id, al_iss'

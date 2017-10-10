@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -25,7 +25,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedSomaImposto(SpedBase, models.Model):
-    _name = b'sped.soma.imposto'
+    _name = 'sped.soma.imposto'
     _description = 'Soma dos Impostos Calculados'
     _abstract = True
     # _order = 'emissao, modelo, data_emissao desc, serie, numero'
@@ -2137,7 +2137,7 @@ class SpedSomaImposto(SpedBase, models.Model):
 
         valores = res['value']
         valores.pop('id', None)
-        self.update({campo: valor for campo, valor in valores.iteritems() if campo in self._fields})
+        self.update({campo: valor for campo, valor in valores.items() if campo in self._fields})
 
     def calcula_impostos(self):
         self.ensure_one()

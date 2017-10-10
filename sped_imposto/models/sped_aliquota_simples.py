@@ -5,14 +5,14 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 from odoo.addons.l10n_br_base.models.sped_base import SpedBase
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
 
 class SpedAliquotaSIMPLESAnexo(models.Model):
-    _name = b'sped.aliquota.simples.anexo'
+    _name = 'sped.aliquota.simples.anexo'
     _description = 'Anexos do SIMPLES Nacional'
     _rec_name = 'nome'
     _order = 'nome'
@@ -39,12 +39,12 @@ class SpedAliquotaSIMPLESAnexo(models.Model):
 
             if anexo_ids:
                 raise ValidationError(
-                    _(u'Anexo já existe na tabela!')
+                    _('Anexo já existe na tabela!')
                 )
 
 
 class SpedAliquotaSIMPLESTeto(SpedBase, models.Model):
-    _name = b'sped.aliquota.simples.teto'
+    _name = 'sped.aliquota.simples.teto'
     _description = 'Tetos do SIMPLES Nacional'
     _rec_name = 'nome'
     _order = 'valor'
@@ -74,7 +74,7 @@ class SpedAliquotaSIMPLESTeto(SpedBase, models.Model):
 
 
 class SpedAliquotaSIMPLESAliquota(SpedBase, models.Model):
-    _name = b'sped.aliquota.simples.aliquota'
+    _name = 'sped.aliquota.simples.aliquota'
     _description = 'Alíquotas do SIMPLES Nacional'
     _rec_name = 'al_simples'
     _order = 'anexo_id, teto_id'

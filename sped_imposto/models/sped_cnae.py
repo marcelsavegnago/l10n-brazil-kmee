@@ -5,14 +5,14 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
 
 class SpedCNAE(models.Model):
-    _name = b'sped.cnae'
+    _name = 'sped.cnae'
     _description = 'CNAEs'
     _order = 'codigo'
     _rec_name = 'cnae'
@@ -75,4 +75,4 @@ class SpedCNAE(models.Model):
                 cnae_ids = self.search([('codigo', '=', cnae.codigo)])
 
             if len(cnae_ids) > 0:
-                raise ValidationError(_(u'Código CNAE já existe na tabela!'))
+                raise ValidationError(_('Código CNAE já existe na tabela!'))

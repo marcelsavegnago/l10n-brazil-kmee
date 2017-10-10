@@ -5,14 +5,14 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
 
 class SpedNaturezaOperacao(models.Model):
-    _name = b'sped.natureza.operacao'
+    _name = 'sped.natureza.operacao'
     _description = 'Naturezas de Operação Fiscal'
     _rec_name = 'nome'
     _order = 'nome'
@@ -75,7 +75,7 @@ class SpedNaturezaOperacao(models.Model):
 
             if len(natureza_operacao_ids) > 0:
                 raise ValidationError(_(
-                    u'Código de natureza de operação fiscal já existe!'
+                    'Código de natureza de operação fiscal já existe!'
                 ))
 
     @api.depends('nome')
@@ -93,5 +93,5 @@ class SpedNaturezaOperacao(models.Model):
 
             if len(natureza_operacao_ids) > 0:
                 raise ValidationError(_(
-                    u'Natureza de operação fiscal já existe!'
+                    'Natureza de operação fiscal já existe!'
                 ))

@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo import api, fields, models
 from odoo.addons.l10n_br_base.constante_tributaria import (
@@ -26,7 +26,7 @@ from odoo.exceptions import ValidationError
 
 
 class SpedOperacaoFiscalItem(models.Model):
-    _name = b'sped.operacao.item'
+    _name = 'sped.operacao.item'
     _description = 'Itens da Operação Fiscal'
     _order = 'operacao_id, protocolo_id, contribuinte, cfop_codigo'
     # _rec_name = 'nome'
@@ -163,7 +163,7 @@ class SpedOperacaoFiscalItem(models.Model):
 
 
 class SpedOperacaoFiscal(models.Model):
-    _name = b'sped.operacao'
+    _name = 'sped.operacao'
     _inherit = 'sped.operacao'
 
     item_ids = fields.One2many(

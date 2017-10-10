@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -22,7 +22,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedNBS(models.Model):
-    _name = b'sped.nbs'
+    _name = 'sped.nbs'
     _description = 'NBS'
     _order = 'codigo'
     _rec_name = 'nbs'

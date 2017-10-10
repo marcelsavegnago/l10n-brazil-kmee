@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
@@ -15,7 +15,7 @@ from odoo.addons.l10n_br_base.constante_tributaria import (
 
 
 class SpedProtocoloICMS(models.Model):
-    _name = b'sped.protocolo.icms'
+    _name = 'sped.protocolo.icms'
     _description = 'Protocolos ICMS'
     _rec_name = 'descricao'
     _order = 'descricao'
@@ -446,7 +446,7 @@ class SpedProtocoloICMS(models.Model):
 
 
 class SpedProtocoloICMSAliquota(models.Model):
-    _name = b'sped.protocolo.icms.aliquota'
+    _name = 'sped.protocolo.icms.aliquota'
     _description = 'Protocolos ICMS - alíquotas'
     # _rec_name = 'descricao'
     _order = 'protocolo_id, data_inicio desc, estado_origem_id, ' \
@@ -503,7 +503,7 @@ class SpedProtocoloICMSAliquota(models.Model):
 
 
 class SpedProtocoloICMSNCM(models.Model):
-    _name = b'sped.protocolo.icms.ncm'
+    _name = 'sped.protocolo.icms.ncm'
     _description = 'Protocolos ICMS - NCM e MVA'
     # _rec_name = 'descricao'
     _order = 'protocolo_id, ncm_id'

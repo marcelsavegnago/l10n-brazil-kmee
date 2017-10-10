@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -32,7 +32,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedAliquotaIPI(SpedBase, models.Model):
-    _name = b'sped.aliquota.ipi'
+    _name = 'sped.aliquota.ipi'
     _description = 'Alíquotas do IPI'
     _rec_name = 'descricao'
     _order = 'al_ipi'
@@ -99,4 +99,4 @@ class SpedAliquotaIPI(SpedBase, models.Model):
             al_ipi_ids = self.search(busca)
 
             if al_ipi_ids:
-                raise ValidationError(_(u'Alíquota de IPI já existe!'))
+                raise ValidationError(_('Alíquota de IPI já existe!'))

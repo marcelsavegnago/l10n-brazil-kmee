@@ -5,14 +5,14 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
 class SpedServico(models.Model):
-    _name = b'sped.servico'
+    _name = 'sped.servico'
     _description = 'Serviços (fiscal)'
     _order = 'codigo'
     _rec_name = 'servico'

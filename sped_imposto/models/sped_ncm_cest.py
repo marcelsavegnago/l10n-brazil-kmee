@@ -5,13 +5,13 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo import api, fields, models
 
 
 class SpedNCM(models.Model):
-    _name = b'sped.ncm'
+    _name = 'sped.ncm'
     _inherit = 'sped.ncm'
 
     cest_ids = fields.Many2many(
@@ -24,7 +24,7 @@ class SpedNCM(models.Model):
 
 
 class SpedCEST(models.Model):
-    _name = b'sped.cest'
+    _name = 'sped.cest'
     _inherit = 'sped.cest'
 
     ncm_ids = fields.Many2many(

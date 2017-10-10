@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo import api, fields, models
 from odoo.addons.l10n_br_base.constante_tributaria import (
@@ -31,7 +31,7 @@ from odoo.addons.l10n_br_base.constante_tributaria import (
 
 
 class SpedCFOP(models.Model):
-    _name = b'sped.cfop'
+    _name = 'sped.cfop'
     _description = 'CFOPs'
     _rec_name = 'codigo'
     _order = 'codigo'

@@ -10,6 +10,7 @@
     'license': 'AGPL-3',
     'author': 'KMEE,Odoo Community Association (OCA)',
     'website': 'www.kmee.com.br',
+    'installable': False,
     'depends': [
         'base',
         'l10n_br_base',

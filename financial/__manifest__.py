@@ -7,6 +7,7 @@
     'summary': '''
         * [OLD] Do not install this module, it is here for migration only
         ''',
+    'installable': False,
     'version': '10.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'KMEE,Odoo Community Association (OCA)',

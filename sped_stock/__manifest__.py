@@ -6,7 +6,7 @@
     'name': 'Sped Estoque',
     'summary': """
         Estoque Brasileiro""",
-    'version': '10.0.1.0.0',
+    'version': '11.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'KMEE,Odoo Community Association (OCA)',
     'website': 'www.kmee.com.br',

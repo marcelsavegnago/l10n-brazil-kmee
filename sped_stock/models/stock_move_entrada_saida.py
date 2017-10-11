@@ -93,7 +93,7 @@ where
 
 
 class StockMoveCusto(models.Model):
-    _name = b'stock.move.entrada.saida'
+    _name = 'stock.move.entrada.saida'
     _description = 'Movimento de Estoque - Entradas e Saídas'
     _auto = False
     _order = 'produto_id, data, sinal desc, quantidade desc'

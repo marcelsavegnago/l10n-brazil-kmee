@@ -2,7 +2,7 @@
 # Copyright 2017 KMEE
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -26,7 +26,7 @@ class StockMove(SpedCalculoImpostoItem, models.Model):
     _abstract = False
 
     is_brazilian = fields.Boolean(
-        string=u'Is a Brazilian Invoice?',
+        string='Is a Brazilian Invoice?',
         related='picking_id.is_brazilian',
     )
     #

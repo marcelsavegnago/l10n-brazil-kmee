@@ -34,7 +34,7 @@ CERTIFICADOS = {}
 
 
 class SpedCertificado(models.Model):
-    _name = b'sped.certificado'
+    _name = 'sped.certificado'
     _description = 'Certificado Digital'
     _rec_name = 'descricao'
     _order = 'data_fim_validade desc'

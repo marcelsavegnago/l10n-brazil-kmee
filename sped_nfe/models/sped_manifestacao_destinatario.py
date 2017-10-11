@@ -25,7 +25,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedManifestacaoDestinatario(models.Model):
-    _name = b'sped.manifestacao.destinatario'
+    _name = 'sped.manifestacao.destinatario'
     _description = 'Manifestação do Destinatário'
 
     empresa_id = fields.Many2one(

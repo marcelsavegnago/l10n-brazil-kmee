@@ -6,10 +6,10 @@
 #
 
 {
-    'name': u'SPED - NF-e / NFC-e',
+    'name': 'SPED - NF-e / NFC-e',
     'version': '10.0.1.0.0',
-    'author': u'"Odoo Community Association (OCA), Ari Caldeira',
-    'category': u'Base',
+    'author': 'Odoo Community Association (OCA), Ari Caldeira',
+    'category': 'Base',
     'depends': [
         'l10n_br_base',
         'sped_imposto',

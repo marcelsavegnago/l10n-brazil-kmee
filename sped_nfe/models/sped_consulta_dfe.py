@@ -29,7 +29,7 @@ except (ImportError, IOError) as err:
 
 
 class ConsultaDFe(models.Model):
-    _name = b'sped.consulta.dfe'
+    _name = 'sped.consulta.dfe'
     _description = 'Consulta DFe'
 
     empresa_id = fields.Many2one(

@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -34,7 +34,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedDocumentoItem(SpedCalculoImpostoItem, models.Model):
-    _name = b'sped.documento.item'
+    _name = 'sped.documento.item'
     _description = 'Itens do Documento Fiscal'
     _abstract = False
     # _order = 'emissao, modelo, data_emissao desc, serie, numero'

@@ -5,14 +5,14 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo.addons.l10n_br_base.models.sped_base import SpedBase
 from odoo import fields, models
 
 
 class SpedDocumentoItemDeclaracaoImportacaoAdicao(SpedBase, models.Model):
-    _name = b'sped.documento.item.declacarao.importacao.adicao'
+    _name = 'sped.documento.item.declacarao.importacao.adicao'
     _description = 'Adições da Declaração de Importação do Item do ' \
                    'Documento Fiscal'
 

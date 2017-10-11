@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -27,7 +27,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedDocumento(SpedBase, models.Model):
-    _name = b'sped.documento'
+    _name = 'sped.documento'
     _description = 'Documentos Fiscais'
     _inherit = ['mail.thread']
     _order = 'emissao, modelo, data_emissao desc, serie, numero desc'
@@ -1194,7 +1194,7 @@ class SpedDocumento(SpedBase, models.Model):
 
             if campos_proibidos:
                 mensagem += '\nCampos proibidos: '
-                mensagem += unicode(campos_proibidos)
+                mensagem += str(campos_proibidos)
 
             raise ValidationError(_(mensagem))
 

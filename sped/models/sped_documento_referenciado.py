@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo import fields, models
 from odoo.addons.l10n_br_base.constante_tributaria import (
@@ -15,7 +15,7 @@ from odoo.addons.l10n_br_base.constante_tributaria import (
 
 
 class SpedDocumentoReferenciado(models.Model):
-    _name = b'sped.documento.referenciado'
+    _name = 'sped.documento.referenciado'
     _description = 'Documentos Referenciados no Documento Fiscal'
 
     documento_id = fields.Many2one(

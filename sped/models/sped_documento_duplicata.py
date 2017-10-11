@@ -5,14 +5,14 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo.addons.l10n_br_base.models.sped_base import SpedBase
 from odoo import api, fields, models
 
 
 class SpedDocumentoDuplicata(SpedBase, models.Model):
-    _name = b'sped.documento.duplicata'
+    _name = 'sped.documento.duplicata'
     _description = 'Duplicatas do Documento Fiscal'
     _order = 'documento_id, data_vencimento'
     # _rec_name = 'numero'

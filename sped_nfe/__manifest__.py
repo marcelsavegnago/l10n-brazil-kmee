@@ -7,7 +7,7 @@
 
 {
     'name': 'SPED - NF-e / NFC-e',
-    'version': '10.0.1.0.0',
+    'version': '11.0.1.0.0',
     'author': 'Odoo Community Association (OCA), Ari Caldeira',
     'category': 'Base',
     'depends': [

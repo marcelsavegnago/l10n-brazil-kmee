@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -57,7 +57,7 @@ class SpedDocumentoItem(models.Model):
 
         descricao = descricao.replace('—', '-').replace('–', '-')
         descricao = descricao.replace('”', '"').replace('“', '"')
-        descricao = descricao.replace('’', u"'").replace('‘', u"'")
+        descricao = descricao.replace('’', "'").replace('‘', "'")
         descricao = descricao.replace('—', '-').replace('–', '-')
         det.prod.xProd.valor = descricao.strip()
 

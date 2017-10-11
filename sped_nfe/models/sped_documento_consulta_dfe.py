@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -33,7 +33,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedCartaCorrecao(models.Model):
-    _name = b'sped.documento.carta.correcao'
+    _name = 'sped.documento.carta.correcao'
     _description = 'Carta de Correção'
     _order = 'documento_id, sequencia desc'
     _rec_name = 'descricao'

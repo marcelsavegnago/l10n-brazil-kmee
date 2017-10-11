@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -29,7 +29,7 @@ except (ImportError, IOError) as err:
 
 
 class ConsultaDFe(models.Model):
-    _name = b'sped.consulta.dfe'
+    _name = 'sped.consulta.dfe'
     _description = 'Consulta DFe'
 
     empresa_id = fields.Many2one(

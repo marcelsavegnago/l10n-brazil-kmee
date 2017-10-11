@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo import api, fields, models
 
@@ -17,7 +17,7 @@ class MailTemplate(models.Model):
         self.ensure_one()
 
         multi_mode = True
-        if isinstance(res_ids, (int, long)):
+        if isinstance(res_ids, int):
             res_ids = [res_ids]
             multi_mode = False
 

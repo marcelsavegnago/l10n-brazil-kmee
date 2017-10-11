@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 import tempfile
@@ -34,7 +34,7 @@ CERTIFICADOS = {}
 
 
 class SpedCertificado(models.Model):
-    _name = b'sped.certificado'
+    _name = 'sped.certificado'
     _description = 'Certificado Digital'
     _rec_name = 'descricao'
     _order = 'data_fim_validade desc'

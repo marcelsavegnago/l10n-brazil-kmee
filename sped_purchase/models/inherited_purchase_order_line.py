@@ -14,7 +14,7 @@ from odoo.addons.sped_imposto.models.sped_calculo_imposto_item import (
 
 
 class PurchaseOrderLine(SpedCalculoImpostoItem, models.Model):
-    _inherit = b'purchase.order.line'
+    _inherit = 'purchase.order.line'
 
     is_brazilian = fields.Boolean(
         string=u'Is a Brazilian Invoice?',

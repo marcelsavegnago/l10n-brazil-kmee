@@ -47,7 +47,7 @@ class CategoriaTrabalhador(models.Model):
         required=True,
     )
     name = fields.Char(
-        compute='_calcula_name',
+        compute='_compute_name',
         store=True,
     )
 
@@ -66,7 +66,7 @@ class CategoriaTrabalhador(models.Model):
                     return res
 
     @api.depends('codigo', 'nome')
-    def _calcula_name(self):
+    def _compute_name(self):
         for categoria in self:
             categoria.name = categoria.codigo + '-' + categoria.nome
 

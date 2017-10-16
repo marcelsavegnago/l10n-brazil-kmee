@@ -11,7 +11,8 @@
         <field name="model">esocial.tipo_logradouro</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <form string="Tipos de Logradouro">
+            <form string="Tipos de Logradouro"
+            edit="false" create="false" delete="false">
                 <sheet>
                     <group>
                         <group name="geral" colspan="2" col="2">
@@ -29,7 +30,8 @@
         <field name="model">esocial.tipo_logradouro</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <tree string="Tipos de Logradouro">
+            <tree string="Tipos de Logradouro"
+            edit="false" create="false" delete="false">
                 <field name="codigo" />
                 <field name="nome" />
             </tree>

@@ -31,12 +31,12 @@ class TipoBeneficio(models.Model):
         string='Descrição',
     )
     name = fields.Char(
-        compute='_calcula_name',
+        compute='_compute_name',
         store=True,
     )
 
     @api.depends('codigo', 'nome')
-    def _calcula_name(self):
+    def _compute_name(self):
         for tipo in self:
             tipo.name = str(tipo.codigo) + '-' + tipo.nome
 

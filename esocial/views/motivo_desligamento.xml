@@ -11,7 +11,8 @@
         <field name="model">esocial.motivo_desligamento</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <form string="Motivos de Desligamento">
+            <form string="Motivos de Desligamento"
+            edit="false" create="false" delete="false">
                 <sheet>
                     <group>
                         <group name="geral" colspan="2" col="2">
@@ -31,7 +32,8 @@
         <field name="model">esocial.motivo_desligamento</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <tree string="Motivos de Desligamento">
+            <tree string="Motivos de Desligamento"
+            edit="false" create="false" delete="false">
                 <field name="codigo" />
                 <field name="nome" />
             </tree>

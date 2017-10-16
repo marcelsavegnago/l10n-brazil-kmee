@@ -11,7 +11,8 @@
         <field name="model">esocial.agente_causador</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <form string="Agente Causador do Acidente de Trabalho">
+            <form string="Agente Causador do Acidente de Trabalho"
+            edit="false" delete="false" create="false">
                 <sheet>
                     <group>
                         <group name="geral" colspan="2" col="2">
@@ -29,7 +30,8 @@
         <field name="model">esocial.agente_causador</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <tree string="Agente Causador do Acidente de Trabalho">
+            <tree string="Agente Causador do Acidente de Trabalho"
+            edit="false" create="false" delete="false">
                 <field name="codigo" />
                 <field name="nome" />
             </tree>

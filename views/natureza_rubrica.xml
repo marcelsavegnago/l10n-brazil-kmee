@@ -11,7 +11,8 @@
         <field name="model">esocial.natureza_rubrica</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <form string="Natureza das Rubricas da Folha de Pagamento">
+            <form string="Natureza das Rubricas da Folha de Pagamento"
+            edit="false" create="false" delete="false">
                 <sheet>
                     <group>
                         <group name="geral" colspan="2" col="2">
@@ -32,7 +33,8 @@
         <field name="model">esocial.natureza_rubrica</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <tree string="Natureza das Rubricas da Folha de Pagamento">
+            <tree string="Natureza das Rubricas da Folha de Pagamento"
+            edit="false" create="false" delete="false">
                 <field name="codigo" />
                 <field name="nome" />
             </tree>

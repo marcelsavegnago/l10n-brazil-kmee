@@ -29,7 +29,7 @@ class NaturezaLesao(models.Model):
         required=True,
     )
     name = fields.Char(
-        compute='_calcula_name',
+        compute='_compute_name',
         store=True,
     )
     descricao = fields.Text(
@@ -51,6 +51,6 @@ class NaturezaLesao(models.Model):
                     return res
 
     @api.depends('codigo', 'nome')
-    def _calcula_name(self):
+    def _compute_name(self):
         for natureza in self:
             natureza.name = natureza.codigo + '-' + natureza.nome

@@ -11,7 +11,8 @@
         <field name="model">esocial.parte_corpo</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <form string="Parte do Corpo Atingida">
+            <form string="Parte do Corpo Atingida"
+            edit="false" create="false" delete="false">
                 <sheet>
                     <group>
                         <group name="geral" colspan="2" col="2">
@@ -29,7 +30,8 @@
         <field name="model">esocial.parte_corpo</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <tree string="Parte do Corpo Atingida">
+            <tree string="Parte do Corpo Atingida"
+            edit="false" create="false" delete="false">
                 <field name="codigo" />
                 <field name="nome" />
             </tree>

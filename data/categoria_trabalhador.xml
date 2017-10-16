@@ -262,7 +262,7 @@
         <field name="descricao">Participante de curso de formação, como etapa de concurso público, sem vínculo de emprego/estatutário</field>
     </record>
 
-    <record id="tab01_904" model="esocial.categoria_trabalhador">
+    <record id="tab01_905" model="esocial.categoria_trabalhador">
         <field name="codigo">905</field>
         <field name="nome">Atleta não profissional</field>
         <field name="grupo">9</field>

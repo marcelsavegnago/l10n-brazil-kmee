@@ -11,7 +11,8 @@
         <field name="model">esocial.financiamento_aposentadoria</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <form string="Financiamento da Aposentadoria Especial">
+            <form string="Financiamento da Aposentadoria Especial"
+            edit="false" create="false" delete="false">
                 <sheet>
                     <group>
                         <group name="geral" colspan="2" col="2">
@@ -29,7 +30,8 @@
         <field name="model">esocial.financiamento_aposentadoria</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <tree string="Financiamento da Aposentadoria Especial">
+            <tree string="Financiamento da Aposentadoria Especial"
+            edit="false" create="false" delete="false">
                 <field name="codigo" />
                 <field name="nome" />
             </tree>

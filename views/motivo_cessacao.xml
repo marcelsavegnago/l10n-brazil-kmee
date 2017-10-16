@@ -6,7 +6,7 @@
 -->
 <odoo>
 
-    <record model="ir.ui.view" id="esocial_motivo_cessacao_form">
+    <record model="ir.ui.view" id="esocial.motivo_cessacao_form">
         <field name="name">esocial.motivo_cessacao_form</field>
         <field name="model">esocial.motivo_cessacao</field>
         <field name="priority">1</field>
@@ -25,7 +25,7 @@
         </field>
     </record>
 
-    <record model="ir.ui.view" id="esocial_motivo_cessacao_tree">
+    <record model="ir.ui.view" id="esocial.motivo_cessacao_tree">
         <field name="name">esocial.motivo_cessacao_view</field>
         <field name="model">esocial.motivo_cessacao</field>
         <field name="priority">1</field>

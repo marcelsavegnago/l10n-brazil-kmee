@@ -30,7 +30,11 @@ class NaturezaJuridica(models.Model):
         required=True,
     )
     name = fields.Char(
+<<<<<<< HEAD
         compute='_compute_name',
+=======
+        compute='_calcula_name',
+>>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
         store=True,
     )
 
@@ -57,7 +61,11 @@ class NaturezaJuridica(models.Model):
             natureza.codigo = formata_natureza(natureza.codigo)
 
     @api.depends('codigo', 'nome')
+<<<<<<< HEAD
     def _compute_name(self):
+=======
+    def _calcula_name(self):
+>>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
         for natureza in self:
             natureza.name = natureza.codigo + '-' + natureza.nome
 

@@ -11,8 +11,12 @@
         <field name="model">esocial.motivo_cessacao</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
+<<<<<<< HEAD
             <form string="Agente Causador do Acidente de Trabalho"
             edit="false" create="false" delete="false">
+=======
+            <form string="Agente Causador do Acidente de Trabalho">
+>>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
                 <sheet>
                     <group>
                         <group name="geral" colspan="2" col="2">
@@ -30,8 +34,12 @@
         <field name="model">esocial.motivo_cessacao</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
+<<<<<<< HEAD
             <tree string="Motivos de Cessação de Benefícios Previdenciários"
             edit="false" create="false" delete="false">
+=======
+            <tree string="Motivos de Cessação de Benefícios Previdenciários">
+>>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
                 <field name="codigo" />
                 <field name="nome" />
             </tree>

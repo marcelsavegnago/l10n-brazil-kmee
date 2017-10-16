@@ -262,11 +262,19 @@
         <field name="descricao">Participante de curso de formação, como etapa de concurso público, sem vínculo de emprego/estatutário</field>
     </record>
 
+<<<<<<< HEAD
     <record id="tab01_905" model="esocial.categoria_trabalhador">
+=======
+    <record id="tab01_904" model="esocial.categoria_trabalhador">
+>>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
         <field name="codigo">905</field>
         <field name="nome">Atleta não profissional</field>
         <field name="grupo">9</field>
         <field name="descricao">Atleta não profissional em formação que receba bolsa</field>
     </record>
 
+<<<<<<< HEAD
 </odoo>
+=======
+</odoo>
+>>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26

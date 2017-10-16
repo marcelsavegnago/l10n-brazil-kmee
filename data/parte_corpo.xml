@@ -228,4 +228,8 @@
         <field name="nome">Localização da lesão, NIC</field>
     </record>
 
+<<<<<<< HEAD
 </odoo>
+=======
+</odoo>
+>>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26

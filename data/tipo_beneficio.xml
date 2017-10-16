@@ -2,6 +2,10 @@
 <!-- Copyright 2017 KMEE
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
+<<<<<<< HEAD
+=======
+
+>>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
     <record id="tab25_1" model="esocial.tipo_beneficio">
         <field name="codigo">1</field>
         <field name="nome">Aposentadoria Voluntária por Idade e Tempo de Contribuição - Proventos Integrais</field>
@@ -320,4 +324,8 @@
         <field name="descricao">Outros Benefícios previdenciários concedidos antes do início de vigência do eSocial</field>
     </record>
 
+<<<<<<< HEAD
 </odoo>
+=======
+</odoo>
+>>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26

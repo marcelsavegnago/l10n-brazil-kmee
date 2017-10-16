@@ -27,21 +27,29 @@
         'views/financiamento_aposentadoria.xml',
         'views/natureza_rubrica.xml',
         'views/parte_corpo.xml',
+<<<<<<< HEAD
         'views/tipo_inscricao.xml',
+=======
+>>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
         'views/agente_causador.xml',
         'views/situacao_geradora_doenca.xml',
         'views/situacao_geradora_acidente.xml',
         'views/natureza_lesao.xml',
+<<<<<<< HEAD
         'views/tipo_dependente.xml',
         'views/tipo_lotacao_tributaria.xml',
         'views/classificacao_tributaria.xml',
         'views/motivo_afastamento.xml',
         'views/tipo_arquivo_esocial.xml',
+=======
+        'views/motivo_afastamento.xml',
+>>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
         'views/motivo_desligamento.xml',
         'views/tipo_logradouro.xml',
         'views/natureza_juridica.xml',
         'views/motivo_cessacao.xml',
         'views/tipo_beneficio.xml',
+<<<<<<< HEAD
         'views/codificacao_acidente_trabalho.xml',
         'views/fatores_meio_ambiente.xml',
         'data/natureza_lesao.xml',
@@ -54,6 +62,13 @@
         'data/classificacao_tributaria.xml',
         'data/parte_corpo.xml',
         'data/tipo_inscricao.xml',
+=======
+        'data/natureza_lesao.xml',
+        'data/categoria_trabalhador.xml',
+        'data/financiamento_aposentadoria.xml',
+        'data/natureza_rubrica.xml',
+        'data/parte_corpo.xml',
+>>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
         'data/agente_causador.xml',
         'data/situacao_geradora_doenca.xml',
         'data/situacao_geradora_acidente.xml',
@@ -64,8 +79,11 @@
         'data/natureza_juridica.xml',
         'data/motivo_cessacao.xml',
         'data/tipo_beneficio.xml',
+<<<<<<< HEAD
         'data/codificacao_acidente_trabalho.xml',
         'data/fatores_meio_ambiente.xml'
+=======
+>>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
     ],
     'application': True,
 }

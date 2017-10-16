@@ -19,7 +19,7 @@ class TiposInscricao(models.Model):
     ]
 
     descricao = fields.Text(
-        string='Descrição',
+        string='Nome',
         required=True,
     )
 

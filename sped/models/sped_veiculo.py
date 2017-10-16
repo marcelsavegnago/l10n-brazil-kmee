@@ -50,28 +50,29 @@ class SpedVeiculo(models.Model):
         valores = {}
         res['value'] = valores
 
-        placa = self.placa.strip().replace(
-            '-', '').replace(' ', '').replace(
-            ' ', '').upper()
+        if self.placa:
+            placa = self.placa.strip().replace(
+                '-', '').replace(' ', '').replace(
+                ' ', '').upper()
 
-        if len(placa) != 7:
-            raise ValidationError(
-                'Placa inválida! Informe a placa no formato AAA-9999')
+            if len(placa) != 7:
+                raise ValidationError(
+                    'Placa inválida! Informe a placa no formato AAA-9999')
 
-        if not (placa[0:3].isalpha() and placa[3:7].isdigit()):
-            raise ValidationError(
-                'Placa inválida! Informe a placa no formato AAA-9999')
+            if not (placa[0:3].isalpha() and placa[3:7].isdigit()):
+                raise ValidationError(
+                    'Placa inválida! Informe a placa no formato AAA-9999')
 
-        valores['placa'] = placa[0:3] + '-' + placa[3:7]
+            valores['placa'] = placa[0:3] + '-' + placa[3:7]
 
-        if self.id:
-            veiculo_ids = self.search(
-                [('placa', '=', self.placa), ('id', '!=', self.id)])
-        else:
-            veiculo_ids = self.search([('placa', '=', self.placa)])
+            if self.id:
+                veiculo_ids = self.search(
+                    [('placa', '=', self.placa), ('id', '!=', self.id)])
+            else:
+                veiculo_ids = self.search([('placa', '=', self.placa)])
 
-        if len(veiculo_ids) > 0:
-            raise ValidationError('Veículo já cadastrado!')
+            if len(veiculo_ids) > 0:
+                raise ValidationError('Veículo já cadastrado!')
 
         return res
 

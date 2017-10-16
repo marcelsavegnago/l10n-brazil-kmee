@@ -25,7 +25,11 @@ class AgenteCausador(models.Model):
         required=True,
     )
     descricao = fields.Char(
+<<<<<<< HEAD
         string='Nome',
+=======
+        string='Descrição',
+>>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
         required=True,
     )
     name = fields.Char(

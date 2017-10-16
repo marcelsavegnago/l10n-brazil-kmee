@@ -20,6 +20,7 @@ from . import tipo_logradouro
 from . import natureza_juridica
 from . import motivo_cessacao
 <<<<<<< HEAD
+<<<<<<< HEAD
 from . import tipo_beneficio
 from . import tipo_inscricao
 from . import tipo_dependente
@@ -31,3 +32,9 @@ from . import fatores_meio_ambiente
 =======
 from . import tipo_beneficio
 >>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
+=======
+from . import tipo_beneficio
+from . import tipo_inscricao
+from . import tipo_dependente
+from . import classificacao_tributaria
+>>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes

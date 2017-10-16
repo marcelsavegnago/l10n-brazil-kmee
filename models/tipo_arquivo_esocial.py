@@ -5,12 +5,21 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
+<<<<<<< HEAD
 from odoo import api, fields, models
 
 
 class TipoArquivoEsocial(models.Model):
     _name = 'esocial.tipo_arquivo_esocial'
     _description = 'Tipos de Arquivo do eSocial'
+=======
+from odoo import api, fields, models, _
+
+
+class AgenteCausador(models.Model):
+    _name = 'esocial.tipo_dependente'
+    _description = 'Tipos de Dependente'
+>>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
     _order = 'codigo'
     _sql_constraints = [
         ('codigo',
@@ -20,7 +29,11 @@ class TipoArquivoEsocial(models.Model):
     ]
 
     codigo = fields.Char(
+<<<<<<< HEAD
         size=6,
+=======
+        size=2,
+>>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
         string='Codigo',
         required=True,
     )
@@ -37,8 +50,13 @@ class TipoArquivoEsocial(models.Model):
     def _valida_codigo(self):
         for tipo in self:
             if tipo.codigo:
+<<<<<<< HEAD
                 if tipo.codigo[0] == 'S' and tipo.codigo[2:].isdigit():
                     tipo.codigo = tipo.codigo.zfill(6)
+=======
+                if tipo.codigo.isdigit():
+                    tipo.codigo = tipo.codigo.zfill(2)
+>>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
                 else:
                     res = {'warning': {
                         'title': _('Código Incorreto!'),

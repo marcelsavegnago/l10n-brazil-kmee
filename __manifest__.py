@@ -28,16 +28,24 @@
         'views/natureza_rubrica.xml',
         'views/parte_corpo.xml',
 <<<<<<< HEAD
+<<<<<<< HEAD
         'views/tipo_inscricao.xml',
 =======
 >>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
+=======
+        'views/tipo_inscricao.xml',
+>>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
         'views/agente_causador.xml',
         'views/situacao_geradora_doenca.xml',
         'views/situacao_geradora_acidente.xml',
         'views/natureza_lesao.xml',
 <<<<<<< HEAD
+<<<<<<< HEAD
         'views/tipo_dependente.xml',
         'views/tipo_lotacao_tributaria.xml',
+=======
+        'views/tipo_dependente.xml',
+>>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
         'views/classificacao_tributaria.xml',
         'views/motivo_afastamento.xml',
         'views/tipo_arquivo_esocial.xml',
@@ -67,8 +75,14 @@
         'data/categoria_trabalhador.xml',
         'data/financiamento_aposentadoria.xml',
         'data/natureza_rubrica.xml',
+        'data/tipo_dependente.xml',
+        'data/classificacao_tributaria.xml',
         'data/parte_corpo.xml',
+<<<<<<< HEAD
 >>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
+=======
+        'data/tipo_inscricao.xml',
+>>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
         'data/agente_causador.xml',
         'data/situacao_geradora_doenca.xml',
         'data/situacao_geradora_acidente.xml',

@@ -12,11 +12,16 @@
         <field name="priority">1</field>
         <field name="arch" type="xml">
 <<<<<<< HEAD
+<<<<<<< HEAD
             <form string="Categoria do Trabalhador"
             edit="false" create="false" delete="false">
 =======
             <form string="Categoria do Trabalhador">
 >>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
+=======
+            <form string="Categoria do Trabalhador"
+            edit="false" create="false" delete="false">
+>>>>>>> 565ad17... [FIX] PEP8
                 <sheet>
                     <group>
                         <group name="geral" colspan="4" col="4">
@@ -39,11 +44,16 @@
         <field name="priority">1</field>
         <field name="arch" type="xml">
 <<<<<<< HEAD
+<<<<<<< HEAD
             <tree string="Categoria do Trabalhador"
             edit="false" create="false" delete="false">
 =======
             <tree string="Categoria do Trabalhador">
 >>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
+=======
+            <tree string="Categoria do Trabalhador"
+            edit="false" create="false" delete="false">
+>>>>>>> 565ad17... [FIX] PEP8
                 <field name="codigo" />
                 <field name="nome" />
                 <field name="grupo" />

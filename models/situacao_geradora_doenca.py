@@ -30,10 +30,14 @@ class SituacaoGeradora(models.Model):
     )
     name = fields.Char(
 <<<<<<< HEAD
+<<<<<<< HEAD
         compute='_compute_name',
 =======
         compute='_calcula_name',
 >>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
+=======
+        compute='_compute_name',
+>>>>>>> 565ad17... [FIX] PEP8
         store=True,
     )
     descricao = fields.Text(
@@ -56,9 +60,13 @@ class SituacaoGeradora(models.Model):
 
     @api.depends('codigo', 'nome')
 <<<<<<< HEAD
+<<<<<<< HEAD
     def _compute_name(self):
 =======
     def _calcula_name(self):
 >>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
+=======
+    def _compute_name(self):
+>>>>>>> 565ad17... [FIX] PEP8
         for situacao in self:
             situacao.name = situacao.codigo + '-' + situacao.nome

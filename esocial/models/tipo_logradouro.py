@@ -29,11 +29,11 @@ class TipoLogradouro(models.Model):
         required=True,
     )
     name = fields.Char(
-        compute='_compute_name',
+        compute='_calcula_name',
         store=True,
     )
 
     @api.depends('codigo', 'nome')
-    def _compute_name(self):
+    def _calcula_name(self):
         for tipo in self:
             tipo.name = tipo.codigo + '-' + tipo.nome

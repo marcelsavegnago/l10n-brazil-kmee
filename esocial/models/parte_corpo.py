@@ -29,7 +29,7 @@ class ParteCorpo(models.Model):
         required=True,
     )
     name = fields.Char(
-        compute='_compute_name',
+        compute='_calcula_name',
         store=True,
     )
 
@@ -48,6 +48,6 @@ class ParteCorpo(models.Model):
                     return res
 
     @api.depends('codigo', 'nome')
-    def _compute_name(self):
+    def _calcula_name(self):
         for parte in self:
             parte.name = parte.codigo + '-' + parte.nome

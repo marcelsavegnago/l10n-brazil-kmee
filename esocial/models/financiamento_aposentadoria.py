@@ -30,7 +30,7 @@ class FinanciamentoAposentadoria(models.Model):
         required=True,
     )
     name = fields.Char(
-        compute='_compute_name',
+        compute='_calcula_name',
         store=True,
     )
 
@@ -50,7 +50,7 @@ class FinanciamentoAposentadoria(models.Model):
                     return res
 
     @api.depends('codigo', 'nome')
-    def _compute_name(self):
+    def _calcula_name(self):
         for financiamento in self:
             financiamento.name = financiamento.codigo + '-' + \
                                  financiamento.nome

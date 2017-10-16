@@ -30,7 +30,7 @@ class NaturezaJuridica(models.Model):
         required=True,
     )
     name = fields.Char(
-        compute='_compute_name',
+        compute='_calcula_name',
         store=True,
     )
 
@@ -57,7 +57,7 @@ class NaturezaJuridica(models.Model):
             natureza.codigo = formata_natureza(natureza.codigo)
 
     @api.depends('codigo', 'nome')
-    def _compute_name(self):
+    def _calcula_name(self):
         for natureza in self:
             natureza.name = natureza.codigo + '-' + natureza.nome
 

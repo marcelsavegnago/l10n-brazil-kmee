@@ -29,7 +29,7 @@ class MotivoCessacao(models.Model):
         required=True,
     )
     name = fields.Char(
-        compute='_compute_name',
+        compute='_calcula_name',
         store=True,
     )
 
@@ -48,6 +48,6 @@ class MotivoCessacao(models.Model):
                     return res
 
     @api.depends('codigo', 'nome')
-    def _compute_name(self):
+    def _calcula_name(self):
         for motivo in self:
             motivo.name = motivo.codigo + '-' + motivo.nome

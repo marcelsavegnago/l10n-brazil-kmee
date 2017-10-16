@@ -25,7 +25,7 @@ class AgenteCausador(models.Model):
         required=True,
     )
     descricao = fields.Char(
-        string='Descrição',
+        string='Nome',
         required=True,
     )
     name = fields.Char(

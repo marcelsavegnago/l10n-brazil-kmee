@@ -24,10 +24,14 @@ class TiposInscricao(models.Model):
 
     descricao = fields.Text(
 <<<<<<< HEAD
+<<<<<<< HEAD
         string='Nome',
 =======
         string='Descrição',
 >>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
+=======
+        string='Nome',
+>>>>>>> e6f12d3... [ADD] tabelas 5,7 e 8 e algumas correcoes
         required=True,
     )
 

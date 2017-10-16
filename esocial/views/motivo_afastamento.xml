@@ -27,7 +27,7 @@
         </field>
     </record>
 
-    <record model="ir.ui.view" id="esocial.motivo_afastamento_tree">
+    <record model="ir.ui.view" id="esocial_motivo_afastamento_tree">
         <field name="name">esocial.motivo_afastamento_view</field>
         <field name="model">esocial.motivo_afastamento</field>
         <field name="priority">1</field>

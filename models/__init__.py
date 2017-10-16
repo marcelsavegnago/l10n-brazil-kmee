@@ -20,3 +20,6 @@ from . import tipo_logradouro
 from . import natureza_juridica
 from . import motivo_cessacao
 from . import tipo_beneficio
+from . import tipo_inscricao
+from . import tipo_dependente
+from . import classificacao_tributaria

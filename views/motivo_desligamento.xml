@@ -6,7 +6,7 @@
 -->
 <odoo>
 
-    <record model="ir.ui.view" id="esocial.motivo_desligamento_form">
+    <record model="ir.ui.view" id="esocial_motivo_desligamento_form">
         <field name="name">esocial.motivo_desligamento_form</field>
         <field name="model">esocial.motivo_desligamento</field>
         <field name="priority">1</field>
@@ -36,7 +36,7 @@
         </field>
     </record>
 
-    <record model="ir.ui.view" id="esocial.motivo_desligamento_tree">
+    <record model="ir.ui.view" id="esocial_motivo_desligamento_tree">
         <field name="name">esocial.motivo_desligamento_view</field>
         <field name="model">esocial.motivo_desligamento</field>
         <field name="priority">1</field>

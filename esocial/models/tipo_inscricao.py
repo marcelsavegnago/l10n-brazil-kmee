@@ -2,7 +2,7 @@
 
 from odoo import fields, models, api
 
-class TipoInscricao(models.Model):
+class TiposInscricao(models.Model):
     _name = "esocial.tipos_inscricao"
     _description = "Tipos de Inscrição"
     _order = 'codigo'
@@ -19,7 +19,7 @@ class TipoInscricao(models.Model):
     ]
 
     descricao = fields.Text(
-        string='Nome',
+        string='Descrição',
         required=True,
     )
 

@@ -29,7 +29,7 @@ class MotivoDesligamento(models.Model):
         required=True,
     )
     name = fields.Char(
-        compute='_calcula_name',
+        compute='_compute_name',
         store=True,
     )
     descricao = fields.Text(
@@ -52,6 +52,6 @@ class MotivoDesligamento(models.Model):
                     return res
 
     @api.depends('codigo', 'nome')
-    def _calcula_name(self):
+    def _compute_name(self):
         for motivo in self:
             motivo.name = motivo.codigo + '-' + motivo.nome

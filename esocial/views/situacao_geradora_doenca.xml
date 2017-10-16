@@ -11,7 +11,8 @@
         <field name="model">esocial.situacao_geradora_doenca</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <form string="Situação Geradora da Doença Profissional">
+            <form string="Situação Geradora da Doença Profissional"
+            edit="false" create="false" delete="false">
                 <sheet>
                     <group>
                         <group name="geral" colspan="2" col="2">
@@ -31,7 +32,8 @@
         <field name="model">esocial.situacao_geradora_doenca</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <tree string="Situação Geradora da Doença Profissional">
+            <tree string="Situação Geradora da Doença Profissional"
+            edit="false" create="false" delete="false">
                 <field name="codigo" />
                 <field name="nome" />
             </tree>

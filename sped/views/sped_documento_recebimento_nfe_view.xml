@@ -23,7 +23,6 @@
             <field name="entrada_saida" position="attributes" >
                 <attribute name="attrs">{'invisible': False}</attribute>
             </field>
-
         </field>
     </record>
 

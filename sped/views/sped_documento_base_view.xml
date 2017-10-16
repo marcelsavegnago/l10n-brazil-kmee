@@ -245,7 +245,7 @@
                                 <group colspan="4" col="4">
                                     <separator string="Frete e transporte" />
                                     <newline />
-                                    <field name="modalidade_frete" attrs="{'required': '1', 'readonly': [('permite_alteracao', '=', False)]}" />
+                                    <field name="modalidade_frete" required="1" attrs="{'readonly': [('permite_alteracao', '=', False)]}" />
                                     <newline />
                                     <field name="transportadora_id" colspan="4" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': ['!', ('modalidade_frete', 'in', ['0', '1', '2'])], 'readonly': [('permite_alteracao', '=', False)]}" />
                                     <newline />
@@ -297,16 +297,16 @@
                         <page name="outras" string="Outras informações">
                             <group>
                                 <group colspan="4" col="4">
-                                    <field name="finalidade_nfe" attrs="{'required': '1', 'readonly': [('permite_alteracao', '=', False)]}" colspan="2" string="Finalidade" />
-                                    <field name="tipo_emissao_nfe" attrs="{'required': '1', 'readonly': [('permite_alteracao', '=', False)]}" colspan="2" string="Tipo de emissão" />
+                                    <field name="finalidade_nfe"  colspan="2" string="Finalidade" required="1" attrs="{'readonly': [('permite_alteracao', '=', False)]}"/>
+                                    <field name="tipo_emissao_nfe" required="1" attrs="{'readonly': [('permite_alteracao', '=', False)]}" colspan="2" string="Tipo de emissão" />
                                     <newline />
-                                    <field name="consumidor_final" attrs="{'required': '1', 'readonly': [('permite_alteracao', '=', False)]}" colspan="2" />
-                                    <field name="presenca_comprador" attrs="{'required': '1', 'readonly': [('permite_alteracao', '=', False)]}" colspan="2" />
+                                    <field name="consumidor_final" required="1" attrs="{'readonly': [('permite_alteracao', '=', False)]}" colspan="2" />
+                                    <field name="presenca_comprador" required="1" attrs="{'readonly': [('permite_alteracao', '=', False)]}" colspan="2" />
                                     <newline />
-                                    <field name="ambiente_nfe" attrs="{'required': '1', 'readonly': [('permite_alteracao', '=', False)]}" colspan="2" string="Ambiente" />
+                                    <field name="ambiente_nfe" required="1" attrs="{ 'readonly': [('permite_alteracao', '=', False)]}" colspan="2" string="Ambiente" />
                                     <newline />
-                                    <field name="entrada_saida" attrs="{'required': '1', 'readonly': ['|', ('id', '!=', False),('permite_alteracao', '=', False)]}" colspan="2" />
-                                    <field name="regime_tributario" attrs="{'required': '1', 'readonly': ['|', ('id', '!=', False), ('permite_alteracao', '=', False)]}" colspan="2" />
+                                    <field name="entrada_saida" required="1" attrs="{ 'readonly': ['|', ('id', '!=', False),('permite_alteracao', '=', False)]}" colspan="2" />
+                                    <field name="regime_tributario" required="1" attrs="{ 'readonly': ['|', ('id', '!=', False), ('permite_alteracao', '=', False)]}" colspan="2" />
                                     <newline />
                                     <field name="natureza_operacao_id" colspan="4" required="1" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('permite_alteracao', '=', False)]}" />
                                     <newline />

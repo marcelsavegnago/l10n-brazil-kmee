@@ -43,6 +43,7 @@
         'views/motivo_cessacao.xml',
         'views/tipo_beneficio.xml',
         'views/codificacao_acidente_trabalho.xml',
+        'views/fatores_meio_ambiente.xml',
         'data/natureza_lesao.xml',
         'data/tipo_arquivo_esocial.xml',
         'data/tipo_lotacao_tributaria.xml',
@@ -64,6 +65,7 @@
         'data/motivo_cessacao.xml',
         'data/tipo_beneficio.xml',
         'data/codificacao_acidente_trabalho.xml',
+        'data/fatores_meio_ambiente.xml'
     ],
     'application': True,
 }

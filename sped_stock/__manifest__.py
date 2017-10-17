@@ -29,7 +29,7 @@
 
         'views/inherited_stock_inventory_view.xml',
 
-        'wizards/inherited_make_procurement_view.xml',
+        # 'wizards/inherited_make_procurement_view.xml',
         'wizards/inherited_change_product_quantity_view.xml',
 
         #

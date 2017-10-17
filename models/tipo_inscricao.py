@@ -2,7 +2,7 @@
 
 from odoo import fields, models, api
 
-class TiposInscricao(models.Model):
+class TipoInscricao(models.Model):
     _name = "esocial.tipos_inscricao"
     _description = "Tipos de Inscrição"
     _order = 'codigo'

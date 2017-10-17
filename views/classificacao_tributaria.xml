@@ -12,7 +12,7 @@
         <field name="model">esocial.classificacao_tributaria</field>
         <field name="priority">50</field>
         <field name="arch" type="xml">
-            <form string="Tipos de Inscrição"
+            <form string="Classificação Tributária"
             edit="false" delete="false" create="false">
                 <sheet>
                     <group>
@@ -31,7 +31,7 @@
         <field name="model">esocial.classificacao_tributaria</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <tree string="Tipos de Inscrição"
+            <tree string="Classificação Tributária"
             edit="false" create="false" delete="false">
                 <field name="codigo" />
                 <field name="descricao" />
@@ -44,7 +44,7 @@
         <field name="model">esocial.classificacao_tributaria</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <search string="Tipos de Inscrição">
+            <search string="Classificação Tributária">
                 <field name="codigo" />
                 <field name="descricao" />
             </search>
@@ -52,7 +52,7 @@
     </record>
 
     <record model="ir.actions.act_window" id="classificacao_tributaria_action">
-        <field name="name">Tipos de Inscrição</field>
+        <field name="name">Classificação Tributária</field>
         <field name="res_model">esocial.classificacao_tributaria</field>
         <field name="view_mode">tree,form</field>
     </record>

@@ -38,7 +38,7 @@ class MotivoCessacao(models.Model):
         for motivo in self:
             if motivo.codigo:
                 if motivo.codigo.isdigit():
-                    motivo.codigo = agente.codigo.zfill(1)
+                    motivo.codigo = motivo.codigo.zfill(1)
                 else:
                     res = {'warning': {
                         'title': _('Código Incorreto!'),

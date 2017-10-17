@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="tab10_01" model="esocial.tipo_lotacao_tributaria">
+    <field name="codigo">01</field>
+    <field name="descricao">Classificação da atividade econômica exercida pela Pessoa Jurídica para fins de atribuição de código FPAS, inclusive obrasde construção civil própria, exceto:a) empreitada parcial ou sub-empreitada de obra de construçãocivil (utilizar opção 02);b) prestação de serviços em instalações de terceiros (utilizaropções 03 a 09);c) Embarcação inscrita no Registro Especial Brasileiro - REB(utilizar opção 10) Não preencher </field>
+    <field name="preenchimento_campo">Não preencher</field>
+  </record>
+  <record id="tab10_02" model="esocial.tipo_lotacao_tributaria">
+    <field name="codigo">02</field>
+    <field name="descricao">Obra de Construção Civil - Empreitada Parcial ou Subempreitada</field>
+    <field name="preenchimento_campo">CNO da Obra - A informação do CNPJ do Contratante/Proprietário do CNO é prestada nos sub-registros</field>
+  </record>
+  <record id="tab10_03" model="esocial.tipo_lotacao_tributaria">
+    <field name="codigo">03</field>
+    <field name="descricao">Pessoa Física Tomadora de Serviços prestados mediante cessão de mão de obra, exceto contratante de cooperativa</field>
+    <field name="preenchimento_campo">CPF do contratante</field>
+  </record>
+  <record id="tab10_04" model="esocial.tipo_lotacao_tributaria">
+    <field name="codigo">04</field>
+    <field name="descricao">Pessoa Jurídica Tomadora de Serviços prestados mediante cessão de mão de obra, exceto contratante de cooperativa, nos termos da lei 8.212/1991</field>
+    <field name="preenchimento_campo">CNPJ do Estabelecimento Contratante</field>
+  </record>
+  <record id="tab10_05" model="esocial.tipo_lotacao_tributaria">
+    <field name="codigo">05</field>
+    <field name="descricao">Pessoa Jurídica Tomadora de Serviços prestados por cooperados por intermédio de cooperativa de trabalho, exceto aqueles prestados a entidade beneficente/isenta</field>
+    <field name="preenchimento_campo">CNPJ do Estabelecimento Contratante</field>
+  </record>
+  <record id="tab10_06" model="esocial.tipo_lotacao_tributaria">
+    <field name="codigo">06</field>
+    <field name="descricao">Entidade beneficente/isenta Tomadora de Serviços prestados por cooperados por intermédio de cooperativa de trabalho</field>
+    <field name="preenchimento_campo">CNPJ do Estabelecimento Contratante</field>
+  </record>
+  <record id="tab10_07" model="esocial.tipo_lotacao_tributaria">
+    <field name="codigo">07</field>
+    <field name="descricao">Pessoa Física tomadora de Serviços prestados por Cooperados por intermédio de Cooperativa de Trabalho</field>
+    <field name="preenchimento_campo"> CPF do contratante</field>
+  </record>
+  <record id="tab10_08" model="esocial.tipo_lotacao_tributaria">
+    <field name="codigo">08</field>
+    <field name="descricao">Operador Portuário tomador de serviços de trabalhadores avulsos</field>
+    <field name="preenchimento_campo">CNPJ do Operador Portuário</field>
+  </record>
+  <record id="tab10_09" model="esocial.tipo_lotacao_tributaria">
+    <field name="codigo">09</field>
+    <field name="descricao">Contratante de trabalhadores avulsos não portuários por intermédio de Sindicato</field>
+    <field name="preenchimento_campo">CNPJ ou CPF do Contratante</field>
+  </record>
+  <record id="tab10_10" model="esocial.tipo_lotacao_tributaria">
+    <field name="codigo">10</field>
+    <field name="descricao">Embarcação inscrita no Registro Especial Brasileiro - REB</field>
+    <field name="preenchimento_campo">Não Preencher</field>
+  </record>
+  <record id="tab10_21" model="esocial.tipo_lotacao_tributaria">
+    <field name="codigo">21</field>
+    <field name="descricao">Classificação da atividade econômica ou obra própria de construção civil da Pessoa Física</field>
+    <field name="preenchimento_campo">Não Preencher</field>
+  </record>
+  <record id="tab10_24" model="esocial.tipo_lotacao_tributaria">
+    <field name="codigo">24</field>
+    <field name="descricao">Empregador Doméstico</field>
+    <field name="preenchimento_campo">Não Preencher</field>
+  </record>
+  <record id="tab10_90" model="esocial.tipo_lotacao_tributaria">
+    <field name="codigo">90</field>
+    <field name="descricao">Atividades desenvolvidas no exterior por trabalhador vinculado ao Regime Geral de Previdência Social (expatriados)</field>
+    <field name="preenchimento_campo">Não Preencher</field>
+  </record>
+  <record id="tab10_91" model="esocial.tipo_lotacao_tributaria">
+    <field name="codigo">91</field>
+    <field name="descricao">Atividades desenvolvidas por trabalhador estrangeiro vinculado a Regime de Previdência Social Estrangeiro</field>
+    <field name="preenchimento_campo">Não Preencher</field>
+  </record>
+</odoo>

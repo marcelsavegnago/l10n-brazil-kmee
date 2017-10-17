@@ -25,6 +25,7 @@ from . import tipo_beneficio
 from . import tipo_inscricao
 from . import tipo_dependente
 from . import classificacao_tributaria
+<<<<<<< HEAD
 from . import codificacao_acidente_trabalho
 from . import tipo_arquivo_esocial
 from . import tipo_lotacao_tributaria
@@ -38,3 +39,6 @@ from . import tipo_inscricao
 from . import tipo_dependente
 from . import classificacao_tributaria
 >>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
+=======
+from . import codificacao_acidente_trabalho
+>>>>>>> da5aaac... [ADD]Módulo 24

@@ -58,6 +58,7 @@
         'views/motivo_cessacao.xml',
         'views/tipo_beneficio.xml',
 <<<<<<< HEAD
+<<<<<<< HEAD
         'views/codificacao_acidente_trabalho.xml',
         'views/fatores_meio_ambiente.xml',
         'data/natureza_lesao.xml',
@@ -71,6 +72,9 @@
         'data/parte_corpo.xml',
         'data/tipo_inscricao.xml',
 =======
+=======
+        'views/codificacao_acidente_trabalho.xml',
+>>>>>>> da5aaac... [ADD]Módulo 24
         'data/natureza_lesao.xml',
         'data/categoria_trabalhador.xml',
         'data/financiamento_aposentadoria.xml',
@@ -94,10 +98,14 @@
         'data/motivo_cessacao.xml',
         'data/tipo_beneficio.xml',
 <<<<<<< HEAD
+<<<<<<< HEAD
         'data/codificacao_acidente_trabalho.xml',
         'data/fatores_meio_ambiente.xml'
 =======
 >>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
+=======
+        'data/codificacao_acidente_trabalho.xml',
+>>>>>>> da5aaac... [ADD]Módulo 24
     ],
     'application': True,
 }

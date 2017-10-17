@@ -23,3 +23,4 @@ from . import tipo_beneficio
 from . import tipo_inscricao
 from . import tipo_dependente
 from . import classificacao_tributaria
+from . import codificacao_acidente_trabalho

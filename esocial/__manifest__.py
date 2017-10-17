@@ -56,6 +56,8 @@
         'data/parte_corpo.xml',
         'data/tipo_inscricao.xml',
         'data/natureza_lesao.xml',
+        'data/tipo_arquivo_esocial.xml',
+        'data/tipo_lotacao_tributaria.xml',
         'data/categoria_trabalhador.xml',
         'data/financiamento_aposentadoria.xml',
         'data/natureza_rubrica.xml',

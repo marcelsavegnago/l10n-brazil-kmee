@@ -5,12 +5,12 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 
 
-class AgenteCausador(models.Model):
-    _name = 'esocial.tipo_dependente'
-    _description = 'Tipos de Dependente'
+class TipoArquivoEsocial(models.Model):
+    _name = 'esocial.tipo_arquivo_esocial'
+    _description = 'Tipos de Arquivo do eSocial'
     _order = 'codigo'
     _sql_constraints = [
         ('codigo',
@@ -20,7 +20,7 @@ class AgenteCausador(models.Model):
     ]
 
     codigo = fields.Char(
-        size=2,
+        size=6,
         string='Codigo',
         required=True,
     )
@@ -37,8 +37,8 @@ class AgenteCausador(models.Model):
     def _valida_codigo(self):
         for tipo in self:
             if tipo.codigo:
-                if tipo.codigo.isdigit():
-                    tipo.codigo = tipo.codigo.zfill(2)
+                if tipo.codigo[0] == 'S' and tipo.codigo[2:].isdigit():
+                    tipo.codigo = tipo.codigo.zfill(6)
                 else:
                     res = {'warning': {
                         'title': _('Código Incorreto!'),

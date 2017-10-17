@@ -80,19 +80,20 @@ class SpedNCM(models.Model):
     @api.depends('codigo', 'ex', 'descricao', 'al_ipi_id')
     def _compute_ncm(self):
         for ncm in self:
-            ncm.codigo_formatado = (
-                ncm.codigo[:2] +
-                '.' +
-                ncm.codigo[2:4] +
-                '.' + ncm.codigo[4:6] +
-                '.' + ncm.codigo[6:]
-            )
-            ncm.ncm = ncm.codigo_formatado
+            if ncm.codigo and ncm.descricao:
+                ncm.codigo_formatado = (
+                    ncm.codigo[:2] +
+                    '.' +
+                    ncm.codigo[2:4] +
+                    '.' + ncm.codigo[4:6] +
+                    '.' + ncm.codigo[6:]
+                )
+                ncm.ncm = ncm.codigo_formatado
 
-            if ncm.ex:
-                ncm.ncm += '-ex' + ncm.ex
+                if ncm.ex:
+                    ncm.ncm += '-ex' + ncm.ex
 
-            ncm.ncm += ' - ' + ncm.descricao[:60]
+                ncm.ncm += ' - ' + ncm.descricao[:60]
 
     @api.depends('codigo', 'ex')
     def _check_codigo(self):

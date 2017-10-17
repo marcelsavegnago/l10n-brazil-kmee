@@ -10,10 +10,9 @@
         <field name="model">sped.produto</field>
         <field name="inherit_id" ref="l10n_br_base.sped_produto_produto_form" />
         <field name="arch" type="xml">
-            <!--<header position="inside" >-->
-                <!--<button name="%(stock.action_view_change_product_quantity)d" string="Atualizar estoque atual" type="action"  />-->
-                <!--<button name="%(stock.act_make_procurement)d" string="Procurement Request" type="action" />-->
-            <!--</header>-->
+            <header position="inside" >
+                <button name="%(stock.action_view_change_product_quantity)d" string="Atualizar estoque atual" type="action" />
+            </header>
             <div name="button_box" position="inside">
                 <button class="oe_stat_button" name="%(stock_move_entrada_saida_produto_em_maos_action)d" icon="fa-building-o" type="action">
                     <div class="o_form_field o_stat_info">
@@ -56,7 +55,7 @@
             </div>
             <field name="fator_quantidade_especie" position="after">
                 <newline />
-                <field name="property_stock_procurement" groups="l10n_br_base.GRUPO_SUPORTE" />
+                <!--<field name="property_stock_procurement" groups="l10n_br_base.GRUPO_SUPORTE" />-->
                 <newline />
                 <field name="property_stock_production" groups="l10n_br_base.GRUPO_SUPORTE" />
                 <newline />

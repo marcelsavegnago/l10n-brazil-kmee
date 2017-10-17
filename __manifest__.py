@@ -112,7 +112,11 @@
 >>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
 =======
         'data/codificacao_acidente_trabalho.xml',
+<<<<<<< HEAD
 >>>>>>> da5aaac... [ADD]Módulo 24
+=======
+        'data/fatores_meio_ambiente.xml'
+>>>>>>> 68e66ce... [ADD]Módulo 23
     ],
     'application': True,
 }

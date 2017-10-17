@@ -40,6 +40,7 @@
         'views/natureza_juridica.xml',
         'views/motivo_cessacao.xml',
         'views/tipo_beneficio.xml',
+        'views/codificacao_acidente_trabalho.xml',
         'data/natureza_lesao.xml',
         'data/categoria_trabalhador.xml',
         'data/financiamento_aposentadoria.xml',
@@ -58,6 +59,7 @@
         'data/natureza_juridica.xml',
         'data/motivo_cessacao.xml',
         'data/tipo_beneficio.xml',
+        'data/codificacao_acidente_trabalho.xml',
     ],
     'application': True,
 }

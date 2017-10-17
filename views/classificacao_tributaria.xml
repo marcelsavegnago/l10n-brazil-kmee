@@ -13,10 +13,14 @@
         <field name="priority">50</field>
         <field name="arch" type="xml">
 <<<<<<< HEAD
+<<<<<<< HEAD
             <form string="Classificação Tributária"
 =======
             <form string="Tipos de Inscrição"
 >>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
+=======
+            <form string="Classificação Tributária"
+>>>>>>> 84247a3... [ADD] tabelas 9 e 10 feitas
             edit="false" delete="false" create="false">
                 <sheet>
                     <group>
@@ -36,10 +40,14 @@
         <field name="priority">1</field>
         <field name="arch" type="xml">
 <<<<<<< HEAD
+<<<<<<< HEAD
             <tree string="Classificação Tributária"
 =======
             <tree string="Tipos de Inscrição"
 >>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
+=======
+            <tree string="Classificação Tributária"
+>>>>>>> 84247a3... [ADD] tabelas 9 e 10 feitas
             edit="false" create="false" delete="false">
                 <field name="codigo" />
                 <field name="descricao" />
@@ -53,10 +61,14 @@
         <field name="priority">1</field>
         <field name="arch" type="xml">
 <<<<<<< HEAD
+<<<<<<< HEAD
             <search string="Classificação Tributária">
 =======
             <search string="Tipos de Inscrição">
 >>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
+=======
+            <search string="Classificação Tributária">
+>>>>>>> 84247a3... [ADD] tabelas 9 e 10 feitas
                 <field name="codigo" />
                 <field name="descricao" />
             </search>
@@ -65,10 +77,14 @@
 
     <record model="ir.actions.act_window" id="classificacao_tributaria_action">
 <<<<<<< HEAD
+<<<<<<< HEAD
         <field name="name">Classificação Tributária</field>
 =======
         <field name="name">Tipos de Inscrição</field>
 >>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
+=======
+        <field name="name">Classificação Tributária</field>
+>>>>>>> 84247a3... [ADD] tabelas 9 e 10 feitas
         <field name="res_model">esocial.classificacao_tributaria</field>
         <field name="view_mode">tree,form</field>
     </record>

@@ -45,6 +45,7 @@
         'views/tipo_lotacao_tributaria.xml',
 =======
         'views/tipo_dependente.xml',
+<<<<<<< HEAD
 >>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
         'views/classificacao_tributaria.xml',
         'views/motivo_afastamento.xml',
@@ -52,6 +53,12 @@
 =======
         'views/motivo_afastamento.xml',
 >>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
+=======
+        'views/tipo_lotacao_tributaria.xml',
+        'views/classificacao_tributaria.xml',
+        'views/motivo_afastamento.xml',
+        'views/tipo_arquivo_esocial.xml',
+>>>>>>> 84247a3... [ADD] tabelas 9 e 10 feitas
         'views/motivo_desligamento.xml',
         'views/tipo_logradouro.xml',
         'views/natureza_juridica.xml',

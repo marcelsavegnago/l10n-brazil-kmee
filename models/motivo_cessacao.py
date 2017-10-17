@@ -47,10 +47,14 @@ class MotivoCessacao(models.Model):
             if motivo.codigo:
                 if motivo.codigo.isdigit():
 <<<<<<< HEAD
+<<<<<<< HEAD
                     motivo.codigo = motivo.codigo.zfill(1)
 =======
                     motivo.codigo = agente.codigo.zfill(1)
 >>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
+=======
+                    motivo.codigo = motivo.codigo.zfill(1)
+>>>>>>> 84247a3... [ADD] tabelas 9 e 10 feitas
                 else:
                     res = {'warning': {
                         'title': _('Código Incorreto!'),

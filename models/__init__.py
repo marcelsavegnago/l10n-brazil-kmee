@@ -26,6 +26,7 @@ from . import tipo_inscricao
 from . import tipo_dependente
 from . import classificacao_tributaria
 <<<<<<< HEAD
+<<<<<<< HEAD
 from . import codificacao_acidente_trabalho
 from . import tipo_arquivo_esocial
 from . import tipo_lotacao_tributaria
@@ -42,3 +43,8 @@ from . import classificacao_tributaria
 =======
 from . import codificacao_acidente_trabalho
 >>>>>>> da5aaac... [ADD]Módulo 24
+=======
+from . import codificacao_acidente_trabalho
+from . import tipo_arquivo_esocial
+from . import tipo_lotacao_tributaria
+>>>>>>> 84247a3... [ADD] tabelas 9 e 10 feitas

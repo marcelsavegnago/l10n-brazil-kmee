@@ -3,10 +3,14 @@
 from odoo import fields, models, api
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 class TipoInscricao(models.Model):
 =======
 class TiposInscricao(models.Model):
 >>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
+=======
+class TipoInscricao(models.Model):
+>>>>>>> 84247a3... [ADD] tabelas 9 e 10 feitas
     _name = "esocial.tipos_inscricao"
     _description = "Tipos de Inscrição"
     _order = 'codigo'

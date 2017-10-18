@@ -36,6 +36,10 @@
 <!--                     <field name="launch_pack_operations" invisible="1"/> -->
 <!--                     <button name="button_scrap" type="object" string="Sucata" attrs="{'invisible': ['|', ('operacao_id', '!=', False), '|', ('state', 'in', ('draft', 'cancel')), '&amp;', ('picking_type_code', '=', 'incoming'), ('state', '!=', 'done')]}"/> -->
                     <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,partially_available,assigned,done" />
+                    <field name="show_operations" invisible="1" readonly="1"/>
+                    <field name="operacao_id" invisible="1" readonly="1"/>
+                    <field name="has_packages" invisible="1"/>
+                    <field name="move_line_exist" invisible="1"/>
                 </header>
 
             </header>

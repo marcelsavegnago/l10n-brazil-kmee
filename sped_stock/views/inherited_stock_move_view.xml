@@ -47,10 +47,10 @@
                 <field name="currency_unidade_id" invisible="1"/>
                 <field name="unidade_id" invisible="1" />
             </field>
-            <field name="company_id" position="replace">
-                <field name="empresa_id" options="{'no_create': True}" required="1" groups="base.group_multi_company" />
-                <field name="company_id" invisible="1"/>
-            </field>
+            <!--<field name="company_id" position="replace">-->
+                <!--<field name="empresa_id" options="{'no_create': True}" required="1" groups="base.group_multi_company" />-->
+                <!--<field name="company_id" invisible="1"/>-->
+            <!--</field>-->
             <field name="product_uom_qty" position="replace">
                 <field name="product_uom_qty" invisible="1" />
                 <field name="quantidade" required="1" />

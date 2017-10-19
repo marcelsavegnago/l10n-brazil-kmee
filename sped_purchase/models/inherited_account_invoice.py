@@ -10,11 +10,11 @@ class AccountInvoice(models.Model):
 
     @api.onchange('purchase_id')
     def _purchase_order_change_brazil(self):
-        self.sped_participante_id = self.purchase_id.sped_participante_id
+        self.sped_participante_id = self.purchase_id.participante_id
         self.sped_operacao_produto_id = \
-            self.purchase_id.sped_operacao_produto_id
+            self.purchase_id.operacao_produto_id
         self.sped_operacao_servico_id = \
-            self.purchase_id.sped_operacao_servico_id
+            self.purchase_id.operacao_servico_id
         self.condicao_pagamento_id = self.purchase_id.condicao_pagamento_id
 
     @api.multi

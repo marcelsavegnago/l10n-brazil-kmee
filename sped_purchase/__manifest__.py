@@ -21,8 +21,8 @@
         'views/purchase_order.xml',
     ],
     'demo': [
-        'demo/purchase_order_line.xml',
-        'demo/purchase_order.xml',
+        # 'demo/purchase_order_line.xml',
+        # 'demo/purchase_order.xml',
     ],
     'installable': True,
 }

@@ -13,6 +13,19 @@ from odoo.addons.sped_imposto.models.sped_calculo_imposto import (
 class PurchaseOrder(SpedCalculoImposto, models.Model):
     _inherit = 'purchase.order'
 
+    item_ids = fields.One2many(
+        comodel_name='purchase.order.line',
+        inverse_name='order_id',
+    )
+
+    operacao_produto_id = fields.Many2one(
+        comodel_name='sped.operacao'
+    )
+
+    operacao_servico_id = fields.Many2one(
+        comodel_name='sped.operacao'
+    )
+
     def _get_date(self):
         """
         Return the document date

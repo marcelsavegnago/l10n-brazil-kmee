@@ -442,7 +442,7 @@
     <!-- Temporariamente, substituímos o menu original pelo nosso -->
     <record model="ir.ui.menu" id="sale.menu_sale_quotations">
         <field name="name">Orçamentos</field>
-        <field name="parent_id" ref="sales_team.menu_sales"/>
+        <field name="parent_id" ref="sale.sale_order_menu"/>
         <field name="action" ref="sale_order_orcamento_action"/>
         <field name="sequence" eval="3"/>
     </record>

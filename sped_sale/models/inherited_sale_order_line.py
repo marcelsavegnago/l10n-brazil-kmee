@@ -203,7 +203,7 @@ class SaleOrderLine(SpedCalculoImpostoItem, models.Model):
     def _get_customer_lead(self):
         for record in self:
             ir_values = self.env['ir.values']
-            dias_definidos = ir_values.get_default('sale.config.settings',
+            dias_definidos = ir_values.get_default('res.config.settings',
                                             'dias_vencimento_cotacao')
             record.customer_lead = dias_definidos
 

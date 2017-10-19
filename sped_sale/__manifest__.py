@@ -20,6 +20,7 @@
         'sale_stock',
         'sped_stock',
         'sale_order_dates',
+        'sale_management',
     ],
     'data': [
         'views/inherited_sale_config_settings_view.xml',

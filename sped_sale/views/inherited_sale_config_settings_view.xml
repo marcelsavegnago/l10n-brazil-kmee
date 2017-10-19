@@ -5,13 +5,37 @@
 <odoo>
 
     <record model="ir.ui.view" id="view_sales_config">
-        <field name="name">sale.config.settings.form (in sped_sale)</field>
-        <field name="model">sale.config.settings</field>
-        <field name="inherit_id" ref="sale.view_sales_config"/>
+        <field name="name">res.config.settings.form (in sped_sale)</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
         <field name="arch" type="xml">
-            <group name="quotations_sales" position="inside">
-                <field name="dias_vencimento_cotacao" />
-            </group>
+			<div class="col-xs-12 col-md-6 o_setting_box" position="after">
+            	<div class="col-xs-12 col-md-6 o_setting_box" id="propagation_info" title="Rescheduling applies to any chain of operations (e.g. Make To Order, Pick Pack Ship). In the case of MTO sales, a vendor delay (updated incoming date) impacts the expected delivery date to the customer. This option allows to not propagate the rescheduling if the change is not critical." >
+					<div class="o_setting_left_pane" >
+						<field name="dias_vencimento_cotacao" on_change="1"/>
+					</div>
+					<div class="o_setting_right_pane">
+						<label for="use_propagation_minimum_delta" />
+						<div class="text-muted" >
+
+									Don’t propagate scheduling changes through chains of operations
+
+						</div>
+						<div class="content-group" >
+							<div class="mt16" attrs="{'invisible': [('use_propagation_minimum_delta', '=', False)]}" modifiers="{'invisible':[['use_propagation_minimum_delta','=',false]]}">
+								<span >
+									Change must be higher than
+									<field name="propagation_minimum_delta" class="oe_inline" />
+									 days to be propagated
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--<group name="quotations_sales" position="inside">-->
+                <!--<field name="dias_vencimento_cotacao" />-->
+            <!--</group>-->
         </field>
     </record>
 

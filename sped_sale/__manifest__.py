@@ -6,7 +6,7 @@
     'name': 'Sped Vendas',
     'summary': """
         Vendas Brasileira""",
-    'version': '10.0.1.0.0',
+    'version': '11.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'KMEE,Odoo Community Association (OCA)',
     'website': 'www.kmee.com.br',
@@ -20,6 +20,7 @@
         'sale_stock',
         'sped_stock',
         'sale_order_dates',
+        'sale_management',
     ],
     'data': [
         'views/inherited_sale_config_settings_view.xml',

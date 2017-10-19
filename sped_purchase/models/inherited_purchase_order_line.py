@@ -21,15 +21,15 @@ class PurchaseOrderLine(SpedCalculoImpostoItem, models.Model):
         related='order_id.is_brazilian',
     )
     empresa_id = fields.Many2one(
-        related='order_id.sped_empresa_id',
+        related='order_id.empresa_id',
         readonly=True,
     )
     participante_id = fields.Many2one(
-        related='order_id.sped_participante_id',
+        related='order_id.participante_id',
         readonly=True,
     )
     operacao_id = fields.Many2one(
-        related='order_id.sped_operacao_produto_id',
+        related='order_id.operacao_id',
         readonly=True,
     )
     data_emissao = fields.Datetime(
@@ -105,6 +105,13 @@ class PurchaseOrderLine(SpedCalculoImpostoItem, models.Model):
         compute='_compute_permite_alteracao',
     )
 
+    # Para que o módulo instale
+    documento_id = fields.Many2one(
+        comodel_name='account.invoice',
+        # string='Pedido de compra',
+        # readonly=True,
+    )
+
     @api.onchange('produto_id')
     def onchange_product_id_date(self):
         domain = {}
@@ -119,8 +126,7 @@ class PurchaseOrderLine(SpedCalculoImpostoItem, models.Model):
                     'para permtir o cálculo correto dos impostos'),
             }
             return {'warning': warning}
-        if not (self.order_id.sped_operacao_produto_id or
-                self.order_id.sped_operacao_servico_id):
+        if not (self.order_id.operacao_id):
             warning = {
                 'title': _('Warning!'),
                 'message': _(

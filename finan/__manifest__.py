@@ -6,16 +6,16 @@
     'name': 'Financeiro',
     'summary': """
         Controle Financeiro Brasileiro""",
-    'version': '10.0.1.0.0',
+    'version': '11.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'KMEE,Odoo Community Association (OCA)',
     'website': 'www.kmee.com.br',
-    'installable': False,
+    'installable': True,
     'depends': [
         'base',
         'l10n_br_base',
         'mail',
-        'report_xlsx',
+        # 'report_xlsx',
     ],
     'external_dependencies': {
         'python': ['html2text', 'pybrasil', 'numpy'],
@@ -61,12 +61,11 @@
         #
         # Relatórios
         #
-        'reports/finan_relatorio_fluxo_caixa_data.xml',
-        'wizards/finan_relatorio_fluxo_caixa_wizard.xml',
-
-        'reports/finan_relatorio_divida_data.xml',
-        'wizards/finan_relatorio_divida_wizard.xml',
-        'wizards/finan_lancamento_novo_pagamento_wizard.xml',
+        # 'reports/finan_relatorio_fluxo_caixa_data.xml',
+        # 'wizards/finan_relatorio_fluxo_caixa_wizard.xml',
+        #
+        # 'reports/finan_relatorio_divida_data.xml',
+        # 'wizards/finan_relatorio_divida_wizard.xml',
 
         ##'data/financial_document_type_data.xml',
         ##'data/interest_data.xml',

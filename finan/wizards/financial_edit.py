@@ -16,11 +16,11 @@ class FinancialEdit(models.TransientModel):
         required=True,
     )
     amount = fields.Monetary(
-        string=u"Document amount",
+        string="Document amount",
         required=True,
     )
     amount_discount = fields.Monetary(
-        string=u'Discount',
+        string='Discount',
         # required=True
     )
     date_maturity = fields.Date(

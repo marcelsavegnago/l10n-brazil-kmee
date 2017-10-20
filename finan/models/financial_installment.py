@@ -2,7 +2,7 @@
 # Copyright 2017 KMEE
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo import api, fields, models
 
@@ -15,7 +15,7 @@ from ..constants import (
 
 
 class FinancialInstallment(models.Model):
-    _name = b'financial.installment'
+    _name = 'financial.installment'
     _description = 'Financial Installment'
     _rec_name = 'document_number'
 
@@ -92,12 +92,12 @@ class FinancialInstallment(models.Model):
         digits=(18, 2),
     )
     amount_total = fields.Monetary(
-        string=u'Total',
+        string='Total',
         readonly=True,
         compute='_compute_totals',
     )
     amount_discount = fields.Monetary(
-        string=u'Discount',
+        string='Discount',
     )
     note = fields.Text(
         string='Note',

@@ -15,7 +15,7 @@ class FinancialCancel(models.TransientModel):
     )
 
     obs = fields.Text(
-        string=u'Observações',
+        string='Observações',
     )
 
     @api.multi

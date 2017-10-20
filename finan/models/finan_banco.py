@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo import api, fields, models
 from odoo.addons.l10n_br_base.models.sped_base import SpedBase
@@ -13,7 +13,7 @@ from ..constantes import *
 
 
 class FinanBanco(SpedBase, models.Model):
-    _name = b'finan.banco'
+    _name = 'finan.banco'
     _description = 'Conta Bancária'
     _rec_name = 'nome'
     _order = 'nome'

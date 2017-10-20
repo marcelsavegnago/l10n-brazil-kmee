@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from datetime import datetime
 
@@ -14,7 +14,7 @@ from ..constantes import *
 
 
 class FinanRelatorioWizard(models.TransientModel):
-    _name = b'finan.relatorio.wizard'
+    _name = 'finan.relatorio.wizard'
     _description = 'Relatórios Financeiros - Wizard'
 
     empresa_id = fields.Many2one(

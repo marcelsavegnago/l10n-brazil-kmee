@@ -6,7 +6,7 @@
     'name': 'Sped Financeiro',
     'summary': """
         Integracão entre o controle financeiro e o módulo fiscal""",
-    'version': '10.0.1.0.0',
+    'version': '11.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'KMEE,Odoo Community Association (OCA)',
     'website': 'www.odoobrasil.org.br',
@@ -20,6 +20,6 @@
     ],
     'demo': [
     ],
-    'installable': False,
-    'auto_install': False,
+    'installable': True,
 }
+

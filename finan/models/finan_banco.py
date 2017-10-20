@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 import json
@@ -27,7 +27,7 @@ except (ImportError, IOError) as err:
 
 
 class FinanBanco(SpedBase, models.Model):
-    _name = b'finan.banco'
+    _name = 'finan.banco'
     _description = 'Conta Bancária'
     _rec_name = 'nome'
     #_order = 'nome'

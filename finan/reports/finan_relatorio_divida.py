@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -440,7 +440,7 @@ class FinanRelatorioDivida(ReportXlsxBase):
 
         self.write_header()
 
-        for chave_grupo in self.report_data['linhas'].keys():
+        for chave_grupo in list(self.report_data['linhas'].keys()):
             if self.report_wizard.group_by == 'data_vencimento_util':
                 data_vencimento_util = fields.Datetime.from_string(chave_grupo)
                 data_vencimento_util = \

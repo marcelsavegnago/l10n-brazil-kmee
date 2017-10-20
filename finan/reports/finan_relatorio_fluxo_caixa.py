@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -130,7 +130,7 @@ class FinanRelatorioFluxoCaixa(ReportXlsxBase):
                 'valor_final': 0,
             }
 
-            for data_periodo in report_data['titulo_data_periodo'].keys():
+            for data_periodo in list(report_data['titulo_data_periodo'].keys()):
                 linha[data_periodo] = 0
 
             report_data['linhas'][conta.codigo] = linha
@@ -148,7 +148,7 @@ class FinanRelatorioFluxoCaixa(ReportXlsxBase):
             'valor_final': 0,
         }
 
-        for data_periodo in report_data['titulo_data_periodo'].keys():
+        for data_periodo in list(report_data['titulo_data_periodo'].keys()):
             linha[data_periodo] = 0
 
         report_data['resumos_total'] = linha
@@ -160,7 +160,7 @@ class FinanRelatorioFluxoCaixa(ReportXlsxBase):
             'valor_final': 0,
         }
 
-        for data_periodo in report_data['titulo_data_periodo'].keys():
+        for data_periodo in list(report_data['titulo_data_periodo'].keys()):
             linha[data_periodo] = 0
 
         report_data['resumos_acumulados'] = linha

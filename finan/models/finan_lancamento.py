@@ -2,7 +2,7 @@
 # Copyright 2017 KMEE
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -24,7 +24,7 @@ except (ImportError, IOError) as err:
 
 
 class FinanLancamento(SpedBase, models.Model):
-    _name = b'finan.lancamento'
+    _name = 'finan.lancamento'
     _description = 'Lançamento Financeiro'
     _inherit = ['mail.thread']
     _order = 'data_vencimento_util, numero, id desc'
@@ -1009,89 +1009,179 @@ class FinanLancamento(SpedBase, models.Model):
             vr_documento=vr_documento,
             **kwargs
         )
+    #def action_view_financial(self, type):
+        #if type == '2receive':
+            #action = self.env.ref(
+                #'finan.financial_lancamento._debt_2receive_form_action').read()[0]
+        #elif type == '2pay':
+            #action = self.env.ref(
+                #'finan.financial_lancamento._debt_2pay_form_action').read()[0]
+        #if len(self) > 1:
+            #action['domain'] = [('id', 'in', self.ids)]
+        #elif len(self) == 1:
+            ## action['views'] = \
+            ##     [(
+            ##         self.env.ref('finan.financial_lancamento._form_view').id,
+            ##         'form',
+            ##     )]
+            #action['res_id'] = self.ids[0]
+        #else:
+            #action = {'type': 'ir.actions.act_window_close'}
+        #return action
 
-    @api.multi
-    def cria_pagamento(self):
-        #if not self.id:
-            #super(FinanLancamento, self).create()
-        context = dict(self.env.context)
 
-        dados = {
-            'conta_id': self.conta_id.id,
-            'empresa_id': self.empresa_id.id,
-            'participante_id': self.participante_id.id,
-            'vr_documento': self.vr_saldo,
-            'vr_movimentado': self.vr_saldo,
-            'data_pagamento': str(hoje()),
-            'divida_id': self.id,
-        }
+    # def _create_from_dict(self, lancamento._dict):
+    #     '''How to use:
+    #
+    # def _prepare_lancamento_item(self, item):
+    #      return {
+    #          'numero':
+    #              '{0.serie}-{0.numero:0.0f}-{1.numero}/{2}'.format(
+    #                  self, item, len(self.duplicata_ids)),
+    #          'data_vencimento': item.data_vencimento,
+    #          'amount': item.valor
+    #      }
+    #
+    #  def _prepare_lancamento_financeiro(self):
+    #      return {
+    #          'date': self.data_emissao,
+    #          'type': '2receive',
+    #          'partner_id':
+    #              self.participante_id and self.participante_id.partner_id.id,
+    #          'referencia_id': self._name + ',' + str(self.id),
+    #          'bank_id': 1,
+    #          'empresa_id': self.empresa_id and self.empresa_id.empresa_id.id,
+    #          'currency_id': self.currency_id.id,
+    #          'payment_term_id':
+    #              self.payment_term_id and self.payment_term_id.id or False,
+    #          # 'account_type_id':
+    #          # 'analytic_conta_id':
+    #          # 'condicao_pagamento_id:
+    #          'lines': [self._prepara_lancamento_item(parcela)
+    #                    for parcela in self.duplicata_ids],
+    #      }
+    #
+    #  def action_financial_create(self):
+    #
+    #      p = self._prepare_lancamento_financeiro()
+    #      financial_lancamento._ids = self.env['finan.lancamento']._create_from_dict(p)
+    #      financial_lancamento._ids.action_confirm()
+    #
+    #      :param lancamento._dict:
+    #      :return: a lancamento set of finan.lancamento
+    #      '''
+    #      lines = lancamento._dict.pop('lines')
+    #
+    #      financial_lancamento._ids = self.env['finan.lancamento']
+    #
+    #      for item in lines:
+    #          data_vencimento = item.pop('data_vencimento')
+    #          vr_documento = item.pop('vr_documento')
+    #          numero = item.pop('numero')
+    #          #
+    #          # Override lancamento._dict with item data!
+    #          #
+    #          kwargs = lancamento._dict.copy()
+    #          kwargs.update(item)
+    #
+    #          values = self._prepare_financial_lancamento(
+    #              data_vencimento=data_vencimento,
+    #              vr_documento=vr_documento,
+    #              numero=numero,
+    #              **kwargs
+    #          )
+    #          financial = self.create(values)
+    #          financial_lancamento._ids |= financial
+    #      return financial_lancamento._ids
 
-        if self.tipo == FINAN_DIVIDA_A_RECEBER:
-            form = self.env.ref(
-                'finan.finan_lancamento_novo_recebimento_form',
-                True
-            )
-            dados['tipo'] = FINAN_RECEBIMENTO
-            if self.participante_id.adiantamento_a_pagar:
-                if self.participante_id.adiantamento_a_pagar <= \
-                    self.vr_saldo:
-                    dados['vr_adiantado'] = \
-                        self.participante_id.adiantamento_a_pagar * -1
-                else:
-                    dados['vr_adiantado'] = self.vr_saldo * -1
+    #def _readonly_state(self):
+        #return {'draft': [('readonly', False)]}
 
-        else:
-            form = self.env.ref(
-                'finan.finan_lancamento_novo_pagamento_form',
-                True
-            )
-            dados['tipo'] = FINAN_PAGAMENTO
-            if self.participante_id.adiantamento_a_receber:
-                if self.participante_id.adiantamento_a_receber <= \
-                    self.vr_saldo:
-                    dados['vr_adiantado'] = \
-                        self.participante_id.adiantamento_a_receber * -1
-                else:
-                    dados['vr_adiantado'] = self.vr_saldo * -1
+    #def _required_fields(self):
+        #return True
 
-        wizard = self.env['finan.lancamento.wizard'].create(dados)
+    #def _track_visibility_onchange(self):
+        #return 'onchange'
 
-        return {
-            'view_type': 'form',
-            'view_id': [form.id],
-            'view_mode': 'form',
-            'res_model': 'finan.lancamento.wizard',
-            'res_id': wizard.id,
-            'views': [(form.id, 'form')],
-            'type': 'ir.actions.act_window',
-            'target': 'new',
-            'context': context,
-        }
+    #def cron_interest(self):
+        #if self.env['resource.calendar'].data_eh_dia_util_bancario(
+                #datetime.data_hoje()):
+            #lancamento = self.search([
+                #('state', '=', 'open'),
+                #('data_vencimento_util', '<', datetime.data_hoje())])
+            ## lancamento._compute_interest()
+            #lancamento._compute_situacao_divida()
 
-    def gera_boleto(self, sem_anexo=False):
-        self.ensure_one()
+    #@api.depends('condicao_pagamento_id', 'vr_documento',
+                 #'data_vencimento_util')
+    #def _compute_interest(self):
+        #for lancamento in self:
+            #if self.env['resource.calendar']. \
+                    #data_eh_dia_util_bancario(datetime.data_hoje()) and lancamento. \
+                    #state == 'open' and \
+                    #(datetime.data_hoje() > datetime.strptime
+                        #(lancamento.data_vencimento_util, '%Y-%m-%d')):
+                #day = (
+                    #datetime.data_hoje() - datetime.strptime(
+                        #lancamento.data_vencimento,
+                        #'%Y-%m-%d'))
+                #interest = lancamento.vr_documento * \
+                    #(lancamento.condicao_pagamento_id.interest_percent * day.days) / 100
 
-        if self.tipo != FINAN_DIVIDA_A_RECEBER:
-            return
+                #delay_fee = (lancamento.condicao_pagamento_id.
+                             #delay_fee_percent / 100) * lancamento.vr_documento
+                #lancamento.vr_juros = interest + delay_fee
 
-        if not self.carteira_id:
-            return
+    #def change_state(self, new_state):
+        #for lancamento in self:
+            #if lancamento._avaliable_transition(lancamento.state, new_state):
+                #lancamento.state = new_state
+            #elif lancamento.state == new_state:
+                #return True
+            #else:
+                #raise UserError(_('This state transition is not allowed'))
 
-        boleto = self.carteira_id.gera_boleto(self)
+    #def action_confirm(self):
+        #for lancamento in self:
+            #lancamento.change_state('open')
 
-        if sem_anexo:
-            return boleto
+    #def action_budget(self):
+        #for lancamento in self:
+            #lancamento.change_state('budget')
 
-        nome_arquivo = 'Boleto_'
-        nome_arquivo += boleto.nosso_numero
-        nome_arquivo += '_'
-        banco = FINAN_BANCO_DICT[boleto.banco.codigo][6:]
-        nome_arquivo += banco
-        nome_arquivo += '.pdf'
-        self._grava_anexo(nome_arquivo=nome_arquivo, conteudo=boleto.pdf)
+    #def action_paid(self):
+        #for lancamento in self:
+            #lancamento.change_state('paid')
+            #if lancamento.state == 'paid':
+                #data_pagamento = \
+                    #max([x.data_pagamento for x in lancamento.pagamento_ids])
+                #lancamento.data_pagamento = data_pagamento
 
-        return boleto
+    #def action_estorno(self):
+        #for lancamento in self:
+            #lancamento.change_state('open')
 
-    def imprime_boleto(self):
-        for lancamento in self:
-            lancamento.gera_boleto()
+    #def action_cancel(self, motivo_id, obs):
+        #for lancamento in self:
+            #lancamento.change_state('cancelled')
+            #if lancamento.note:
+                #new_note = lancamento.note + '\n' + obs
+            #else:
+                #new_note = obs
+            #lancamento.write({
+                #'motivo_baixa_id': motivo_id,
+                #'vr_baixado': lancamento.vr_documento,
+                #'note': new_note,
+                #'vr_saldo': 0,
+            #})
+            #lancamento.with_context(no_email=True).message_post(body=new_note)
+
+
+#class FinanLancamentoMotivoCancelamento(models.Model):
+    #_name = 'finan.lancamento.motivo.cancelamento'
+    #_rec_name = 'motivo_cancelamento'
+
+    #motivo_cancelamento = fields.Char(
+        #string="Motivo do Cancelamento",
+        #required=True,
+    #)

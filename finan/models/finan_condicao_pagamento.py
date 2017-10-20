@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -44,7 +44,7 @@ except (ImportError, IOError) as err:
 
 
 class FinanCondicaoPagamento(models.Model):
-    _name = b'finan.condicao.pagamento'
+    _name = 'finan.condicao.pagamento'
     _description = 'Condição de Pagamemento'
     _rec_name = 'nome_comercial'
     _order = 'sequence, nome'

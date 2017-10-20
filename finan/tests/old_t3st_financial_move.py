@@ -163,10 +163,10 @@ class TestFinancialMove(TransactionCase):
 
         fr = self.financial_edit.with_context(ctx)
         vals = self.financial_edit.with_context(ctx).\
-            default_get([u'date_maturity',
-                         u'amount',
-                         u'currency_id',
-                         u'change_reason'])
+            default_get(['date_maturity',
+                         'amount',
+                         'currency_id',
+                         'change_reason'])
         vals['change_reason'] = 'qualquer coisa'
         vals['note'] = '!'
         message_number_before = len(self.env['financial.move'].browse(cr_1.id).

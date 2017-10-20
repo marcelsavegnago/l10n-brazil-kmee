@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo import _
 from odoo import exceptions, fields
@@ -398,14 +398,14 @@ class ReportXslxFinancialPartnerStatement(ReportXlsxFinancialBase):
         self.write_header()
         for move_id in self.report_data['moves']:
             move_dict = {
-                'document_date': move_id[u'date_document'],
-                'document_number': move_id[u'document_number'],
-                'date_business_maturity': move_id[u'date_business_maturity'],
-                'amount_document': move_id[u'amount_document'],
-                'amount_paid': move_id[u'amount_total'],
-                'arrears_days': move_id[u'arrears_days'],
-                'amount_residual': move_id[u'amount_residual'],
-                'debt_status': move_id[u'debt_status'],
+                'document_date': move_id['date_document'],
+                'document_number': move_id['document_number'],
+                'date_business_maturity': move_id['date_business_maturity'],
+                'amount_document': move_id['amount_document'],
+                'amount_paid': move_id['amount_total'],
+                'arrears_days': move_id['arrears_days'],
+                'amount_residual': move_id['amount_residual'],
+                'debt_status': move_id['debt_status'],
                 'amount_paid_receipt_item': 0,
                 'amount_discount': 0,
                 'amount_penalty_forecast': 0,
@@ -427,13 +427,13 @@ class ReportXslxFinancialPartnerStatement(ReportXlsxFinancialBase):
                             move_line_id['amount_paid_receipt_item'],
                         'arrears_days': move_line_id['amount_discount'],
                         'amount_residual': 0,
-                        'amount_discount': move_line_id[u'amount_discount'],
+                        'amount_discount': move_line_id['amount_discount'],
                         'amount_penalty_forecast':
                             move_line_id['amount_penalty_forecast'],
                         'amount_interest_forecast':
                             move_line_id['amount_interest_forecast'],
-                        'date_payment': move_line_id[u'date_payment'],
-                        'amount_total': move_line_id[u'amount_total'],
+                        'date_payment': move_line_id['date_payment'],
+                        'amount_total': move_line_id['amount_total'],
                         'debt_status': '',
                         'amount_paid': 0,
                     }

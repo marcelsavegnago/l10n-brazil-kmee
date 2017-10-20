@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 
 from odoo.report import report_sxw
 from odoo import fields
@@ -234,7 +234,7 @@ class ReportXlsxBase(ReportXlsx):
                                    self.define_group_footer_default_style())
 
     def _set_column_width(self):
-        for position, column in iter(self.columns.items()):
+        for position, column in iter(list(self.columns.items())):
             self.sheet.set_column(position, position, column['width'])
 
     def write_title(self):
@@ -254,7 +254,7 @@ class ReportXlsxBase(ReportXlsx):
 
         self.current_row += 1
 
-        for position, filter in iter(filters.items()):
+        for position, filter in iter(list(filters.items())):
             title = filter['title']
             value = filter['value']
             style = filter.get('style', self.style.header.align_left)
@@ -277,7 +277,7 @@ class ReportXlsxBase(ReportXlsx):
         if columns is None:
             columns = self.columns
 
-        for current_column, column in iter(columns.items()):
+        for current_column, column in iter(list(columns.items())):
             self.sheet.write(self.current_row, current_column,
                              column['header'], self.style.header.align_center)
         self.current_row += 1
@@ -294,17 +294,17 @@ class ReportXlsxBase(ReportXlsx):
         else:
             first_row = last_row
 
-        first_column = self.columns.keys()[0]
-        last_column = self.columns.keys()[-1]
+        first_column = list(self.columns.keys())[0]
+        last_column = list(self.columns.keys())[-1]
         if last_column >= 1:
             penultimate_column = last_column - 1
         else:
             penultimate_column = first_column
 
-        for current_column, column in iter(columns.items()):
+        for current_column, column in iter(list(columns.items())):
             style = column.get('style', self.style.detail.align_left)
 
-            if isinstance(style, basestring):
+            if isinstance(style, str):
                 style = getattr(self.style.detail, style,
                                 self.style.detail.align_left)
 

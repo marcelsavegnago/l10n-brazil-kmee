@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-# Copyright 2016 KMEE
+#
+# Copyright 2017 KMEE - Átila Graciano <atilla.silva@kmee.com.br>
+# Copyright 2017 KMEE - Bianca Bartolomei <bianca.bartolomei@kmee.com.br>
+# Copyright 2017 KMEE - Wagner Pereira <wagner.pereira@kmee.com.br>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
@@ -23,6 +26,7 @@
     },
     'data': [
         'views/menus.xml',
+        'views/codigo_aliquota_FPAS.xml',
         'views/categoria_trabalhador.xml',
         'views/financiamento_aposentadoria.xml',
         'views/natureza_rubrica.xml',
@@ -45,6 +49,7 @@
         'views/codificacao_acidente_trabalho.xml',
         'views/fatores_meio_ambiente.xml',
         'data/natureza_lesao.xml',
+        'data/codigo_aliquota_FPAS.xml',
         'data/tipo_arquivo_esocial.xml',
         'data/tipo_lotacao_tributaria.xml',
         'data/categoria_trabalhador.xml',
@@ -65,7 +70,9 @@
         'data/motivo_cessacao.xml',
         'data/tipo_beneficio.xml',
         'data/codificacao_acidente_trabalho.xml',
-        'data/fatores_meio_ambiente.xml'
+        'data/fatores_meio_ambiente.xml',
+        'security/esocial_security.xml',
+        'security/ir.model.access.csv',
     ],
     'application': True,
 }

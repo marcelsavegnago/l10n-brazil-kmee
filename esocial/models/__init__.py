@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 KMEE - Luis Felipe Miléo <mileo@kmee.com.br>
-# Copyright 2016 KMEE - Hendrix Costa <hendrix.costa@kmee.com.br>
-# Copyright 2017 KMEE - Aristides Caldeira <aristides.caldeira@kmee.com.br>
+# Copyright 2017 KMEE - Átila Graciano <atilla.silva@kmee.com.br>
+# Copyright 2017 KMEE - Bianca Bartolomei <bianca.bartolomei@kmee.com.br>
+# Copyright 2017 KMEE - Wagner Pereira <wagner.pereira@kmee.com.br>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 
@@ -27,3 +27,6 @@ from . import codificacao_acidente_trabalho
 from . import tipo_arquivo_esocial
 from . import tipo_lotacao_tributaria
 from . import fatores_meio_ambiente
+from . import codigo_aliquota_FPAS
+from . import FPAS_classificacao_tributaria
+from . import tipos_lotacao_classificacao

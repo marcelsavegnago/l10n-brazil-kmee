@@ -6,18 +6,18 @@
 -->
 <odoo>
 
-    <record model="ir.ui.view" id="esocial.financiamento_aposentadoria_form">
+    <record model="ir.ui.view" id="esocial.financiamento_aposentadoria_form" >
         <field name="name">esocial.financiamento_aposentadoria_form</field>
         <field name="model">esocial.financiamento_aposentadoria</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <form string="Financiamento da Aposentadoria Especial"
+            <form string="Financiamento da Aposent. Especial e Redução do Tempo de Contrib."
             edit="false" create="false" delete="false">
                 <sheet>
                     <group>
-                        <group name="geral" colspan="2" col="2">
+                        <group name="geral" colspan="2" col="4">
                             <field name="codigo"/>
-                            <field name="nome" />
+                            <field name="nome" colspan="4" />
                         </group>
                     </group>
                 </sheet>
@@ -30,7 +30,7 @@
         <field name="model">esocial.financiamento_aposentadoria</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <tree string="Financiamento da Aposentadoria Especial"
+            <tree string="Categoria do Trabalhador"
             edit="false" create="false" delete="false">
                 <field name="codigo" />
                 <field name="nome" />
@@ -43,7 +43,7 @@
         <field name="model">esocial.financiamento_aposentadoria</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <search string="Financiamento da Aposentadoria Especial">
+            <search string="Categoria do Trabalhador">
                 <field name="codigo" />
                 <field name="nome" />
             </search>
@@ -51,7 +51,7 @@
     </record>
 
     <record model="ir.actions.act_window" id="financiamento_aposentadoria_action">
-        <field name="name">Financiamento da Aposentadoria Especial</field>
+        <field name="name">Categorias de Trabalhadores</field>
         <field name="res_model">esocial.financiamento_aposentadoria</field>
         <field name="view_mode">tree,form</field>
     </record>
@@ -73,7 +73,7 @@
     <menuitem
         action="esocial.financiamento_aposentadoria_action"
         id="menu_esocial_financiamento_aposentadoria"
-        name="02-Finan.Apos.Especial"
+        name="02-Financiamento da Aposent. Especial e Redução do Tempo de Contrib."
         parent="menu_esocial_tabelas"
         sequence="02"
     />

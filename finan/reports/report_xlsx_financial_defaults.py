@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from __future__ import division, print_function, unicode_literals
+
 import html2text
 from odoo import _
 from odoo import fields
@@ -351,7 +351,7 @@ class ReportXslxFinancialDefault(ReportXlsxFinancialBase):
                     if line_position == 0 or line['participante_id'] != \
                             partner_last_line:
                         partner = self.env['sped.participante'].browse(
-                            line[u'participante_id'])
+                            line['participante_id'])
                         partner_cnpj_cpf = " - " + \
                                            partner.cnpj_cpf if \
                             partner.cnpj_cpf else ""
@@ -378,7 +378,7 @@ class ReportXslxFinancialDefault(ReportXlsxFinancialBase):
                         message_columns_head = \
                             self.define_columns_messages_header()
                         for current_column, column in iter(
-                                message_columns_head.items()):
+                                list(message_columns_head.items())):
                             self.sheet.write(self.current_row, current_column,
                                              column['header'],
                                              self.style.header.align_center)
@@ -431,7 +431,7 @@ class ReportXslxFinancialDefault(ReportXlsxFinancialBase):
                     if line_position == 0 or line['participante_id'] != \
                             partner_last_line:
                         partner = self.env['sped.participante'].browse(
-                            line[u'partner_id'])
+                            line['partner_id'])
                         partner_cnpj_cpf = " - " + \
                                            partner.cnpj_cpf if \
                             partner.cnpj_cpf else ""
@@ -458,7 +458,7 @@ class ReportXslxFinancialDefault(ReportXlsxFinancialBase):
                         message_columns_head = \
                             self.define_columns_messages_header()
                         for current_column, column in iter(
-                                message_columns_head.items()):
+                                list(message_columns_head.items())):
                             self.sheet.write(self.current_row, current_column,
                                              column['header'],
                                              self.style.header.align_center)

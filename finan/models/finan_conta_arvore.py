@@ -2,7 +2,7 @@
 # Copyright 2017 KMEE
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from __future__ import division, print_function, unicode_literals
+
 
 
 from odoo import api, fields, models, _
@@ -183,7 +183,7 @@ create index finan_conta_arvore_nivel
 
 
 class FinanContaArvore(models.Model):
-    _name = b'finan.conta.arvore'
+    _name = 'finan.conta.arvore'
     _description = 'Conta Financeira - Árvore de Análise'
     _auto = False
 

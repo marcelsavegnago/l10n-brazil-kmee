@@ -2,7 +2,7 @@
 # Copyright 2017 KMEE
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -22,7 +22,7 @@ except (ImportError, IOError) as err:
 
 
 class FinanLancamento(SpedBase, models.Model):
-    _name = b'finan.lancamento'
+    _name = 'finan.lancamento'
     _description = 'Lançamento Financeiro'
     _inherit = ['mail.thread']
     _order = 'data_vencimento_util, numero, id desc'
@@ -1041,7 +1041,7 @@ class FinanLancamento(SpedBase, models.Model):
 
 
 #class FinanLancamentoMotivoCancelamento(models.Model):
-    #_name = b'finan.lancamento.motivo.cancelamento'
+    #_name = 'finan.lancamento.motivo.cancelamento'
     #_rec_name = 'motivo_cancelamento'
 
     #motivo_cancelamento = fields.Char(

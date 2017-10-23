@@ -51,13 +51,14 @@ class SpedCEST(models.Model):
     @api.depends('codigo', 'descricao')
     def _compute_cest(self):
         for cest in self:
-            cest.codigo_formatado = (
-                cest.codigo[:2] + '.' +
-                cest.codigo[2:5] + '.' +
-                cest.codigo[5:]
-            )
-            cest.cest = cest.codigo_formatado
-            cest.cest += ' - ' + cest.descricao[:60]
+            if cest.codigo and cest.descricao:
+                cest.codigo_formatado = (
+                    cest.codigo[:2] + '.' +
+                    cest.codigo[2:5] + '.' +
+                    cest.codigo[5:]
+                )
+                cest.cest = cest.codigo_formatado
+                cest.cest += ' - ' + cest.descricao[:60]
 
     @api.depends('codigo')
     def _check_codigo(self):

@@ -6,5 +6,5 @@
 #
 
 
-from . import inherited_make_procurement
+# from . import inherited_make_procurement
 from . import inherited_change_product_quantity

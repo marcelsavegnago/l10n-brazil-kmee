@@ -2,7 +2,7 @@
 # Copyright 2017 KMEE
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from __future__ import division, print_function, unicode_literals
+
 
 import logging
 
@@ -28,7 +28,7 @@ class SaleOrderLine(SpedCalculoImpostoItem, models.Model):
     _abstract = False
 
     is_brazilian = fields.Boolean(
-        string=u'Is a Brazilian Invoice?',
+        string='Is a Brazilian Invoice?',
         related='order_id.is_brazilian',
     )
     #
@@ -203,7 +203,7 @@ class SaleOrderLine(SpedCalculoImpostoItem, models.Model):
     def _get_customer_lead(self):
         for record in self:
             ir_values = self.env['ir.values']
-            dias_definidos = ir_values.get_default('sale.config.settings',
+            dias_definidos = ir_values.get_default('res.config.settings',
                                             'dias_vencimento_cotacao')
             record.customer_lead = dias_definidos
 

@@ -6,7 +6,7 @@
     'name': 'Sped Compras',
     'summary': """
         Compras Brasileira""",
-    'version': '10.0.1.0.0',
+    'version': '11.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'KMEE,Odoo Community Association (OCA)',
     'website': 'www.kmee.com.br',
@@ -21,8 +21,8 @@
         'views/purchase_order.xml',
     ],
     'demo': [
-        'demo/purchase_order_line.xml',
-        'demo/purchase_order.xml',
+        # 'demo/purchase_order_line.xml',
+        # 'demo/purchase_order.xml',
     ],
     'installable': True,
 }

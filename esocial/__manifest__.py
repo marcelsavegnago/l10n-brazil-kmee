@@ -68,9 +68,8 @@
         'data/tipo_beneficio.xml',
         'data/codificacao_acidente_trabalho.xml',
         'data/fatores_meio_ambiente.xml',
-
-         'security/esocial_security.xml',
-         'security/ir.model.access.csv',
+        'security/esocial_security.xml',
+        'security/ir.model.access.csv',
     ],
     'application': True,
 }

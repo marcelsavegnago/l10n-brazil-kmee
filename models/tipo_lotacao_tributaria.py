@@ -7,29 +7,45 @@
 
 from odoo import api, fields, models
 
-
 class TipoLotacaoTributaria(models.Model):
-    _name = 'esocial.tipo_lotacao_tributaria'
+    _name = 'esocial.lotacao_tributaria'
     _description = 'Tipos de Lotação Tributária'
     _order = 'codigo'
+    _rec_name = 'name'
     _sql_constraints = [
         ('codigo',
          'unique(codigo)',
          'Este código já existe !'
          )
     ]
-
     codigo = fields.Char(
         size=2,
         string='Codigo',
-        required=True,
     )
-    descricao = fields.Char(
+
+    nome = fields.Text(
         string='Nome',
+    )
+
+    codigo_trabalhador_ids = fields.Many2many(
+        'esocial.categoria_trabalhador',
+        string='Codigo',
+        relation = 'trabalhador_tributaria_ids',
+    )
+
+
+    codigo_tributaria_classificacao_ids = fields.Many2many(
+        'esocial.classificacao_tributaria',
+        string='Codigo',
+        relation='tributaria_classificacao_ids',
+    )
+
+    descricao = fields.Char(
+        string='Descrição',
         required=True,
     )
     preenchimento_campo = fields.Char(
-        string='Preenchimento do campo {nrInsc}',
+        string=u'Preenchimento do campo {nrInsc}',
         required=True,
     )
     name = fields.Char(
@@ -52,7 +68,14 @@ class TipoLotacaoTributaria(models.Model):
                     lotacao.codigo = False
                     return res
 
-    @api.depends('codigo', 'descricao', 'preenchimento_campo')
+    @api.depends('codigo', 'descricao')
     def _compute_name(self):
         for lotacao in self:
-            lotacao.name = lotacao.codigo + '-' + lotacao.descricao + '-' + lotacao.preenchimento_campo
+            lotacao.name = lotacao.codigo
+
+    @api.multi
+    def name_get(self):
+        result = []
+        for s in self:
+            result.append((s.id, s.name))
+        return result

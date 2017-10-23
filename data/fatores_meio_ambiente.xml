@@ -6,10 +6,17 @@
         <field name="codigo">codigo</field>
         <field name="nome">nome</field>
     </record>
+<<<<<<< HEAD
     <record id="tab23_101000" model="esocial.fatores_meio_ambiente">
         <field name="codigo">01.01.000</field>
         <field name="nome">FÍSICOS</field>
     </record>
+=======
+    <!--<record id="tab23_101000" model="esocial.fatores_meio_ambiente">-->
+        <!--<field name="codigo">01.01.000</field>-->
+        <!--<field name="nome">FÍSICOS</field>-->
+    <!--</record>-->
+>>>>>>> 2af478f... [ADD] permissoes, todos as tabelas
     <record id="tab23_101001" model="esocial.fatores_meio_ambiente">
         <field name="codigo">01.01.001</field>
         <field name="nome">Infrassom e sons de baixa frequência</field>
@@ -90,10 +97,17 @@
         <field name="codigo">01.01.999</field>
         <field name="nome">Outros</field>
     </record>
+<<<<<<< HEAD
     <record id="tab23_201000" model="esocial.fatores_meio_ambiente">
         <field name="codigo">02.01.000</field>
         <field name="nome">QUIMICOS</field>
     </record>
+=======
+    <!--<record id="tab23_201000" model="esocial.fatores_meio_ambiente">-->
+        <!--<field name="codigo">02.01.000</field>-->
+        <!--<field name="nome">QUIMICOS</field>-->
+    <!--</record>-->
+>>>>>>> 2af478f... [ADD] permissoes, todos as tabelas
     <record id="tab23_201001" model="esocial.fatores_meio_ambiente">
         <field name="codigo">02.01.001</field>
         <field name="nome">Acetaldeído</field>
@@ -3462,10 +3476,17 @@
         <field name="codigo">02.01.999</field>
         <field name="nome">Outros</field>
     </record>
+<<<<<<< HEAD
     <record id="tab23_301000" model="esocial.fatores_meio_ambiente">
         <field name="codigo">03.01.000</field>
         <field name="nome">BIOLÓGICO</field>
     </record>
+=======
+    <!--<record id="tab23_301000" model="esocial.fatores_meio_ambiente">-->
+        <!--<field name="codigo">03.01.000</field>-->
+        <!--<field name="nome">BIOLÓGICO</field>-->
+    <!--</record>-->
+>>>>>>> 2af478f... [ADD] permissoes, todos as tabelas
     <record id="tab23_301001" model="esocial.fatores_meio_ambiente">
         <field name="codigo">03.01.001</field>
         <field name="nome">Trabalho ou operações, em contato permanente com pacientes em isolamento por doenças infecto-contagiosas, bem como objetos de seu uso, não previamente esterilizados</field>
@@ -3546,10 +3567,17 @@
         <field name="codigo">03.01.999</field>
         <field name="nome">Outros</field>
     </record>
+<<<<<<< HEAD
     <record id="tab23_401000" model="esocial.fatores_meio_ambiente">
         <field name="codigo">04.01.000</field>
         <field name="nome">ERGONÔMICO - BIOMECÂNICOS</field>
     </record>
+=======
+    <!--<record id="tab23_401000" model="esocial.fatores_meio_ambiente">-->
+        <!--<field name="codigo">04.01.000</field>-->
+        <!--<field name="nome">ERGONÔMICO - BIOMECÂNICOS</field>-->
+    <!--</record>-->
+>>>>>>> 2af478f... [ADD] permissoes, todos as tabelas
     <record id="tab23_401001" model="esocial.fatores_meio_ambiente">
         <field name="codigo">04.01.001</field>
         <field name="nome">Exigência de posturas incômodas ou pouco confortáveis por longos períodos</field>
@@ -3590,10 +3618,17 @@
         <field name="codigo">04.01.999</field>
         <field name="nome">Outros</field>
     </record>
+<<<<<<< HEAD
     <record id="tab23_402000" model="esocial.fatores_meio_ambiente">
         <field name="codigo">04.02.000</field>
         <field name="nome">ERGONÔMICO - MOBILIÁRIO E EQUIPAMENTOS</field>
     </record>
+=======
+    <!--<record id="tab23_402000" model="esocial.fatores_meio_ambiente">-->
+        <!--<field name="codigo">04.02.000</field>-->
+        <!--<field name="nome">ERGONÔMICO - MOBILIÁRIO E EQUIPAMENTOS</field>-->
+    <!--</record>-->
+>>>>>>> 2af478f... [ADD] permissoes, todos as tabelas
     <record id="tab23_402001" model="esocial.fatores_meio_ambiente">
         <field name="codigo">04.02.001</field>
         <field name="nome">Mobiliário sem meios de regulagem de ajuste</field>
@@ -3606,10 +3641,17 @@
         <field name="codigo">04.02.999</field>
         <field name="nome">Outros</field>
     </record>
+<<<<<<< HEAD
     <record id="tab23_403000" model="esocial.fatores_meio_ambiente">
         <field name="codigo">04.03.000</field>
         <field name="nome">ERGONÔMICO - ORGANIZACIONAIS</field>
     </record>
+=======
+    <!--<record id="tab23_403000" model="esocial.fatores_meio_ambiente">-->
+        <!--<field name="codigo">04.03.000</field>-->
+        <!--<field name="nome">ERGONÔMICO - ORGANIZACIONAIS</field>-->
+    <!--</record>-->
+>>>>>>> 2af478f... [ADD] permissoes, todos as tabelas
     <record id="tab23_403001" model="esocial.fatores_meio_ambiente">
         <field name="codigo">04.03.001</field>
         <field name="nome">Ausência de pausas para descanso ou não cumprimento destas durante a jornada</field>
@@ -3638,10 +3680,17 @@
         <field name="codigo">04.03.999</field>
         <field name="nome">Outros</field>
     </record>
+<<<<<<< HEAD
     <record id="tab23_404000" model="esocial.fatores_meio_ambiente">
         <field name="codigo">04.04.000</field>
         <field name="nome">ERGONÔMICO - PSICOSSOCIAIS / COGNITIVOS</field>
     </record>
+=======
+    <!--<record id="tab23_404000" model="esocial.fatores_meio_ambiente">-->
+        <!--<field name="codigo">04.04.000</field>-->
+        <!--<field name="nome">ERGONÔMICO - PSICOSSOCIAIS / COGNITIVOS</field>-->
+    <!--</record>-->
+>>>>>>> 2af478f... [ADD] permissoes, todos as tabelas
     <record id="tab23_404001" model="esocial.fatores_meio_ambiente">
         <field name="codigo">04.04.001</field>
         <field name="nome">Situações de estresse</field>
@@ -3662,10 +3711,17 @@
         <field name="codigo">04.04.999</field>
         <field name="nome">Outros</field>
     </record>
+<<<<<<< HEAD
     <record id="tab23_501000" model="esocial.fatores_meio_ambiente">
         <field name="codigo">05.01.000</field>
         <field name="nome">MECÂNICO/ACIDENTES</field>
     </record>
+=======
+    <!--<record id="tab23_501000" model="esocial.fatores_meio_ambiente">-->
+        <!--<field name="codigo">05.01.000</field>-->
+        <!--<field name="nome">MECÂNICO/ACIDENTES</field>-->
+    <!--</record>-->
+>>>>>>> 2af478f... [ADD] permissoes, todos as tabelas
     <record id="tab23_501001" model="esocial.fatores_meio_ambiente">
         <field name="codigo">05.01.001</field>
         <field name="nome">Trabalho em altura</field>
@@ -3738,10 +3794,17 @@
         <field name="codigo">05.01.999</field>
         <field name="nome">Outros</field>
     </record>
+<<<<<<< HEAD
     <record id="tab23_601000" model="esocial.fatores_meio_ambiente">
         <field name="codigo">06.01.000</field>
         <field name="nome">PERICULOSOS</field>
     </record>
+=======
+    <!--<record id="tab23_601000" model="esocial.fatores_meio_ambiente">-->
+        <!--<field name="codigo">06.01.000</field>-->
+        <!--<field name="nome">PERICULOSOS</field>-->
+    <!--</record>-->
+>>>>>>> 2af478f... [ADD] permissoes, todos as tabelas
     <record id="tab23_601001" model="esocial.fatores_meio_ambiente">
         <field name="codigo">06.01.001</field>
         <field name="nome">Explosivos</field>
@@ -3770,10 +3833,17 @@
         <field name="codigo">06.01.999</field>
         <field name="nome">Outros</field>
     </record>
+<<<<<<< HEAD
     <record id="tab23_701000" model="esocial.fatores_meio_ambiente">
         <field name="codigo">07.01.000</field>
         <field name="nome">PENOSOS</field>
     </record>
+=======
+    <!--<record id="tab23_701000" model="esocial.fatores_meio_ambiente">-->
+        <!--<field name="codigo">07.01.000</field>-->
+        <!--<field name="nome">PENOSOS</field>-->
+    <!--</record>-->
+>>>>>>> 2af478f... [ADD] permissoes, todos as tabelas
     <record id="tab23_701001" model="esocial.fatores_meio_ambiente">
         <field name="codigo">07.01.001</field>
         <field name="nome">Decisão judicial</field>
@@ -3790,10 +3860,17 @@
         <field name="codigo">07.01.999</field>
         <field name="nome">Outros</field>
     </record>
+<<<<<<< HEAD
     <record id="tab23_801000" model="esocial.fatores_meio_ambiente">
         <field name="codigo">08.01.000</field>
         <field name="nome">ASSOCIAÇÃO DE FATORES DE RISCO</field>
     </record>
+=======
+    <!--<record id="tab23_801000" model="esocial.fatores_meio_ambiente">-->
+        <!--<field name="codigo">08.01.000</field>-->
+        <!--<field name="nome">ASSOCIAÇÃO DE FATORES DE RISCO</field>-->
+    <!--</record>-->
+>>>>>>> 2af478f... [ADD] permissoes, todos as tabelas
     <record id="tab23_801001" model="esocial.fatores_meio_ambiente">
         <field name="codigo">08.01.001</field>
         <field name="nome">Mineração subterrânea cujas atividades sejam exercidas afastadas das frentes de produção</field>
@@ -3806,10 +3883,17 @@
         <field name="codigo">08.01.999</field>
         <field name="nome">Outros</field>
     </record>
+<<<<<<< HEAD
     <record id="tab23_901000" model="esocial.fatores_meio_ambiente">
         <field name="codigo">09.01.000</field>
         <field name="nome">AUSÊNCIA DE FATORES DE RISCO</field>
     </record>
+=======
+    <!--<record id="tab23_901000" model="esocial.fatores_meio_ambiente">-->
+        <!--<field name="codigo">09.01.000</field>-->
+        <!--<field name="nome">AUSÊNCIA DE FATORES DE RISCO</field>-->
+    <!--</record>-->
+>>>>>>> 2af478f... [ADD] permissoes, todos as tabelas
     <record id="tab23_901001" model="esocial.fatores_meio_ambiente">
         <field name="codigo">09.01.001</field>
         <field name="nome">Ausência de Fator de Risco</field>

@@ -28,10 +28,12 @@
                             <field name="codigo"/>
                             <field name="grupo"/>
                             <field name="nome" colspan="4" />
-                            <newline />
-                            <field name="descricao" colspan="4" nolabel="1" />
-                            <newline />
+                            <field name="classificacao_tributaria"/>
                         </group>
+                        <newline />
+                            <field name="descricao" colspan="4" nolabel="1" />
+                            <field name="codigo_tributaria_ids" widget="many2many"></field>
+                        <newline />
                     </group>
                 </sheet>
             </form>

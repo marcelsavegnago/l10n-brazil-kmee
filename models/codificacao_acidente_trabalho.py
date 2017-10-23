@@ -50,7 +50,7 @@ class CodificacaoAcidenteTrabalho(models.Model):
     @api.depends('codigo', 'nome')
     def _compute_name(self):
         for c in self:
-            c.name = c.codigo + '-' + c.nome
+            c.name = c.codigo
 
 
 

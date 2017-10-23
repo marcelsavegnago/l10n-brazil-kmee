@@ -28,6 +28,12 @@ class CategoriaTrabalhador(models.Model):
          )
     ]
 
+    codigo_tributaria_ids = fields.Many2many(
+        'esocial.lotacao_tributaria',
+        string='Codigo',
+        relation='trabalhador_tributaria_ids',
+    )
+
     codigo = fields.Char(
         size=3,
         string='Codigo',
@@ -36,6 +42,9 @@ class CategoriaTrabalhador(models.Model):
     nome = fields.Char(
         string='Nome',
         required=True,
+    )
+    classificacao_tributaria = fields.Text(
+        string='Classificação Tributária'
     )
     descricao = fields.Text(
         string='Descrição',

@@ -32,6 +32,7 @@ from . import tipo_arquivo_esocial
 from . import tipo_lotacao_tributaria
 from . import fatores_meio_ambiente
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 from . import tipo_beneficio
 >>>>>>> c7e221e... [ADD] Tabelas eSocial 01, 02, 03, 13, 14, 15, 16, 17, 18 , 19, 20 , 21, 25 e 26
@@ -51,3 +52,8 @@ from . import tipo_lotacao_tributaria
 >>>>>>> 84247a3... [ADD] tabelas 9 e 10 feitas
 =======
 >>>>>>> 68e66ce... [ADD]Módulo 23
+=======
+from . import codigo_aliquota_FPAS
+from . import FPAS_classificacao_tributaria
+from . import tipos_lotacao_classificacao
+>>>>>>> 2af478f... [ADD] permissoes, todos as tabelas

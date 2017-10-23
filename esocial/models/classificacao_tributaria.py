@@ -8,7 +8,7 @@
 from odoo import api, fields, models, _
 
 
-class AgenteCausador(models.Model):
+class ClassificacaoTributaria(models.Model):
     _name = 'esocial.classificacao_tributaria'
     _description = 'Classificação Tributária'
     _order = 'codigo'
@@ -18,14 +18,24 @@ class AgenteCausador(models.Model):
          'Este código já existe !'
          )
     ]
+    codigo_tributaria_classificacao_ids = fields.Many2many(
+        'esocial.lotacao_tributaria',
+        string='Codigo',
+        relation='tributaria_classificacao_ids',
+    )
+    codigo_tributaria_fpas_ids = fields.Many2many(
+        'esocial.codigo_aliquota',
+        string='Codigo',
+        relation='tributaria_fpas_ids',
+    )
 
     codigo = fields.Char(
         size=2,
-        string='Codigo',
+        string='Código',
         required=True,
     )
     descricao = fields.Char(
-        string='Nome',
+        string='Classificação Tributária',
         required=True,
     )
     name = fields.Char(
@@ -50,4 +60,4 @@ class AgenteCausador(models.Model):
     @api.depends('codigo', 'descricao')
     def _compute_name(self):
         for classificacao in self:
-            classificacao.name = classificacao.codigo + '-' + classificacao.descricao
+            classificacao.name = classificacao.codigo

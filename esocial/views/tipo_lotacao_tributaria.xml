@@ -5,47 +5,50 @@
     License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 -->
 <odoo>
-
-    <record model="ir.ui.view" id="esocial.tipo_lotacao_tributaria_form" >
-        <field name="name">esocial.tipo_lotacao_tributaria_form</field>
-        <field name="model">esocial.tipo_lotacao_tributaria</field>
+    <record model="ir.ui.view" id="esocial.lotacao_tributaria_form" >
+        <field name="name">esocial.lotacao_tributaria_form</field>
+        <field name="model">esocial.lotacao_tributaria</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
             <form string="Tipos de Lotação Tributária"
-            edit="false" create="false" delete="false">
+                edit="false" create="false" delete="false">
                 <sheet>
                     <group>
-                        <group name="geral" colspan="2" col="3">
+                        <group name="geral" colspan="1" col="3">
                             <field name="codigo"/>
-                            <field name="descricao" colspan="2" />
+                            <field name="nome"/>
                             <field name="preenchimento_campo"></field>
                         </group>
+                        <field name="descricao"/>
+                            <field name="codigo_tributaria_classificacao_ids" widget="many2many" clickable="True"/>
+                        <newline />
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record model="ir.ui.view" id="esocial.tipo_lotacao_tributaria_tree">
-        <field name="name">esocial.tipo_lotacao_tributaria_view</field>
-        <field name="model">esocial.tipo_lotacao_tributaria</field>
+    <record model="ir.ui.view" id="esocial.lotacao_tributaria_tree">
+        <field name="name">esocial.lotacao_tributaria_view</field>
+        <field name="model">esocial.lotacao_tributaria</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
             <tree string="Tipos de Lotação Tributária"
             edit="false" create="false" delete="false">
                 <field name="codigo" />
-                <field name="descricao" />
-                <field name="preenchimento_campo"></field>
+                <field name="nome"/>
+                <field name="preenchimento_campo" />
             </tree>
         </field>
     </record>
 
-    <record model="ir.ui.view" id="tipo_lotacao_tributaria_search">
-        <field name="name">esocial.tipo_lotacao_tributaria_search</field>
-        <field name="model">esocial.tipo_lotacao_tributaria</field>
+    <record model="ir.ui.view" id="lotacao_tributaria_search">
+        <field name="name">esocial.lotacao_tributaria_search</field>
+        <field name="model">esocial.lotacao_tributaria</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
             <search string="Tipos de Lotação Tributária">
+                <field name="nome" />
                 <field name="codigo" />
                 <field name="descricao"/>
                 <field name="preenchimento_campo"/>
@@ -53,29 +56,29 @@
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="tipo_lotacao_tributaria_action">
+    <record model="ir.actions.act_window" id="lotacao_tributaria_action">
         <field name="name">Tipos de Lotação Tributária</field>
-        <field name="res_model">esocial.tipo_lotacao_tributaria</field>
+        <field name="res_model">esocial.lotacao_tributaria</field>
         <field name="view_mode">tree,form</field>
     </record>
 
-    <record model="ir.actions.act_window.view" id="tipo_lotacao_tributaria_tree_action">
+    <record model="ir.actions.act_window.view" id="lotacao_tributaria_tree_action">
         <field eval="1" name="sequence"/>
         <field name="view_mode">tree</field>
-        <field name="view_id" ref="tipo_lotacao_tributaria_tree"/>
-        <field name="act_window_id" ref="tipo_lotacao_tributaria_action"/>
+        <field name="view_id" ref="lotacao_tributaria_tree"/>
+        <field name="act_window_id" ref="lotacao_tributaria_action"/>
     </record>
 
-    <record model="ir.actions.act_window.view" id="tipo_lotacao_tributaria_form_action">
+    <record model="ir.actions.act_window.view" id="lotacao_tributaria_form_action">
         <field eval="2" name="sequence"/>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="tipo_lotacao_tributaria_form"/>
-        <field name="act_window_id" ref="tipo_lotacao_tributaria_action"/>
+        <field name="view_id" ref="lotacao_tributaria_form"/>
+        <field name="act_window_id" ref="lotacao_tributaria_action"/>
     </record>
 
     <menuitem
-        action="esocial.tipo_lotacao_tributaria_action"
-        id="menu_esocial_tipo_lotacao_tributaria"
+        action="esocial.lotacao_tributaria_action"
+        id="menu_esocial_lotacao_tributaria"
         name="10-Tipos de Lotação Tributária"
         parent="menu_esocial_tabelas"
         sequence="10"

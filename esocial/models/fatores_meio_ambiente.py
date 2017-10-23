@@ -8,9 +8,9 @@
 from odoo import api, fields, models
 
 
-class CodificacaoAcidenteTrabalho(models.Model):
-    _name = 'esocial.codificacao_acidente_trabalho'
-    _description = 'Codificação Acidente de Trabalho'
+class FatoresRiscoMeioAmbiente(models.Model):
+    _name = 'esocial.fatores_meio_ambiente'
+    _description = 'Fatores de Risco do Meio Ambiente do Trabalho'
     _order = 'name'
     _sql_constraints = [
         ('codigo',
@@ -19,7 +19,7 @@ class CodificacaoAcidenteTrabalho(models.Model):
     ]
 
     codigo = fields.Char(
-        size=6,
+        size=9,
         string='Codigo',
         required=True,
     )
@@ -50,7 +50,7 @@ class CodificacaoAcidenteTrabalho(models.Model):
     @api.depends('codigo', 'nome')
     def _compute_name(self):
         for c in self:
-            c.name = c.codigo
+            c.name = c.codigo + '-' + c.nome
 
 
 

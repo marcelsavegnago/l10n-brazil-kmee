@@ -26,3 +26,7 @@ from . import classificacao_tributaria
 from . import codificacao_acidente_trabalho
 from . import tipo_arquivo_esocial
 from . import tipo_lotacao_tributaria
+from . import fatores_meio_ambiente
+from . import codigo_aliquota_FPAS
+from . import FPAS_classificacao_tributaria
+from . import tipos_lotacao_classificacao

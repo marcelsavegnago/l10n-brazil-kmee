@@ -63,9 +63,9 @@ Images
 Contributors
 ------------
 
-* Luis Felipe Mileo <mileo@kmee.com.br>
-* Bruna Braga <bruna.braga@kmee.com.br>
-* Albert De La Fuente <albert.fuente@kmee.com.br>
+* Átila Graciano <atilla.silva@kmee.com.br>
+* Bianca Bartolomei <bianca.bartolomei@kmee.com.br>
+* Wagner Pereira <wagner.pereira@kmee.com.br>
 
 Maintainer
 ----------

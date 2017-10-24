@@ -794,7 +794,6 @@ class SpedParticipante(SpedBase, models.Model):
             'state_id': state_id,
             'phone': fone,
             'mobile': celular,
-            'fax': fax,
             'customer': self.eh_cliente,
             'supplier': self.eh_fornecedor,
             'website': self.site,

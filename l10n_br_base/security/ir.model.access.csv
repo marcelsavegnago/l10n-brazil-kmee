@@ -11,6 +11,10 @@ l10n_br_base.GRUPO_SUPORTE,l10n_br_base.model_sped_participante,Participante (su
 l10n_br_base.GRUPO_CADASTRO_LEITURA,l10n_br_base.model_sped_participante,Participante (somente leitura),sped_participante_grupo_cadastro_leitura,True,False,False,False
 l10n_br_base.GRUPO_CADASTRO_GERAL,l10n_br_base.model_sped_participante,Participante (geral),sped_participante_grupo_cadastro_geral,True,True,True,False
 l10n_br_base.GRUPO_CADASTRO_GERENTE,l10n_br_base.model_sped_participante,Participante (gerente),sped_participante_grupo_cadastro_gerente,True,True,True,True
+l10n_br_base.GRUPO_SUPORTE,l10n_br_base.model_sped_endereco,Participante (suporte),sped_participante_grupo_suporte,True,True,True,True
+l10n_br_base.GRUPO_CADASTRO_LEITURA,l10n_br_base.model_sped_participante,Participante (somente leitura),sped_participante_grupo_cadastro_leitura,True,False,False,False
+l10n_br_base.GRUPO_CADASTRO_GERAL,l10n_br_base.model_sped_participante,Participante (geral),sped_participante_grupo_cadastro_geral,True,True,True,False
+l10n_br_base.GRUPO_CADASTRO_GERENTE,l10n_br_base.model_sped_participante,Participante (gerente),sped_participante_grupo_cadastro_gerente,True,True,True,True
 l10n_br_base.GRUPO_SUPORTE,base.model_res_partner,Partner (suporte),res_partner_grupo_suporte,True,True,True,True
 l10n_br_base.GRUPO_CADASTRO_LEITURA,base.model_res_partner,Partner (somente leitura),res_partner_grupo_cadastro_leitura,True,False,False,False
 l10n_br_base.GRUPO_CADASTRO_GERAL,base.model_res_partner,Partner (geral),res_partner_grupo_cadastro_geral,True,True,True,False

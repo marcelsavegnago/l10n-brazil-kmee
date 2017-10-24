@@ -1,5 +1,5 @@
 -
-    Partner with valid CNPJ and Iscrição Estadual
+    Partner with valid Iscrição Estadual
 -
   !python {model: sped.participante}: |
     from openerp.exceptions import ValidationError

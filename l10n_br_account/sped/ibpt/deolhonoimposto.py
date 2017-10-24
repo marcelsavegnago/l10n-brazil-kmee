@@ -42,7 +42,7 @@ def _request(req):
 
 
 def get_ibpt_product(config, ncm, ex='0', reference=None, description=None,
-                     uom=None, amount=None, gtin=None):
+                     uom=None, amount=0, gtin=None):
 
     data = urllib.urlencode({
         'token': config.token,

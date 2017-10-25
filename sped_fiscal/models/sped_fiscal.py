@@ -8,6 +8,10 @@ from odoo import api, fields, models, _
 class SpedFiscal(models.Model):
 
     _name = 'sped.fiscal'
-    _description = 'Sped Fiscal'  # TODO
+    _description = 'Emissor do Sped Fiscal'
 
     name = fields.Char()
+
+    @api.multi
+    def gerar(self):
+        pass

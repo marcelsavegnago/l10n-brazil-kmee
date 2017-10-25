@@ -18,5 +18,6 @@
         'views/sped_fiscal.xml',
     ],
     'demo': [
+        'demo/gerar_sped_fiscal.yml',
     ],
 }

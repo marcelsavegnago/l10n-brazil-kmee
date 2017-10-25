@@ -1,0 +1,10 @@
+-
+  Geração do SPED FISCAL para uma Empresa do Regime normal
+-
+  !record {model: sped.fiscal, id: sped_fiscal_sped_empresa_regime_normal_sp}:
+    name: 'SPED FISCAL EMPRESA REGIME NORMAL'
+-
+  Clico no botão gerar do SPED FISCAL
+-
+  !python {model: sped.fiscal, id: sped_fiscal_sped_empresa_regime_normal_sp}: |
+    self.gerar()

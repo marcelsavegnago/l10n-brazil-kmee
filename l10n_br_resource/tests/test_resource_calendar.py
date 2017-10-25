@@ -200,12 +200,12 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
         self.assertEqual(total_dias_uteis, 22,
                          'ERRO: Total dias uteis mes Jan/2017 inválido')
 
-        data_inicio = fields.Datetime.from_string('2018-01-01 00:00:01')
+        data_inicio = fields.Datetime.from_string('2018-01-02 00:00:01')
         data_final = fields.Datetime.from_string('2018-01-31 23:59:59')
 
         total_dias_uteis = self.resource_calendar.quantidade_dias_uteis(
             data_inicio, data_final)
-        self.assertEqual(total_dias_uteis, 23,
+        self.assertEqual(total_dias_uteis, 21,
                          'ERRO: Total dias uteis mes Jan/2018 inválido')
 
     def test_10_data_eh_feriado_bancario(self):

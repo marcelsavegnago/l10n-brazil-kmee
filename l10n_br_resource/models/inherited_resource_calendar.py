@@ -195,9 +195,9 @@ class ResourceCalendar(models.Model):
         :return datetime Proximo dia util apartir da data referencia
         """
         while data_referencia:
+            data_referencia += timedelta(days=1)
             if self.data_eh_dia_util(data_referencia):
                 return data_referencia
-            data_referencia += timedelta(days=1)
 
     @api.multi
     def proximo_dia_util_bancario(self, data_referencia=datetime.now()):

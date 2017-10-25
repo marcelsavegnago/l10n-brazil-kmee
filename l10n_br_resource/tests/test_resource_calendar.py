@@ -205,7 +205,7 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
 
         total_dias_uteis = self.resource_calendar.quantidade_dias_uteis(
             data_inicio, data_final)
-        self.assertEqual(total_dias_uteis, 23,
+        self.assertEqual(total_dias_uteis, 21,
                          'ERRO: Total dias uteis mes Jan/2018 inválido')
 
     def test_10_data_eh_feriado_bancario(self):

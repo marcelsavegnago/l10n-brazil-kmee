@@ -13,7 +13,7 @@
         'l10n_br',
         'l10n_br_base',
         'account_cancel',
-        'account_fiscal_position_rule',
+        # 'account_fiscal_position_rule',
     ],
     'data': [
         'data/l10n_br_account.fiscal.document.csv',

@@ -205,7 +205,7 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
 
         total_dias_uteis = self.resource_calendar.quantidade_dias_uteis(
             data_inicio, data_final)
-        self.assertEqual(total_dias_uteis, 23,
+        self.assertEqual(total_dias_uteis, 21,
                          'ERRO: Total dias uteis mes Jan/2018 inválido')
 
     def test_10_data_eh_feriado_bancario(self):
@@ -225,3 +225,22 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
         data_eh_feriado_bancario = self.nacional_calendar_id.\
             data_eh_feriado_bancario(data)
         self.assertTrue(data_eh_feriado_bancario)
+
+
+        data = fields.Datetime.from_string('2017-10-26 09:02:01')
+        data_eh_feriado_bancario = self.nacional_calendar_id.\
+            data_eh_feriado_bancario(data)
+        self.assertFalse(data_eh_feriado_bancario)
+
+
+        self.test_calendar_id = self.resource_calendar.create({
+            'name': 'Calendario de Teste',
+            'country_id': self.env.ref("base.br").id,
+        })
+
+        data = fields.Datetime.from_string('2017-10-26 09:39:01')
+        data_eh_feriado_bancario = self.test_calendar_id.\
+            data_eh_feriado_bancario(data)
+        self.assertFalse(data_eh_feriado_bancario)
+
+

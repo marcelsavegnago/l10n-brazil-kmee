@@ -243,4 +243,41 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
             data_eh_feriado_bancario(data)
         self.assertFalse(data_eh_feriado_bancario)
 
+    def test_11_data_eh_dia_util_bancario(self):
+        #Verifica se data eh um dia util bancario
 
+        self.resource_leaves.create({
+            'name': 'Feriado Bancário',
+            'date_from': fields.Datetime.from_string('2017-01-13 00:00:00'),
+            'date_to': fields.Datetime.from_string('2017-01-13 23:59:59'),
+            'calendar_id': self.nacional_calendar_id.id,
+            'leave_kind': 'B',
+            'leave_scope': 'N',
+        })
+
+        segunda = fields.Datetime.from_string('2017-01-09 00:00:01')
+        feriado1 = fields.Datetime.from_string('2017-01-01 00:00:01')
+        quinta = fields.Datetime.from_string('2017-10-26 00:00:01')
+        domingo = fields.Datetime.from_string('2017-01-08 00:00:01')
+        feriado2 = fields.Datetime.from_string('2017-01-13 00:00:01')
+
+
+        self.assertTrue(
+            self.municipal_calendar_id.data_eh_dia_util_bancario(segunda),
+            "ERRO: Segunda eh dia util bancario!")
+
+        self.assertFalse(
+            self.municipal_calendar_id.data_eh_dia_util_bancario(feriado1),
+            "ERRO: Feriado nao eh dia util bancario!")
+
+        self.assertTrue(
+            self.municipal_calendar_id.data_eh_dia_util_bancario(quinta),
+            "ERRO: Quinta e dia util bancario!")
+
+        self.assertFalse(
+            self.municipal_calendar_id.data_eh_dia_util_bancario(domingo),
+            "ERRO: Domingo nao e dia util bancario!")
+
+        self.assertFalse(
+            self.municipal_calendar_id.data_eh_dia_util_bancario(feriado2),
+            "ERRO: Feriado nao eh dia util bancario!")

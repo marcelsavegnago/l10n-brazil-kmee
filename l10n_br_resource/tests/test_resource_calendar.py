@@ -189,6 +189,8 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
             not self.municipal_calendar_id.data_eh_dia_util(feriado2),
             "ERRO: Feriado2 nao eh dia util!")
 
+
+
     def test_09_quantidade_dia_util(self):
         """ Calcular a qunatidade de dias uteis.
         """
@@ -281,3 +283,37 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
         self.assertFalse(
             self.municipal_calendar_id.data_eh_dia_util_bancario(feriado2),
             "ERRO: Feriado nao eh dia util bancario!")
+
+    def test_12_proximo_dia_util_bancario(self):
+
+        self.resource_leaves.create({
+            'name': 'Feriado Bancário',
+            'date_from': fields.Datetime.from_string('2017-01-13 00:00:00'),
+            'date_to': fields.Datetime.from_string('2017-01-13 23:59:59'),
+            'calendar_id': self.nacional_calendar_id.id,
+            'leave_kind': 'B',
+            'leave_scope': 'N',
+        })
+
+        dia_do_feriado = fields.Datetime.from_string(
+            '2017-01-13 00:00:01')
+        proximo_dia_util = self.municipal_calendar_id.proximo_dia_util_bancario(
+            dia_do_feriado)
+        self.assertEqual(proximo_dia_util,
+                         fields.Datetime.from_string('2017-01-16 00:00:01'),
+                         'Partindo de um feriado, próximo dia util inválido')
+
+        fim_de_semana = fields.Datetime.from_string('2017-10-28 00:00:01')
+        proximo_dia_util = self.municipal_calendar_id.proximo_dia_util_bancario(fim_de_semana)
+        self.assertEqual(proximo_dia_util, fields.Datetime.from_string('2017-10-30 00:00:01'),
+                         'Partindo de um fim de semana, próximo dia útil inválido')
+
+        fim_de_semana = fields.Datetime.from_string('2016-06-05 00:00:01')
+        proximo_dia_util = self.municipal_calendar_id.proximo_dia_util_bancario(fim_de_semana)
+        self.assertEqual(proximo_dia_util, fields.Datetime.from_string('2016-06-06 00:00:01'),
+                         'Partindo de um fim de semana, próximo dia útil inválido')
+
+        mesmo_dia = fields.Datetime.from_string('2017-06-22 00:00:01')
+        proximo_dia_util = self.municipal_calendar_id.proximo_dia_util_bancario(mesmo_dia)
+        self.assertEqual(proximo_dia_util, fields.Datetime.from_string('2017-06-22 00:00:01'),
+                         'Partindo de um fim de semana, próximo dia útil inválido')

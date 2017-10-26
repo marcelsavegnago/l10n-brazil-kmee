@@ -15,7 +15,7 @@ addons:
       - libxslt-dev
 
 env:
-  - VERSION="11.0" ODOO_REPO="kmee/ocb" LINT_CHECK="0" TESTS=1
+  - VERSION="11.0" ODOO_REPO="kmee/OCB" LINT_CHECK="0" TESTS=1
   - VERSION="11.0" LINT_CHECK="1"
 
 # virtualenv:

@@ -189,6 +189,8 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
             not self.municipal_calendar_id.data_eh_dia_util(feriado2),
             "ERRO: Feriado2 nao eh dia util!")
 
+
+
     def test_09_quantidade_dia_util(self):
         """ Calcular a qunatidade de dias uteis.
         """
@@ -205,7 +207,7 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
 
         total_dias_uteis = self.resource_calendar.quantidade_dias_uteis(
             data_inicio, data_final)
-        self.assertEqual(total_dias_uteis, 23,
+        self.assertEqual(total_dias_uteis, 21,
                          'ERRO: Total dias uteis mes Jan/2018 inválido')
 
     def test_10_data_eh_feriado_bancario(self):
@@ -225,3 +227,93 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
         data_eh_feriado_bancario = self.nacional_calendar_id.\
             data_eh_feriado_bancario(data)
         self.assertTrue(data_eh_feriado_bancario)
+
+
+        data = fields.Datetime.from_string('2017-10-26 09:02:01')
+        data_eh_feriado_bancario = self.nacional_calendar_id.\
+            data_eh_feriado_bancario(data)
+        self.assertFalse(data_eh_feriado_bancario)
+
+
+        self.test_calendar_id = self.resource_calendar.create({
+            'name': 'Calendario de Teste',
+            'country_id': self.env.ref("base.br").id,
+        })
+
+        data = fields.Datetime.from_string('2017-10-26 09:39:01')
+        data_eh_feriado_bancario = self.test_calendar_id.\
+            data_eh_feriado_bancario(data)
+        self.assertFalse(data_eh_feriado_bancario)
+
+    def test_11_data_eh_dia_util_bancario(self):
+        #Verifica se data eh um dia util bancario
+
+        self.resource_leaves.create({
+            'name': 'Feriado Bancário',
+            'date_from': fields.Datetime.from_string('2017-01-13 00:00:00'),
+            'date_to': fields.Datetime.from_string('2017-01-13 23:59:59'),
+            'calendar_id': self.nacional_calendar_id.id,
+            'leave_kind': 'B',
+            'leave_scope': 'N',
+        })
+
+        segunda = fields.Datetime.from_string('2017-01-09 00:00:01')
+        feriado1 = fields.Datetime.from_string('2017-01-01 00:00:01')
+        quinta = fields.Datetime.from_string('2017-10-26 00:00:01')
+        domingo = fields.Datetime.from_string('2017-01-08 00:00:01')
+        feriado2 = fields.Datetime.from_string('2017-01-13 00:00:01')
+
+
+        self.assertTrue(
+            self.municipal_calendar_id.data_eh_dia_util_bancario(segunda),
+            "ERRO: Segunda eh dia util bancario!")
+
+        self.assertFalse(
+            self.municipal_calendar_id.data_eh_dia_util_bancario(feriado1),
+            "ERRO: Feriado nao eh dia util bancario!")
+
+        self.assertTrue(
+            self.municipal_calendar_id.data_eh_dia_util_bancario(quinta),
+            "ERRO: Quinta e dia util bancario!")
+
+        self.assertFalse(
+            self.municipal_calendar_id.data_eh_dia_util_bancario(domingo),
+            "ERRO: Domingo nao e dia util bancario!")
+
+        self.assertFalse(
+            self.municipal_calendar_id.data_eh_dia_util_bancario(feriado2),
+            "ERRO: Feriado nao eh dia util bancario!")
+
+    def test_12_proximo_dia_util_bancario(self):
+
+        self.resource_leaves.create({
+            'name': 'Feriado Bancário',
+            'date_from': fields.Datetime.from_string('2017-01-13 00:00:00'),
+            'date_to': fields.Datetime.from_string('2017-01-13 23:59:59'),
+            'calendar_id': self.nacional_calendar_id.id,
+            'leave_kind': 'B',
+            'leave_scope': 'N',
+        })
+
+        dia_do_feriado = fields.Datetime.from_string(
+            '2017-01-13 00:00:01')
+        proximo_dia_util = self.municipal_calendar_id.proximo_dia_util_bancario(
+            dia_do_feriado)
+        self.assertEqual(proximo_dia_util,
+                         fields.Datetime.from_string('2017-01-16 00:00:01'),
+                         'Partindo de um feriado, próximo dia util inválido')
+
+        fim_de_semana = fields.Datetime.from_string('2017-10-28 00:00:01')
+        proximo_dia_util = self.municipal_calendar_id.proximo_dia_util_bancario(fim_de_semana)
+        self.assertEqual(proximo_dia_util, fields.Datetime.from_string('2017-10-30 00:00:01'),
+                         'Partindo de um fim de semana, próximo dia útil inválido')
+
+        fim_de_semana = fields.Datetime.from_string('2016-06-05 00:00:01')
+        proximo_dia_util = self.municipal_calendar_id.proximo_dia_util_bancario(fim_de_semana)
+        self.assertEqual(proximo_dia_util, fields.Datetime.from_string('2016-06-06 00:00:01'),
+                         'Partindo de um fim de semana, próximo dia útil inválido')
+
+        mesmo_dia = fields.Datetime.from_string('2017-06-22 00:00:01')
+        proximo_dia_util = self.municipal_calendar_id.proximo_dia_util_bancario(mesmo_dia)
+        self.assertEqual(proximo_dia_util, fields.Datetime.from_string('2017-06-22 00:00:01'),
+                         'Partindo de um fim de semana, próximo dia útil inválido')

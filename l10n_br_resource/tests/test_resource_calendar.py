@@ -238,6 +238,7 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
             'country_id': self.env.ref("base.br").id,
         })
 
+
         data = fields.Datetime.from_string('2017-10-26 09:39:01')
         data_eh_feriado_bancario = self.test_calendar_id.\
             data_eh_feriado_bancario(data)

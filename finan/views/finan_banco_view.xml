@@ -21,29 +21,28 @@
                 <field name="titular_id" />
                 <templates>
                     <t t-name="kanban-box">
-                        <!-- Define a cor do Kanban -->
                         <div t-attf-class="#{kanban_color(1)} oe_kanban_global_click">
-                            <div class="o_dropdown_kanban_dropdown">
-                                <div>
-                                    <strong>
-                                        <field name="titular_id" />
-                                        <field name="tipo" />
-                                    </strong>
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary" align="center">
+                                        <strong>
+                                            <field name="titular_id" /> - <field name="tipo" />
+                                        </strong>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="oe_kanban_content">
-                                <div class="oe_kanban_footer">
-                                    <div>
-                                        <!-- Lado Esquerdo -->
-                                        <field name="banco" />
-                                    </div>
-                                    <div>
-                                        <!-- Lado Direito -->
-                                        <field name="agencia" />
-                                        <field name="agencia_digito" />
-                                        <field name="conta" />
-                                        <field name="conta_digito" />
-                                    </div>
+                            <div class="o_kanban_card_content">
+                                <div align="center">
+                                    <field name="banco" />
+                                </div>
+                                <div align="center">
+                                    Agência <field name="agencia" />-<field name="agencia_digito" />
+                                </div>
+                                <div align="center">
+                                    Conta <field name="conta" />-<field name="conta_digito" />
+                                </div>
+                                <div align="center">
+                                    Saldo <field name="saldo_inicial" />
                                 </div>
                             </div> <!-- oe_kanban_content -->
                             <div class="oe_clear" />

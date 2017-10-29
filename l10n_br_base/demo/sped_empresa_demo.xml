@@ -11,61 +11,132 @@
     </record>
     -->
 
+    <record model="sped.empresa" id="sped_empresa_panificio_hoara_mara_simples_sp">
+        <field name="nome">PANIFICIO HOARA MARA SIMPLES</field>
+        <field name='razao_social'>Empresa Regime Normal SP</field>
+        <field name='fantasia'>	Não informado</field>
+        <field name="cnpj_cpf">53.939.351/0001-29</field>
+        <field name="endereco">ESTRADA DO JARDIM</field>
+        <field name="numero">1600</field>
+        <field name="bairro">JARDIM COLONIA</field>
+        <field name="municipio_id" ref="MUNICIPIO_35244020000"/>
+        <field name="cep">12315-030</field>
+        <field name="complemento">casa</field>
+        <field name="site">www.panificiohoara.com.br</field>
+        <field name="fone">(11) 3777-7777</field>
+        <field name="celular">(11) 988-88-8889</field>
+        <field name="fone_comercial">(11) 3777-7777</field>
+        <field name="email">panificiohoara@suaempresa.com.br</field>
+        <field name="contribuinte">1</field>
+        <field name="ie">392.215.456.110</field>
+        <field name="im">99999999999999</field>
+        <field name="cei">12.345.67890/00</field>
+        <field name="suframa">10.1160.10-0</field>
+        <field name="rntrc">12345678</field>
+        <field name="crc">12345678901234</field>
+        <field name="crc_uf" ref="ESTADO_SP"/>
+        <field name="eh_cliente" eval="1"/>
+        <field name="eh_fornecedor" eval="1"/>
+        <field name="eh_empresa" eval="1"/>
+        <field name="codigo">123</field>
+        <field name="comment">Isto é uma observação</field>
+        <field name="regime_tributario">1</field>
+    </record>
+
     <record model="sped.empresa" id="sped_empresa_regime_normal_sp">
         <field name="nome">Empresa Regime Normal SP</field>
         <field name='razao_social'>Empresa Regime Normal SP</field>
+        <field name='fantasia'>Regime Normal SP</field>
         <field name="cnpj_cpf">53.939.351/0001-29</field>
         <field name="endereco">Avenida Paulista</field>
         <field name="numero">1</field>
         <field name="bairro">Bela Vista</field>
-        <!--<field name="estado" ref="ESTADO_MG"/>-->
         <field name="municipio_id" ref="MUNICIPIO_35503080000"/>
         <field name="cep">01311-000</field>
+        <field name="bloco">casa</field>
         <field name="site">www.suaempresa.com.br</field>
         <field name="fone">11 3999-9999</field>
+        <field name="celular">(11) 988-88-8889</field>
+        <field name="fone_comercial">(11) 3777-7777</field>
         <field name="email">info@suaempresa.com.br</field>
+        <field name="contribuinte">1</field>
         <field name="ie">392.215.456.110</field>
+        <field name="im">99999999999999</field>
+        <field name="cei">12.345.67890/00</field>
+        <field name="suframa">10.1160.10-0</field>
+        <field name="rntrc">12345678</field>
+        <field name="crc">12345678901234</field>
+        <field name="crc_uf" ref="ESTADO_SP"/>
         <field name="eh_cliente" eval="0"/>
         <field name="eh_fornecedor" eval="0"/>
         <field name="eh_empresa" eval="1"/>
+        <field name="codigo">123</field>
+        <field name="comment">Isto é uma observação</field>
+        <field name="regime_tributario">1</field>
     </record>
 
     <record model="sped.empresa" id="sped_empresa_demo_simples_sp">
         <field name="nome">Empresa Simples SP</field>
         <field name='razao_social'>Empresa Simples SP</field>
+        <field name='fantasia'>	Não informado</field>
         <field name="cnpj_cpf">81.583.054/0001-29</field>
         <field name="endereco">Avenida Paulista</field>
         <field name="numero">1</field>
         <field name="bairro">Bela Vista</field>
-        <!--<field name="estado" ref="ESTADO_MG"/>-->
         <field name="municipio_id" ref="MUNICIPIO_35503080000"/>
         <field name="cep">01311-000</field>
+        <field name="complemento">bloco</field>
         <field name="site">www.suaempresa.com.br</field>
         <field name="fone">11 3999-9999</field>
+        <field name="celular">(11) 988-88-8889</field>
+        <field name="fone_comercial">(11) 3777-7777</field>
         <field name="email">info@suaempresa.com.br</field>
-        <field name="ie">078.016.350.838</field>
+        <field name="contribuinte">2</field>
+        <!--<field name="ie">078.016.350.838</field>-->
+        <field name="im">99999999999999</field>
+        <field name="cei">12.345.67890/00</field>
+        <field name="suframa">10.1160.10-0</field>
+        <field name="rntrc">12345678</field>
+        <field name="crc">12345678901234</field>
+        <field name="crc_uf" ref="ESTADO_SP"/>
         <field name="eh_cliente" eval="0"/>
         <field name="eh_fornecedor" eval="0"/>
         <field name="eh_empresa" eval="1"/>
+        <field name="codigo">123</field>
+        <field name="comment">Isto é uma observação</field>
+        <field name="regime_tributario">1</field>
     </record>
 
     <record model="sped.empresa" id="sped_empresa_demo_simples_rj">
         <field name="nome">Empresa Simples RJ</field>
         <field name='razao_social'>Empresa Simples RJ</field>
+        <field name='fantasia'>	Não informado</field>
         <field name="cnpj_cpf">17.020.195/0001-34</field>
         <field name="endereco">Rua Gil de Gois</field>
         <field name="numero">221</field>
         <field name="bairro">Centro</field>
-        <!--<field name="estado" ref="ESTADO_MG"/>-->
         <field name="municipio_id" ref="MUNICIPIO_33010090000"/>
         <field name="cep">01311-000</field>
+        <field name="complemento">bloco</field>
         <field name="site">www.marcelosophia.com.br</field>
         <field name="fone">(22) 2893-0881</field>
+        <field name="celular">(11) 988-88-8889</field>
+        <field name="fone_comercial">(11) 3777-7777</field>
         <field name="email">marcelosophia@example.com</field>
-        <field name="ie">17.625.05-5</field>
+        <field name="contribuinte">9</field>
+        <!--<field name="ie">17.625.05-5</field>-->
+        <field name="im">99999999999999</field>
+        <field name="cei">12.345.67890/00</field>
+        <field name="suframa">10.1160.10-0</field>
+        <field name="rntrc">12345678</field>
+        <field name="crc">12345678901234</field>
+        <field name="crc_uf" ref="ESTADO_RJ"/>
         <field name="eh_cliente" eval="0"/>
         <field name="eh_fornecedor" eval="0"/>
         <field name="eh_empresa" eval="1"/>
+        <field name="codigo">123</field>
+        <field name="comment">Isto é uma observação</field>
+        <field name="regime_tributario">1</field>
     </record>
 
 

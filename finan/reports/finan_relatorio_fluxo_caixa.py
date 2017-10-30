@@ -12,11 +12,8 @@ import logging
 from psycopg2.extensions import AsIs
 from dateutil.relativedelta import relativedelta
 
-from odoo import _
+from odoo import models, exceptions
 from odoo import fields
-from odoo.report import report_sxw
-
-from .report_xlsx_base import ReportXlsxBase
 
 _logger = logging.getLogger(__name__)
 
@@ -27,7 +24,9 @@ except (ImportError, IOError) as err:
     _logger.debug(err)
 
 
-class FinanRelatorioFluxoCaixa(ReportXlsxBase):
+class FinanRelatorioFluxoCaixa(models.AbstractModel):
+    _name = 'report.finan.finan_relatorio_fluxo_caixa'
+    _inherit = 'report.report_xlsx.abstract'
 
     def define_title(self):
         if self.report_wizard.periodo == 'dias':
@@ -637,19 +636,3 @@ class FinanRelatorioFluxoCaixa(ReportXlsxBase):
         # 1 / 2.54 = 1 cm convertido em polegadas
         #
         self.sheet.set_margins(1 / 2.54, 1 / 2.54, 1 / 2.54, 1 / 2.54)
-
-
-FinanRelatorioFluxoCaixa(
-    #
-    # Nome do relatório, no campo "name",
-    # no arquivo report_xlsx_finan_fluxo_caixa_data.xml,
-    # *SEMPRE* precedido por "report."
-    #
-    'report.finan_relatorio_fluxo_caixa',
-    #
-    # O model usado para filtrar os dados do relatório, ou de onde vão vir os
-    # dados
-    #
-    'finan.relatorio.wizard',
-    parser=report_sxw.rml_parse
-)

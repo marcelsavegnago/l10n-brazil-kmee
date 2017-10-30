@@ -49,11 +49,11 @@
         #
         # Relatórios
         #
-        # 'reports/finan_relatorio_fluxo_caixa_data.xml',
-        # 'wizards/finan_relatorio_fluxo_caixa_wizard.xml',
-        #
-        # 'reports/finan_relatorio_divida_data.xml',
-        # 'wizards/finan_relatorio_divida_wizard.xml',
+        'reports/finan_relatorio_fluxo_caixa_data.xml',
+        'wizards/finan_relatorio_fluxo_caixa_wizard.xml',
+
+        'reports/finan_relatorio_divida_data.xml',
+        'wizards/finan_relatorio_divida_wizard.xml',
 
         ##'data/financial_document_type_data.xml',
         ##'data/interest_data.xml',

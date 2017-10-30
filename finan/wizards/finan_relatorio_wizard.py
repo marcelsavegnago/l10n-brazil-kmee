@@ -6,9 +6,7 @@
 #
 
 
-
 from datetime import datetime
-
 from odoo import fields, models, api
 from ..constantes import *
 
@@ -80,16 +78,16 @@ class FinanRelatorioWizard(models.TransientModel):
     def gera_relatorio_fluxo_caixa(self):
         self.ensure_one()
 
-        return self.env['report'].get_action(
-            self,
-            report_name='finan_relatorio_fluxo_caixa'
+        return self.env['ir.actions.report']._get_report_from_name(
+            'finan.finan_relatorio_fluxo_caixa').report_action(
+            self.id,
         )
 
     @api.multi
     def gera_relatorio_divida(self):
         self.ensure_one()
 
-        return self.env['report'].get_action(
-            self,
-            report_name='finan_relatorio_divida'
+        return self.env['ir.actions.report']._get_report_from_name(
+            'finan.finan_relatorio_divida').report_action(
+            self.id,
         )

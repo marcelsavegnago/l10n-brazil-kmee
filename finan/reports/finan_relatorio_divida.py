@@ -12,11 +12,8 @@ import logging
 from collections import OrderedDict
 from psycopg2.extensions import AsIs
 
-from odoo import _
-from odoo import fields, exceptions
-from odoo.report import report_sxw
+from odoo import models, fields
 from ..constantes import *
-from .report_xlsx_base import ReportXlsxBase
 
 _logger = logging.getLogger(__name__)
 
@@ -27,7 +24,10 @@ except (ImportError, IOError) as err:
     _logger.debug(err)
 
 
-class FinanRelatorioDivida(ReportXlsxBase):
+class FinanRelatorioDivida(models.AbstractModel):
+    _name = 'report.finan.finan_relatorio_divida'
+    _inherit = 'report.report_xlsx.abstract'
+
     def define_title(self):
         if self.report_wizard.group_by == 'data_vencimento_util':
             if self.report_wizard.tipo_divida == 'a_receber':
@@ -564,17 +564,3 @@ class FinanRelatorioDivida(ReportXlsxBase):
         # 1 / 2.54 = 1 cm convertido em polegadas
         #
         self.sheet.set_margins(1 / 2.54, 1 / 2.54, 1 / 2.54, 1 / 2.54)
-
-
-FinanRelatorioDivida(
-    #
-    # Name of the report in report_xlsx_financial_cashflow_data.xml,
-    # field name, *always* preceeded by 'report.'
-    #
-    'report.finan_relatorio_divida',
-    #
-    # The model used to filter report data, or where the data come from
-    #
-    'finan.relatorio.wizard',
-    parser=report_sxw.rml_parse
-)

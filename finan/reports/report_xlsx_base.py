@@ -7,9 +7,7 @@
 
 
 
-from odoo.report import report_sxw
-from odoo import fields
-from odoo.addons.report_xlsx.report.report_xlsx import ReportXlsx
+from odoo import models, fields
 
 from decimal import Decimal
 
@@ -41,33 +39,8 @@ def col_number_to_reference(col):
     return _col_number_to_reference(col)
 
 
-class ReportXlsxBase(ReportXlsx):
-
-    def __init__(self, name, table, rml=False, parser=report_sxw.rml_parse,
-                 header=True, store=False):
-        super(ReportXlsxBase, self).__init__(
-            name, table, rml=rml, parser=parser, header=header, store=store)
-        self.current_row = 1
-        #
-        # # main sheet which will contains report
-        # self.sheet = None
-        #
-        # # columns of the report
-        # self.columns = None
-        #
-        # # current_row must be incremented at each writing lines
-        # self.current_row = None
-        #
-        # # Formats
-        # self.format_right = None
-        # self.format_right_bold_italic = None
-        # self.format_bold = None
-        # self.format_header_left = None
-        # self.format_header_center = None
-        # self.format_header_right = None
-        # self.format_header_amount = None
-        # self.format_amount = None
-        # self.format_percent_bold_italic = None
+class ReportXlsxBase(models.AbstractModel):
+    _inherit = 'report.report_xlsx.abstract'
 
     def get_workbook_options(self):
         return {'constant_memory': True}

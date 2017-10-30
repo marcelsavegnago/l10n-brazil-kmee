@@ -6,15 +6,11 @@
 -->
 <odoo>
 
-    <record model="ir.actions.report.xml" id="finan_relatorio_fluxo_caixa_action">
-        <field name="name">Fluxo de caixa</field>
-        <field name="type">ir.actions.report.xml</field>
-        <!-- model que vai filtrar os dados do relatório -->
-        <field name="model">finan.relatorio.wizard</field>
-        <!-- o name *NUNCA* pode ser precedido por "report.", vai ser adicionado automaticamente -->
-        <field name="report_name">finan_relatorio_fluxo_caixa</field>
-        <field name="report_type">xlsx</field>
-        <field name="auto" eval="False"/>
-    </record>
+    <report id="finan_relatorio_fluxo_caixa_action"
+            name="finan.finan_relatorio_fluxo_caixa"
+            model="finan.relatorio.wizard"
+            string="Fluxo de caixa"
+            report_type="xlsx" file="finan_relatorio_wizard"
+            attachment_use="False"/>
 
 </odoo>

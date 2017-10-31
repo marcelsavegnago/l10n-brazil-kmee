@@ -278,7 +278,7 @@ class SpedProduto(SpedBase, models.Model):
             'uom_id': self.unidade_id.uom_id.id,
             'uom_po_id': self.unidade_id.uom_id.id,
             'standard_price': self.preco_custo,
-            'list_price': self.list_price,
+            'list_price': self.preco_venda,
             'sale_ok': True,
             'purchase_ok': True,
             'barcode': self.codigo_barras,

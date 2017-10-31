@@ -14,10 +14,12 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
         self.resource_calendar = self.env['resource.calendar']
         self.resource_leaves = self.env['resource.calendar.leaves']
 
+
         self.nacional_calendar_id = self.resource_calendar.create({
             'name': 'Calendario Nacional',
             'country_id': self.env.ref("base.br").id,
         })
+
         self.leave_nacional_01 = self.resource_leaves.create({
             'name': 'Tiradentes',
             'date_from': fields.Datetime.from_string('2016-03-21 00:00:00'),
@@ -146,11 +148,11 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
                          fields.Datetime.from_string('2016-03-22 00:00:01'),
                          'Partindo de um feriado, próximo dia util inválido')
 
-        anterior_ao_fds = fields.Datetime.from_string('2016-12-16 00:00:01')
+        anterior_ao_fds = fields.Datetime.from_string('2018-01-01 00:00:01')
         proximo_dia_util = self.municipal_calendar_id.proximo_dia_util(
             anterior_ao_fds)
         self.assertEqual(proximo_dia_util,
-                         fields.Datetime.from_string('2016-12-19 00:00:01'),
+                         fields.Datetime.from_string('2018-01-02 00:00:01'),
                          'Partindo de um fds, próximo dia util inválido')
 
     def test_07_get_dias_base(self):
@@ -210,11 +212,10 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
             not self.municipal_calendar_id.data_eh_dia_util(feriado2),
             "ERRO: Feriado2 nao eh dia util!")
 
-
-
     def test_09_quantidade_dia_util(self):
         """ Calcular a qunatidade de dias uteis.
         """
+
         data_inicio = fields.Datetime.from_string('2017-01-01 00:00:01')
         data_final = fields.Datetime.from_string('2017-01-31 23:59:59')
 
@@ -238,7 +239,7 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
         # adicionando feriado bancário
         self.resource_leaves.create({
             'name': 'Feriado Bancário',
-            'date_from': fields.Datetime.from_string('2017-01-13 00:00:00'),
+            'date_from': fields.Datetime.from_string('2017-01-13 00:00:01'),
             'date_to': fields.Datetime.from_string('2017-01-13 23:59:59'),
             'calendar_id': self.nacional_calendar_id.id,
             'leave_kind': 'B',
@@ -250,7 +251,7 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
         self.assertTrue(data_eh_feriado_bancario)
 
 
-        data = fields.Datetime.from_string('2017-10-26 09:02:01')
+        data = fields.Datetime.from_string('2018-01-09 09:02:01')
         data_eh_feriado_bancario = self.nacional_calendar_id.\
             data_eh_feriado_bancario(data)
         self.assertFalse(data_eh_feriado_bancario)
@@ -334,7 +335,7 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
         self.assertEqual(proximo_dia_util, fields.Datetime.from_string('2016-06-06 00:00:01'),
                          'Partindo de um fim de semana, próximo dia útil inválido')
 
-        mesmo_dia = fields.Datetime.from_string('2017-06-22 00:00:01')
+        mesmo_dia = fields.Datetime.from_string('2017-06-23 00:00:01')
         proximo_dia_util = self.municipal_calendar_id.proximo_dia_util_bancario(mesmo_dia)
-        self.assertEqual(proximo_dia_util, fields.Datetime.from_string('2017-06-22 00:00:01'),
+        self.assertEqual(proximo_dia_util, fields.Datetime.from_string('2017-06-26 00:00:01'),
                          'Partindo de um fim de semana, próximo dia útil inválido')

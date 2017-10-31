@@ -1,4 +1,4 @@
-suds
+suds-jurko==0.6
 num2words
 pillow==3.4.2
 reportlab

@@ -104,12 +104,33 @@ class TestResourceCalendar(test_common.SingleTransactionCase):
         self.assertEqual(1, len(self.holidays))
 
     def test_04_data_eh_feriado(self):
-        data = fields.Datetime.from_string('2016-08-25 00:00:01')
+        # Nacional
+        data = fields.Datetime.from_string('2016-03-21 12:00:00')
+        data_eh_feriado = self.municipal_calendar_id.data_eh_feriado(data)
+        self.assertTrue(data_eh_feriado)
+
+        # Estadual
+        data = fields.Datetime.from_string('2016-01-25 12:00:00')
+        data_eh_feriado = self.municipal_calendar_id.data_eh_feriado(data)
+        self.assertTrue(data_eh_feriado)
+
+        # Municipal
+        data = fields.Datetime.from_string('2016-08-25 12:00:00')
         data_eh_feriado = self.municipal_calendar_id.data_eh_feriado(data)
         self.assertTrue(data_eh_feriado)
 
     def test_05_data_eh_feriado_emendado(self):
         data = fields.Datetime.from_string('2016-08-25 00:00:01')
+        data_eh_feriado_emendado = \
+            self.municipal_calendar_id.data_eh_feriado_emendado(data)
+        self.assertTrue(data_eh_feriado_emendado)
+
+        data = fields.Datetime.from_string('2017-11-02 00:00:01')
+        data_eh_feriado_emendado = \
+            self.municipal_calendar_id.data_eh_feriado_emendado(data)
+        self.assertTrue(data_eh_feriado_emendado)
+
+        data = fields.Datetime.from_string('2017-08-15 00:00:01')
         data_eh_feriado_emendado = \
             self.municipal_calendar_id.data_eh_feriado_emendado(data)
         self.assertTrue(data_eh_feriado_emendado)

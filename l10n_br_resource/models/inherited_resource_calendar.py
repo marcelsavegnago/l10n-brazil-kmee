@@ -12,6 +12,7 @@ from odoo.exceptions import AccessError
 from datetime import datetime, timedelta
 from odoo import tools
 
+
 _logger = logging.getLogger(__name__)
 
 
@@ -194,10 +195,12 @@ class ResourceCalendar(models.Model):
                                    verifique se amanha é dia útil.
         :return datetime Proximo dia util apartir da data referencia
         """
+
         while data_referencia:
             data_referencia += timedelta(days=1)
             if self.data_eh_dia_util(data_referencia):
                 return data_referencia
+
 
     @api.multi
     def proximo_dia_util_bancario(self, data_referencia=datetime.now()):
@@ -206,10 +209,13 @@ class ResourceCalendar(models.Model):
                                    verifique se amanha é dia útil.
         :return datetime Proximo dia util apartir da data referencia
         """
-        if self.data_eh_dia_util_bancario(data_referencia):
-            return data_referencia
-        data_referencia += timedelta(days=1)
-        return self.proximo_dia_util_bancario(data_referencia)
+
+        while data_referencia:
+            data_referencia += timedelta(days=1)
+            if self.data_eh_dia_util_bancario(data_referencia):
+                return data_referencia
+
+
 
     @api.multi
     def get_dias_base(self, data_from=datetime.now(), data_to=datetime.now()):
@@ -239,12 +245,13 @@ class ResourceCalendar(models.Model):
         """
         if not self.leave_ids:
             self = self.with_context(self._context)._get_brazilian_calendar()
-        if self.leave_ids.filtered(
-                lambda record: data_referencia.strftime("%Y-%m-%d 00:00:00") <=
-                record.date_from <=
-                data_referencia.strftime("%Y-%m-%d 23:59:59") and
-                record.leave_kind == 'B'):
-            return True
+        for leave in self.leave_ids:
+            if leave.date_from <= data_referencia.strftime(
+                    "%Y-%m-%d %H:%M:%S"):
+                if leave.date_to >= data_referencia. \
+                        strftime("%Y-%m-%d %H:%M:%S"):
+                    if leave.leave_kind == 'B':
+                        return True
         return False
 
     @api.multi

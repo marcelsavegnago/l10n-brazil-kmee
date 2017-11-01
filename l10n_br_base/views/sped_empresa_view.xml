@@ -59,7 +59,7 @@
                             <group col="4" colspan="4">
                                 <separator string="Inscrição Estadual" colspan="4" />
                                 <field name="contribuinte" colspan="2" />
-                                <field name="ie" attrs="{'invisible': [('contribuinte', '!=', '1')]}" colspan="2" />
+                                <field name="ie" attrs="{'invisible': [('contribuinte', '!=', '1')], 'required':[('contribuinte', '=', '1')]}" colspan="2" />
                             </group>
                             <newline />
                             <group col="6" colspan="4" attrs="{'invisible': [('tipo_pessoa', '!=', 'F')]}">

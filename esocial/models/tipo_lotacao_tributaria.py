@@ -5,7 +5,8 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
+
 
 class TipoLotacaoTributaria(models.Model):
     _name = 'esocial.lotacao_tributaria'
@@ -30,9 +31,8 @@ class TipoLotacaoTributaria(models.Model):
     codigo_trabalhador_ids = fields.Many2many(
         'esocial.categoria_trabalhador',
         string='Codigo',
-        relation = 'trabalhador_tributaria_ids',
+        relation='trabalhador_tributaria_ids',
     )
-
 
     codigo_tributaria_classificacao_ids = fields.Many2many(
         'esocial.classificacao_tributaria',

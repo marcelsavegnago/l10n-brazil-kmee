@@ -5,12 +5,13 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from odoo import api, fields, models
+from odoo import fields, models
+
 
 class FPASClassificacaoTributaria(models.Model):
     _name = 'esocial.tributaria_fpas'
     _description = 'Compatibilidade entre FPAS e Classificação Tributária'
 
     name = fields.Char(
-        string ='Classificação Tributária',
+        string='Classificação Tributária',
     )

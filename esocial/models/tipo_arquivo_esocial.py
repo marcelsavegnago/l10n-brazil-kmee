@@ -41,8 +41,9 @@ class TipoArquivoEsocial(models.Model):
                     tipo.codigo = tipo.codigo.zfill(6)
                 else:
                     res = {'warning': {
-                        'title': _('Código Incorreto!'),
-                        'message': _('Campo Código somente aceita números! - Corrija antes de salvar')
+                        'title': ('Código Incorreto!'),
+                        'message': ('Campo Código somente aceita números!'
+                                    ' - Corrija antes de salvar')
                     }}
                     tipo.codigo = False
                     return res

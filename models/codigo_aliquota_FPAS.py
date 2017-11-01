@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, api
+from odoo import fields, models, api, _
 
 
 class CodigoAliquotaFPAS(models.Model):
@@ -34,12 +34,10 @@ class CodigoAliquotaFPAS(models.Model):
         required=True,
     )
 
-
     name = fields.Char(
         compute='_compute_name',
         store=True,
     )
-
 
     @api.onchange('codigo')
     def _valida_codigo(self):
@@ -50,7 +48,8 @@ class CodigoAliquotaFPAS(models.Model):
                 else:
                     res = {'warning': {
                         'title': _('Código Incorreto!'),
-                        'message': _('Campo Código somente aceita números! - Corrija antes de salvar')
+                        'message': _('Campo Código somente aceita números!'
+                                     ' - Corrija antes de salvar')
                     }}
                     codigo_aliguota.codigo = False
                     return res

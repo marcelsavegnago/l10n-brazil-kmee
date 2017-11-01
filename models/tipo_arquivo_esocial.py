@@ -77,8 +77,9 @@ class TipoArquivoEsocial(models.Model):
 >>>>>>> 84247a3... [ADD] tabelas 9 e 10 feitas
                 else:
                     res = {'warning': {
-                        'title': _('Código Incorreto!'),
-                        'message': _('Campo Código somente aceita números! - Corrija antes de salvar')
+                        'title': ('Código Incorreto!'),
+                        'message': ('Campo Código somente aceita números!'
+                                    ' - Corrija antes de salvar')
                     }}
                     tipo.codigo = False
                     return res

@@ -9,6 +9,7 @@ from odoo import api, fields, models, _
 from pybrasil.base import modulo11
 from pybrasil.inscricao import limpa_formatacao
 
+
 class NaturezaJuridica(models.Model):
     _name = 'esocial.natureza_juridica'
     _description = 'Natureza Juridica'

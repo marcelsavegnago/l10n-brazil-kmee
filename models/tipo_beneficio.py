@@ -5,12 +5,13 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 
 
 class TipoBeneficio(models.Model):
     _name = 'esocial.tipo_beneficio'
-    _description = 'Tipos de Benefícios Previdenciários dos Regimes Próprios de Previdência'
+    _description = 'Tipos de Benefícios Previdenciários' \
+                   ' dos Regimes Próprios de Previdência'
     _order = 'codigo'
     _sql_constraints = [
         ('codigo',
@@ -55,4 +56,3 @@ class TipoBeneficio(models.Model):
 >>>>>>> 565ad17... [FIX] PEP8
         for tipo in self:
             tipo.name = str(tipo.codigo) + '-' + tipo.nome
-

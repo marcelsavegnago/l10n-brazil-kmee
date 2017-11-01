@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 
 
 class AgenteCausador(models.Model):
@@ -50,7 +50,8 @@ class AgenteCausador(models.Model):
                 else:
                     res = {'warning': {
                         'title': _('Código Incorreto!'),
-                        'message': _('Campo Código somente aceita números! - Corrija antes de salvar')
+                        'message': _('Campo Código somente aceita números! '
+                                     '- Corrija antes de salvar')
                     }}
                     agente.codigo = False
                     return res

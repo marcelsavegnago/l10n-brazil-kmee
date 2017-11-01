@@ -50,7 +50,8 @@ class SituacaoGeradora(models.Model):
                 else:
                     res = {'warning': {
                         'title': _('Código Incorreto!'),
-                        'message': _('Campo Código somente aceita números! - Corrija antes de salvar')
+                        'message': _('Campo Código somente aceita números!'
+                                     ' - Corrija antes de salvar')
                     }}
                     situacao.codigo = False
                     return res

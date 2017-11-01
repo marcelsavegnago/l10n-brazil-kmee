@@ -77,7 +77,8 @@ class CategoriaTrabalhador(models.Model):
                 else:
                     res = {'warning': {
                         'title': _('Código Incorreto!'),
-                        'message': _('Campo Código somente aceita números! - Corrija antes de salvar')
+                        'message': _('Campo Código somente aceita números!'
+                                     ' - Corrija antes de salvar')
                     }}
                     categoria.codigo = False
                     return res
@@ -94,4 +95,3 @@ class CategoriaTrabalhador(models.Model):
 >>>>>>> 565ad17... [FIX] PEP8
         for categoria in self:
             categoria.name = categoria.codigo + '-' + categoria.nome
-

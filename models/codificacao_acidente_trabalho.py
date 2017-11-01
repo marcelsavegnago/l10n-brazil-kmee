@@ -5,7 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 
 
 class CodificacaoAcidenteTrabalho(models.Model):
@@ -34,7 +34,6 @@ class CodificacaoAcidenteTrabalho(models.Model):
         store=True,
     )
 
-
     @api.onchange('codigo')
     def _valida_codigo(self):
         for elemento in self:
@@ -42,7 +41,8 @@ class CodificacaoAcidenteTrabalho(models.Model):
             if not cod_novo.isdigit():
                 res = {'warning': {
                     'title': _('Código Incorreto!'),
-                    'message': _('Campo Código somente aceita números ou pontos!'
+                    'message': _('Campo Código somente aceita'
+                                 ' números ou pontos!'
                                  ' - Corrija antes de salvar')
                 }}
                 return res
@@ -53,11 +53,9 @@ class CodificacaoAcidenteTrabalho(models.Model):
             c.name = c.codigo
 
 
-
 def limpa_formatacao(codigo):
     codigof = ''
     for d in codigo:
         if d != '.':
             codigof += d
     return codigof
-

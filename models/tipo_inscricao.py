@@ -4,6 +4,10 @@ from odoo import fields, models, api
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> 251061b... [FIX] Correções pep8 esocial
 class TipoInscricao(models.Model):
 =======
 class TiposInscricao(models.Model):

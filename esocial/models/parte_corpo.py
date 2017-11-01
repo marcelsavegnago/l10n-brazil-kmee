@@ -42,7 +42,8 @@ class ParteCorpo(models.Model):
                 else:
                     res = {'warning': {
                         'title': _('Código Incorreto!'),
-                        'message': _('Campo Código somente aceita números! - Corrija antes de salvar')
+                        'message': _('Campo Código somente aceita números!'
+                                     ' - Corrija antes de salvar')
                     }}
                     parte.codigo = False
                     return res

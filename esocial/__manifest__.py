@@ -8,7 +8,7 @@
 {
     'name': 'eSocial - Brasil',
     'summary': """
-        Implementa todos os ajustes necessários ao Odoo para suportar os 
+        Implementa todos os ajustes necessários ao Odoo para suportar os
         serviços do eSocial brasileiro.
         """,
     'version': '11.0.1.0.0',

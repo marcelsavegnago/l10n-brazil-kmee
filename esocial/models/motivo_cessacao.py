@@ -42,7 +42,8 @@ class MotivoCessacao(models.Model):
                 else:
                     res = {'warning': {
                         'title': _('Código Incorreto!'),
-                        'message': _('Campo Código somente aceita números! - Corrija antes de salvar')
+                        'message': _('Campo Código somente aceita números! '
+                                     '- Corrija antes de salvar')
                     }}
                     motivo.codigo = False
                     return res

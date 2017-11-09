@@ -1089,6 +1089,9 @@ class SpedDocumento(SpedBase, models.Model):
         if self.modelo not in (MODELO_FISCAL_NFE, MODELO_FISCAL_NFCE):
             return res
 
+        if not self.serie:
+            return res
+
         ultimo_numero = self.search([
             ('empresa_id.cnpj_cpf', '=', self.empresa_id.cnpj_cpf),
             ('ambiente_nfe', '=', self.ambiente_nfe),

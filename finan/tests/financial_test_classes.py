@@ -18,7 +18,7 @@ class FinancialTestCase(SingleTransactionCase):
 
     def setUp(self):
         super(FinancialTestCase, self).setUp()
-        if not self.env['financial.account'].search_count([]):
+        if not self.env['finan.conta'].search_count([]):
             self.skipTest("No Financial Chart found")
 
     def create_financial(self, amount_document=100, type='2receive',
@@ -60,7 +60,7 @@ class FinancialTestCase(SingleTransactionCase):
             'default_type': financial.type == '2receive' and 'receipt_item' or
             'payment_item',
             'default_amount_document': financial.amount_residual,
-            'default_account_id': financial.account_id,
+            'default_account_id': finan.conta_id,
             'default_currency_id': financial.currency_id,
         }
 

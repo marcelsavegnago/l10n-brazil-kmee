@@ -872,25 +872,25 @@ class FinanLancamento(SpedBase, models.Model):
             **kwargs
         )
 
-    #def action_view_financial(self, type):
-        #if type == '2receive':
-            #action = self.env.ref(
-                #'finan.financial_lancamento._debt_2receive_form_action').read()[0]
-        #elif type == '2pay':
-            #action = self.env.ref(
-                #'finan.financial_lancamento._debt_2pay_form_action').read()[0]
-        #if len(self) > 1:
-            #action['domain'] = [('id', 'in', self.ids)]
-        #elif len(self) == 1:
-            ## action['views'] = \
-            ##     [(
-            ##         self.env.ref('finan.financial_lancamento._form_view').id,
-            ##         'form',
-            ##     )]
-            #action['res_id'] = self.ids[0]
-        #else:
-            #action = {'type': 'ir.actions.act_window_close'}
-        #return action
+    def action_view_financial(self, type):
+        if type == '2receive':
+            action = self.env.ref(
+                'finan.finan_lancamento_divida_a_receber_form_action').read()[0]
+        elif type == '2pay':
+            action = self.env.ref(
+                'finan.finan_lancamento_divida_a_pagar_form_action').read()[0]
+        if len(self) > 1:
+            action['domain'] = [('id', 'in', self.ids)]
+        elif len(self) == 1:
+            # action['views'] = \
+            #     [(
+            #         self.env.ref('finan.financial_lancamento._form_view').id,
+            #         'form',
+            #     )]
+            action['res_id'] = self.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action
 
 
     # def _create_from_dict(self, lancamento._dict):

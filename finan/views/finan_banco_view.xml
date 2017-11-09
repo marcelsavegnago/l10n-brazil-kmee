@@ -19,6 +19,7 @@
                 <field name="conta" />
                 <field name="conta_digito" />
                 <field name="titular_id" />
+                <field name="currency_id" />
                 <templates>
                     <t t-name="kanban-box">
                         <div t-attf-class="#{kanban_color(1)} oe_kanban_global_click">

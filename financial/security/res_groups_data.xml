@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+        <!-- Copyright 2017 KMEE
+             License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<openerp>
+    <data>
+
+        <!-- Regas de acesso para cadastros -->
+        <record id="CATEGORIA_MODULO_FINAN" model="ir.module.category">
+            <field name="name">Financeiro</field>
+            <field name="description">Lançamentos Financeiro</field>
+            <field name="sequence">-98</field>
+        </record>
+
+        <record id="GRUPO_FINAN_LEITURA" model="res.groups">
+            <field name="name">Financeiro (somente leitura)</field>
+            <field name="category_id" ref="CATEGORIA_MODULO_FINAN"/>
+        </record>
+
+        <record id="GRUPO_FINAN_GERAL" model="res.groups">
+            <field name="name">Financeiro</field>
+            <field name="category_id" ref="CATEGORIA_MODULO_FINAN"/>
+        </record>
+
+        <record id="GRUPO_FINAN_GERENTE" model="res.groups">
+            <field name="name">Financeiro (gerente)</field>
+            <field name="category_id" ref="CATEGORIA_MODULO_FINAN"/>
+        </record>
+
+    </data>
+</openerp>

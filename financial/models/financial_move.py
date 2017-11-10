@@ -78,6 +78,7 @@ class FinancialMove(models.Model):
         comodel_name='res.currency',
         default=lambda self: self.env.user.company_id.currency_id,
         track_visibility='_track_visibility_onchange',
+        required=True,
     )
     partner_id = fields.Many2one(
         comodel_name='res.partner',
@@ -396,7 +397,10 @@ class FinancialMove(models.Model):
         string='Document amount in original currency',
         digits=(18, 2),
     )
-
+    currency_rate = fields.Float(
+        string='Taxa de conversão',
+        digits=(18, 8),
+    )
     #
     #
     # Payment term and Payment mode

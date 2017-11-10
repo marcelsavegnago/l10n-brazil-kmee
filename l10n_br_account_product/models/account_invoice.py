@@ -91,6 +91,7 @@ class AccountInvoice(models.Model):
         else:
             self.amount_tax = sum(self._amount_line_tax(line)
                                   for line in self.invoice_line)
+
         self.amount_total = self.amount_tax + self.amount_untaxed
 
         self.vr_custo_comercial = sum(
@@ -244,10 +245,19 @@ class AccountInvoice(models.Model):
 
             inv.amount_pis_cofins_csll = inv.service_cofins_value + \
                                          inv.service_pis_value + inv.csll_value
+
+            diff_currency = inv.company_currency_id != inv.currency_id
+            if diff_currency:
+                inv.amount_company_currency = inv.company_currency_id.compute(
+                    inv.amount_total, inv.currency_id
+                )
+
             inv.amount_total = inv.amount_tax + inv.amount_untaxed
             inv.amount_wh = (inv.issqn_value_wh + inv.pis_value_wh + inv.
                              cofins_value_wh + inv.csll_value_wh + inv.
                              irrf_value_wh + inv.inss_value_wh)
+
+            inv.amount_net = inv.amount_company_currency - inv.amount_wh
 
     @api.one
     def _set_irrf_wh(self):
@@ -321,11 +331,17 @@ class AccountInvoice(models.Model):
             })
         return True
 
-    @api.multi
-    @api.depends('amount_total', 'amount_wh')
-    def _amount_net(self):
-        for inv in self:
-            inv.amount_net = inv.amount_total - inv.amount_wh
+    # @api.multi
+    # @api.depends('amount_total', 'amount_wh')
+    # def _amount_net(self):
+    #     for inv in self:
+    #
+    #         diff_currency = inv.company_currency_id != inv.currency_id
+    #         if diff_currency:
+    #             inv.amount_company_currency = inv.company_currency_id.compute(
+    #                 inv.amount_total, inv.currency_id
+    #             )
+    #         inv.amount_net = inv.amount_company_currency - inv.amount_wh
 
     issuer = fields.Selection(
         [('0', u'Emissão própria'), ('1', 'Terceiros')],
@@ -666,8 +682,21 @@ class AccountInvoice(models.Model):
         compute='_amount_all_service',
         store=True,
         digits_compute=dp.get_precision('Account'))
+
+    company_currency_id = fields.Many2one(
+        comodel_name='res.currency',
+        related='company_id.currency_id',
+        string=u'Moeda da empresa',
+    )
+    amount_company_currency = fields.Float(
+        string=u'Valor em moeda da empresa', compute='_amount_all_service',
+        digits_compute=dp.get_precision('Account'),
+        help=u'Quanto o parceiro deve pagar:\n'
+             u'Valor da nota fiscal\n'
+             u'- retenções\n'
+    )
     amount_net = fields.Float(
-        string=u'Valor Fatura', compute='_amount_net',
+        string=u'Valor Fatura', compute='_amount_all_service',
         digits_compute=dp.get_precision('Account'),
         help=u'Quanto o parceiro deve pagar:\n'
              u'Valor da nota fiscal\n'

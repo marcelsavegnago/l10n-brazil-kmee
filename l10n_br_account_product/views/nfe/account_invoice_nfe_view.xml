@@ -162,8 +162,20 @@
                                                 string="(update)" class="oe_link oe_edit_only"
                                                 type="object" help="Recompute taxes and total"/>
                                             <newline/>
+                                            <label for="currency_id" groups="base.group_multi_currency"/>
+                                            <div groups="base.group_multi_currency">
+                                                <field name="currency_id" class="oe_inline"/>
+                                                <button name="%(account.action_account_change_currency)d" type="action"
+                                                  class="oe_inline oe_link oe_edit_only"
+                                                  string="(change)"
+                                                  attrs="{'invisible':[('state','!=','draft')]}"
+                                                  groups="account.group_account_user"/>
+                                            </div>
                                             <field name="amount_total" string="Total da NF" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                            <field name="amount_net" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+
+                                            <field name="company_currency_id"/>
+                                            <field name="amount_company_currency" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
+                                            <field name="amount_net" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
                                             <newline/>
                                         </group>
                                     </group>
@@ -351,15 +363,6 @@
                                     <field name="journal_id" groups="account.group_account_user"
                                         on_change="onchange_journal_id(journal_id)" options="{'no_create': True}"
                                         attrs="{'readonly':[('internal_number','!=',False)]}" domain="[('type', 'in', {'out_invoice': ['sale'], 'out_refund': ['sale_refund'], 'in_refund': ['purchase_refund'], 'in_invoice': ['purchase']}.get(type, [])), ('company_id', '=', company_id)]"/>
-                                    <label for="currency_id" groups="base.group_multi_currency"/>
-                                    <div groups="base.group_multi_currency">
-                                        <field name="currency_id" class="oe_inline"/>
-                                        <button name="%(account.action_account_change_currency)d" type="action"
-                                          class="oe_inline oe_link oe_edit_only"
-                                          string="(change)"
-                                          attrs="{'invisible':[('state','!=','draft')]}"
-                                          groups="account.group_account_user"/>
-                                    </div>
                                     <field domain="[('company_id', '=', company_id), ('type','in',{'out_invoice': ['receivable'], 'out_refund': ['receivable'], 'in_refund': ['payable'], 'in_invoice': ['payable']}.get(type, []))]"
                                         name="account_id" groups="account.group_account_user"
                                         context="{'periods_special': False, 'all_fiscalyear': True}"/>

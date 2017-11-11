@@ -110,12 +110,8 @@ class SpedDocumentoDuplicata(models.Model):
             # Converte o valor usando a cotação mais recente.
             #
             taxa_conversao = moeda_empresa_id._get_conversion_rate(self, moeda_documento_id)
-            valor_moeda_empresa = moeda_empresa_id.compute(valor_documento, moeda_documento_id)
+            valor_estrangeiro = moeda_documento_id.compute(valor_documento, moeda_empresa_id)
 
-            valor_estrangeiro = valor_documento
-            valor_documento = valor_moeda_empresa
-
-            dados['amount_document'] = valor_documento
             dados['original_currency_amount'] = valor_estrangeiro
             dados['currency_rate'] = taxa_conversao
             dados['original_currency_id'] = moeda_documento_id.id

@@ -251,6 +251,8 @@ class AccountInvoice(models.Model):
                 inv.amount_company_currency = inv.company_currency_id.compute(
                     inv.amount_total, inv.currency_id
                 )
+            else:
+                inv.amount_company_currency = inv.amount_total
 
             inv.amount_total = inv.amount_tax + inv.amount_untaxed
             inv.amount_wh = (inv.issqn_value_wh + inv.pis_value_wh + inv.
@@ -370,7 +372,10 @@ class AccountInvoice(models.Model):
     date_hour_invoice = fields.Datetime(
         u'Data e hora de emissão', readonly=True,
         states={'draft': [('readonly', False)]},
-        select=True, help="Deixe em branco para usar a data atual")
+        copy=False,
+        select=True,
+        help="Deixe em branco para usar a data atual"
+    )
     ind_final = fields.Selection(
         [('0', u'Não'),
          ('1', u'Sim')],

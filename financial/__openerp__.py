@@ -75,7 +75,8 @@
         'reports/report_xlsx_financial_defaults_data.xml',
         'reports/report_xlsx_financial_moves_cancelled_data.xml',
 
-        # 'security/inherited_res_partner_bank_security.xml',
+        'security/financial_move_ir_rule.xml',
+        'security/res_groups_data.xml',
         'security/ir.model.access.csv',
     ],
     'demo': [

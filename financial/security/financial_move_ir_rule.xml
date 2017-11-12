@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+        <!-- Copyright 2017 KMEE
+             Copyright 2017 KMEE - Hendrix Costa <hendrix.costa@kmee.com.br>
+             License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+             -->
+
+<openerp>
+    <data>
+
+        <!--Regras de acesso para lançamento financeiros -->
+        <record id="ir_rule_financial_move" model="ir.rule">
+            <field name="name">Apenas seus Lançamentos Financeiros</field>
+            <field name="model_id" ref="model_financial_move"/>
+            <field name="domain_force">
+                ['|',('company_id','=',False),('company_id','in',user.company_ids._ids)]
+            </field>
+        </record>
+
+    </data>
+</openerp>

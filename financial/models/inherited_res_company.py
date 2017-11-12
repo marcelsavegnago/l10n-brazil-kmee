@@ -8,6 +8,11 @@ from openerp import api, fields, models
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
+    adiantar_dia_pagamento_util = fields.Boolean(
+        string=u'Adiantar dia de pagamento útil?',
+        default=False
+    )
+
     today_date = fields.Date(
         string='Today Date',
     )

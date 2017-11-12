@@ -1,7 +1,34 @@
-id,name,model_id/id,group_id/id,perm_read,perm_unlink,perm_create,perm_unlink
-financial.financial_account_access_name,financial.account,financial.model_financial_account,base.group_user,1,1,1,1
-financial.financial_document_type_access_name,financial.document.type,financial.model_financial_document_type,base.group_user,1,1,1,1
-financial.financial_installment_access_name,financial.installment,financial.model_financial_installment,base.group_user,1,1,1,1
-financial.financial_installment_simulation_access_name,financial.installment.simulation,financial.model_financial_installment_simulation,base.group_user,1,1,1,1
-financial.financial_move_access_name,financial.move,financial.model_financial_move,base.group_user,1,1,1,1
-financial.financial_tree_analysis_access_name,financial.account.tree.analysis,financial.model_financial_account_tree_analysis,base.group_user,1,1,1,1
+group_id/id,model_id/id,name,id,perm_read,perm_create,perm_write,perm_unlink
+base.group_no_one,model_financial_move,Lançamento Financeiro (suporte),financial_move_grupo_suporte,True,True,True,True
+financial.GRUPO_FINAN_LEITURA,model_financial_move,Lançamento Financeiro (somente leitura),financial_move_grupo_finan_leitura,True,False,False,False
+financial.GRUPO_FINAN_GERAL,model_financial_move,Lançamento Financeiro (geral),financial_move_grupo_finan_geral,True,True,True,False
+financial.GRUPO_FINAN_GERENTE,model_financial_move,Lançamento Financeiro (Gerente),financial_move_grupo_finan_gerente,True,True,True,True
+
+base.group_no_one,model_res_partner_bank,Conta Financeira (suporte),res_partner_bank_grupo_suporte,True,True,True,True
+financial.GRUPO_FINAN_LEITURA,model_res_partner_bank,Conta Financeira (somente leitura),res_partner_bank_grupo_finan_leitura,True,False,False,False
+financial.GRUPO_FINAN_GERAL,model_res_partner_bank,Conta Financeira (geral),res_partner_bank_grupo_finan_geral,True,False,False,False
+financial.GRUPO_FINAN_GERENTE,model_res_partner_bank,Conta Financeira (Gerente),res_partner_bank_grupo_finan_gerente,True,True,True,False
+
+base.group_no_one,model_financial_installment,Financial Installment (suporte),financial_installment_grupo_suporte,True,True,True,True
+financial.GRUPO_FINAN_LEITURA,model_financial_installment,Financial Installment (somente leitura),financial_installment_grupo_finan_leitura,True,False,False,False
+financial.GRUPO_FINAN_GERAL,model_financial_installment,Financial Installment (geral),financial_installment_grupo_finan_geral,True,True,True,False
+financial.GRUPO_FINAN_GERENTE,model_financial_installment,Financial Installment (Gerente),financial_installment_grupo_finan_gerente,True,True,True,True
+
+base.group_no_one,model_financial_document_type,Financial Document Type (suporte),financial_document_type_grupo_suporte,True,True,True,True
+financial.GRUPO_FINAN_LEITURA,model_financial_document_type,Financial Document Type (somente leitura),financial_document_type_grupo_finan_leitura,True,False,False,False
+financial.GRUPO_FINAN_GERAL,model_financial_document_type,Financial Document Type (geral),financial_document_type_grupo_finan_geral,True,True,True,False
+financial.GRUPO_FINAN_GERENTE,model_financial_document_type,Financial Document Type (Gerente),financial_document_type_grupo_finan_gerente,True,True,True,True
+
+base.group_no_one,account_payment.model_payment_mode,Modo de Pagamento (suporte),payment_mode_grupo_suporte,True,True,True,True
+financial.GRUPO_FINAN_LEITURA,account_payment.model_payment_mode,Modo de Pagamento (somente leitura),payment_mode_grupo_finan_leitura,True,False,False,False
+financial.GRUPO_FINAN_GERAL,account_payment.model_payment_mode,Modo de Pagamento (geral),payment_mode_grupo_finan_geral,True,True,True,False
+financial.GRUPO_FINAN_GERENTE,account_payment.model_payment_mode,Modo de Pagamento (Gerente),payment_mode_grupo_finan_gerente,True,True,True,True
+
+base.group_no_one,model_financial_account,Financial Account (suporte),financial_account_grupo_suporte,True,True,True,True
+financial.GRUPO_FINAN_LEITURA,model_financial_account,Financial Account (somente leitura),financial_account_grupo_finan_leitura,True,False,False,False
+financial.GRUPO_FINAN_GERAL,model_financial_account,Financial Account (geral),financial_account_grupo_finan_geral,True,True,True,False
+financial.GRUPO_FINAN_GERENTE,model_financial_account,Financial Account (Gerente),financial_account_grupo_finan_gerente,True,True,True,True
+
+,model_financial_move_motivo_cancelamento,access_financial_move_motivo_cancelamento,access_financial_move_motivo_cancelamento,True,True,True,True
+,model_financial_installment_simulation,access_financial_installment_simulation,access_financial_installment_simulation,True,True,True,True
+,model_financial_account_tree_analysis,access_financial_account_tree_analysis,access_financial_account_tree_analysis,True,True,True,True

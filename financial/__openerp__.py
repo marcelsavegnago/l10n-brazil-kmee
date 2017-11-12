@@ -34,6 +34,10 @@
         'python': ['html2text'],
     },
     'data': [
+        'security/financial_move_ir_rule.xml',
+        'security/res_groups_data.xml',
+        'security/ir.model.access.csv',
+
         'views/financial_menu.xml',
 
         'data/financial_document_type_data.xml',
@@ -74,10 +78,6 @@
         'reports/report_xlsx_financial_partner_statement_data.xml',
         'reports/report_xlsx_financial_defaults_data.xml',
         'reports/report_xlsx_financial_moves_cancelled_data.xml',
-
-        'security/financial_move_ir_rule.xml',
-        'security/res_groups_data.xml',
-        'security/ir.model.access.csv',
     ],
     'demo': [
         'demo/financial_move.xml',

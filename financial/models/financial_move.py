@@ -78,6 +78,7 @@ class FinancialMove(models.Model):
         comodel_name='res.currency',
         default=lambda self: self.env.user.company_id.currency_id,
         track_visibility='_track_visibility_onchange',
+        required=True,
     )
     partner_id = fields.Many2one(
         comodel_name='res.partner',
@@ -396,7 +397,10 @@ class FinancialMove(models.Model):
         string='Document amount in original currency',
         digits=(18, 2),
     )
-
+    currency_rate = fields.Float(
+        string='Taxa de conversão',
+        digits=(18, 8),
+    )
     #
     #
     # Payment term and Payment mode
@@ -908,6 +912,48 @@ class FinancialMove(models.Model):
             financial = self.create(values)
             financial_move_ids |= financial
         return financial_move_ids
+
+    @api.onchange('original_currency_amount', 'original_currency_id', 'currency_id')
+    def onchange_original_currency_amount(self):
+
+        if not self.original_currency_id or not self.currency_id:
+            return
+
+        diff_currency = self.original_currency_id != self.currency_id
+
+        if diff_currency:
+
+            self.currency_rate = self.original_currency_id._get_conversion_rate(
+                self.original_currency_id,
+                self.currency_id
+            )
+
+            if self.original_currency_amount:
+
+                self.amount_document = self.currency_id.compute(
+                    self.original_currency_amount, self.original_currency_id
+                )
+
+    #
+    # Método com problemas de arredondamento
+    #
+    # @api.onchange('original_currency_id', 'currency_id', 'amount_document')
+    # def onchange_amount_document(self):
+    #
+    #     diff_currency = self.original_currency_id != self.currency_id
+    #
+    #     if diff_currency:
+    #
+    #         self.currency_rate = self.original_currency_id._get_conversion_rate(
+    #             self.original_currency_id,
+    #             self.currency_id
+    #         )
+    #
+    #         if self.amount_document:
+    #
+    #             self.original_currency_amount = self.original_currency_id.compute(
+    #                 self.amount_document, self.currency_id
+    #             )
 
 
 class FinancialMoveMotivoCancelamento(models.Model):

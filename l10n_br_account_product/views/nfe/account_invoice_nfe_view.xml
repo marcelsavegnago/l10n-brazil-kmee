@@ -162,8 +162,20 @@
                                                 string="(update)" class="oe_link oe_edit_only"
                                                 type="object" help="Recompute taxes and total"/>
                                             <newline/>
+                                            <label for="currency_id" groups="base.group_multi_currency"/>
+                                            <div groups="base.group_multi_currency">
+                                                <field name="currency_id" class="oe_inline"/>
+                                                <button name="%(account.action_account_change_currency)d" type="action"
+                                                  class="oe_inline oe_link oe_edit_only"
+                                                  string="(change)"
+                                                  attrs="{'invisible':[('state','!=','draft')]}"
+                                                  groups="account.group_account_user"/>
+                                            </div>
                                             <field name="amount_total" string="Total da NF" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                            <field name="amount_net" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+
+                                            <field name="company_currency_id" options="{'no_open': True, 'no_create': True}"/>
+                                            <field name="amount_company_currency" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
+                                            <field name="amount_net" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
                                             <newline/>
                                         </group>
                                     </group>
@@ -328,21 +340,27 @@
                                     </tree>
                                 </field>
                             </group>
-                            <group string="Pagamentos">
-                                <field nolabel="1" name="payment_ids">
-                                    <tree string="Payments">
-                                        <field name="date"/>
-                                        <field name="move_id"/>
-                                        <field name="ref"/>
-                                        <field name="name"/>
-                                        <field name="journal_id" groups="base.group_user"/>
-                                        <field name="debit"/>
-                                        <field name="credit"/>
-                                        <field name="amount_currency" groups="base.group_multi_currency"/>
-                                        <field name="currency_id" groups="base.group_multi_currency"/>
-                                    </tree>
-                                </field>
+                            <page string="Financeiro" name="financial_page">
+                            <group cols="4">
+                            <field name="financial_ids" colspan="4" nolabel="1">
+                                <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancelled'">
+                                    <field name="date_business_maturity" string="Maturity"/>
+                                    <field name="date_document"/>
+                                    <field name="display_name"/>
+                                    <!--<field name="partner_id"/>-->
+                                    <!--<field name="document_type_id"/>-->
+                                    <!--<field name="document_number"/>-->
+                                    <field name="currency_id" groups="base.group_multi_currency"/>
+                                    <field name="amount_document" sum="Document"/>
+                                    <field name="amount_total" sum="Total"/>
+                                    <field name="date_payment"/>
+                                    <field name="amount_paid_document" sum="Paid"/>
+                                    <field name="amount_residual" sum="Residual"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
                             </group>
+                        </page>
                         </page>
                         <page string="Contábil">
                             <group col="4">
@@ -351,15 +369,6 @@
                                     <field name="journal_id" groups="account.group_account_user"
                                         on_change="onchange_journal_id(journal_id)" options="{'no_create': True}"
                                         attrs="{'readonly':[('internal_number','!=',False)]}" domain="[('type', 'in', {'out_invoice': ['sale'], 'out_refund': ['sale_refund'], 'in_refund': ['purchase_refund'], 'in_invoice': ['purchase']}.get(type, [])), ('company_id', '=', company_id)]"/>
-                                    <label for="currency_id" groups="base.group_multi_currency"/>
-                                    <div groups="base.group_multi_currency">
-                                        <field name="currency_id" class="oe_inline"/>
-                                        <button name="%(account.action_account_change_currency)d" type="action"
-                                          class="oe_inline oe_link oe_edit_only"
-                                          string="(change)"
-                                          attrs="{'invisible':[('state','!=','draft')]}"
-                                          groups="account.group_account_user"/>
-                                    </div>
                                     <field domain="[('company_id', '=', company_id), ('type','in',{'out_invoice': ['receivable'], 'out_refund': ['receivable'], 'in_refund': ['payable'], 'in_invoice': ['payable']}.get(type, []))]"
                                         name="account_id" groups="account.group_account_user"
                                         context="{'periods_special': False, 'all_fiscalyear': True}"/>
@@ -468,9 +477,6 @@
                             <group string="Observações Fiscais">
                                 <field name="fiscal_comment" nolabel="1"/>
                             </group>
-                        </page>
-                        <page string="Financial" name="financial_page">
-                            <field name="financial_ids"/>
                         </page>
                     </notebook>
                 </sheet>

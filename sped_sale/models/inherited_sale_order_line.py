@@ -200,13 +200,14 @@ class SaleOrderLine(SpedCalculoImpostoItem, models.Model):
         readonly=True,
     )
 
+    dias_vencimento_cotacao = fields.Float(
+        string="Dias de vencimento das cotações",
+    )
+
     @api.model
     def _get_customer_lead(self):
         for record in self:
-            ir_values = self.env['ir.values']
-            dias_definidos = ir_values.get_default('res.config.settings',
-                                                   'dias_vencimento_cotacao')
-            record.customer_lead = dias_definidos
+            record.customer_lead = self.dias_vencimento_cotacao
 
     customer_lead = fields.Float(
         'Dias de vencimento da cotação',

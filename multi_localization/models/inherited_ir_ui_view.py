@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2016 Taŭga Tecnologia - Aristides Caldeira <aristides.caldeira@tauga.com.br>
+# Copyright 2016 Taŭga Tecnologia - Aristides Caldeira
+# <aristides.caldeira@tauga.com.br>
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
@@ -21,9 +22,9 @@ class IrUiView(models.Model):
         string='Business views/Localizations',
     )
 
-    #------------------------------------------------------
-    # Inheritance mecanism
-    #------------------------------------------------------
+#    ------------------------------------------------------
+#     Inheritance mecanism
+#    ------------------------------------------------------
     @api.model
     def get_inheriting_views_arch(self, view_id, model):
         res = super(IrUiView, self).get_inheriting_views_arch(view_id, model)
@@ -37,10 +38,12 @@ class IrUiView(models.Model):
         localization_id = None
         if self.env.user.localization_id:
             localization_id = self.env.user.localization_id.id
-        elif self.env.user.company_id and self.env.user.company_id.localization_id:
+        elif self.env.user.company_id \
+                and self.env.user.company_id.localization_id:
             localization_id = self.env.user.company_id.localization_id.id
 
-        inherited_view_ids = [inherited_view_id for view_arch, inherited_view_id in res]
+        inherited_view_ids = [inherited_view_id
+                              for view_arch, inherited_view_id in res]
 
         if localization_id is None:
             condition = [
@@ -59,7 +62,8 @@ class IrUiView(models.Model):
 
         if len(views) == len(inherited_view_ids):
             #
-            # None of the selected inherited views have any localization limitation
+            # None of the selected inherited views
+            # have any localization limitation
             #
             return res
 

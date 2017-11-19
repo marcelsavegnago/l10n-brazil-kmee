@@ -27,7 +27,7 @@ install:
 #  - pip install -r requirements.txt
   - pip install https://github.com/kmee/pybrasil/archive/python3.zip
   - pip install https://github.com/kmee/geraldo/archive/python3.zip
-  - pip install https://github.com/odoo-brazil/PySPED/archive/master.zip
+  - pip install https://github.com/kmee/PySPED/archive/python3.zip
   - travis_install_nightly
   - pip install -r requirements.txt
 

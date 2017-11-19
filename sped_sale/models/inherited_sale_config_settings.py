@@ -9,15 +9,8 @@ from odoo import fields, models, api
 class SaleConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
-    dias_vencimento_cotacao = fields.Float(
+    default_dias_vencimento_cotacao = fields.Float(
         string="Dias de vencimento das cotações",
-        default=0.0
+        default_model='sale.order.line',
+        default=0.0,
     )
-
-    @api.multi
-    def set_dias_vencimento_cotacao_defaults(self):
-        return self.env['ir.values'].sudo().set_default(
-            'res.config.settings',
-            'dias_vencimento_cotacao',
-            self.dias_vencimento_cotacao
-        )

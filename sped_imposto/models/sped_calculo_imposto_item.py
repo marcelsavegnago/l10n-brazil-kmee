@@ -7,15 +7,81 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-
-
 import logging
 
-from odoo import api, fields, models, _
-import odoo.addons.decimal_precision as dp
-from odoo.exceptions import ValidationError
+from odoo.addons.l10n_br_base.constante_tributaria import (
+    REGIME_TRIBUTARIO,
+    MODELO_FISCAL,
+    IE_DESTINATARIO,
+    TIPO_EMISSAO,
+    ENTRADA_SAIDA,
+    TIPO_CONSUMIDOR_FINAL,
+    POSICAO_CFOP,
+    ORIGEM_MERCADORIA,
+    ORIGEM_MERCADORIA_NACIONAL,
+    ST_ICMS,
+    MODALIDADE_BASE_ICMS_PROPRIO,
+    MODALIDADE_BASE_ICMS_PROPRIO_VALOR_OPERACAO,
+    ST_ICMS_SN,
+    MODALIDADE_BASE_ICMS_ST,
+    MODALIDADE_BASE_ICMS_ST_MARGEM_VALOR_AGREGADO,
+    APURACAO_IPI,
+    APURACAO_IPI_MENSAL,
+    ST_IPI,
+    ST_IPI_ENTRADA,
+    ST_IPI_SAIDA,
+    MODALIDADE_BASE_IPI,
+    MODALIDADE_BASE_IPI_ALIQUOTA,
+    ST_PIS,
+    ST_PIS_ENTRADA,
+    ST_PIS_SAIDA,
+    MODALIDADE_BASE_PIS,
+    MODALIDADE_BASE_PIS_ALIQUOTA,
+    ST_COFINS,
+    ST_COFINS_ENTRADA,
+    ST_COFINS_SAIDA,
+    MODALIDADE_BASE_COFINS,
+    MODALIDADE_BASE_COFINS_ALIQUOTA,
+    MODELO_FISCAL_CONSUMIDOR_FINAL,
+    ENTRADA_SAIDA_SAIDA,
+    TIPO_EMISSAO_PROPRIA,
+    TIPO_EMISSAO_TERCEIROS,
+    POSICAO_CFOP_ESTADUAL,
+    POSICAO_CFOP_ESTRANGEIRO,
+    POSICAO_CFOP_INTERESTADUAL,
+    REGIME_TRIBUTARIO_SIMPLES,
+    ENTRADA_SAIDA_ENTRADA,
+    ST_ICMS_SN_OUTRAS,
+    ST_PIS_CALCULA_ALIQUOTA,
+    ST_PIS_CALCULA_QUANTIDADE,
+    TIPO_CONSUMIDOR_FINAL_CONSUMIDOR_FINAL,
+    ST_IPI_CALCULA,
+    ST_ICMS_SN_CALCULA_CREDITO,
+    ORIGEM_MERCADORIA_ALIQUOTA_4,
+    ST_ICMS_CALCULA_ST,
+    ST_ICMS_SN_CALCULA_ST,
+    TIPO_PRODUTO_SERVICO_SERVICOS,
+    MODALIDADE_BASE_IPI_QUANTIDADE,
+    ST_PIS_CALCULA,
+    ST_PIS_CALCULA_CREDITO,
+    ST_PIS_AQUIS_SEM_CREDITO,
+    MODALIDADE_BASE_PIS_QUANTIDADE,
+    MODALIDADE_BASE_COFINS_QUANTIDADE,
+    ST_ICMS_SN_CALCULA_PROPRIO,
+    ST_ICMS_SN_ANTERIOR,
+    ST_ICMS_CALCULA_PROPRIO,
+    MODALIDADE_BASE_ICMS_PROPRIO_PAUTA,
+    MODALIDADE_BASE_ICMS_PROPRIO_PRECO_TABELADO_MAXIMO,
+    MODALIDADE_BASE_ICMS_PROPRIO_MARGEM_VALOR_AGREGADO,
+    ST_ICMS_COM_REDUCAO,
+    ST_ICMS_ZERA_ICMS_PROPRIO,
+
+)
 from odoo.addons.l10n_br_base.models.sped_base import SpedBase
-from odoo.addons.l10n_br_base.constante_tributaria import *
+from odoo.exceptions import ValidationError
+
+import odoo.addons.decimal_precision as dp
+from odoo import api, fields, _
 
 _logger = logging.getLogger(__name__)
 
@@ -160,8 +226,8 @@ class SpedCalculoImpostoItem(SpedBase):
     # quantidade = fields.Float(
     # string='Quantidade',
     # default=1,
-    #digits=dp.get_precision('SPED - Quantidade'),
-    #)
+    # digits=dp.get_precision('SPED - Quantidade'),
+    # )
     unidade_id = fields.Many2one(
         comodel_name='sped.unidade',
         string='Unidade',
@@ -220,13 +286,13 @@ class SpedCalculoImpostoItem(SpedBase):
     vr_seguro = fields.Monetary(
         string='Valor do seguro',
     )
-    #al_desconto = fields.Monetary(
-        #string='Percentual de desconto',
-        #currency_field='currency_aliquota_rateio_id',
-        #compute='_compute_al_desconto',
-        #inverse='_inverse_al_desconto',
-        #store=True,
-    #)
+    # al_desconto = fields.Monetary(
+    # string='Percentual de desconto',
+    # currency_field='currency_aliquota_rateio_id',
+    # compute='_compute_al_desconto',
+    # inverse='_inverse_al_desconto',
+    # store=True,
+    # )
     vr_desconto = fields.Monetary(
         string='Valor do desconto',
     )
@@ -877,26 +943,22 @@ class SpedCalculoImpostoItem(SpedBase):
         help='Indica o tipo do item',
     )
 
-    #@api.depends('vr_desconto')
-    #def _compute_al_desconto(self):
-        #for item in self:
-            #al_desconto = D(0)
-            #if item.vr_produtos and item.vr_desconto:
-                #al_desconto = D(item.vr_desconto) / D(item.vr_produtos)
-                #al_desconto *= 100
-            #item.al_desconto = al_desconto
-
-    #def _inverse_al_desconto(self):
-        #for item in self:
-            #al_desconto = D(item.al_desconto) / 100
-            #vr_desconto = D(item.vr_produtos) * al_desconto
-            #vr_desconto = vr_desconto.quantize(D('0.01'))
-            #item.vr_desconto = vr_desconto
-
-    #
+    # @api.depends('vr_desconto')
+    # def _compute_al_desconto(self):
+    # for item in self:
+    # al_desconto = D(0)
+    # if item.vr_produtos and item.vr_desconto:
+    # al_desconto = D(item.vr_desconto) / D(item.vr_produtos)
+    # al_desconto *= 100
+    # item.al_desconto = al_desconto
+    # def _inverse_al_desconto(self):
+    # for item in self:
+    # al_desconto = D(item.al_desconto) / 100
+    # vr_desconto = D(item.vr_produtos) * al_desconto
+    # vr_desconto = vr_desconto.quantize(D('0.01'))
+    # item.vr_desconto = vr_desconto
     # Funções para manter a sincronia entre as CSTs do PIS e COFINS para
     # entrada ou saída
-    #
     @api.onchange('cst_ipi_entrada')
     def _onchange_cst_ipi_entrada(self):
         self.ensure_one()
@@ -997,7 +1059,10 @@ class SpedCalculoImpostoItem(SpedBase):
                 self.uom_id = self.produto_id.unidade_id.uom_id
             return res
         elif self.emissao == TIPO_EMISSAO_TERCEIROS:
-            res = self._onchange_produto_id_recebimento()
+            if self.env.context.get('manual'):
+                res = self._onchange_produto_id_emissao_propria()
+            else:
+                res = self._onchange_produto_id_recebimento()
             if hasattr(self, 'product_id'):
                 self.product_id = self.produto_id.product_id.id
             if hasattr(self, 'product_uom'):
@@ -1031,15 +1096,15 @@ class SpedCalculoImpostoItem(SpedBase):
                     busca_item = [
                         ('operacao_id', '=', domain.get('operacao_id', False)),
                         ('tipo_protocolo', '=',
-                             domain.get('tipo_protocolo', False)),
+                         domain.get('tipo_protocolo', False)),
                         ('cfop_id.posicao', '=',
-                             domain.get('cfop_id_posicao', False)),
+                         domain.get('cfop_id_posicao', False)),
                         ('contribuinte', '=',
-                             domain.get('contribuinte', False)),
+                         domain.get('contribuinte', False)),
                         ('protocolo_id', '=',
-                             domain.get('protocolo_id', False)),
+                         domain.get('protocolo_id', False)),
                         ('tipo_produto_servico', '=',
-                             domain.get('tipo_produto_servico', False)),
+                         domain.get('tipo_produto_servico', False)),
                     ]
                     operacao_item_ids = self.operacao_id.item_ids.search(
                         busca_item)
@@ -1505,7 +1570,8 @@ class SpedCalculoImpostoItem(SpedBase):
         # Na nota de terceiros, respeitamos o IPI enviado no XML original,
         # e não recalculamos
         #
-        if self.emissao != TIPO_EMISSAO_PROPRIA:
+        if self.emissao != TIPO_EMISSAO_PROPRIA and not \
+                self.env.context.get('manual'):
             return res
 
         if (self.regime_tributario == REGIME_TRIBUTARIO_SIMPLES and
@@ -1556,7 +1622,8 @@ class SpedCalculoImpostoItem(SpedBase):
         avisos = {}
         res['warning'] = avisos
 
-        if self.emissao != TIPO_EMISSAO_PROPRIA:
+        if self.emissao != TIPO_EMISSAO_PROPRIA and not \
+                self.env.context.get('manual'):
             return res
 
         if not self.protocolo_id:
@@ -1712,7 +1779,8 @@ class SpedCalculoImpostoItem(SpedBase):
         if hasattr(self, 'product_uom_qty'):
             self.product_uom_qty = self.quantidade
 
-        if self.emissao != TIPO_EMISSAO_PROPRIA:
+        if self.emissao != TIPO_EMISSAO_PROPRIA and not \
+                self.env.context.get('manual'):
             return res
 
         #
@@ -1732,10 +1800,10 @@ class SpedCalculoImpostoItem(SpedBase):
         vr_produtos = D(self.quantidade) * D(self.vr_unitario)
         vr_produtos = vr_produtos.quantize(D('0.01'))
 
-        #if self.al_desconto:
-            #al_desconto = D(self.al_desconto) / 100
-            #vr_desconto = vr_produtos * al_desconto
-            #self.vr_desconto = vr_desconto
+        # if self.al_desconto:
+        # al_desconto = D(self.al_desconto) / 100
+        # vr_desconto = vr_produtos * al_desconto
+        # self.vr_desconto = vr_desconto
 
         #
         # Até segunda ordem, a quantidade e valor unitário para tributação não
@@ -1799,7 +1867,8 @@ class SpedCalculoImpostoItem(SpedBase):
     def _onchange_calcula_ipi(self):
         res = {}
 
-        if self.emissao != TIPO_EMISSAO_PROPRIA:
+        if self.emissao != TIPO_EMISSAO_PROPRIA and not \
+                self.env.context.get('manual'):
             return res
 
         self.bc_ipi = 0
@@ -1842,7 +1911,8 @@ class SpedCalculoImpostoItem(SpedBase):
     def _onchange_calcula_icms_sn(self):
         res = {}
 
-        if self.emissao != TIPO_EMISSAO_PROPRIA:
+        if self.emissao != TIPO_EMISSAO_PROPRIA and not \
+                self.env.context.get('manual'):
             return res
 
         self.vr_icms_sn = 0
@@ -1885,7 +1955,8 @@ class SpedCalculoImpostoItem(SpedBase):
     def _onchange_calcula_pis_cofins(self):
         res = {}
 
-        if self.emissao != TIPO_EMISSAO_PROPRIA:
+        if self.emissao != TIPO_EMISSAO_PROPRIA and not \
+                self.env.context.get('manual'):
             return res
 
         if (self.cst_pis in ST_PIS_CALCULA or
@@ -1949,7 +2020,8 @@ class SpedCalculoImpostoItem(SpedBase):
     def _onchange_calcula_icms_proprio(self):
         self.ensure_one()
 
-        if self.emissao != TIPO_EMISSAO_PROPRIA:
+        if self.emissao != TIPO_EMISSAO_PROPRIA and not \
+                self.env.context.get('manual'):
             return
 
         self.bc_icms_proprio = 0
@@ -2032,7 +2104,8 @@ class SpedCalculoImpostoItem(SpedBase):
     def _onchange_calcula_icms_st(self):
         self.ensure_one()
 
-        if self.emissao != TIPO_EMISSAO_PROPRIA:
+        if self.emissao != TIPO_EMISSAO_PROPRIA and not \
+                self.env.context.get('manual'):
             return
 
         self.bc_icms_st = 0
@@ -2109,7 +2182,8 @@ class SpedCalculoImpostoItem(SpedBase):
 
         res = {}
 
-        if self.emissao != TIPO_EMISSAO_PROPRIA:
+        if self.emissao != TIPO_EMISSAO_PROPRIA and not \
+                self.env.context.get('manual'):
             return res
 
         self.al_difal = 0
@@ -2150,7 +2224,8 @@ class SpedCalculoImpostoItem(SpedBase):
 
         res = {}
 
-        if self.emissao != TIPO_EMISSAO_PROPRIA:
+        if self.emissao != TIPO_EMISSAO_PROPRIA and not \
+                self.env.context.get('manual'):
             return res
 
         if self.al_simples:
@@ -2166,7 +2241,8 @@ class SpedCalculoImpostoItem(SpedBase):
 
         res = {}
 
-        if self.emissao != TIPO_EMISSAO_PROPRIA:
+        if self.emissao != TIPO_EMISSAO_PROPRIA and not \
+                self.env.context.get('manual'):
             return res
 
         if self.al_ibpt:
@@ -2183,7 +2259,8 @@ class SpedCalculoImpostoItem(SpedBase):
 
         res = {}
 
-        if self.emissao != TIPO_EMISSAO_PROPRIA:
+        if self.emissao != TIPO_EMISSAO_PROPRIA and not \
+                self.env.context.get('manual'):
             return res
 
         vr_nf = self.vr_operacao + self.vr_ipi + self.vr_icms_st + self.vr_ii
@@ -2255,7 +2332,7 @@ class SpedCalculoImpostoItem(SpedBase):
 
     def _seta_valores(self, res):
         self.ensure_one()
-        print (res)
+        print(res)
         if not (res and res.get('value')):
             return
 
@@ -2375,7 +2452,7 @@ class SpedCalculoImpostoItem(SpedBase):
             ['product_uom_qty', 'quantidade'],
         ]
         for campo_original, campo_brasil in CAMPOS:
-            if campo_original in dados and not campo_brasil in dados:
+            if campo_original in dados and campo_brasil not in dados:
                 dados[campo_brasil] = dados[campo_original]
 
         return dados

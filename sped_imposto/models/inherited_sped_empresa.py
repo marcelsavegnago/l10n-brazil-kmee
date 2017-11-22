@@ -22,7 +22,7 @@ from odoo.addons.l10n_br_base.constante_tributaria import (
     TIPO_EMISSAO_NFE,
     TIPO_EMISSAO_CFE,
     INDICADOR_PRESENCA_COMPRADOR,
-    INDICADOR_PRESENCA_COMPRADOR_NAO_SE_APLICA,
+    PROVEDOR_NFSE
 )
 
 import logging
@@ -222,7 +222,7 @@ class SpedEmpresa(models.Model):
         selection=AMBIENTE_NFE,
         string='Ambiente NFS-e'
     )
-    # provedor_nfse = fields.Selection(PROVEDOR_NFSE, 'Provedor NFS-e')
+    provedor_nfse = fields.Selection(PROVEDOR_NFSE, 'Provedor NFS-e')
     serie_rps_producao = fields.Char(
         string='Série em produção',
         size=3,

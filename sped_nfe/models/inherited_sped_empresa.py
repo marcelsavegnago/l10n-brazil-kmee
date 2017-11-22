@@ -113,6 +113,7 @@ class SpedEmpresa(models.Model):
 
         processador = ProcessadorNFe()
         processador.estado = self.estado
+        processador.ambiente = int(self.ambiente_nfe)
 
         if self.certificado_id:
             processador.certificado = \

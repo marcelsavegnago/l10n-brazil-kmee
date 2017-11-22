@@ -559,7 +559,7 @@ class SpedCalculoImpostoItem(SpedBase):
     #
 
     # ISS
-    # cst_iss = fields.Selection(ST_ISS, 'CST ISS', index=True)
+    cst_iss = fields.Selection(ST_ISS, 'CST ISS', index=True)
     bc_iss = fields.Monetary(
         string='Base do ISS',
     )

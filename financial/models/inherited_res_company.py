@@ -17,6 +17,8 @@ class ResCompany(models.Model):
         string='Today Date',
     )
 
+    @api.model
     def cron_update_reference_date_today(self):
         for company in self.env['res.company'].search([]):
-            company.today_date = fields.Date.today()
+            if company.today_date != fields.Date.today():
+                company.today_date = fields.Date.today()

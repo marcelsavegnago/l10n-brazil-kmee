@@ -48,6 +48,25 @@ class PurchaseOrder(SpedCalculoImposto, models.Model):
         store=True
     )
 
+    state = fields.Selection(
+        selection_add=[('faturado_fornecedor', 'Faturado pelo Fornecedor')],
+        group_expand='_read_group_stage_ids',
+        readonly=False,
+    )
+
+    order_line_count = fields.Integer(
+        compute='_compute_order_line_count'
+    )
+
+    @api.depends('order_line')
+    def _compute_order_line_count(self):
+        for pedido in self:
+            pedido.order_line_count = len(pedido.order_line)
+
+    @api.model
+    def _read_group_stage_ids(self, values, domain, order):
+        return ['draft', 'purchase', 'faturado_fornecedor', 'done', 'cancel']
+
     @api.model
     def _prepare_picking(self):
         res = super(PurchaseOrder, self)._prepare_picking()

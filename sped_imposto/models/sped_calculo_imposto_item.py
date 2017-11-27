@@ -1036,6 +1036,48 @@ class SpedCalculoImpostoItem(SpedBase):
                 self.uom_id = self.produto_id.unidade_id.uom_id
             return res
 
+    def busca_operacao_item(self, domain_base):
+        #
+        # As variações abaixo, nos 3 laços for, garantem que todas as
+        # possibilidades de variação dos critérios de pesquisa sejam atendidas
+        # A ordem de anihamento dos laços é inversa à ordem de importância da
+        # variação que queremos, ou seja, a primeira pesquisa é com/sem
+        # contribuinte, a segunda com/sem protocolo, e assim por diante
+        #
+        for varia_tipo_produto_servico in [True, False]:
+            for varia_protocolo in [True, False]:
+                for varia_contribuinte in [True, False]:
+                    variacao = {}
+                    if not varia_contribuinte:
+                        variacao['contribuinte'] = False
+                    if not varia_protocolo:
+                        variacao['protocolo_id'] = False
+                    if not varia_tipo_produto_servico:
+                        variacao['tipo_produto_servico'] = False
+
+                    domain = domain_base.copy()
+                    domain.update(variacao)
+
+                    busca_item = [
+                        ('operacao_id', '=', domain.get('operacao_id', False)),
+                        ('tipo_protocolo', '=',
+                             domain.get('tipo_protocolo', False)),
+                        ('cfop_id.posicao', '=',
+                             domain.get('cfop_id_posicao', False)),
+                        ('contribuinte', '=',
+                             domain.get('contribuinte', False)),
+                        ('protocolo_id', '=',
+                             domain.get('protocolo_id', False)),
+                        ('tipo_produto_servico', '=',
+                             domain.get('tipo_produto_servico', False)),
+                    ]
+                    operacao_item_ids = self.operacao_id.item_ids.search(
+                        busca_item)
+
+                    if operacao_item_ids:
+                        return operacao_item_ids
+        return False
+
     def _onchange_produto_id_emissao_propria(self):
         self.ensure_one()
 

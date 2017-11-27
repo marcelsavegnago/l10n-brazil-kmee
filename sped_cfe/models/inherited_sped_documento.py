@@ -491,6 +491,17 @@ class SpedDocumento(models.Model):
                 raise Warning('Pagamento(s) não autorizado(s)!')
 
         cliente = self.processador_cfe()
+<<<<<<< 8dd4d9987ee3e7861022d3211b9c4d6fd14f9e91
+=======
+
+        # FIXME: Datas
+        # # A NFC-e deve ter data de emissão no máx. 5 minutos antes
+        # # da transmissão; por isso, definimos a hora de emissão aqui no
+        # # envio
+        if self.modelo == MODELO_FISCAL_NFCE:
+            self.data_hora_emissao = fields.Datetime.now()
+            self.data_hora_entrada_saida = self.data_hora_emissao
+>>>>>>> [NEW] Processador cfe
 
         cfe = self.monta_cfe()
         self.grava_cfe(cfe)

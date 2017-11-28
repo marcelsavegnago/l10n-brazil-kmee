@@ -251,7 +251,6 @@ class SpedDocumento(models.Model):
             **kwargs
         )
         cfe_venda.validar()
-
         return cfe_venda
 
     def _monta_cfe_identificacao(self):
@@ -374,6 +373,7 @@ class SpedDocumento(models.Model):
 
         cfe = self.monta_cfe()
         # TODO: self.grava_cfe(cfe)
+
         #
         # Processa resposta
         #
@@ -390,6 +390,7 @@ class SpedDocumento(models.Model):
                 self.numero = chave.numero_cupom_fiscal
                 self.serie = chave.numero_serie
                 self.chave = resposta.chaveConsulta[3:]
+
 
                 # TODO: self.grava_cfe_autorizacao(resposta.xml())
 

@@ -166,18 +166,20 @@ class SpedDocumento(models.Model):
                 5000,  # FIXME: Colocar a porta nas configurações
                 numero_caixa=int(self.configuracoes_pdv.numero_caixa)
             )
-        elif self.tipo_processador_cfe == 'remoto':
-            NotImplementedError
+        elif self.configuracoes_pdv.tipo_sat == 'remoto':
+            cliente = None
+            # NotImplementedError
 
         return cliente
 
-    def grava_cfe(self, chave, cfe):
+    def grava_cfe(self, cfe):
         self.ensure_one()
-        nome_arquivo = chave + 'envio-cfe.xml'
+        nome_arquivo = 'envio-cfe.xml'
+        conteudo = cfe.documento().encode('utf-8')
         self.arquivo_xml_id = False
-        self.arquivo_xml_id = self._grava_anexo(nome_arquivo, cfe).id
+        self.arquivo_xml_id = self._grava_anexo(nome_arquivo, conteudo).id
 
-    def grava_cfe_autorizacao(self, chave, cfe):
+    def grava_cfe_autorizacao(self, cfe):
         self.ensure_one()
         nome_arquivo = self.chave + '-proc-nfe.xml'
         self.arquivo_xml_autorizacao_id = False
@@ -372,7 +374,7 @@ class SpedDocumento(models.Model):
         cliente = self.processador_cfe()
 
         cfe = self.monta_cfe()
-        # TODO: self.grava_cfe(cfe)
+        self.grava_cfe(cfe)
 
         #
         # Processa resposta
@@ -392,7 +394,8 @@ class SpedDocumento(models.Model):
                 self.chave = resposta.chaveConsulta[3:]
 
 
-                # TODO: self.grava_cfe_autorizacao(resposta.xml())
+
+                self.grava_cfe_autorizacao(resposta.xml())
 
                 # # self.grava_pdf(nfe, procNFe.danfe_pdf)
 

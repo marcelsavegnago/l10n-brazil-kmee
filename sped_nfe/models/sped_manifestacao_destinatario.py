@@ -8,7 +8,9 @@
 
 import logging
 
-from odoo import fields, models
+from odoo import _, api, fields, models
+import base64
+from lxml import objectify
 
 _logger = logging.getLogger(__name__)
 
@@ -111,20 +113,137 @@ class SpedManifestacaoDestinatario(models.Model):
         size=60,
     )
 
-    # 'nsu': fields.char(
-    # u'NSU', size=25, select=True),
-    # 'situacao_dfe': fields.selection(
-    #   SITUACAO_DFE, u'Situacação DF-e', select=True),
-    # 'situacao_manifestacao': fields.selection(
-    #   SITUACAO_MANIFESTACAO, u'Situacação DF-e', select=True),
-    # 'data_manifestacao': fields.datetime(
-    #   u'Data da manifestação'),
-    # 'justificativa': fields.char(
-    #   u'Justificativa', size=255),
-    # 'xml_autorizacao': fields.text(
-    #   u'XML de autorização'),
-    # 'xml_cancelamento': fields.text(
-    #   u'XML de cancelamento'),
-    # 'documento_original_id': fields.many2one(
-    #   'sped.documento',
-    #   u'Documento de remessa/transferência/venda original'),
+
+    situacao_nfe = fields.Selection(
+        string=u'Situacação da NF-e',
+        selection=SITUACAO_NFE,
+        select=True,
+        readonly=True,
+    )
+
+    state = fields.Selection(
+        string=u'Situacação da Manifestação',
+        selection=SITUACAO_MANIFESTACAO,
+        select=True,
+        readonly=True,
+    )
+    sped_consulta_dfe_id = fields.Many2one(
+        string=u'DF-E',
+        comodel_name='sped.consulta.dfe',
+        readonly=True,
+    )
+
+    @api.multi
+    def action_ciencia_emissao(self):
+        for record in self:
+
+            record.sped_consulta_dfe_id.validate_nfe_configuration(
+                record.empresa_id)
+
+            nfe_result = record.sped_consulta_dfe_id.send_event(
+                record.empresa_id,
+                record.chave,
+                'ciencia_operacao'
+            )
+            if nfe_result['code'] == '135':
+                record.state = 'ciente'
+            elif nfe_result['code'] == '573':
+                record.state = 'ciente'
+            else:
+                raise models.ValidationError(
+                    nfe_result['code'] + ' - ' + nfe_result['message'])
+                return False
+
+        return True
+
+    @api.multi
+    def action_confirmar_operacacao(self):
+        for record in self:
+            record.sped_consulta_dfe_id.validate_nfe_configuration(
+                record.empresa_id)
+            nfe_result = record.sped_consulta_dfe_id.send_event(
+                record.empresa_id,
+                record.chave,
+                'confirma_operacao')
+
+            if nfe_result['code'] == '135':
+                record.state = 'confirmado'
+            else:
+                raise models.ValidationError(_(
+                        nfe_result['code'] + ' - ' + nfe_result['message'])
+                )
+                return False
+
+        return True
+
+    @api.multi
+    def action_operacao_desconhecida(self):
+        for record in self:
+            record.sped_consulta_dfe_id.\
+                validate_nfe_configuration(record.empresa_id)
+            nfe_result = record.sped_consulta_dfe_id.send_event(
+                record.empresa_id,
+                record.chave,
+                'desconhece_operacao')
+
+            if nfe_result['code'] == '135':
+                record.state = 'desconhecido'
+            else:
+                raise models.ValidationError(_(
+                    nfe_result['code'] + ' - ' + nfe_result['message']))
+                return False
+
+        return True
+
+    @api.multi
+    def action_negar_operacao(self):
+        for record in self:
+            record.sped_consulta_dfe_id.\
+                validate_nfe_configuration(record.empresa_id)
+            nfe_result = record.sped_consulta_dfe_id.send_event(
+                record.empresa_id,
+                record.chave,
+                'nao_realizar_operacao')
+
+            if nfe_result['code'] == '135':
+                record.state = 'nap_realizado'
+            else:
+                raise models.ValidationError(_(
+                    nfe_result['code'] + ' - ' + nfe_result['message']))
+                return False
+
+        return True
+
+    @api.multi
+    def action_download_xml(self):
+        result = True
+        for record in self:
+            record.sped_consulta_dfe_id.\
+                validate_nfe_configuration(record.empresa_id)
+            nfe_result = record.sped_consulta_dfe_id.\
+                download_nfe(record.empresa_id, record.chave)
+
+            if nfe_result['code'] == '138':
+
+                file_name = 'NFe%s.xml' % record.chave
+                record.env['ir.attachment'].create(
+                    {
+                        'name': file_name,
+                        'datas': base64.b64encode(nfe_result['nfe']),
+                        'datas_fname': file_name,
+                        'description':
+                            u'XML NFe - Download manifesto do destinatário',
+                        'res_model': 'sped.manifestacao.destinatario',
+                        'res_id': record.id
+                    })
+
+                nfe = objectify.fromstring(nfe_result['nfe'])
+                documento = self.env['sped.documento'].new()
+                documento.modelo = nfe.NFe.infNFe.ide.mod.text
+                documento.le_nfe(xml=nfe_result['nfe'])
+            else:
+                raise models.ValidationError(_(
+                    nfe_result['code'] + ' - ' + nfe_result['message'])
+                )
+
+        return result

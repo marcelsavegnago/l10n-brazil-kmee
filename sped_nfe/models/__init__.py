@@ -22,3 +22,5 @@ from . import inherited_sped_documento_volume
 from . import sped_documento_carta_correcao
 
 from . import sped_consulta_dfe
+
+from le_nfe import inherited_sped_documento

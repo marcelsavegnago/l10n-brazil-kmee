@@ -123,6 +123,13 @@ class SpedParticipante(SpedBase, models.Model):
         store=True,
         index=True,
     )
+    cnpj_cpf_numero = fields.Char(
+        string='CNPJ/CPF (somente números)',
+        size=14,
+        compute='_compute_tipo_pessoa',
+        store=True,
+        index=True,
+    )
     tipo_pessoa = fields.Char(
         string='Tipo pessoa',
         size=1,
@@ -361,6 +368,9 @@ class SpedParticipante(SpedBase, models.Model):
                     INDICADOR_IE_DESTINATARIO_NAO_CONTRIBUINTE
                 )
                 participante.cnpj_cpf_raiz = participante.cnpj_cpf
+
+            participante.cnpj_cpf_numero = \
+                limpa_formatacao(participante.cnpj_cpf)
 
     @api.depends('eh_consumidor_final', 'endereco', 'numero', 'complemento',
                  'bairro', 'municipio_id', 'cep', 'eh_cliente',

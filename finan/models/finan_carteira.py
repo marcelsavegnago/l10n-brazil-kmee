@@ -132,6 +132,9 @@ class FinanCarteira(SpedBase, models.Model):
         required=True,
         default=1,
     )
+    empresa_id = fields.Many2one(
+        comodel_name='sped.empresa'
+    )
 
     @api.depends('banco_id', 'banco_id.banco', 'banco_id.titular_id',
                  'carteira',

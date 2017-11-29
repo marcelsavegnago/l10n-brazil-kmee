@@ -16,3 +16,5 @@ from . import inherited_sped_participante
 from . import finan_banco_extrato
 from . import finan_banco_saldo
 from . import finan_remessa
+from . import inherited_sale_order
+from . import inherited_sped_documento

@@ -21,6 +21,15 @@ class SpedEmpresa(models.Model):
     data_referencia_financeira = fields.Date(
         string='Data de referência financeira',
     )
+    carteira_id = fields.Many2one(
+        string='Carteira Padrão',
+        comodel_name='finan.carteira',
+    )
+    carteira_ids = fields.One2many(
+        string='Carteiras Permitidas',
+        comodel_name='finan.carteira',
+        inverse_name='empresa_id',
+    )
 
     def cron_atualiza_data_referencia_financeira(self):
         for empresa in self.env['sped.empresa'].search([]):

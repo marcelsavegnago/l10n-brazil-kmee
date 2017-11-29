@@ -7,7 +7,7 @@
 
 import logging
 
-from odoo import api, fields, models, _
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 import odoo.addons.decimal_precision as dp
 from .sped_base import SpedBase
@@ -113,39 +113,39 @@ class SpedProduto(SpedBase, models.Model):
         default='0'
     )
     # ncm_id = fields.Many2one(
-    # comodel_name='sped.ncm',
-    # string='NCM')
+    #     comodel_name='sped.ncm',
+    #     string='NCM')
     # cest_ids = fields.Many2many(
-    # comodel_name='sped.cest',
-    # related='ncm_id.cest_ids',
-    # string='Códigos CEST',
+    #     comodel_name='sped.cest',
+    #     related='ncm_id.cest_ids',
+    #     string='Códigos CEST',
     # )
     # exige_cest = fields.Boolean(
-    # string='Exige código CEST?',
+    #     string='Exige código CEST?',
     # )
     # cest_id = fields.Many2one(
-    # comodel_name='sped.cest',
-    # string='CEST'
+    #     comodel_name='sped.cest',
+    #     string='CEST'
     # )
     # protocolo_id = fields.Many2one(
-    # comodel_name='sped.protocolo.icms',
-    # string='Protocolo/Convênio',
+    #     comodel_name='sped.protocolo.icms',
+    #     string='Protocolo/Convênio',
     # )
     # al_ipi_id = fields.Many2one(
-    # comodel_name='sped.aliquota.ipi',
-    # string='Alíquota de IPI',
+    #     comodel_name='sped.aliquota.ipi',
+    #     string='Alíquota de IPI',
     # )
     # al_pis_cofins_id = fields.Many2one(
-    # comodel_name='sped.aliquota.pis.cofins',
-    # string='Alíquota de PIS e COFINS',
+    #     comodel_name='sped.aliquota.pis.cofins',
+    #     string='Alíquota de PIS e COFINS',
     # )
     # servico_id = fields.Many2one(
-    # comodel_name='sped.servico',
-    # string='Código do serviço',
+    #     comodel_name='sped.servico',
+    #     string='Código do serviço',
     # )
     # nbs_id = fields.Many2one(
-    # comodel_name='sped.nbs',
-    # string='NBS',
+    #     comodel_name='sped.nbs',
+    #     string='NBS',
     # )
     unidade_id = fields.Many2one(
         comodel_name='sped.unidade',
@@ -158,19 +158,20 @@ class SpedProduto(SpedBase, models.Model):
         readonly=True,
     )
     # unidade_tributacao_ncm_id = fields.Many2one(
-    # comodel_name='sped.unidade',
-    # related='ncm_id.unidade_id',
-    # string='Unidade de tributação do NCM',
-    # readonly=True,
+    #     comodel_name='sped.unidade',
+    #     related='ncm_id.unidade_id',
+    #     string='Unidade de tributação do NCM',
+    #     readonly=True,
     # )
     # fator_conversao_unidade_tributacao_ncm = fields.Float(
-    # string='Fator de conversão entre as unidades',
-    # default=1,
+    #     string='Fator de conversão entre as unidades',
+    #     default=1,
     # )
     # exige_fator_conversao_unidade_tributacao_ncm = fields.Boolean(
-    # string='Exige fator de conversão entre as unidades?',
-    # compute='_compute_exige_fator_conversao_ncm',
+    #     string='Exige fator de conversão entre as unidades?',
+    #     compute='_compute_exige_fator_conversao_ncm',
     # )
+    #
     # Para a automação dos volumes na NF-e
     especie = fields.Char(
         string='Espécie/embalagem',
@@ -350,6 +351,5 @@ class SpedProduto(SpedBase, models.Model):
             produtos = self.search(args, limit=limit)
             return produtos.name_get()
 
-        return super(SpedProduto, self).name_search(name=name, args=args,
-                                                    operator=operator,
-                                                    limit=limit)
+        return super(SpedProduto, self).\
+            name_search(name=name, args=args, operator=operator, limit=limit)

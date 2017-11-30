@@ -25,6 +25,7 @@
         'views/inherited_sped_documento_emissao_nfce_view.xml',
         'views/sped_documento_carta_correcao_view.xml',
         'views/sped_consulta_dfe_view.xml',
+        'views/sped_importa_nfe.xml',
     ],
     'external_dependencies': {
         'python': ['pybrasil', 'pysped', 'mako'],

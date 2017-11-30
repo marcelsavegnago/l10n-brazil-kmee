@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2016 KMEE INFORMATICA LTDA -
+    Hugo Borges <hugo.borges@kmee.com.br>
+    License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
+-->
+
+<odoo>
+
+     <record id='sped_importa_nfe_wizard_form' model='ir.ui.view'>
+        <field name='name'>sped_importa_nfe</field>
+        <field name='model'>sped.importa.nfe</field>
+        <field name='arch' type='xml'>
+            <form string="Importar NFe">
+                <sheet>
+                    <group>
+                        <field name='chave'/>
+                    </group>
+                    <group>
+                        <field name='empresa_id'/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name='importa_nfe'
+                        string='Importar'
+                        class='btn-primary'
+                        type='object'/> or
+                    <button string='Cancelar'
+                        class='btn-default'
+                        special='cancel'/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="sped_importa_nfe_wizard_action"
+        name="Importar_NF-e"
+        res_model="sped.importa.nfe"
+        view_type="form"
+        view_mode="form"
+        target="new"
+        />
+
+    <menuitem
+        id="menu_sped_importa_nfe_wizard"
+        sequence="20"
+        name="Importar_NF-e"
+        parent="sped.menu_sped_documento_emissao"
+        action="sped_importa_nfe_wizard_action"
+        />
+</odoo>

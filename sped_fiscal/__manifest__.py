@@ -11,7 +11,7 @@
     'author': 'KMEE,Odoo Community Association (OCA)',
     'website': 'www.kmee.com.br',
     'depends': [
-        'sped',
+        'l10n_br_base',
     ],
     'data': [
         'security/sped_fiscal.xml',

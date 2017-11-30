@@ -23,4 +23,4 @@ from . import sped_documento_carta_correcao
 
 from . import sped_consulta_dfe
 
-from le_nfe import inherited_sped_documento
+from .le_nfe import inherited_sped_documento

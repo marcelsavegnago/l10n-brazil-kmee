@@ -6,7 +6,8 @@ from odoo import api, fields, models
 from odoo.addons.sped_imposto.models.sped_calculo_imposto import (
     SpedCalculoImposto
 )
-from odoo.addons.l10n_br_base.constante_tributaria import SITUACAO_FISCAL_SPED_CONSIDERA_ATIVO
+from odoo.addons.l10n_br_base.constante_tributaria \
+    import SITUACAO_FISCAL_SPED_CONSIDERA_ATIVO
 
 
 class PurchaseOrder(SpedCalculoImposto, models.Model):
@@ -135,7 +136,8 @@ class PurchaseOrder(SpedCalculoImposto, models.Model):
     @api.multi
     def visualizar_documentos(self):
         '''
-        This function returns an action that display existing vendor bills of given purchase order ids.
+        This function returns an action that display existing vendor
+        bills of given purchase order ids.
         When only one found, show the vendor bill immediately.
         '''
         action = self.env.ref('sped.sped_documento_emissao_nfe_acao')
@@ -151,9 +153,11 @@ class PurchaseOrder(SpedCalculoImposto, models.Model):
         }
 
         if len(self.documento_ids) > 1:
-            result['domain'] = "[('id', 'in', " + str(self.documento_ids.ids) + ")]"
+            result['domain'] = "[('id', 'in', " + \
+                               str(self.documento_ids.ids) + ")]"
         elif len(self.documento_ids) == 1:
-            res = self.env.ref('sped_purchase.sped_documento_emissao_nfe_form_view', False)
+            res = self.env.ref('sped_purchase.sped_documento_'
+                               'emissao_nfe_form_view', False)
             result['views'] = [(res and res.id or False, 'form')]
             result['res_id'] = self.documento_ids.id
         return result
@@ -173,3 +177,21 @@ class PurchaseOrder(SpedCalculoImposto, models.Model):
         if self.company_id.po_lock == 'lock':
             self.write({'state': 'done'})
         return {}
+
+    @api.onchange('state')
+    def atualiza_estado(self):
+        action = {}
+        if self.state == 'faturado_fornecedor':
+            action = {
+                'name': 'Importar NF-e',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'sped.importa.nfe',
+                'view_id': self.env.ref(
+                    'sped_nfe.sped_importa_nfe_wizard_action').id,
+                'type': 'ir.actions.act_window',
+                # 'context': context,
+                'target': 'new'
+            }
+
+        return action

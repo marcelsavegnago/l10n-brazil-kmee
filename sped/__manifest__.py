@@ -21,6 +21,8 @@
     'installable': True,
     'application': True,
     'data': [
+        'security/sped_obrigacoes_fiscais.xml',
+        'views/sped_obrigacoes_fiscais.xml',
         #
         # Menus
         #

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017 KMEE INFORMATICA LTDA
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="sped_obrigacoes_fiscais_form_view">
+        <field name="name">sped.obrigacoes_fiscais.form (in sped)</field>
+        <field name="model">sped.obrigacoes_fiscais</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="gerar_arquivo" string="Gerar Arquivos" type="object"/>
+                    <button name="envia_arquivos_por_email" string="Enviar por email" type="object"/>
+                </header>
+                <sheet>
+                     <div class="oe_title">
+                        <label for="mes_ano" class="oe_edit_only"/>
+                        <h1>
+                            <field name="mes_ano" default_focus="1" placeholder="MM/AAAA" required="1" />
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="arquivo_zip_xml_nfe_emitidas_id"/>
+                        <field name="arquivo_zip_xml_nfe_recebidas_id"/>
+                        <field name="arquivo_zip_xml_cte_recebidas_id"/>
+                        <field name="arquivo_zip_xml_nfce_cfe_emitidas_id"/>
+                        <field name="arquivo_posicao_estoque_id"/>
+                        <field name="arquivo_sped_efd_id"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter"></div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="sped_obrigacoes_fiscais_tree_view">
+        <field name="name">sped.obrigacoes_fiscais.tree (in sped)</field>
+        <field name="model">sped.obrigacoes_fiscais</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="mes_ano"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="sped_obrigacoes_fiscais_act_window">
+        <field name="name">Obrigacoes Fiscais</field>
+        <field name="res_model">sped.obrigacoes_fiscais</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="sped_obrigacoes_fiscais_menu">
+        <field name="name">Obrigacoes Fiscais</field>
+        <field name="parent_id" ref="xmlid of parent menu"/>
+        <field name="action" ref="sped_obrigacoes_fiscais_act_window"/>
+        <field name="sequence" eval="16"/>
+    </record>
+
+</odoo>

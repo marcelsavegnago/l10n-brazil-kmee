@@ -10,6 +10,7 @@ from __future__ import division, print_function, unicode_literals
 import logging
 import tempfile
 from datetime import datetime
+import base64
 
 from odoo import api, fields, models
 from odoo.addons.l10n_br_base.constante_tributaria import (
@@ -144,7 +145,7 @@ class SpedCertificado(models.Model):
 
         arq = tempfile.NamedTemporaryFile(delete=False)
         arq.seek(0)
-        arq.write(self.arquivo.decode('base64'))
+        arq.write(base64.decodebytes(self.arquivo))
         arq.flush()
 
         cert = pysped.xml_sped.certificado.Certificado()

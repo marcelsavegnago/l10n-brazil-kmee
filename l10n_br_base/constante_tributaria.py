@@ -958,7 +958,8 @@ SITUACAO_NFE_DENEGADA = 'denegada'
 SITUACAO_NFE_INUTILIZADA = 'inutilizada'
 
 PROVEDOR_NFSE = (
-    ('ginfes', 'GINFES')
+    ('ginfes', 'GINFES'),
+    ('paulistana', 'Paulistana'),
 )
 
 NATUREZA_TRIBUTACAO_NFSE = (

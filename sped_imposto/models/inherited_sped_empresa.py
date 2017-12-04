@@ -233,10 +233,14 @@ class SpedEmpresa(models.Model):
         size=3,
         default='100'
     )
-    ultimo_rps = fields.Integer(
-        string='Último RPS'
+    ultimo_rps = fields.Many2one(
+        comodel_name='ir.sequence',
+        string='Último RPS',
+        copy=False,
     )
-    ultimo_lote_rps = fields.Integer(
+    ultimo_lote_rps = fields.Many2one(
+        comodel_name='ir.sequence',
+        copy=False,
         string='Último lote de RPS'
     )
     presenca_comprador = fields.Selection(

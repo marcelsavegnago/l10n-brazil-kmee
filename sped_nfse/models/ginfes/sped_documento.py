@@ -9,6 +9,11 @@ import datetime
 from decimal import Decimal
 import os
 
+from odoo.addons.l10n_br_base import (
+    TIPO_EMISSAO_NFE_NORMAL,
+    AMBIENTE_NFE_PRODUCAO,
+)
+
 from pytrustnfe.nfse.ginfes import xml_recepcionar_lote_rps
 from pytrustnfe.nfse.ginfes import recepcionar_lote_rps
 from pytrustnfe.nfse.ginfes import consultar_situacao_lote
@@ -27,6 +32,36 @@ DIRNAME = os.path.dirname(__file__)
 class SpedDocumento(models.Model):
 
     _inherit = 'sped.documento'
+
+    numero_rps = fields.Char(
+        string='Número da RPS'
+    )
+
+    @api.onchange('empresa_id', 'modelo', 'emissao')
+    def _onchange_empresa_id(self):
+        res = super(SpedDocumento, self)._onchange_empresa_id()
+
+        if self.modelo == MODELO_FISCAL_NFSE:
+            res['value']['ambiente_nfe'] = self.empresa_id.ambiente_nfse
+            res['value']['tipo_emissao_nfe'] = TIPO_EMISSAO_NFE_NORMAL
+
+            if self.empresa_id.ambiente_nfse == AMBIENTE_NFE_PRODUCAO:
+                res['value']['serie'] = self.empresa_id.serie_rps_producao
+            else:
+                res['value']['serie'] = self.empresa_id.serie_rps_homologacao
+
+
+            return res
+
+    @api.onchange('empresa_id', 'modelo', 'emissao', 'serie', 'ambiente_nfe')
+    def _onchange_serie(self):
+        res = super(SpedDocumento, self)._onchange_serie()
+
+        if self.modelo == MODELO_FISCAL_NFSE:
+            rps = self.empresa_id.ultimo_rps._next()
+            res['value']['numero_rps'] = rps
+
+        return res
 
     def envia_nfe(self):
         self.ensure_one()
@@ -251,7 +286,7 @@ class SpedDocumento(models.Model):
                 'optante_simples': '1' if self.empresa_id.regime_tributario in
                                           ('1', '2') else '2',
                 'incentivador_cultural': '2', # TODO: automatizar seleção
-                'numero': int(self.numero),
+                'numero': int(self.numero_rps),
                 'serie': self.serie,
                 'tipo_rps': '1', # TODO: opções para substituir nota
                 'data_emissao': data_emissao.strftime('%Y-%m-%dT%H:%M:%S'),
@@ -264,7 +299,7 @@ class SpedDocumento(models.Model):
         rps[0].update(servico)
 
         lote_rps = {
-            'numero_lote': self.empresa_id.ultimo_lote_rps._next(),
+            'numero_lote': self.empresa_id.ultimo_lote_rps.next_by_code(''),
             'cnpj_prestador': re.sub('[^0-9]', '', empresa.cnpj_cpf or ''),
             'inscricao_municipal': re.sub('[^0-9]', '', empresa.im or ''),
             'lista_rps': rps,

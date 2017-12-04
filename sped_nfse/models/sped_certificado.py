@@ -15,6 +15,7 @@ _logger = logging.getLogger(__name__)
 
 try:
     import pybrasil.certificado as Cert
+    from pytrustnfe.certificado import Certificado as CertificadoNFse
 except (ImportError, IOError) as err:
     _logger.debug(err)
 
@@ -27,22 +28,9 @@ class SpedCertificado(models.Model):
 
     def certificado_nfse(self):
         self.ensure_one()
+        cert = self.certificado_nfe()
 
-        if self.id in CERTIFICADOS:
-            return CERTIFICADOS[self.id]
+        senha = bytes(cert.senha.encode())
+        arquivo = cert.stream_certificado
 
-        cert = self.with_context({'bin_size': False}).arquivo
-        arq = tempfile.NamedTemporaryFile(delete=False)
-        arq.seek(0)
-        arq.write(base64.decodebytes(cert))
-        arq.flush()
-
-        cert = Cert.Certificado()
-        cert.arquivo = arq.name
-        cert.senha = self.senha
-
-        cert.prepara_certificado_arquivo_pfx()
-
-        CERTIFICADOS[self.id] = cert
-
-        return cert
+        return CertificadoNFse(arquivo, senha)

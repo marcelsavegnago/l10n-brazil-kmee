@@ -93,8 +93,8 @@
                         <field name="serie_rps_producao" string="Série" />
                         <field name="serie_rps_homologacao" string="Série" />
                         <newline />
-                        <field name="ultimo_rps" />
-                        <field name="ultimo_lote_rps" />
+                        <!--<field name="ultimo_rps" />-->
+                        <!--<field name="ultimo_lote_rps" />-->
                     </group>
                 </page>
             </xpath>

@@ -9,7 +9,7 @@ import datetime
 from decimal import Decimal
 import os
 
-from odoo.addons.l10n_br_base import (
+from odoo.addons.l10n_br_base.constante_tributaria import (
     TIPO_EMISSAO_NFE_NORMAL,
     AMBIENTE_NFE_PRODUCAO,
 )

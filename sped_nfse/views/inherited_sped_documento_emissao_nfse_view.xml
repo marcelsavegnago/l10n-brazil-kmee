@@ -24,11 +24,8 @@
                                 attrs="{'invisible': [('situacao_nfe', '!=', 'enviada')]}"/>
                     </header>
                 </xpath>
-                <xpath expr="//field[@name='numero']" position="replace">
-                    <!-- MODELOS RELACIONADOS A NFCE E NFE RESPECTIVAMENTE -->
-                    <field name="numero" attrs="{'invisible': [('modelo','not in',('65','55'))]}" />
-                    <!-- MODELO RELACIONADO A NOTA FISCAL DE SERVIÇO -->
-                    <field name="numero_rps" attrs="{'invisible': [('modelo','=','SE')]}" />
+                <xpath expr="//field[@name='numero']" position="after">
+                    <field name="numero_rps" attrs="{'invisible': [('modelo','!=','SE')]}" />
                 </xpath>
                 <xpath expr="//field[@name='empresa_id']" position="before">
                     <field name="situacao_nfe" readonly="1" colspan="4"

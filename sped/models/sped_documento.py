@@ -1350,9 +1350,7 @@ class SpedDocumento(SpedBase, models.Model):
     def create(self, dados):
         dados = self.executa_antes_create(dados)
         result = super(SpedDocumento, self).create(dados)
-        return self.executa_depois_create(result, dados)
-
-    def executa_depois_create(self, result, dados):
+        # result.executa_depois_create()
         return result
 
     def executa_antes_write(self, dados):

@@ -22,7 +22,7 @@ _logger = logging.getLogger(__name__)
 
 try:
     import pysped
-
+    import pybrasil.certificado as Cert
     from pybrasil.data import formata_data
     from pybrasil.inscricao import (formata_cnpj, formata_cpf, valida_cnpj,
                                     valida_cpf)
@@ -148,7 +148,7 @@ class SpedCertificado(models.Model):
         arq.write(base64.decodebytes(self.arquivo))
         arq.flush()
 
-        cert = pysped.xml_sped.certificado.Certificado()
+        cert = Cert.Certificado()
         cert.arquivo = arq.name
         cert.senha = self.senha
 

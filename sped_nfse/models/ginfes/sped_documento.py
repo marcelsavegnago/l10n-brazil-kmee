@@ -12,6 +12,9 @@ import os
 from odoo.addons.l10n_br_base.constante_tributaria import (
     TIPO_EMISSAO_NFE_NORMAL,
     AMBIENTE_NFE_PRODUCAO,
+    SITUACAO_NFE_ENVIADA,
+    SITUACAO_NFE_REJEITADA,
+    SITUACAO_NFE_CANCELADA,
 )
 
 from pytrustnfe.nfse.ginfes import xml_recepcionar_lote_rps
@@ -40,7 +43,8 @@ class SpedDocumento(models.Model):
     @api.onchange('empresa_id', 'modelo', 'emissao')
     def _onchange_empresa_id(self):
         res = super(SpedDocumento, self)._onchange_empresa_id()
-
+        if not res:
+            res = {'value': {}}
         if self.modelo == MODELO_FISCAL_NFSE:
             res['value']['ambiente_nfe'] = self.empresa_id.ambiente_nfse
             res['value']['tipo_emissao_nfe'] = TIPO_EMISSAO_NFE_NORMAL
@@ -57,7 +61,7 @@ class SpedDocumento(models.Model):
     def _onchange_serie(self):
         res = super(SpedDocumento, self)._onchange_serie()
 
-        if self.modelo == MODELO_FISCAL_NFSE:
+        if self.modelo == MODELO_FISCAL_NFSE and not self.numero_rps:
             rps = self.empresa_id.ultimo_rps._next()
             res['value']['numero_rps'] = rps
 
@@ -93,7 +97,7 @@ class SpedDocumento(models.Model):
         obj_retorno = retorno['object']
 
         if hasattr(obj_retorno, 'Protocolo'):
-            self.situacao_nfe = 'enviada'
+            self.situacao_nfe = SITUACAO_NFE_ENVIADA
             self.protocolo_autorizacao = obj_retorno.Protocolo
             self.data_hora_autorizacao = datetime.datetime.strptime(
                 obj_retorno.DataRecebimento.text, '%Y-%m-%dT%H:%M:%S')
@@ -104,7 +108,7 @@ class SpedDocumento(models.Model):
             msg += obj_retorno.Mensagem + ' - '
             msg += obj_retorno.Correcao
             self.mensagem_nfe = msg
-            self.situacao_nfe = 'rejeitada'
+            self.situacao_nfe = SITUACAO_NFE_REJEITADA
 
     def consulta_nfse(self):
         pfx = self.empresa_id.certificado_id.certificado_nfse()
@@ -182,13 +186,13 @@ class SpedDocumento(models.Model):
         obj_retorno = retorno['object']
 
         if hasattr(obj_retorno, 'Cancelamento'):
-            self.situacao_nfe = 'cancelado'
+            self.situacao_nfe = SITUACAO_NFE_CANCELADA
             self.mensagem_nfe = u'Nota Fiscal de Serviço Cancelada'
 
         else:
             # E79 - Nota já está cancelada
             if obj_retorno.ListaMensagemRetorno.MensagemRetorno.Codigo == 'E79':
-                self.situacao_nfe = 'cancelado'
+                self.situacao_nfe = SITUACAO_NFE_CANCELADA
                 self.mensagem_nfe = u'Nota Fiscal de Serviço Cancelada'
 
             else:
@@ -299,7 +303,7 @@ class SpedDocumento(models.Model):
         rps[0].update(servico)
 
         lote_rps = {
-            'numero_lote': self.empresa_id.ultimo_lote_rps.next_by_code(''),
+            'numero_lote': self.empresa_id.ultimo_lote_rps._next(),
             'cnpj_prestador': re.sub('[^0-9]', '', empresa.cnpj_cpf or ''),
             'inscricao_municipal': re.sub('[^0-9]', '', empresa.im or ''),
             'lista_rps': rps,

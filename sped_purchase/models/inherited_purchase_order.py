@@ -191,9 +191,6 @@ class PurchaseOrder(SpedCalculoImpostoProdutoServico, models.Model):
         self._create_picking()
         if self.company_id.po_lock == 'lock':
             self.write({'state': 'done'})
-        for picking in self.picking_ids:
-            if picking.state != 'cancel':
-                picking.write({'state': 'confirmed'})
         return {}
 
     @api.multi

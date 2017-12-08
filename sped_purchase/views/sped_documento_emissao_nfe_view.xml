@@ -7,15 +7,31 @@
         <field name="arch" type="xml">
             <group position="before">
                 <group colspan="4">
-                    <field name="purchase_order_ids" widget="many2many_tags"/>
+                    <field name="purchase_order_ids" widget="many2many_tags"
+                           domain="[('empresa_id', '=', empresa_id.id),
+                           ('participante_id', '=', participante_id.id),
+                           ('invoice_status', '=', 'to invoice')]"/>
                 </group>
             </group>
             <field name="item_ids" position="attributes">
                 <attribute name="context">{
-                    'form_view_ref' : 'sped_purchase.sped_documento_item_form',
-                    'tree_view_ref' : 'sped_purchase.sped_documento_item_tree',
-                    'manual': True}</attribute>
+                    'form_view_ref': 'sped_purchase.sped_documento_item_form',
+                    'tree_view_ref': 'sped_purchase.sped_documento_item_tree',
+                    'manual': True, 'default_purchase_ids': [(4, purchase_order_ids[0].id)]}</attribute>
             </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="sped_documento_ajuste_recebimento_form" >
+        <field name="name">sped.documento.ajuste.recebimento.form (in sped_purchase)</field>
+        <field name="model">sped.documento</field>
+        <field name="inherit_id" ref="sped_nfe.sped_documento_ajuste_recebimento_form" />
+        <field name="arch" type="xml">
+            <group position="before">
+                <group colspan="4">
+                    <field name="purchase_order_ids" widget="many2many_tags"/>
+                </group>
+            </group>
         </field>
     </record>
 </odoo>

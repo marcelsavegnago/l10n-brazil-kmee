@@ -30,6 +30,24 @@ class SpedDocumento(models.Model):
         }
         return dados
 
+    @api.onchange('purchase_order_ids')
+    def _onchange_atualiza_po_itens(self):
+        """
+        Atualiza o campo purchase_ids dos itens do pedido de compra
+        de acordo com o campo purchase_order_ids do pedido de compra
+        """
+        for record in self:
+            if not record.purchase_order_ids or len(
+                    record.purchase_order_ids) > 1:
+                return {}
+
+            dados = {
+                'purchase_ids': [(6, False, record.purchase_order_ids[0].ids)]
+            }
+
+            for item in record.item_ids:
+                item.write(dados)
+
     # # Carregar linhas da Purchase Order
     # @api.onchange('purchase_order_ids')
     # def purchase_order_change(self):

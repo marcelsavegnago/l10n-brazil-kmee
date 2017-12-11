@@ -43,6 +43,7 @@
                     <field name="purchase_ids" widget="many2many_tags"
                            domain="[('invoice_status', '=', 'to invoice')]"/>
                     <field name="purchase_line_ids" widget="many2many_tags"
+                           attrs="{'invisible': [('purchase_ids', '=', False)]}"
                            domain="[('order_id', '=', purchase_ids[0])]"/>
                     <field name="pode_alterar_quantidade" invisible="True"/>
                 </group>

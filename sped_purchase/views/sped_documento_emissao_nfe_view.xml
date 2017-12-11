@@ -17,7 +17,8 @@
                 <attribute name="context">{
                     'form_view_ref': 'sped_purchase.sped_documento_item_form',
                     'tree_view_ref': 'sped_purchase.sped_documento_item_tree',
-                    'manual': True, 'default_purchase_ids': [(4, purchase_order_ids[0].id)]}</attribute>
+                    'manual': True
+                </attribute>
             </field>
         </field>
     </record>

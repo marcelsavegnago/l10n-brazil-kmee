@@ -873,7 +873,7 @@ class FinanLancamento(SpedBase, models.Model):
             diferenca += D(lancamento.vr_baixado)
             diferenca += D(lancamento.vr_outros_debitos)
 
-            adiantamento = D(0)
+            adiantamento = lancamento.vr_adiantado
             if lancamento.tipo == FINAN_RECEBIMENTO:
                 if self.participante_id.adiantamento_a_pagar:
                     if self.participante_id.adiantamento_a_pagar <= \
@@ -901,7 +901,7 @@ class FinanLancamento(SpedBase, models.Model):
 
             else:
                 lancamento.vr_adiantado = D(0)
-                lancamento.vr_desconto = diferenca * -1
+                #lancamento.vr_desconto = diferenca * -1
 
     #@api.model
     #def _avaliable_transition(self, old_state, new_state):

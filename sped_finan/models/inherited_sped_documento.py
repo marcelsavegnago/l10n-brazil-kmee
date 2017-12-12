@@ -33,6 +33,11 @@ class SpedDocumento(models.Model):
         copy=False,
     )
 
+    anexos = fields.Boolean(
+        string='Anexos Gerados',
+        readonly=True,
+    )
+
     @api.onchange('operacao_id', 'emissao', 'natureza_operacao_id')
     def _onchange_operacao_id(self):
         res = super(SpedDocumento, self)._onchange_operacao_id()
@@ -161,3 +166,4 @@ class SpedDocumento(models.Model):
 
                     boleto = lancamento_id.gera_boleto()
                     documento_id._grava_anexo(boleto.nome, boleto.pdf)
+        self.anexos = True

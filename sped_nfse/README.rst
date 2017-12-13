@@ -8,6 +8,10 @@ Sped Nfse
 
 Transmissão de NFS-E
 
+Atualmente apenas provedor Ginfes:
+* Transmissão de RPS
+* Consulta de situação da RPS
+
 Installation
 ============
 
@@ -39,7 +43,15 @@ To use this module, you need to:
 Known issues / Roadmap
 ======================
 
-* ...
+* Provedor Ginfes [x]
+* Transmissão de RPS (Ginfes) [x]
+* Consulta de situação de RPS (Ginfes) [x]
+
+* Substituição de RPS (Ginfes) []
+* Cancelamento de RPS (GinfesL []
+
+* Outros provedores []
+
 
 Bug Tracker
 ===========
@@ -60,8 +72,10 @@ Images
 Contributors
 ------------
 
-* Firstname Lastname <email.address@example.org>
-* Second Person <second.person@example.org>
+* Daniel Sadamo <daniel.sadamo@kmee.com.br>
+* Atilla Silva <atilla.silva@kmee.com.br>
+* Luis Felipe Mileo <mileo@kmee.com.br>
+* Wagner Pereira <wagner.pereira@kmee.com.br>
 
 Maintainer
 ----------

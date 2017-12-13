@@ -73,7 +73,7 @@ class SpedEFD(models.Model):
         registro_0000.DT_FIN = self.transforma_data(self.dt_fim[:10]) # data_final
         registro_0000.NOME = query_resposta[0][0] # filial.razao_social (?)
         cpnj_cpf = self.limpa_formatacao(query_resposta[0][1])
-        if cpnj_cpf == 11:
+        if len(cpnj_cpf) == 11:
             registro_0000.CPF = cpnj_cpf
         else:
             registro_0000.CNPJ = cpnj_cpf
@@ -149,7 +149,7 @@ class SpedEFD(models.Model):
         registro_0150.NOME = query_resposta[0][0]
         registro_0150.COD_PAIS = '1058' # TODO: arrumar a query_resposta
         cpnj_cpf = self.limpa_formatacao(query_resposta[0][1])
-        if cpnj_cpf == 11:
+        if len(cpnj_cpf) == 11:
             registro_0150.CPF = cpnj_cpf
         else:
             registro_0150.CNPJ = cpnj_cpf

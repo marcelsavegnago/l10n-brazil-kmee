@@ -94,6 +94,20 @@ class SpedDocumento(models.Model):
     #                 )
     #     return {}
 
+    @api.onchange('purchase_order_ids')
+    def purchase_order_change(self):
+        self.ensure_one()
+        if len(self.mapped('purchase_order_ids')) > 1:
+            return {}
+        elif not self.purchase_order_ids:
+            res = {'value': {'item_ids': [(1, item.id, {
+                'purchase_ids': [(6, 0, [])],
+                'purchase_line_ids': [(6, 0, [])]
+            }) for item in self.mapped('item_ids')]}}
+            return res
+        for item in self.mapped('item_ids'):
+            item.purchase_ids = self.purchase_order_ids.ids
+        self.item_ids.find_lines()
 
     def _criar_picking_entrada(self):
         if not self.purchase_order_ids:

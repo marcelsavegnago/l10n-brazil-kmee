@@ -246,7 +246,6 @@ class SpedManifestacaoDestinatario(models.Model):
 
     @api.multi
     def action_download_xml(self):
-        result = True
         for record in self:
             record.sped_consulta_dfe_id.\
                 validate_nfe_configuration(record.empresa_id)
@@ -293,7 +292,7 @@ class SpedManifestacaoDestinatario(models.Model):
                     'res_id': dados.id,
                     'res_model': 'sped.documento',
                     'type': 'ir.actions.act_window',
-                    'target': 'new',
+                    'target': 'current',
                     'flags': {'form': {'action_buttons': True, 'options': {'mode': 'edit'}}},
                 }
             else:

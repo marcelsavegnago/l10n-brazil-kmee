@@ -29,12 +29,29 @@ class SpedDocumentoItem(models.Model):
         default=True,
     )
 
-    def executa_depois_create(self):
+    @api.multi
+    def find_lines(self):
         for item in self:
-            item.faturar_linhas()
+            data = {
+                'produto_id': item.produto_id,
+                'quantidade': item.quantidade,
+                'vr_unitario': item.vr_unitario,
+                'vr_frete': item.vr_frete,
+                'vr_seguro': item.vr_seguro,
+                'vr_desconto': item.vr_desconto,
+                'vr_outras': item.vr_outras,
+            }
+            for linha in self.purchase_ids.mapped('order_line') - \
+                    self.mapped('purchase_line_ids'):
+                if all(linha[field] == data[field] for field in data.keys()):
+                    self.purchase_line_ids += linha
 
     @api.onchange('purchase_ids', 'purchase_line_ids')
     def _onchange_purchase_line_ids(self):
+
+        for purchase in self.mapped('purchase_ids'):
+            if purchase not in self.documento_id.mapped('purchase_order_ids'):
+                self.documento_id.purchase_order_ids += purchase
 
         result = {'domain': {
             'purchase_line_ids': [],

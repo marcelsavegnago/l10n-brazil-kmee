@@ -60,20 +60,12 @@ class NfeXmlPeriodicExport(models.TransientModel):
 
                     caminhos_xmls += company.nfe_root_folder + pos_order.chave_cfe_cancelamento + '.xml '
 
-            if not company_has_parent:
-                os.system(
-                    "zip -r " + os.path.join(
-                        company.nfe_root_folder,
-                        zipname)
-                    + ' ' + caminhos_xmls
-                )
-            else:
-                os.system(
-                    "zip -r " + os.path.join(
-                        company.nfe_root_folder,
-                        zipname)
-                    + ' ' + caminhos_xmls
-                )
+            os.system(
+                "zip -r " + os.path.join(
+                    company.nfe_root_folder,
+                    zipname)
+                + ' ' + caminhos_xmls
+            )
 
             for pos_order in pos_orders:
                 os.remove(
@@ -81,34 +73,19 @@ class NfeXmlPeriodicExport(models.TransientModel):
                     + pos_order.chave_cfe + '.xml'
                 )
 
-        if not company_has_parent:
-            orderFile = open(
-                os.path.join(
-                    company.nfe_root_folder,
-                    zipname + '.zip'
-                ), 'r'
-            )
-        else:
-            orderFile = open(
-                os.path.join(
-                    company.nfe_root_folder,
-                    zipname + '.zip'
-                ), 'r'
-            )
+        orderFile = open(
+            os.path.join(
+                company.nfe_root_folder,
+                zipname + '.zip'
+            ), 'r'
+        )
 
         itemFile = orderFile.read()
 
-        if not company_has_parent:
-            self.write({
-                'state': 'done',
-                'zip_sat_file': base64.b64encode(itemFile),
-                'name': zipname + '.zip',
-            })
-        else:
-            self.write({
-                'state': 'done',
-                'zip_sat_file': base64.b64encode(itemFile),
-                'name': zipname + '.zip',
-            })
+        self.write({
+            'state': 'done',
+            'zip_sat_file': base64.b64encode(itemFile),
+            'name': zipname + '.zip',
+        })
 
         return super(NfeXmlPeriodicExport, self).export()

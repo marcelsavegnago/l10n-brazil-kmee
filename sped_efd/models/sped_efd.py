@@ -178,8 +178,8 @@ class SpedEFD(models.Model):
         lista = []
         for resposta in query_resposta:
             registro_0190 = registros.Registro0190()
-            registro_0190.UNID = resposta[0]
-            registro_0190.DESCR = resposta[1]
+            registro_0190.UNID = resposta[0].upper()
+            registro_0190.DESCR = resposta[1].upper()
             lista.append(registro_0190)
         return lista
 
@@ -217,7 +217,7 @@ class SpedEFD(models.Model):
         lista = []
         for resposta in query_resposta:
             registro_0200 = registros.Registro0200()
-            registro_0200.COD_ITEM = resposta[0]
+            registro_0200.COD_ITEM = resposta[0].upper()
             registro_0200.DESCR_ITEM = resposta[1]
             registro_0200.COD_BARRA =  resposta[2]
             # registro_0200.COD_ANT_ITEM = query_resposta[0]
@@ -230,6 +230,127 @@ class SpedEFD(models.Model):
             # registro_0200.ALIQ_ICMS = query_resposta[0]
             lista.append(registro_0200)
         return lista
+
+    def transforma_valor(self, valor):
+        return str(valor).replace('.',',')
+
+    def query_registro_C100(self):
+        query = """
+                    select distinct 
+                        d.id
+                    from
+                        sped_natureza_operacao n 
+                        join sped_documento d on d.natureza_operacao_id = n.id
+                        join sped_documento_item as i on d.id=i.documento_id
+                        join sped_empresa c on c.id = d.empresa_id
+                        join sped_participante p on p.id = c.participante_id
+                """
+        self._cr.execute(query)
+        query_resposta = self._cr.fetchall()
+        lista = []
+        for resposta in self.env['sped.documento'].browse(query_resposta):
+            registro_c100 = registros.RegistroC100()
+            registro_c100.IND_OPER = resposta.entrada_saida
+            registro_c100.IND_EMIT = resposta.emissao
+            registro_c100.COD_PART = '1'
+            registro_c100.COD_MOD = resposta.modelo
+            registro_c100.COD_SIT = resposta.situacao_nfe
+            # registro_c100.SER = resposta
+            registro_c100.NUM_DOC = '000000000'
+            # registro_c100.CHV_NFE = resposta
+            registro_c100.DT_DOC = self.transforma_data(resposta.data_hora_emissao)
+            # registro_c100.DT_E_S = resposta
+            registro_c100.VL_DOC = self.transforma_valor(resposta.vr_nf)
+            if resposta.ind_forma_pagamento == '2':
+                registro_c100.IND_PGTO = '9'
+            else:
+                registro_c100.IND_PGTO = resposta.ind_forma_pagamento
+            # registro_c100.VL_DESC = resposta
+            # registro_c100.VL_ABAT_NT = resposta
+            # registro_c100.VL_MERC = resposta
+            registro_c100.IND_FRT = resposta.modalidade_frete
+            # registro_c100.VL_FRT = resposta
+            # registro_c100.VL_SEG = resposta
+            # registro_c100.VL_OUT_DA = resposta
+            # registro_c100.VL_BC_ICMS = resposta
+            # registro_c100.VL_ICMS = resposta
+            # registro_c100.VL_BC_ICMS_ST = resposta
+            # registro_c100.VL_ICMS_ST = resposta
+            # registro_c100.VL_IPI = resposta
+            # registro_c100.VL_PIS = resposta
+            # registro_c100.VL_COFINS = resposta
+            # registro_c100.VL_PIS_ST = resposta
+            # registro_c100.VL_COFINS_ST = resposta
+            lista.append(registro_c100)
+        return lista
+
+    # def query_registro_C500(self):
+    #     query = """
+    #                 select distinct
+    #                     d.entrada_saida, d.emissao, d.modelo,
+    #                     d.situacao_nfe, d.numero, d.data_hora_emissao,
+    #                     d.vr_nf,d.ind_forma_pagamento, d.modalidade_frete
+    #                 from
+    #                     sped_natureza_operacao n
+    #                     join sped_documento d on d.natureza_operacao_id = n.id
+    #                     join sped_documento_item as i on d.id=i.documento_id
+    #                 where
+    #                     d.emissao='1'
+    #             """
+    #     self._cr.execute(query)
+    #     query_resposta = self._cr.fetchall()
+    #     registro_c500 = registros.RegistroC500()
+    #     registro_c500.IND_OPER =
+    #     registro_c500.IND_EMIT =
+    #     registro_c500.COD_PART =
+    #     registro_c500.COD_MOD =
+    #     registro_c500.COD_SIT =
+    #     # registro_c500.SER =
+    #     # registro_c500.SUB =
+    #     registro_c500.COD_CONS =
+    #     registro_c500.NUM_DOC =
+    #     registro_c500.DT_DOC =
+    #     registro_c500.DT_E_S =
+    #     registro_c500.VL_DOC =
+    #     # registro_c500.VL_DESC =
+    #     registro_c500.VL_FORN =
+    #     # registro_c500.VL_SERV_NT =
+    #     # registro_c500.VL_TERC =
+    #     # registro_c500.VL_DA =
+    #     # registro_c500.VL_BC_ICMS =
+    #     # registro_c500.VL_ICMS =
+    #     # registro_c500.VL_BC_ICMS_ST =
+    #     # registro_c500.VL_ICMS_ST =
+    #     # registro_c500.COD_INF =
+    #     # registro_c500.VL_PIS =
+    #     # registro_c500.VL_COFINS =
+    #     # registro_c500.TP_LIGACAO =
+    #     # registro_c500.COD_GRUPO_TENSAO =
+
+    def query_registro_D100(self):
+        registro_d100 = registros.RegistroD100()
+        registro_d100.IND_OPER
+        registro_d100.IND_EMIT
+        registro_d100.COD_PART
+        registro_d100.COD_MOD
+        registro_d100.COD_SIT
+        # registro_d100.SER
+        # registro_d100.SUB
+        registro_d100.NUM_DOC
+        # registro_d100.CHV_CTE
+        registro_d100.DT_DOC
+        # registro_d100.DT_A_P
+        # registro_d100.TP_CT-e
+        # registro_d100.CHV_CTE_REF
+        registro_d100.VL_DOC
+        # registro_d100.VL_DESC
+        # registro_d100.IND_FRT
+        registro_d100.VL_SERV
+        # registro_d100.VL_BC_ICMS
+        # registro_d100.VL_ICMS
+        # registro_d100.VL_NT
+        # registro_d100.COD_INF
+        # registro_d100.COD_CTA
 
     def junta_pipe(self, registro):
         junta = ''
@@ -258,8 +379,14 @@ class SpedEFD(models.Model):
         for item_lista in self.query_registro0400():
             arq.read_registro(self.junta_pipe(item_lista))
 
-        # bloco 1
-        # arq.read_registro(self.junta_pipe(self.query_registro1010()))
+        # bloco C
+        for item_lista in self.query_registro_C100():
+            arq.read_registro(self.junta_pipe(item_lista))
+        arq.read_registro(self.junta_pipe(self.query_registro_C500()))
+
+        # bloco D
+
+
         for bloco in arq._blocos.items():
                 for registros_bloco in bloco[1].registros:
                     if registros_bloco._valores[1] in hash:

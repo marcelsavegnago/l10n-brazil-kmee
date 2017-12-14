@@ -126,3 +126,18 @@ class SpedDocumento(models.Model):
 
         for documento in self:
             documento.exclui_finan_lancamento()
+
+    def gera_operacao_entrada(self):
+        doc = super(SpedDocumento, self).gera_operacao_entrada()
+        num = 0
+        for duplicata in self.duplicata_ids:
+            vals_dup = {
+                'numero': str(num + 1),
+                'documento_id': doc.id,
+                'data_vencimento': duplicata.data_vencimento,
+                'valor': duplicata.valor,
+            }
+            self.env['sped.documento.duplicata'].create(vals_dup)
+
+        doc.gera_finan_lancamento()
+        return doc

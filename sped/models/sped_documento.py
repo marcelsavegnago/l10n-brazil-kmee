@@ -1407,8 +1407,4 @@ class SpedDocumento(SpedBase, models.Model):
                 for item in self.item_ids:
                     item._onchange_produto_id_emissao_propria()
                     item._onchange_operacao_item_id()
-<<<<<<< HEAD
-
-                return novo_doc
-=======
->>>>>>> 5447b7205923abf141616d8ff202c6a53e5920ee
+                 return novo_doc

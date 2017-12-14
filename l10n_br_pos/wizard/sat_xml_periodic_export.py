@@ -73,19 +73,19 @@ class NfeXmlPeriodicExport(models.TransientModel):
                     + pos_order.chave_cfe + '.xml'
                 )
 
-        orderFile = open(
-            os.path.join(
-                company.nfe_root_folder,
-                zipname + '.zip'
-            ), 'r'
-        )
+            orderFile = open(
+                os.path.join(
+                    company.nfe_root_folder,
+                    zipname + '.zip'
+                ), 'r'
+            )
 
-        itemFile = orderFile.read()
+            itemFile = orderFile.read()
 
-        self.write({
-            'state': 'done',
-            'zip_sat_file': base64.b64encode(itemFile),
-            'name': zipname + '.zip',
-        })
+            self.write({
+                'state': 'done',
+                'zip_sat_file': base64.b64encode(itemFile),
+                'name': zipname + '.zip',
+            })
 
         return super(NfeXmlPeriodicExport, self).export()

@@ -16,37 +16,41 @@ class NfeXmlPeriodicExport(models.TransientModel):
 
     @api.multi
     def export(self):
-        if not self.create_uid.company_id.parent_id.id:
-            pos_order_model = self.env['pos.order']
-            pos_orders = pos_order_model.search([
-                ('date_order', '>=', self.start_period_id.date_start),
-                ('date_order', '<=', self.stop_period_id.date_stop),
-                ('cfe_return', '!=', False),
-            ])
-        else:
-            pos_order_model = self.env['pos.order']
-            pos_orders = pos_order_model.search([
-                ('date_order', '>=', self.start_period_id.date_start),
-                ('date_order', '<=', self.stop_period_id.date_stop),
-                ('company_id', '=', self.create_uid.company_id.id),
-                ('cfe_return', '!=', False),
-            ])
+        company = self.create_uid.company_id
+        company_has_parent = bool(company.parent_id)
+
+        date_stamp = time.strftime("%Y-%m-%d")
+        zipname = 'cfes_xmls_%s' % (date_stamp,)
+
+        pos_order_domain = [
+            ('date_order', '>=', self.start_period_id.date_start),
+            ('date_order', '<=', self.stop_period_id.date_stop),
+            ('cfe_return', '!=', False),
+        ]
+        if company_has_parent:
+            pos_order_domain += [
+                ('company_id', '=', company.id),
+            ]
+            company_name = company.name.replace(" ", "")
+            zipname = ('cfes_xmls_%s_%s' % (company_name, date_stamp))
+
+        pos_orders = self.env['pos.order'].search(pos_order_domain)
 
         if pos_orders:
             caminhos_xmls = ''
             for pos_order in pos_orders:
                 fp_new = open(
-                    self.create_uid.company_id.nfe_root_folder
+                    company.nfe_root_folder
                     + pos_order.chave_cfe + '.xml', 'w'
                 )
                 fp_new.write(base64.b64decode(pos_order.cfe_return))
                 fp_new.close()
 
-                caminhos_xmls += self.create_uid.company_id.nfe_root_folder + pos_order.chave_cfe + '.xml '
+                caminhos_xmls += company.nfe_root_folder + pos_order.chave_cfe + '.xml '
 
                 if pos_order.cfe_cancelamento_return:
                     fp_new = open(
-                        self.create_uid.company_id.nfe_root_folder
+                        company.nfe_root_folder
                         + pos_order.chave_cfe_cancelamento + '.xml', 'w'
                     )
                     fp_new.write(base64.b64decode(
@@ -54,60 +58,57 @@ class NfeXmlPeriodicExport(models.TransientModel):
                     ))
                     fp_new.close()
 
-                    caminhos_xmls += self.create_uid.company_id.nfe_root_folder + pos_order.chave_cfe_cancelamento + '.xml '
+                    caminhos_xmls += company.nfe_root_folder + pos_order.chave_cfe_cancelamento + '.xml '
 
-            if not self.create_uid.company_id.parent_id.id:
+            if not company_has_parent:
                 os.system(
                     "zip -r " + os.path.join(
-                        self.create_uid.company_id.nfe_root_folder,
-                        'cfes_xmls_' + time.strftime("%Y-%m-%d"))
+                        company.nfe_root_folder,
+                        zipname)
                     + ' ' + caminhos_xmls
                 )
             else:
                 os.system(
                     "zip -r " + os.path.join(
-                        self.create_uid.company_id.nfe_root_folder,
-                        'cfes_xmls_' + self.create_uid.company_id.name.replace(
-                            " ", "") + "_" + time.strftime("%Y-%m-%d"))
+                        company.nfe_root_folder,
+                        zipname)
                     + ' ' + caminhos_xmls
                 )
 
             for pos_order in pos_orders:
                 os.remove(
-                    self.create_uid.company_id.nfe_root_folder
+                    company.nfe_root_folder
                     + pos_order.chave_cfe + '.xml'
                 )
 
-        if not self.create_uid.company_id.parent_id.id:
+        if not company_has_parent:
             orderFile = open(
                 os.path.join(
-                    self.create_uid.company_id.nfe_root_folder,
-                    'cfes_xmls_' + time.strftime("%Y-%m-%d") + '.zip'
+                    company.nfe_root_folder,
+                    zipname + '.zip'
                 ), 'r'
             )
         else:
             orderFile = open(
                 os.path.join(
-                    self.create_uid.company_id.nfe_root_folder,
-                    'cfes_xmls_' + self.create_uid.company_id.name.replace(
-                        " ", "") + "_" + time.strftime("%Y-%m-%d") + '.zip'
+                    company.nfe_root_folder,
+                    zipname + '.zip'
                 ), 'r'
             )
 
         itemFile = orderFile.read()
 
-        if not self.create_uid.company_id.parent_id.id:
+        if not company_has_parent:
             self.write({
                 'state': 'done',
                 'zip_sat_file': base64.b64encode(itemFile),
-                'name': 'cfes_xmls_' + time.strftime("%Y-%m-%d") + '.zip',
+                'name': zipname + '.zip',
             })
         else:
             self.write({
                 'state': 'done',
                 'zip_sat_file': base64.b64encode(itemFile),
-                'name': 'cfes_xmls_' + self.create_uid.company_id.name.replace(
-                        " ", "") + "_" + time.strftime("%Y-%m-%d") + '.zip',
+                'name': zipname + '.zip',
             })
 
         return super(NfeXmlPeriodicExport, self).export()

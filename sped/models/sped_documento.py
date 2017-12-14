@@ -1395,6 +1395,7 @@ class SpedDocumento(SpedBase, models.Model):
         if self.operacao_id.operacao_entrada_id:
             empresa_id = self.env['sped.empresa'].search(
                 [('cnpj_cpf', '=', self.participante_id.cnpj_cpf)])
+
             if empresa_id:
                 novo_doc = self.copy()
                 novo_doc.participante_id = self.empresa_id.participante_id
@@ -1406,5 +1407,8 @@ class SpedDocumento(SpedBase, models.Model):
                 for item in self.item_ids:
                     item._onchange_produto_id_emissao_propria()
                     item._onchange_operacao_item_id()
+<<<<<<< HEAD
 
                 return novo_doc
+=======
+>>>>>>> 5447b7205923abf141616d8ff202c6a53e5920ee

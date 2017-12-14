@@ -172,3 +172,19 @@ class PurchaseOrderLine(SpedCalculoImpostoItem, models.Model):
             if all(line.quantidade == line.qty_received
                    for line in line.order_id.mapped('order_line')):
                 line.order_id.state = 'received'
+
+    @api.depends('documento_item_ids.quantidade')
+    def _compute_qty_invoiced(self):
+        for linha in self:
+            if len(linha.documento_item_ids) > 1:
+                total = 0.0
+                for qty in linha.documento_item_ids.mapped('quantidade'):
+                    total += qty
+                linha.qty_invoiced = total
+            elif linha.documento_item_ids:
+                if len(linha.documento_item_ids.purchase_line_ids) > 1:
+                    for linha_item in linha.documento_item_ids.mapped(
+                            'purchase_line_ids'):
+                        linha_item.qty_invoiced = linha_item.quantidade
+                elif linha.documento_item_ids.purchase_line_ids:
+                    linha.qty_invoiced = linha.documento_item_ids.quantidade

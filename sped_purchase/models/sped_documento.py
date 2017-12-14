@@ -94,38 +94,6 @@ class SpedDocumento(models.Model):
     #                 )
     #     return {}
 
-    # @api.onchange('purchase_order_ids')
-    # def purchase_order_change(self):
-    #     self.ensure_one()
-    #     if not self.purchase_order_ids or len(self .mapped('purchase_order_ids')) > 1:
-    #         return {}
-    #     for item in self.mapped('item_ids'):
-    #         item.write({'purchase_ids': [(6, False, self.purchase_order_ids.ids)]})
-
-    # @api.onchange('participante_id', 'item_ids.purchase_ids', 'item_ids.purchase_line_ids', 'empresa_id')
-    # def _onchange_allowed_purchase_ids(self):
-    #     result = {}
-    #
-    #     # A PO can be selected only if at least one PO line is not already in the invoice
-    #     purchase_line_ids = self.item_ids.mapped('purchase_line_ids')
-    #     purchase_ids = self.item_ids.mapped('purchase_ids').filtered(lambda r: r.order_line <= purchase_line_ids)
-    #
-    #     result['domain'] = {'purchase_order_ids': [
-    #         ('invoice_status', '=', 'to invoice'),
-    #         ('id', 'not in', purchase_ids.ids),
-    #     ]}
-    #
-    #     if self.participante_id:
-    #         result['domain']['purchase_order_ids'].append(
-    #             ('participante_id', '=', self.participante_id.id)
-    #         )
-    #
-    #     if self.empresa_id:
-    #         result['domain']['purchase_order_ids'].append(
-    #             ('empresa_id', '=', self.empresa_id.id)
-    #         )
-    #
-    #     return result
 
     def _criar_picking_entrada(self):
         if not self.purchase_order_ids:

@@ -8,9 +8,9 @@
             <group position="before">
                 <group colspan="4">
                     <field name="purchase_order_ids" widget="many2many_tags"
-                           domain="[('empresa_id', '=', empresa_id.id),
-                           ('participante_id', '=', participante_id.id),
-                           ('invoice_status', '=', 'to invoice')]"/>
+                           domain="[('invoice_status', '=', 'to invoice'),
+                           '|', ('participante_id', '=', participante_id), ('participante_id', '=', False),
+                           '|', ('empresa_id', '=', empresa_id), ('empresa_id', '=', False)]"/>
                 </group>
             </group>
             <field name="item_ids" position="attributes">
@@ -30,7 +30,10 @@
         <field name="arch" type="xml">
             <group position="before">
                 <group colspan="4">
-                    <field name="purchase_order_ids" widget="many2many_tags"/>
+                    <field name="purchase_order_ids" widget="many2many_tags"
+                           domain="[('invoice_status', '=', 'to invoice'),
+                           '|', ('participante_id', '=', participante_id), ('participante_id', '=', False),
+                           '|', ('empresa_id', '=', empresa_id), ('empresa_id', '=', False)]"/>
                 </group>
             </group>
         </field>

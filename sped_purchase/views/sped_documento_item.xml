@@ -39,12 +39,16 @@
         <field name="inherit_id" ref="sped_nfe.sped_documento_item_ajuste_recebimento_form"/>
         <field name="arch" type="xml">
             <field name="documento_id" position="before">
+                <field name="participante_id" invisible="True"/>
+                <field name="empresa_id" invisible="True"/>
                 <group>
                     <field name="purchase_ids" widget="many2many_tags"
-                           domain="[('invoice_status', '=', 'to invoice')]"/>
+                           domain="[('invoice_status', '=', 'to invoice'), 
+                           '|', ('participante_id', '=', participante_id), ('participante_id', '=', False),
+                           '|', ('empresa_id', '=', empresa_id), ('empresa_id', '=', False)]"/>
                     <field name="purchase_line_ids" widget="many2many_tags"
                            attrs="{'invisible': [('purchase_ids', '=', False)]}"
-                           domain="[('order_id', '=', purchase_ids[0])]"/>
+                           domain="['|', ('produto_id', '=', produto_id), ('produto_id', '=', False)]"/>
                     <field name="pode_alterar_quantidade" invisible="True"/>
                 </group>
             </field>

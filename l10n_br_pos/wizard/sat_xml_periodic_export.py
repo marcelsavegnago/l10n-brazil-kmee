@@ -7,6 +7,8 @@ from openerp import models, fields, api, _
 import os
 import base64
 import time
+import zipfile
+import io
 
 
 class NfeXmlPeriodicExport(models.TransientModel):
@@ -36,51 +38,27 @@ class NfeXmlPeriodicExport(models.TransientModel):
 
         pos_orders = self.env['pos.order'].search(pos_order_domain)
 
-        if pos_orders:
-            caminhos_xmls = ''
-            for pos_order in pos_orders:
-                fp_new = open(
-                    company.nfe_root_folder
-                    + pos_order.chave_cfe + '.xml', 'w'
-                )
-                fp_new.write(base64.b64decode(pos_order.cfe_return))
-                fp_new.close()
+        if not pos_orders:
+            orderFile = io.BytesIO()
+            orderZip = zipfile.ZipFile(
+                orderFile, mode="w", compression=zipfile.ZIP_DEFLATED
+            )
 
-                caminhos_xmls += company.nfe_root_folder + pos_order.chave_cfe + '.xml '
+            for pos_order in pos_orders:
+                orderZip.writestr(
+                    pos_order.chave_cfe + '.xml',
+                    base64.b64decode(pos_order.cfe_return),
+                )
 
                 if pos_order.cfe_cancelamento_return:
-                    fp_new = open(
-                        company.nfe_root_folder
-                        + pos_order.chave_cfe_cancelamento + '.xml', 'w'
+                    orderZip.writestr(
+                        pos_order.chave_cfe_cancelamento + '.xml',
+                        base64.b64decode(pos_order.cfe_cancelamento_return),
                     )
-                    fp_new.write(base64.b64decode(
-                        pos_order.cfe_cancelamento_return
-                    ))
-                    fp_new.close()
 
-                    caminhos_xmls += company.nfe_root_folder + pos_order.chave_cfe_cancelamento + '.xml '
+            orderZip.close()
 
-            os.system(
-                "zip -r " + os.path.join(
-                    company.nfe_root_folder,
-                    zipname)
-                + ' ' + caminhos_xmls
-            )
-
-            for pos_order in pos_orders:
-                os.remove(
-                    company.nfe_root_folder
-                    + pos_order.chave_cfe + '.xml'
-                )
-
-            orderFile = open(
-                os.path.join(
-                    company.nfe_root_folder,
-                    zipname + '.zip'
-                ), 'r'
-            )
-
-            itemFile = orderFile.read()
+            itemFile = orderFile.getvalue()
 
             self.write({
                 'state': 'done',

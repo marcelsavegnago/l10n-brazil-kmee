@@ -54,16 +54,40 @@ class PurchaseOrder(SpedCalculoImpostoProdutoServico, models.Model):
         store=True
     )
 
-    state = fields.Selection(
-        selection_add=[('invoiced', 'Faturado pelo Fornecedor'),
-                       ('received', 'Recebido')],
+    kanban_state = fields.Selection(
+        selection=[('draft', 'Provisório'),
+                   ('purchase', 'Pedido de Compra'),
+                   ('invoiced', 'Faturado pelo Fornecedor'),
+                   ('received', 'Recebido'),
+                   ('cancel', 'Cancelado')],
         # group_expand='_read_group_stage_ids', FIXME: func. v11
+        compute='_compute_kanban_state',
         readonly=False,
+        store=True,
     )
 
     order_line_count = fields.Integer(
         compute='_compute_order_line_count'
     )
+
+    @api.depends('state', 
+                 'order_line.qty_invoiced',
+                 'order_line.qty_received',
+                 'invoice_status')
+    def _compute_kanban_state(self):
+        for order in self:
+            if order.invoice_status == 'invoiced':
+                order.kanban_state = 'invoiced'
+            if all(line.quantidade == line.qty_received
+                   for line in order.order_line) and order.documento_ids:
+                order.kanban_state = 'received'
+            if order.kanban_state not in ['invoiced', 'received']:
+                if order.state in ['draft', 'sent', 'to approve']:
+                    order.kanban_state = 'draft'
+                if order.state in ['purchase', 'cancel']:
+                    order.kanban_state = order.state
+                if order.state == 'done':
+                    order.kanban_state = 'received'
 
     @api.depends('order_line')
     def _compute_order_line_count(self):
@@ -207,7 +231,7 @@ class PurchaseOrder(SpedCalculoImpostoProdutoServico, models.Model):
         if vals.get('state', False):
             self.ensure_one()
             if not PurchaseOrder._valid_state_change(
-                    self.state, vals['state']):
+                    self.kanban_state, vals['kanban_state']):
                 raise UserError('Transição não permitida')
         return super(PurchaseOrder, self).write(vals)
 

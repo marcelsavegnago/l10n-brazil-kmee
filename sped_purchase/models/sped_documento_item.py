@@ -41,10 +41,10 @@ class SpedDocumentoItem(models.Model):
                 'vr_desconto': item.vr_desconto,
                 'vr_outras': item.vr_outras,
             }
-            for linha in self.purchase_ids.mapped('order_line') - \
-                    self.mapped('purchase_line_ids'):
+            for linha in item.purchase_ids.mapped('order_line') - \
+                    item.mapped('purchase_line_ids'):
                 if all(linha[field] == data[field] for field in data.keys()):
-                    self.purchase_line_ids += linha
+                    item.purchase_line_ids += linha
 
     @api.onchange('purchase_ids', 'purchase_line_ids')
     def _onchange_purchase_line_ids(self):

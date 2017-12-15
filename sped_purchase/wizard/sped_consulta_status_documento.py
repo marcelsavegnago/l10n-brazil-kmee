@@ -69,38 +69,76 @@ class SpedConsultaStatusDocumento(models.TransientModel):
         sting='Processamento Evento NFE',
         readonly=True,
     )
+    purchase_order_id = fields.Many2one(
+        comodel_name='purchase.order',
+        string='Pedido de Compra',
+        copy=False,
+    )
 
     @api.multi
     def busca_status_documento(self):
         self.ensure_one()
+        consulta = self.env['sped.consulta.dfe']
+        consulta.validate_nfe_configuration(self.empresa_id)
+
         try:
-            processador = self.empresa_id.processador_nfe()
-            processo = processador.consultar_nota(
-                processador.ambiente,
-                chave_nfe=self.chave,
-                nfe=False
-            )
-            dados = {
-                'versao': processo.resposta.versao.valor,
-                'motivo': processo.resposta.cStat.txt + ' - ' +
-                           processo.resposta.xMotivo.txt,
-                'codigo_uf': processo.resposta.cUF.txt,
-                'chave': processo.resposta.chNFe.txt,
-                'ambiente_nfe': processo.resposta.tpAmb.txt,
-                'protocolo_autorizacao':
-                    '' if processo.resposta.protNFe is None else
-                    processo.resposta.protNFe.infProt.nProt.txt,
-                'protocolo_cancelamento': '',
-                'processamento_evento_nfe': '',
-                'state': 'done',
-            }
-            self.write(dados)
+
+            nfe_result = consulta.download_nfe(self.empresa_id, self.chave)
+
+            if nfe_result['code'] == '138':
+
+                nfe = objectify.fromstring(nfe_result['nfe'])
+                documento = self.env['sped.documento'].new()
+                documento.modelo = nfe.NFe.infNFe.ide.mod.text
+                dados = documento.le_nfe(xml=nfe_result['nfe'])
+                return {
+                    'name': _("Associar Pedido de Compras"),
+                    'view_mode': 'form',
+                    'view_type': 'form',
+                    'view_id': self.env.ref('sped_nfe.sped_documento_ajuste_recebimento_form').id,
+                    'res_id': dados.id,
+                    'res_model': 'sped.documento',
+                    'type': 'ir.actions.act_window',
+                    'target': 'current',
+                    'context': {'default_purchase_order_ids': [(4, self.purchase_order_id.id)]},
+                    'flags': {'form': {'action_buttons': True, 'options': {'mode': 'edit'}}},
+                }
+
         except Exception as e:
             raise UserError(
-                _(u'Erro na consulta da chave!'), e)
+                _(u'Erro na consulta da chave!', e))
 
-        result = self.env.ref(
-            'sped_purchase.action_sped_consulta_status_documento'
-        ).read()[0]
-        result['res_id'] = self.id
-        return result
+    # @api.multi
+    # def busca_status_documento(self):
+    #     self.ensure_one()
+    #     try:
+    #         processador = self.empresa_id.processador_nfe()
+    #         processo = processador.consultar_nota(
+    #             processador.ambiente,
+    #             chave_nfe=self.chave,
+    #             nfe=False
+    #         )
+    #         dados = {
+    #             'versao': processo.resposta.versao.valor,
+    #             'motivo': processo.resposta.cStat.txt + ' - ' +
+    #                        processo.resposta.xMotivo.txt,
+    #             'codigo_uf': processo.resposta.cUF.txt,
+    #             'chave': processo.resposta.chNFe.txt,
+    #             'ambiente_nfe': processo.resposta.tpAmb.txt,
+    #             'protocolo_autorizacao':
+    #                 '' if processo.resposta.protNFe is None else
+    #                 processo.resposta.protNFe.infProt.nProt.txt,
+    #             'protocolo_cancelamento': '',
+    #             'processamento_evento_nfe': '',
+    #             'state': 'done',
+    #         }
+    #         self.write(dados)
+    #     except Exception as e:
+    #         raise UserError(
+    #             _(u'Erro na consulta da chave!'), e)
+    #
+    #     result = self.env.ref(
+    #         'sped_purchase.action_sped_consulta_status_documento'
+    #     ).read()[0]
+    #     result['res_id'] = self.id
+    #     return result

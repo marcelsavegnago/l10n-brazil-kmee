@@ -94,6 +94,15 @@ class SpedDocumento(models.Model):
     #                 )
     #     return {}
 
+    @api.multi
+    def write(self, vals):
+        res = super(SpedDocumento, self).write(vals)
+        for documento in self:
+            if documento.purchase_order_ids:
+                for pedido in documento.purchase_order_ids:
+                    pedido._get_invoiced()
+        return res
+
     @api.onchange('purchase_order_ids')
     def purchase_order_change(self):
         self.ensure_one()

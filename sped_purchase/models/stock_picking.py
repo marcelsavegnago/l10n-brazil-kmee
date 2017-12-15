@@ -7,6 +7,14 @@ from odoo import api, fields, models, _
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
+    @api.multi
+    def write(self, vals):
+        res = super(StockPicking, self).write(vals)
+        for separacao in self:
+            if separacao.purchase_id:
+                separacao.purchase_id.order_line._compute_qty_received()
+        return res
+
     def action_view_purchase(self):
 
         action = self.env.ref('purchase.purchase_form_action').read()[0]

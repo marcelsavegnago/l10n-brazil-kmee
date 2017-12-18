@@ -1350,8 +1350,8 @@ class SpedDocumento(SpedBase, models.Model):
     @api.model
     def create(self, dados):
         dados = self.executa_antes_create(dados)
-        res = super(SpedDocumento, self).create(dados)
-        return self.executa_depois_create(res, dados)
+        result = super(SpedDocumento, self).create(dados)
+        return self.executa_depois_create(result, dados)
 
     def executa_depois_create(self, result, dados):
         return result

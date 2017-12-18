@@ -15,6 +15,7 @@
         'l10n_br_base',
         'mail',
         'report_xlsx',
+        'report_py3o',
     ],
     'external_dependencies': {
         'python': ['html2text', 'pybrasil', 'numpy'],
@@ -37,6 +38,7 @@
         'views/finan_documento_view.xml',
         'views/finan_forma_pagamento_view.xml',
         'views/inherited_sped_participante_base_view.xml',
+        'views/inherited_sped_empresa_view.xml',
 
         #
         # Lançamentos
@@ -58,6 +60,8 @@
         'views/finan_remessa_boleto_view.xml',
         'views/finan_retorno_boleto_view.xml',
 
+        'views/finan_remessa_boleto_view.xml',
+        'views/finan_banco_fechamento.xml',
         #
         # Relatórios
         #
@@ -68,6 +72,7 @@
         'wizards/finan_relatorio_divida_wizard.xml',
         'wizards/finan_lancamento_novo_pagamento_wizard.xml',
 
+        # 'reports/report_py3o_finan_retorno.xml',
         ##'data/financial_document_type_data.xml',
         ##'data/interest_data.xml',
 

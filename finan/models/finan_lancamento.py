@@ -384,6 +384,7 @@ class FinanLancamento(SpedBase, models.Model):
         inverse_name='lancamento_id',
         string='Extrato banco/caixa',
     )
+
     vr_saldo_banco = fields.Monetary(
         string='Saldo banco/caixa após lançamento',
         related='extrato_id.saldo',
@@ -892,6 +893,10 @@ class FinanLancamento(SpedBase, models.Model):
                     else:
                         adiantamento = self.vr_documento * -1
 
+            elif lancamento.tipo in [FINAN_ENTRADA, FINAN_SAIDA]:
+                # Se for lancamento de entrada ou saida nao computar nada
+                continue
+
             if adiantamento:
                 lancamento.vr_adiantado = adiantamento
 
@@ -935,6 +940,16 @@ class FinanLancamento(SpedBase, models.Model):
             self.env['finan.banco.saldo'].ajusta_saldo(banco_id, data)
 
     def executa_antes_create(self, dados, bancos={}):
+        if 'banco_id' in dados and 'data_documento' in dados:
+            if self.env['finan.banco.fechamento'].search([
+                    ('banco_id', '=', dados['banco_id']),
+                    ('data_final', '>=', dados['data_documento']),
+                    ('data_inicial', '<=', dados['data_documento']),
+                    ('state', '=', 'fechado'),
+            ]):
+                raise UserError('Você não pode lançar um lançamento neste '
+                                'banco, pois o fechamento de caixa já foi '
+                                'efetuado para esse período')
         return dados
 
     @api.model
@@ -950,8 +965,19 @@ class FinanLancamento(SpedBase, models.Model):
         return result
 
     def executa_antes_write(self, dados, bancos={}):
-        self._verifica_ajusta_extrato_saldo(bancos)
-        return dados
+        if 'banco_id' in dados and 'data_documento' in dados:
+            if self.env['finan.banco.fechamento'].search([
+               ('banco_id', '=', dados['banco_id']),
+               ('data_final', '>=', dados['data_documento']),
+               ('data_inicial', '<=', dados['data_documento']),
+               ('state', '=', 'fechado' ),
+            ]):
+                raise UserError('Você não pode lançar um lançamento neste '
+                                'banco, pois o fechamento de caixa já foi '
+                                'efetuado para esse período')
+            else:
+                return dados
+
 
     def write(self, dados):
         bancos = {}
@@ -967,9 +993,21 @@ class FinanLancamento(SpedBase, models.Model):
     def executa_antes_unlink(self, bancos={}):
         for lancamento in self:
             if lancamento.referencia_id:
-                raise UserError('Você não pode excuir um lançamento '
-                    'relacionado a outro documento; verifique se é possível '
-                    'cancelar o documento relacionado.')
+                raise UserError(
+                    'Você não pode excuir um lançamento relacionado a outro '
+                    'documento; verifique se é possível cancelar o documento '
+                    'relacionado.')
+
+            # Verificar se ja foi gerado boletos para esse lancamentos
+            attachment = self.env['ir.attachment']
+            busca = [
+                ('res_model', '=', 'finan.lancamento'),
+                ('res_id', '=', lancamento.id),
+            ]
+            attachment_ids = attachment.search(busca)
+            if attachment_ids:
+                raise UserError(
+                    'Você não pode excuir um lançamento com Anexos!')
 
             if lancamento.provisorio:
                 continue
@@ -1132,6 +1170,7 @@ class FinanLancamento(SpedBase, models.Model):
         banco = FINAN_BANCO_DICT[boleto.banco.codigo][6:]
         nome_arquivo += banco
         nome_arquivo += '.pdf'
+        boleto.nome = nome_arquivo
         self._grava_anexo(nome_arquivo=nome_arquivo, conteudo=boleto.pdf)
 
         return boleto

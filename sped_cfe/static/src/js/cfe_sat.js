@@ -22,7 +22,7 @@ odoo.define('sped_cfe.cfe_sat', function (require) {
             new Model('pdv.config').call("search_read", [[['create_uid', '=', session.uid]], ["ip", "numero_caixa"]]).then(function (res) {
                 self.configs["sat_path"] = res[0].ip;
                 self.configs["numero_caixa"] = res[0].numero_caixa;
-                self.keepalive();
+                // self.keepalive();
                 return self;
             }).fail(function (error) {
                 alert(error);

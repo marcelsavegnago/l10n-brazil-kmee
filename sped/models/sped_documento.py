@@ -56,6 +56,7 @@ class SpedDocumento(SpedBase, models.Model):
         string='Tipo de emissão',
         index=True,
     )
+    numero_identificador = fields.Char()
     modelo = fields.Selection(
         selection=MODELO_FISCAL,
         string='Modelo',
@@ -510,11 +511,17 @@ class SpedDocumento(SpedBase, models.Model):
         compute='_compute_soma_itens',
         store=True,
     )
+    # vr_total_residual = fields.Monetary(
+    #     string='Valor total ',
+    #     compute='_compute_soma_itens',
+    #     store=True,
+    # )
     vr_produtos_tributacao = fields.Monetary(
         string='Valor dos produtos para tributação',
         compute='_compute_soma_itens',
         store=True,
     )
+
     vr_frete = fields.Monetary(
         string='Valor do frete',
         compute='_compute_soma_itens',

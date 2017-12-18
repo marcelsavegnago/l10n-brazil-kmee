@@ -19,6 +19,10 @@ class SpedEFD(models.Model):
         ondelete='restrict',
         copy=False,
     )
+    cpnj_cpf = fields.Char(
+        string='CPNJ/CPF',
+        required=True,
+    )
     dt_ini = fields.Datetime(
         string='Data inicial',
         index=True,
@@ -55,8 +59,8 @@ class SpedEFD(models.Model):
 
     def query_registro0000(self):
         query = """
-            select DISTINCT 
-                p.nome, p.cnpj_cpf, m.estado, p.ie, m.codigo_ibge, p.im, p.suframa
+            select DISTINCT
+                p.id, m.id 
             from 
                 sped_documento as d 
                 join sped_empresa as e on d.empresa_id=e.id
@@ -65,26 +69,26 @@ class SpedEFD(models.Model):
         """
         self._cr.execute(query)
         query_resposta = self._cr.fetchall()
-
+        resposta_participante = self.env['sped.participante'].browse(query_resposta[0][0])
+        resposta_municipio = self.env['sped.municipio'].browse(query_resposta[0][1])
         registro_0000 = registros.Registro0000()
         registro_0000.COD_VER = str(self.versao)
         registro_0000.COD_FIN = '0' # finalidade
         registro_0000.DT_INI = self.transforma_data(self.dt_ini[:10]) # data_inicio
         registro_0000.DT_FIN = self.transforma_data(self.dt_fim[:10]) # data_final
-        registro_0000.NOME = query_resposta[0][0] # filial.razao_social (?)
-        cpnj_cpf = self.limpa_formatacao(query_resposta[0][1])
+        registro_0000.NOME = resposta_participante.nome # filial.razao_social (?)
+        cpnj_cpf = self.limpa_formatacao(resposta_participante.cnpj_cpf)
         if len(cpnj_cpf) == 11:
             registro_0000.CPF = cpnj_cpf
         else:
             registro_0000.CNPJ = cpnj_cpf
-        registro_0000.UF = query_resposta[0][2] # filial.estado
+        registro_0000.UF = resposta_municipio.estado_id.codigo_ibge # filial.estado
         registro_0000.IE = '11111111111111' # Todo: query_resposta[0][3] nao possui valor IE
-        registro_0000.COD_MUN = self.formata_cod_municipio(query_resposta[0][4]) # filial.municipio_id.codigo_ibge[:7]
-        registro_0000.IM = query_resposta[0][5] # filial.im
-        registro_0000.SUFRAMA = self.limpa_formatacao(query_resposta[0][6]) # filial.suframa
+        registro_0000.COD_MUN = self.formata_cod_municipio(resposta_municipio.codigo_ibge) # filial.municipio_id.codigo_ibge[:7]
+        registro_0000.IM = resposta_participante.im # filial.im
+        registro_0000.SUFRAMA = self.limpa_formatacao(resposta_participante.suframa) # filial.suframa
         registro_0000.IND_PERFIL = 'A' # perfil
         registro_0000.IND_ATIV = '1' # tipo_atividade
-
         return registro_0000
 
     # def query_registro0100(self):
@@ -113,53 +117,58 @@ class SpedEFD(models.Model):
     def query_registro0005(self):
         query= """
              select distinct
-                 p.nome, p.cep, p.endereco, p.numero, p.complemento,
-                 p.bairro, p.fone, p.email
+                 p.id
              from
                  sped_participante as p
         """
         self._cr.execute(query)
         query_resposta = self._cr.fetchall()
+        lista = []
+        # for id in query_resposta:
+        resposta = self.env['sped.participante'].browse(query_resposta[0][0])
         registro_0005 = registros.Registro0005()
-        registro_0005.FANTASIA = query_resposta[0][0]
-        registro_0005.CEP = self.limpa_formatacao(query_resposta[0][1])
-        registro_0005.END = query_resposta[0][2]
-        registro_0005.NUM = query_resposta[0][3]
-        registro_0005.COMPL = query_resposta[0][4]
-        registro_0005.BAIRRO = query_resposta[0][5]
-        registro_0005.FONE = self.limpa_formatacao(query_resposta[0][6])
-        registro_0005.EMAIL = query_resposta[0][7]
+        if not resposta.fantasia:
+            resposta.fantasia = 'Teste'
+        registro_0005.FANTASIA = resposta.fantasia
+        registro_0005.CEP = self.limpa_formatacao(resposta.cep)
+        registro_0005.END = resposta.endereco
+        registro_0005.NUM = resposta.numero
+        registro_0005.COMPL = resposta.complemento
+        registro_0005.BAIRRO = resposta.bairro
+        registro_0005.FONE = self.limpa_formatacao(resposta.fone)
+        registro_0005.EMAIL = resposta.email
+        lista.append(registro_0005)
         return registro_0005
 
     def query_registro0150(self):
         query = """
-                    select distinct 
-                    p.nome, p.cnpj_cpf, p.ie, m.codigo_ibge, p.suframa, 
-                    p.endereco, p.numero, p.complemento, p.bairro
+                    select distinct
+                        p.id, m.id 
                     from 
-                    sped_participante as p 
-                    join sped_municipio as m on p.municipio_id=m.id
+                        sped_participante as p 
+                        join sped_municipio as m on p.municipio_id=m.id
                 """
 
         self._cr.execute(query)
         query_resposta = self._cr.fetchall()
-
+        resposta_participante = self.env['sped.participante'].browse(query_resposta[0][0])
+        resposta_municipio = self.env['sped.municipio'].browse(query_resposta[0][1])
         registro_0150 = registros.Registro0150()
         registro_0150.COD_PART = '1' # TODO: arrumar a query_resposta
-        registro_0150.NOME = query_resposta[0][0]
-        registro_0150.COD_PAIS = '1058' # TODO: arrumar a query_resposta
-        cpnj_cpf = self.limpa_formatacao(query_resposta[0][1])
+        registro_0150.NOME = resposta_participante.nome
+        registro_0150.COD_PAIS = resposta_municipio.pais_id.codigo_bacen
+        cpnj_cpf = self.limpa_formatacao(resposta_participante.cnpj_cpf)
         if len(cpnj_cpf) == 11:
             registro_0150.CPF = cpnj_cpf
         else:
             registro_0150.CNPJ = cpnj_cpf
-        registro_0150.IE = self.limpa_formatacao(query_resposta[0][2])
-        registro_0150.COD_MUN = self.formata_cod_municipio(query_resposta[0][3])
-        registro_0150.SUFRAMA = self.limpa_formatacao(query_resposta[0][4])
-        registro_0150.END = query_resposta[0][5]
-        registro_0150.NUM = query_resposta[0][6]
-        registro_0150.COMPL = query_resposta[0][7]
-        registro_0150.BAIRRO = query_resposta[0][8]
+        registro_0150.IE = self.limpa_formatacao(resposta_participante.ie)
+        registro_0150.COD_MUN = self.formata_cod_municipio(resposta_municipio.codigo_ibge)
+        registro_0150.SUFRAMA = self.limpa_formatacao(resposta_participante.suframa)
+        registro_0150.END = resposta_participante.endereco
+        registro_0150.NUM = resposta_participante.numero
+        registro_0150.COMPL = resposta_participante.complemento
+        registro_0150.BAIRRO = resposta_participante.bairro
 
         return registro_0150
 
@@ -170,7 +179,8 @@ class SpedEFD(models.Model):
                     from
                         sped_documento as d
                         join sped_documento_item as di on d.id=di.documento_id 
-                        join sped_unidade as u on di.unidade_id=u.id
+                        join sped_produto as p on di.produto_id=p.id
+                        join sped_unidade as u on p.unidade_id=u.id
                 """
 
         self._cr.execute(query)
@@ -217,7 +227,7 @@ class SpedEFD(models.Model):
         lista = []
         for resposta in query_resposta:
             registro_0200 = registros.Registro0200()
-            registro_0200.COD_ITEM = resposta[0].upper()
+            registro_0200.COD_ITEM = resposta[0]
             registro_0200.DESCR_ITEM = resposta[1]
             registro_0200.COD_BARRA =  resposta[2]
             # registro_0200.COD_ANT_ITEM = query_resposta[0]
@@ -228,7 +238,12 @@ class SpedEFD(models.Model):
             # registro_0200.COD_GEN = query_resposta[0]
             # registro_0200.COD_LST = query_resposta[0]
             # registro_0200.ALIQ_ICMS = query_resposta[0]
+            # registro_h005 = registros.RegistroH005()
+            # registro_h005.DT_INV = '02022017'
+            # registro_h005.VL_INV = '12'
+            # registro_h005.MOT_INV = '01'
             lista.append(registro_0200)
+            # lista.append(registro_h005)
         return lista
 
     def transforma_valor(self, valor):
@@ -248,7 +263,8 @@ class SpedEFD(models.Model):
         self._cr.execute(query)
         query_resposta = self._cr.fetchall()
         lista = []
-        for resposta in self.env['sped.documento'].browse(query_resposta):
+        for id in query_resposta:
+            resposta = self.env['sped.documento'].browse(id[0])
             registro_c100 = registros.RegistroC100()
             registro_c100.IND_OPER = resposta.entrada_saida
             registro_c100.IND_EMIT = resposta.emissao
@@ -328,29 +344,56 @@ class SpedEFD(models.Model):
     #     # registro_c500.COD_GRUPO_TENSAO =
 
     def query_registro_D100(self):
-        registro_d100 = registros.RegistroD100()
-        registro_d100.IND_OPER
-        registro_d100.IND_EMIT
-        registro_d100.COD_PART
-        registro_d100.COD_MOD
-        registro_d100.COD_SIT
-        # registro_d100.SER
-        # registro_d100.SUB
-        registro_d100.NUM_DOC
-        # registro_d100.CHV_CTE
-        registro_d100.DT_DOC
-        # registro_d100.DT_A_P
-        # registro_d100.TP_CT-e
-        # registro_d100.CHV_CTE_REF
-        registro_d100.VL_DOC
-        # registro_d100.VL_DESC
-        # registro_d100.IND_FRT
-        registro_d100.VL_SERV
-        # registro_d100.VL_BC_ICMS
-        # registro_d100.VL_ICMS
-        # registro_d100.VL_NT
-        # registro_d100.COD_INF
-        # registro_d100.COD_CTA
+        query = """
+            select distinct
+                d.id
+            from
+                sped_documento as d
+                join sped_empresa as e on e.id = d.empresa_id
+                join sped_participante as p on p.id = e.participante_id
+        """
+        self._cr.execute(query)
+        query_resposta = self._cr.fetchall()
+        lista = []
+        for id in query_resposta:
+            resposta = self.env['sped.documento'].browse(id[0])
+            registro_d100 = registros.RegistroD100()
+            registro_d100.IND_OPER = resposta.entrada_saida
+            registro_d100.IND_EMIT = resposta.emissao
+            registro_d100.COD_PART = '1'
+            registro_d100.COD_MOD = resposta.modelo
+            registro_d100.COD_SIT = resposta.situacao_fiscal
+            # registro_d100.SER
+            # registro_d100.SUB
+
+            registro_d100.NUM_DOC = str(resposta.numero)
+            # registro_d100.CHV_CTE
+            registro_d100.DT_DOC = resposta.data_entrada_saida
+            # registro_d100.DT_A_P
+            # registro_d100.TP_CT-e
+            # registro_d100.CHV_CTE_REF
+            registro_d100.VL_DOC = str(resposta.vr_produtos)
+            # registro_d100.VL_DESC
+            # registro_d100.IND_FRT
+            registro_d100.VL_SERV = '10' # TODO: achar valor do servico
+            # registro_d100.VL_BC_ICMS
+            # registro_d100.VL_ICMS
+            # registro_d100.VL_NT
+            # registro_d100.COD_INF
+            # registro_d100.COD_CTA
+            lista.append(registro_d100)
+
+        return lista
+
+    def query_registro_H005(self):
+        query = """
+        
+        """
+        self._cr.execute(query)
+        query_resposta = self._cr.fetchall()
+        lista = []
+        for id in query_resposta:
+            resposta = self.env['sped.documento'].browse(id[0])
 
     def junta_pipe(self, registro):
         junta = ''
@@ -372,19 +415,21 @@ class SpedEFD(models.Model):
         # arq.read_registro(self.junta_pipe(self.query_registro0100()))
         arq.read_registro(self.junta_pipe(self.query_registro0005()))
         arq.read_registro(self.junta_pipe(self.query_registro0150()))
-        for item_lista in self.query_registro0190():
-            arq.read_registro(self.junta_pipe(item_lista))
         for item_lista in self.query_registro0200():
+            arq.read_registro(self.junta_pipe(item_lista))
+        for item_lista in self.query_registro0190():
             arq.read_registro(self.junta_pipe(item_lista))
         for item_lista in self.query_registro0400():
             arq.read_registro(self.junta_pipe(item_lista))
 
         # bloco C
-        for item_lista in self.query_registro_C100():
-            arq.read_registro(self.junta_pipe(item_lista))
-        arq.read_registro(self.junta_pipe(self.query_registro_C500()))
+        #for item_lista in self.query_registro_C100():
+        #    arq.read_registro(self.junta_pipe(item_lista))
+        # arq.read_registro(self.junta_pipe(self.query_registro_C500()))
 
         # bloco D
+        # for item_lista in self.query_registro_D100():
+        #    arq.read_registro(self.junta_pipe(item_lista))
 
 
         for bloco in arq._blocos.items():

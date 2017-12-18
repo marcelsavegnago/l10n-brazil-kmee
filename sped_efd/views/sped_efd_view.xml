@@ -10,7 +10,8 @@
             <sheet>
                 <group col="4" colspan="4">
                    <field name="company_id"/>
-                   <field name="fci_file_sent"/>
+                   <field name="cpnj_cpf"/>
+
                    <field name="dt_ini"/>
                    <field name="dt_fim"/>
                 </group>

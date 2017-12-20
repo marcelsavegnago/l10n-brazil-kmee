@@ -144,6 +144,7 @@ class SpedDocumento(models.Model):
     @api.multi
     def gera_boleto_documento_fiscal(self):
         for documento_id in self:
+            documento_id.anexos = True
             forma_id = documento_id.condicao_pagamento_id.forma_pagamento_id
             boleto = forma_id.forma_pagamento == '15'
 
@@ -172,4 +173,3 @@ class SpedDocumento(models.Model):
 
                     boleto = lancamento_id.gera_boleto()
                     documento_id._grava_anexo(boleto.nome, boleto.pdf)
-            # documento_id.anexos = True

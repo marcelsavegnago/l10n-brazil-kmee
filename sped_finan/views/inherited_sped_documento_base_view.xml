@@ -12,7 +12,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='condicao_pagamento_id']" position="after">
                 <newline />
-                <field name="anexos" invisible="1" />
+                <field name="anexos"/>
                 <field name="finan_documento_id" attrs="{'required': [('ind_forma_pagamento', '!=', '9')], 'readonly': [('permite_alteracao', '=', False)]}" />
                 <field name="finan_conta_id" attrs="{'required': [('ind_forma_pagamento', '!=', '9')], 'readonly': [('permite_alteracao', '=', False)]}" />
                 <newline />

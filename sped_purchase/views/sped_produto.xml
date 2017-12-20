@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="sped_produto_produto_form" >
+        <field name="name">sped.produto.produto.form</field>
+        <field name="model">sped.produto</field>
+        <field name="inherit_id" ref="l10n_br_base.sped_produto_produto_form"/>
+        <field name="arch" type="xml">
+            <page name="estoque" position="after">
+                <page name="produtos_fornecedor" string="Produtos de fornecedor"
+                           attrs="{'invisible': [('tipo_produto', '=', 'fornecedor')]}">
+                    <field name="child_ids"
+                           context="{
+                           'tree_view_ref': 'sped_purchase.sped_produto_fornecedor_tree'
+                           }"/>
+                </page>
+            </page>
+            <field name="peso_bruto" position="before">
+                <field name="tipo_produto"/>
+                <field name="parent_id" attrs="{
+                'invisible': [('tipo_produto', '=', 'estoque')],
+                'required': [('tipo_produto', '=', 'fornecedor')]
+                }"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="sped_produto_fornecedor_tree">
+        <field name="name">sped.produto.fornecedor.tree</field>
+        <field name="model">sped.produto</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="codigo"/>
+                <field name="nome"/>
+                <field name="estoque_em_maos" option="{'currency_field': 'currency_unidade_id'}"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

@@ -123,3 +123,17 @@ class SpedDocumentoItem(models.Model):
                 item.quantidade = quantidade
             else:
                 item.pode_alterar_quantidade = True
+
+    @api.multi
+    def selecionar_produto(self):
+        return {
+            'name': _("Selecionar Produto"),
+            'view_mode': 'form',
+            'view_type': 'form',
+            'view_id': self.env.ref(
+                'sped_purchase.selecionar_produto_wizard').id,
+            'res_model': 'sped.documento.item.selecionar.produto',
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'context': {'default_documento_item_id': self.id},
+        }

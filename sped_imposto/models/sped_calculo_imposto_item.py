@@ -1886,7 +1886,7 @@ class SpedCalculoImpostoItem(SpedBase):
         self.ensure_one()
 
         res = {}
-
+        mensagens_complementares = ''
         avisos = {}
         res['warning'] = avisos
 
@@ -1924,14 +1924,20 @@ class SpedCalculoImpostoItem(SpedBase):
         #
         if (self.entrada_saida == ENTRADA_SAIDA_ENTRADA and
                 self.participante_id.estado == 'EX'):
-            aliquota_origem_destino = self.protocolo_id.busca_aliquota(
+            mensagem, aliquota_origem_destino = \
+                self.protocolo_id.busca_aliquota(
                 estado_destino, estado_destino,
                 self.data_emissao, self.empresa_id)
+            if mensagem:
+                mensagens_complementares += mensagem + '; '
 
         else:
-            aliquota_origem_destino = self.protocolo_id.busca_aliquota(
+            mensagem, aliquota_origem_destino = \
+                self.protocolo_id.busca_aliquota(
                 estado_origem, estado_destino,
                 self.data_emissao, self.empresa_id)
+            if mensagem:
+                mensagens_complementares += mensagem + '; '
 
         #
         # Alíquota do ICMS próprio
@@ -1952,9 +1958,12 @@ class SpedCalculoImpostoItem(SpedBase):
         self.al_fcp = 0
 
         if self.calcula_difal:
-            aliquota_interna_destino = self.protocolo_id.busca_aliquota(
+            mensagem, aliquota_interna_destino = \
+            self.protocolo_id.busca_aliquota(
                 estado_destino, estado_destino,
                 self.data_emissao, self.empresa_id)
+            if mensagem:
+                mensagens_complementares += mensagem + '; '
 
             if (aliquota_interna_destino.al_icms_proprio_id.al_icms >
                     al_icms.al_icms):
@@ -1966,6 +1975,9 @@ class SpedCalculoImpostoItem(SpedBase):
                     aliquota_interna_destino.al_icms_proprio_id.al_icms
 
                 self.al_fcp = aliquota_interna_destino.al_fcp
+
+        if mensagens_complementares:
+            self.infcomplementar = mensagens_complementares
 
         #
         # Alíquota e MVA do ICMS ST, somente para quando não houver serviço

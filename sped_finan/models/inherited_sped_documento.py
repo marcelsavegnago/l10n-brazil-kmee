@@ -40,7 +40,7 @@ class SpedDocumento(models.Model):
     )
 
     anexos = fields.Boolean(
-        string='Anexos Gerados',
+        string='Boletos Gerados',
         readonly=True,
     )
 

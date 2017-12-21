@@ -10,21 +10,8 @@ from odoo import api, fields, models, _
 class SpedProduto(models.Model):
     _inherit = b'sped.produto'
 
-    parent_id = fields.Many2one(
-        comodel_name='sped.produto',
-        string='Produto no estoque',
-    )
-
-    child_ids = fields.One2many(
-        comodel_name='sped.produto',
+    produto_fornecedor_ids = fields.One2many(
+        comodel_name='sped.produto.fornecedor',
         string='Produtos de fornecedor',
-        inverse_name='parent_id',
-    )
-
-    tipo_produto = fields.Selection(
-        selection=[
-            ('fornecedor', 'Produto de fornecedor'),
-            ('estoque', 'Produto no estoque'),
-        ],
-        string='Tipo de produto:',
+        inverse_name='produto_id',
     )

@@ -166,6 +166,7 @@ class SpedDocumentoItem(models.Model):
             'vr_produtos_tributacao': \
                 det.prod.qTrib.valor * det.prod.vUnTrib.valor,
             'exibe_tributacao': False,
+            ''
             'fator_conversao_unidade_tributacao': 1,
 
             'vr_frete': det.prod.vFrete.valor,

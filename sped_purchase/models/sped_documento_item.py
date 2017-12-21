@@ -29,6 +29,11 @@ class SpedDocumentoItem(models.Model):
         default=True,
     )
 
+    produto_fornecedor_id = fields.Many2one(
+        string='Produto de fornecedor',
+        comodel_name='sped.produto.fornecedor',
+    )
+
     @api.multi
     def find_lines(self):
         for item in self:
@@ -137,3 +142,67 @@ class SpedDocumentoItem(models.Model):
             'target': 'new',
             'context': {'default_documento_item_id': self.id},
         }
+
+    def _busca_produto_fornecedor(self, dados):
+        if dados['codigo_barras']:
+            produto = self.env['sped.produto.fornecedor'].search(
+                [('codigo_barras', '=', dados['codigo_barras'])])
+
+            if len(produto) == 1:
+                produto.write(dados)
+                return produto
+
+        produto = self.env['sped.produto.fornecedor'].search(
+            [('codigo', '=', dados['codigo'])])
+
+        if len(produto) == 1:
+            produto.write(dados)
+            return produto
+
+        produto = self.env['sped.produto.fornecedor'].create(dados)
+
+        return produto
+
+    def le_nfe(self, det, dados_documento):
+        dados = super(SpedDocumentoItem, self).le_nfe(det, dados_documento)
+        if dados.get('produto_id', False):
+            return dados
+        dados_produto = {
+            'codigo': det.prod.cProd.valor,
+            'descricao_produto': det.prod.xProd.valor,
+            'codigo_barras': det.prod.cEAN.valor,
+            'codigo_barras_tributacao': det.prod.cEANTrib.valor,
+            'ncm_id': self._busca_ncm(str(det.prod.NCM.valor),
+                                      str(det.prod.EXTIPI.valor)),
+            'cest_id': self._busca_cest(str(det.prod.CEST.valor)),
+            'org_icms': str(det.imposto.ICMS.orig.valor),
+            'preco': det.prod.vUnCom.valor,
+            'currency_unidade_id': self._busca_unidade(
+                det.prod.uCom.valor, False),
+
+        }
+        produto_fornecedor = self._busca_produto_fornecedor(dados_produto)
+        if produto_fornecedor.produto_id:
+            dados['produto_id'] = produto_fornecedor.produto_id.id
+        dados['produto_fornecedor_id'] = produto_fornecedor.id
+        return dados
+
+    @api.multi
+    def write(self, vals):
+        res = super(SpedDocumentoItem, self).write(vals)
+        for item in self:
+            if item.produto_id:
+                if not item.produto_fornecedor_id.produto_id:
+                    item.produto_fornecedor_id.produto_id = item.produto_id
+                elif item.produto_fornecedor_id.produto_id != item.produto_id:
+                    item.produto_id =item.produto_fornecedor_id.produto_id
+        return res
+
+    @api.model
+    def create(self, vals):
+        res = super(SpedDocumentoItem, self).create(vals)
+        for item in res:
+            if item.participante_id and \
+                    not item.produto_fornecedor_id.fornecedor:
+                item.produto_fornecedor_id = item.participante_id
+        return res

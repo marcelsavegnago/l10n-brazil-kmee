@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record model="ir.ui.view" id="sped_produto_fornecedor_tree">
+        <field name="name">sped.produto.fornecedor.tree</field>
+        <field name="model">sped.produto.fornecedor</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="produto_id" invisible="True"/>
+                <field name="codigo"/>
+                <field name="descricao_produto"/>
+                <field name="codigo_barras"/>
+                <field name="codigo_barras_tributacao" invisible="True"/>
+                <field name="ncm_id"/>
+                <field name="cest_id"/>
+                <field name="org_icms" invisible="True"/>
+                <field name="preco"/>
+                <field name="fornecedor"/>
+                <field name="estoque_em_maos" option="{'currency_field': 'currency_unidade_id'}"/>
+                <field name="currency_unidade_id" invisible="True"/>
+                <field name="documento_item_ids" invisible="True"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

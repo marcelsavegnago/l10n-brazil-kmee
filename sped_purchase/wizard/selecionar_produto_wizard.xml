@@ -8,9 +8,7 @@
             <form>
                 <h1>
                     <field name="documento_item_id" invisible="True"/>
-                    <field name="produto_id"
-                           domain="[('tipo_produto', '=', 'fornecedor')]"
-                           context="{'default_tipo_produto': 'fornecedor'}"/>
+                    <field name="produto_id"/>
                 </h1>
             </form>
         </field>

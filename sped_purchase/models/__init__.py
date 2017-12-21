@@ -8,4 +8,5 @@ from . import inherited_account_invoice
 from . import sped_documento_item
 from . import sped_documento
 from . import stock_picking
+from . import sped_produto_fornecedor
 from . import sped_produto

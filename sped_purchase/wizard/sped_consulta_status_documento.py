@@ -83,7 +83,7 @@ class SpedConsultaStatusDocumento(models.TransientModel):
     )
 
     forma_consulta = fields.Selection(
-        selection = [
+        selection=[
             ('Chave', 'Chave'),
             ('XML', 'XML'),
         ],
@@ -99,7 +99,7 @@ class SpedConsultaStatusDocumento(models.TransientModel):
 
         if vals.get('chave'):
             chave = ''.join(re.findall(r'[\b]*\d+[\b]*', vals.get('chave')))
-            vals.update(chave = chave)
+            vals.update(chave=chave)
 
         res = super(SpedConsultaStatusDocumento, self).create(vals)
         return res
@@ -119,13 +119,16 @@ class SpedConsultaStatusDocumento(models.TransientModel):
                 'name': _("Associar Pedido de Compras"),
                 'view_mode': 'form',
                 'view_type': 'form',
-                'view_id': self.env.ref('sped_nfe.sped_documento_ajuste_recebimento_form').id,
+                'view_id': self.env.ref('sped_nfe.sped_documento'
+                                        '_ajuste_recebimento_form').id,
                 'res_id': dados.id,
                 'res_model': 'sped.documento',
                 'type': 'ir.actions.act_window',
                 'target': 'current',
-                'context': {'default_purchase_order_ids': [(4, self.purchase_order_id.id)]},
-                'flags': {'form': {'action_buttons': True, 'options': {'mode': 'edit'}}},
+                'context': {'default_purchase_order_ids':
+                            [(4, self.purchase_order_id.id)]},
+                'flags': {'form': {'action_buttons': True,
+                                   'options': {'mode': 'edit'}}},
             }
 
         consulta = self.env['sped.consulta.dfe']
@@ -145,13 +148,16 @@ class SpedConsultaStatusDocumento(models.TransientModel):
                     'name': _("Associar Pedido de Compras"),
                     'view_mode': 'form',
                     'view_type': 'form',
-                    'view_id': self.env.ref('sped_nfe.sped_documento_ajuste_recebimento_form').id,
+                    'view_id': self.env.ref('sped_nfe.sped_documento'
+                                            '_ajuste_recebimento_form').id,
                     'res_id': dados.id,
                     'res_model': 'sped.documento',
                     'type': 'ir.actions.act_window',
                     'target': 'current',
-                    'context': {'default_purchase_order_ids': [(4, self.purchase_order_id.id)]},
-                    'flags': {'form': {'action_buttons': True, 'options': {'mode': 'edit'}}},
+                    'context': {'default_purchase_order_ids':
+                                [(4, self.purchase_order_id.id)]},
+                    'flags': {'form': {'action_buttons': True,
+                                       'options': {'mode': 'edit'}}},
                 }
 
         except Exception as e:

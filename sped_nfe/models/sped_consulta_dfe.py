@@ -137,11 +137,11 @@ class ConsultaDFe(models.Model):
 
         if len(manifestos) != 1:
             manifestos = self.env['sped.manifestacao.destinatario'].\
-                search([('empresa_id','=',self.empresa_id.id)])
+                search([('empresa_id', '=', self.empresa_id.id)])
 
         for manifesto in manifestos:
 
-            if not manifesto.state in ['pendente', 'ciente']:
+            if manifesto.state not in ['pendente', 'ciente']:
                 continue
 
             elif manifesto.state == 'pendente':
@@ -156,7 +156,7 @@ class ConsultaDFe(models.Model):
                 '''
                 try:
                     manifesto.action_ciencia_emissao()
-                except Exception, e:
+                except Exception as e:
                     erros.append(('manifesto', manifesto.id, e))
 
                     try:
@@ -198,7 +198,6 @@ class ConsultaDFe(models.Model):
         for consulta_id in consulta_ids:
             if consulta_id.cron:
                 consulta_id.busca_documentos()
-
 
     @api.multi
     def busca_documentos(self, raise_error=False):

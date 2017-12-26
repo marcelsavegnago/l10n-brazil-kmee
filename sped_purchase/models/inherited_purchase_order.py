@@ -6,13 +6,8 @@ from __future__ import division, print_function, unicode_literals
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError
-from odoo.addons.sped_imposto.models.sped_calculo_imposto import (
-    SpedCalculoImposto
-)
 from odoo.addons.sped_imposto.models.sped_calculo_imposto_produto_servico \
     import SpedCalculoImpostoProdutoServico
-from odoo.addons.l10n_br_base.constante_tributaria \
-    import SITUACAO_FISCAL_SPED_CONSIDERA_ATIVO
 
 
 class PurchaseOrder(SpedCalculoImpostoProdutoServico, models.Model):
@@ -70,7 +65,7 @@ class PurchaseOrder(SpedCalculoImpostoProdutoServico, models.Model):
         compute='_compute_order_line_count'
     )
 
-    @api.depends('state', 
+    @api.depends('state',
                  'order_line.qty_invoiced',
                  'order_line.qty_received',
                  'invoice_status')
@@ -205,7 +200,8 @@ class PurchaseOrder(SpedCalculoImpostoProdutoServico, models.Model):
             'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'sped_purchase.consulta_status_documento',
-            'view_id': self.env.ref('sped_purchase.sped_consulta_status_documento_form').id,
+            'view_id': self.env.ref('sped_purchase.sped_consulta'
+                                    '_status_documento_form').id,
             'type': 'ir.actions.act_window',
             'context': {
                 'default_empresa_id': self.empresa_id.id,
@@ -282,7 +278,8 @@ class PurchaseOrder(SpedCalculoImpostoProdutoServico, models.Model):
             for move in line.move_ids:
                 if move.state == 'done':
                     if move.product_uom != line.product_uom:
-                        total += move.product_uom._compute_quantity(move.product_uom_qty, line.product_uom)
+                        total += move.product_uom._compute_quantity(
+                            move.product_uom_qty, line.product_uom)
                     else:
                         total += move.product_uom_qty
             line.qty_received = total

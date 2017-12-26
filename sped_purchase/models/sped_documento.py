@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 
 
 class SpedDocumento(models.Model):
@@ -59,10 +59,13 @@ class SpedDocumento(models.Model):
     #             'operacao_id': self.purchase_order_ids.operacao_id.id,
     #             'modelo': self.purchase_order_ids.operacao_id.modelo,
     #             'emissao': self.purchase_order_ids.operacao_id.emissao,
-    #             'participante_id': self.purchase_order_ids.participante_id.id,
-    #             'condicao_pagamento_id': self.purchase_order_ids.condicao_pagamento_id.id if \
+    #             'participante_id': self.purchase_order_ids.
+    # participante_id.id,
+    #             'condicao_pagamento_id': self.purchase_order_ids.condicao
+    # _pagamento_id.id if \
     #                 self.purchase_order_ids.condicao_pagamento_id else False,
-    #             'transportadora_id': self.purchase_order_ids.transportadora_id.id if \
+    #             'transportadora_id': self.purchase_order_ids.
+    # transportadora_id.id if \
     #                 self.purchase_order_ids.transportadora_id else False,
     #             'modalidade_frete': self.purchase_order_ids.modalidade_frete,
     #         }
@@ -72,7 +75,8 @@ class SpedDocumento(models.Model):
     #         self.update(self._onchange_operacao_id()['value'])
     #
     #         if self.purchase_order_ids.presenca_comprador:
-    #             self.presenca_comprador = self.purchase_order_ids.presenca_comprador
+    #             self.presenca_comprador = self.purchase_order_ids.presenca
+    # _comprador
     #
     #         self.update(self._onchange_serie()['value'])
     #         self.update(self._onchange_participante_id()['value'])
@@ -127,14 +131,3 @@ class SpedDocumento(models.Model):
             for item in documento.item_ids:
                 item.calcula_impostos()
 
-    @api.model
-    def create(self, vals):
-        documentos = super(SpedDocumento, self).create(vals)
-        documentos.executa_depois_create()
-        return documentos
-
-    @api.multi
-    def write(self, vals):
-        res = super(SpedDocumento, self).write()
-        self.executa_depois_create()
-        return res

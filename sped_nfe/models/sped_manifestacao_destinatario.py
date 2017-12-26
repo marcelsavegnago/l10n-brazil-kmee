@@ -23,11 +23,11 @@ SITUACAO_NFE = [
 ]
 
 SITUACAO_MANIFESTACAO = [
-         ('pendente', 'Pendente'),
-         ('ciente', 'Ciente da operação'),
-         ('confirmado', 'Confirmada operação'),
-         ('desconhecido', 'Desconhecimento'),
-         ('nao_realizado', 'Não realizado'),
+    ('pendente', 'Pendente'),
+    ('ciente', 'Ciente da operação'),
+    ('confirmado', 'Confirmada operação'),
+    ('desconhecido', 'Desconhecimento'),
+    ('nao_realizado', 'Não realizado'),
 ]
 
 
@@ -172,7 +172,6 @@ class SpedManifestacaoDestinatario(models.Model):
             'tag': 'reload',
         }
 
-
     @api.multi
     def action_ciencia_emissao(self):
         for record in self:
@@ -210,7 +209,7 @@ class SpedManifestacaoDestinatario(models.Model):
                 record.state = 'confirmado'
             else:
                 raise models.ValidationError(_(
-                        nfe_result['code'] + ' - ' + nfe_result['message'])
+                    nfe_result['code'] + ' - ' + nfe_result['message'])
                 )
                 return False
 
@@ -299,12 +298,14 @@ class SpedManifestacaoDestinatario(models.Model):
                     'name': _("Associar Pedido de Compras"),
                     'view_mode': 'form',
                     'view_type': 'form',
-                    'view_id': self.env.ref('sped_nfe.sped_documento_ajuste_recebimento_form').id,
+                    'view_id': self.env.ref('sped_nfe.sped_documento'
+                                            '_ajuste_recebimento_form').id,
                     'res_id': dados.id,
                     'res_model': 'sped.documento',
                     'type': 'ir.actions.act_window',
                     'target': 'current',
-                    'flags': {'form': {'action_buttons': True, 'options': {'mode': 'edit'}}},
+                    'flags': {'form': {'action_buttons': True,
+                                       'options': {'mode': 'edit'}}},
                 }
             else:
                 raise models.ValidationError(_(

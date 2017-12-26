@@ -6,7 +6,7 @@
     'name': 'Brazilian Localization CRM',
     'category': 'Localisation',
     'license': 'AGPL-3',
-    'author': 'Akretion, Odoo Community Association (OCA)',
+    'author': 'Odoo Community Association (OCA)',
     'website': 'http://odoo-brasil.org',
     'version': '10.0.1.0.0',
     'depends': [
@@ -15,12 +15,14 @@
     ],
     'data': [
         'views/crm_lead_view.xml',
-        'views/crm_opportunity_view.xml',
+        # 'views/crm_opportunity_view.xml',
+
+        'wizards/crm_lead_to_opportunity_views.xml',
     ],
     'demo': [],
     'test': [
-        'test/crm_lead.yml',
+        # 'test/crm_lead.yml',
     ],
     'installable': True,
-    'auto_install': True,
+    'auto_install': False,
 }

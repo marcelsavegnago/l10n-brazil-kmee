@@ -2,9 +2,9 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-==========================================
+==========
 Módulo CRM
-==========================================
+==========
 
 This module was written to extend the functionality of CRM
 and allow you to fill fields like: CNPJ, IE and etc.

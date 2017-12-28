@@ -2740,7 +2740,10 @@ class SpedCalculoImpostoItem(SpedBase):
 
     def prepara_dados_documento_item(self):
         self.ensure_one()
-        return {}
+        result = {}
+        if self.numero_fci:
+            result.update({'numero_fci': self.numero_fci})
+        return result
 
     def _mantem_sincronia_cadastros(self, dados):
         dados = \

@@ -269,7 +269,7 @@ class SpedDocumento(models.Model):
                     documento.permite_cancelamento = True
 
     @api.depends('modelo', 'emissao', 'justificativa', 'situacao_nfe')
-    def _compute_permite_cancelamento(self):
+    def _compute_permite_inutilizacao(self):
         #
         # Este método deve ser alterado por módulos integrados, para verificar
         # regras de negócio que proíbam a inutilização de um documento fiscal,

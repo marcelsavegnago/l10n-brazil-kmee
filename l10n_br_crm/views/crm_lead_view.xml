@@ -15,7 +15,7 @@
                     <field name="is_brazilian" invisible="1" />
                     <field name="participante_id" string="Customer"
                            attrs="{'invisible': [('is_brazilian', '!=', True)]}"
-                           context="{'default_eh_consumidor_final': True}"
+                           context="{'default_eh_consumidor_final': True, 'default_fone':phone,'default_celular':mobile}"
                     />
                 </field>
                 <!--<field name="street2" position="replace"/>-->

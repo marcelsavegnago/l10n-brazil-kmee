@@ -18,7 +18,7 @@ class Eventos(models.Model):
         string='Codigo do Evento',
         required=True,
     )
-    company_id = fields.Many2one(
+    empresa_id = fields.Many2one(
         string='Empresa',
         comodel_name='sped.empresa',
         ondelete="restrict",
@@ -54,7 +54,7 @@ class Eventos(models.Model):
     )
 
     @api.onchange('evento',
-                  'company_id',
+                  'empresa_id',
                   'data_hora_protocolo',
                   'data_hora_recibo')
     def _compute_name(self):
@@ -63,6 +63,6 @@ class Eventos(models.Model):
                 if evento.data_hora_recibo else evento.data_hora_protocolo
             evento.name = "%s - %s - %s" % \
                           (evento.evento,
-                           evento.company_id.name,
+                           evento.empresa_id.name,
                            fields.Date.to_string(data_hora)
                            )

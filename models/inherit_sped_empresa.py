@@ -40,12 +40,12 @@ class SpedEmpresa(models.Model):
     lote_ids = fields.One2many(
         string='Lotes',
         comodel_name='esocial.lote',
-        inverse_name='company_id',
+        inverse_name='empresa_id',
     )
     evento_ids = fields.One2many(
         string='Eventos',
         comodel_name='esocial.evento',
-        inverse_name='company_id',
+        inverse_name='empresa_id',
     )
     lotes = fields.Integer(
         string='Lotes',

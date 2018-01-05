@@ -25,11 +25,16 @@
         ],
     },
     'data': [
+        # Segurança
+        'security/esocial_security.xml',
+        'security/ir.model.access.csv',
+
         # Menu base
         'views/menus.xml',
 
         # Cadastro de Empresas para e-Social
         'views/empresas.xml',
+        'views/lotes.xml',
 
         # Tabelas do e-Social
         'views/codigo_aliquota_FPAS.xml',
@@ -140,9 +145,12 @@
 >>>>>>> 2af478f... [ADD] permissoes, todos as tabelas
 =======
         'data/codigo_aliquota_FPAS.xml',
+<<<<<<< HEAD
         'security/esocial_security.xml',
         'security/ir.model.access.csv',
 >>>>>>> a447f51... [ADD] Cadastro de Empresas
+=======
+>>>>>>> 1ddcc87... [FIX] Ajustes de Segurança e View de Lotes
     ],
     'application': True,
 }

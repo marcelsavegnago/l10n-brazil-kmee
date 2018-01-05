@@ -11,13 +11,42 @@
                 <field name="partner_id" position="attributes">
                     <attribute name="attrs">{'invisible': [('is_brazilian','=', True)]}</attribute>
                 </field>
+                <field name ="street" position="attributes">
+                    <attribute name="attrs">{'invisible':  [('is_brazilian','=', True)]}</attribute>
+                </field>
+                <field name="street2" position="attributes">
+                    <attribute name="attrs">{'invisible': [('is_brazilian','=', True)]}</attribute>
+                </field>
+                <field name="city" position="attributes">
+                    <attribute name="attrs">{'invisible': [('is_brazilian','=', True)]}</attribute>
+                </field>
+                <field name="state_id" position="attributes">
+                    <attribute name="attrs">{'invisible': [('is_brazilian','=', True)]}</attribute>
+                </field>
+                <field name ="zip" position="attributes">
+                    <attribute name="attrs">{'invisible': [('is_brazilian','=', True)]}</attribute>
+                </field>
+                <xpath expr="//label[@for='street']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('is_brazilian','=', True)]}</attribute>
+                </xpath>
+
+                <field name ="country_id" position="attributes">
+                    <attribute name="attrs">{'invisible': [('is_brazilian','=', True)]}</attribute>
+                </field>
                 <field name="partner_id" position="after">
                     <field name="is_brazilian" invisible="1" />
                     <field name="participante_id" string="Customer"
                            attrs="{'invisible': [('is_brazilian', '!=', True)]}"
                            context="{'default_eh_consumidor_final': True, 'default_fone':phone,'default_celular':mobile}"
                     />
+                    <field name = "endereco"/>
+                    <field name="numero"/>
+                    <field name="complemento"/>
+                    <field name="bairro"/>
+                    <field name ="municipio_id"/>
+                    <field name="cep"/>
                 </field>
+
                 <!--<field name="street2" position="replace"/>-->
                 <!--<field name="zip" position="replace"/>-->
                 <!--<field name="street" position="replace">-->

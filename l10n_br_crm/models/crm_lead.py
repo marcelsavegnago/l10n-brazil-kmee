@@ -28,10 +28,44 @@ class CrmLead(models.Model):
         # compute='_compute_is_brazilian',
     )
 
+    endereco = fields.Char(
+        string='Endereço',
+    )
+    numero = fields.Char(
+        string='Número',
+        size=60
+    )
+    complemento = fields.Char(
+        string='Complemento',
+        size=60
+    )
+    bairro = fields.Char(
+        string='Bairro',
+        size=60
+    )
+    municipio_id = fields.Many2one(
+        comodel_name='sped.municipio',
+        string='Município',
+        ondelete='restrict'
+    )
+    cep = fields.Char(
+        string='CEP',
+        size=9
+    )
+
+
     @api.onchange('participante_id')
     def _onchange_participante_id(self):
         self.ensure_one()
         self.partner_id = self.participante_id.partner_id
+
+        self.endereco = self.participante_id.endereco
+        self.numero = self.participante_id.numero
+        self.complemento = self.participante_id.complemento
+        self.bairro = self.participante_id.bairro
+        self.municipio_id = self.participante_id.municipio_id
+        self.cep = self.participante_id.cep
+
 
     # legal_name = fields.Char(
     #     string='Razão Social',

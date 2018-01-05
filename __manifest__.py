@@ -25,11 +25,16 @@
         ],
     },
     'data': [
+        # Segurança
+        'security/esocial_security.xml',
+        'security/ir.model.access.csv',
+
         # Menu base
         'views/menus.xml',
 
         # Cadastro de Empresas para e-Social
         'views/empresas.xml',
+        'views/lotes.xml',
 
         # Tabelas do e-Social
         'views/codigo_aliquota_FPAS.xml',
@@ -76,8 +81,6 @@
         'data/codificacao_acidente_trabalho.xml',
         'data/fatores_meio_ambiente.xml',
         'data/codigo_aliquota_FPAS.xml',
-        'security/esocial_security.xml',
-        'security/ir.model.access.csv',
     ],
     'application': True,
 }

@@ -17,7 +17,7 @@ class Lotes(models.Model):
         string='Número',
         required=True,
     )
-    company_id = fields.Many2one(
+    empresa_id = fields.Many2one(
         string='Empresa',
         comodel_name='sped.empresa',
         ondelete="restrict",
@@ -50,6 +50,12 @@ class Lotes(models.Model):
         compute='_compute_name',
         store=True,
     )
+    arquivo_envio = fields.Binary(
+        string='Arquivo XML',
+    )
+    arquivo_retorno = fields.Binary(
+        string='Arquivo XML',
+    )
     state = fields.Selection(
         string='Situação',
         selection=[
@@ -60,7 +66,7 @@ class Lotes(models.Model):
     )
 
     @api.onchange('lote',
-                  'company_id',
+                  'empresa_id',
                   'data_hora_protocolo',
                   'data_hora_recibo')
     def _compute_name(self):
@@ -69,7 +75,7 @@ class Lotes(models.Model):
                 if lote.data_hora_recibo else lote.data_hora_protocolo
             lote.name = "%s - %s - %s" % \
                         (lote.lote,
-                         lote.company_id.name,
+                         lote.empresa_id.name,
                          fields.Date.to_string(data_hora)
                          )
 

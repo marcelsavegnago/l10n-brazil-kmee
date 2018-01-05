@@ -94,7 +94,7 @@
                         <group attrs="{'invisible': [('esocial_situacao', '=', 'inativo')]}">
                             <field name="lotes" />
                         </group>
-                        <group attrs="{'invisible': [('esocial_situacao', '=', 'inativo')]}">
+                        <group attrs="{'invisible': [('esocial_situacao', '='   , 'inativo')]}">
                             <field name="eventos" />
                         </group>
                     </group>

@@ -56,4 +56,11 @@ from . import tipo_lotacao_tributaria
 from . import codigo_aliquota_FPAS
 from . import FPAS_classificacao_tributaria
 from . import tipos_lotacao_classificacao
+<<<<<<< HEAD
 >>>>>>> 2af478f... [ADD] permissoes, todos as tabelas
+=======
+
+from . import inherit_sped_empresa
+from . import lote
+from . import evento
+>>>>>>> a447f51... [ADD] Cadastro de Empresas

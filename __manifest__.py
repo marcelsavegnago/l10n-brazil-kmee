@@ -25,7 +25,13 @@
         ],
     },
     'data': [
+        # Menu base
         'views/menus.xml',
+
+        # Cadastro de Empresas para e-Social
+        'views/empresas.xml',
+
+        # Tabelas do e-Social
         'views/codigo_aliquota_FPAS.xml',
         'views/categoria_trabalhador.xml',
         'views/financiamento_aposentadoria.xml',
@@ -47,11 +53,14 @@
 <<<<<<< HEAD
         'views/tipo_dependente.xml',
         'views/tipo_lotacao_tributaria.xml',
+<<<<<<< HEAD
 =======
         'views/tipo_dependente.xml',
 <<<<<<< HEAD
 >>>>>>> 919ddf3... [ADD] tabelas 5,7 e 8 e algumas correcoes
         'views/classificacao_tributaria.xml',
+=======
+>>>>>>> a447f51... [ADD] Cadastro de Empresas
         'views/motivo_afastamento.xml',
         'views/tipo_arquivo_esocial.xml',
 =======
@@ -72,15 +81,14 @@
 <<<<<<< HEAD
         'views/codificacao_acidente_trabalho.xml',
         'views/fatores_meio_ambiente.xml',
+        'data/classificacao_tributaria.xml',
         'data/natureza_lesao.xml',
-        'data/codigo_aliquota_FPAS.xml',
         'data/tipo_arquivo_esocial.xml',
         'data/tipo_lotacao_tributaria.xml',
         'data/categoria_trabalhador.xml',
         'data/financiamento_aposentadoria.xml',
         'data/natureza_rubrica.xml',
         'data/tipo_dependente.xml',
-        'data/classificacao_tributaria.xml',
         'data/parte_corpo.xml',
         'data/tipo_inscricao.xml',
 =======
@@ -125,10 +133,16 @@
 >>>>>>> 68e66ce... [ADD]Módulo 23
 =======
         'data/fatores_meio_ambiente.xml',
+<<<<<<< HEAD
 
          'security/esocial_security.xml',
          'security/ir.model.access.csv',
 >>>>>>> 2af478f... [ADD] permissoes, todos as tabelas
+=======
+        'data/codigo_aliquota_FPAS.xml',
+        'security/esocial_security.xml',
+        'security/ir.model.access.csv',
+>>>>>>> a447f51... [ADD] Cadastro de Empresas
     ],
     'application': True,
 }

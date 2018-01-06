@@ -33,8 +33,8 @@
         'views/menus.xml',
 
         # Cadastro de Empresas para e-Social
-        'views/empresas.xml',
-        'views/lotes.xml',
+        'views/inherit_sped_empresa.xml',
+        'views/lote.xml',
 
         # Tabelas do e-Social
         'views/codigo_aliquota_FPAS.xml',

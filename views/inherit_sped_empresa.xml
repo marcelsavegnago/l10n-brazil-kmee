@@ -118,6 +118,7 @@
             <page name="inscricoes" position="replace" />
             <page name="comercial" position="replace" />
             <page name="fiscal" position="replace" />
+            <page name="multiempresas" position="replace" />
         </field>
     </record>
 

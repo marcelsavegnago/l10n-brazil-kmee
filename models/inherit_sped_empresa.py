@@ -17,7 +17,10 @@ ESOCIAL_AMBIENTE = [
     ('1', 'Produção'),
     ('2', 'Pré-Produção - dados reais'),
     ('3', 'Pré-Produção - dados fictícios'),
-    ('4', 'Homologação'),
+    ('6', 'Homologação'),
+    ('7', 'Validação'),
+    ('8', 'Testes'),
+    ('9', 'Desenvolvimento'),
 ]
 
 
@@ -54,6 +57,12 @@ class SpedEmpresa(models.Model):
     eventos = fields.Integer(
         string='Eventos',
         compute='_compute_eventos',
+    )
+    natureza_juridica_id = fields.Many2one(
+        string='Natureza Jurídica',
+        comodel_name='esocial.natureza_juridica',
+        inverse_name='empresa_ids',
+        ondelete='restrict',
     )
 
     @api.depends('lote_ids')

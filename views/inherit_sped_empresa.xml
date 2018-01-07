@@ -98,6 +98,11 @@
                             <field name="eventos" />
                         </group>
                     </group>
+                    <group name="informacoes_juridicas" string="Informações Jurídicas">
+                        <group>
+                            <field name="natureza_juridica_id" />
+                        </group>
+                    </group>
                     <group name="lotes" attrs="{'invisible': [('esocial_situacao', '=', 'inativo')]}">
                         <group colspan="4" string="Lotes de Transmissão para o e-Social">
                             <field name="lote_ids" attrs="{'readonly': True}" nolabel="1">

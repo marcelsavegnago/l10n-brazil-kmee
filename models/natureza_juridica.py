@@ -42,6 +42,12 @@ class NaturezaJuridica(models.Model):
 >>>>>>> 565ad17... [FIX] PEP8
         store=True,
     )
+    empresa_ids = fields.One2many(
+        string='Empresas',
+        comodel_name='sped.empresa',
+        reverse_name='natureza_juridica_id',
+        ondelete='restrict',
+    )
 
     @api.onchange('codigo')
     def _valida_codigo(self):

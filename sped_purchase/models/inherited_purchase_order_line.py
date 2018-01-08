@@ -150,18 +150,26 @@ class PurchaseOrderLine(SpedCalculoImpostoItem, models.Model):
         for item in self:
             item.permite_alteracao = True
 
-    @api.depends('documento_item_ids.quantidade')
+    @api.depends('documento_item_ids.quantidade',
+                 'documento_item_ids.seller_id')
     def _compute_qty_invoiced(self):
         for linha in self:
-            if len(linha.documento_item_ids) > 1:
+            itens = linha.documento_item_ids.filtered(
+                lambda item: item.documento_id.recebido)
+            if len(itens) > 1:
                 total = 0.0
-                for qty in linha.documento_item_ids.mapped('quantidade'):
-                    total += qty
+                for item in itens:
+                    total += \
+                        item.seller_id.unidade_id.uom_id._compute_quantity(
+                            item.quantidade, item.unidade_id.uom_id
+                        )
                 linha.qty_invoiced = total
-            elif linha.documento_item_ids:
-                if len(linha.documento_item_ids.purchase_line_ids) > 1:
-                    for linha_item in linha.documento_item_ids.mapped(
-                            'purchase_line_ids'):
+            elif itens:
+                if len(itens.purchase_line_ids) > 1:
+                    for linha_item in itens.mapped('purchase_line_ids'):
                         linha_item.qty_invoiced = linha_item.quantidade
-                elif linha.documento_item_ids.purchase_line_ids:
-                    linha.qty_invoiced = linha.documento_item_ids.quantidade
+                elif itens.purchase_line_ids:
+                    linha.qty_invoiced = \
+                        itens.seller_id.unidade_id.uom_id._compute_quantity(
+                            itens.quantidade, itens.unidade_id.uom_id
+                        )

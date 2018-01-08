@@ -27,6 +27,7 @@
         'views/stock_picking.xml',
         'views/sped_produto.xml',
         'wizard/sped_consulta_status_documento.xml',
+        'wizard/selecionar_produto_wizard.xml',
     ],
     'demo': [
         # 'demo/purchase_order_line.xml',

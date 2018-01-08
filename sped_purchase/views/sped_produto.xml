@@ -2,7 +2,7 @@
 <odoo>
     <record model="ir.ui.view" id="sped_produto_parceiro_tree">
         <field name="name">sped.produto.parceiro.tree</field>
-        <field name="model">sped.produto.parceiro</field>
+        <field name="model">product.supplierinfo</field>
         <field name="arch" type="xml">
             <tree>
                 <field name="participante_id"/>

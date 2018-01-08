@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 
 
 class SpedDocumento(models.Model):
@@ -16,6 +16,28 @@ class SpedDocumento(models.Model):
         relation='purchase_order_sped_documento_rel',
         copy=False,
     )
+
+    recebido = fields.Boolean(
+        string='Produtos recebidos?',
+        default=False,
+    )
+
+    @api.multi
+    def receber_produtos(self):
+        self.ensure_one()
+        self.recebido = True
+        pickings = self.purchase_order_ids.mapped('picking_ids').filtered(
+            lambda pick: pick.state not in ['cancel']
+        )
+        return {
+            'name': _("Receber Produtos"),
+            'view_mode': 'tree,form',
+            'view_type': 'form',
+            'res_model': 'stock.picking',
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'domain': [('id', 'in', pickings.ids)]
+        }
 
     def _preparar_sped_documento_item(self, item):
         dados = {

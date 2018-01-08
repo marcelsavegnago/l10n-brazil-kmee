@@ -151,7 +151,8 @@ class PurchaseOrderLine(SpedCalculoImpostoItem, models.Model):
             item.permite_alteracao = True
 
     @api.depends('documento_item_ids.quantidade',
-                 'documento_item_ids.seller_id')
+                 'documento_item_ids.seller_id',
+                 'documento_item_ids.documento_id.recebido')
     def _compute_qty_invoiced(self):
         for linha in self:
             itens = linha.documento_item_ids.filtered(

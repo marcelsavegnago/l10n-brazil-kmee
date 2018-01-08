@@ -268,9 +268,9 @@ class SpedDocumentoItem(models.Model):
             # CFOP
             #
             'cfop_original_id':
-                self.emissao == TIPO_EMISSAO_TERCEIROS and cfop or False,
+                dados_documento['emissao'] == TIPO_EMISSAO_TERCEIROS and cfop or False,
             'cfop_id':
-                self.emissao != TIPO_EMISSAO_TERCEIROS and cfop or False,
+                dados_documento['emissao'] != TIPO_EMISSAO_TERCEIROS and cfop or False,
         }
 
         #

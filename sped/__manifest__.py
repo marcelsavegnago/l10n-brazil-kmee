@@ -34,6 +34,7 @@
         'views/inherited_sped_operacao_base_view.xml',
 
         'views/sped_documento_item_declaracao_importacao_view.xml',
+        'views/sped_documento_item_rastreabilidade_view.xml',
         'views/sped_documento_item_base_view.xml',
         'views/sped_documento_item_emissao_view.xml',
 
@@ -54,6 +55,11 @@
         #
         'security/sped_documento_ir_rule.xml',
         'security/ir.model.access.csv',
+
+        #
+        # Dados de base
+        #
+        'data/sped_participante_data.xml',
     ],
     'external_dependencies': {
         'python': [

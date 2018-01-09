@@ -37,8 +37,17 @@ class SpedDocumento(models.Model):
     _inherit = 'sped.documento'
 
     @api.multi
+    def _compute_total_a_pagar(self):
+        for record in self:
+            valor = record.vr_fatura
+            for pagamento in record.pagamento_ids:
+                valor -= pagamento.valor
+            record.vr_total_residual = valor
+
+    @api.multi
     def _buscar_configuracoes_pdv(self):
-        self.configuracoes_pdv = self.env.user.configuracoes_sat_cfe
+        for record in self:
+            record.configuracoes_pdv = self.env.user.configuracoes_sat_cfe
 
     configuracoes_pdv = fields.Many2one(
         string=u"Configurações para a venda",
@@ -52,21 +61,91 @@ class SpedDocumento(models.Model):
         default=False
     )
 
+    vr_total_residual = fields.Monetary(
+        string='Total Residual',
+        compute='_compute_total_a_pagar',
+    )
+
+    chave_cancelamento = fields.Char(
+        string='Chave Cancelamento',
+        size=44,
+        readonly=True,
+    )
+    codigo_rejeicao_cfe = fields.Char(
+        string=u'Código Rejeição CFe'
+    )
+
+    def executa_depois_autorizar(self):
+        #
+        # Este método deve ser alterado por módulos integrados, para realizar
+        # tarefas de integração necessárias depois de autorizar uma NF-e,
+        # por exemplo, criar lançamentos financeiros, movimentações de
+        # estoque etc.
+        #
+        self.ensure_one()
+        super(SpedDocumento, self).executa_depois_autorizar()
+
+        if self.modelo != MODELO_FISCAL_CFE:
+            super(SpedDocumento, self)._compute_permite_cancelamento()
+            return
+
+        if self.emissao != TIPO_EMISSAO_PROPRIA:
+            super(SpedDocumento, self)._compute_permite_cancelamento()
+            return
+
+        #
+        # Envia o email da nota para o cliente
+        #
+        mail_template = None
+        if self.operacao_id.mail_template_id:
+            mail_template = self.operacao_id.mail_template_id
+        else:
+            if self.modelo == MODELO_FISCAL_NFE and \
+                    self.empresa_id.mail_template_nfe_autorizada_id:
+                mail_template = \
+                    self.empresa_id.mail_template_nfe_autorizada_id
+            elif self.modelo == MODELO_FISCAL_NFCE and \
+                    self.empresa_id.mail_template_nfce_autorizada_id:
+                mail_template = \
+                    self.empresa_id.mail_template_nfce_autorizada_id
+
+        if mail_template is None:
+            return
+
+        self.envia_email(mail_template)
+
+    @api.depends('modelo', 'emissao', 'importado_xml', 'situacao_nfe')
+    def _compute_permite_alteracao(self):
+        super(SpedDocumento, self)._compute_permite_alteracao()
+
+        for documento in self:
+            if not documento.modelo == MODELO_FISCAL_CFE:
+                super(SpedDocumento, documento)._compute_permite_alteracao()
+                continue
+
+            if documento.emissao != TIPO_EMISSAO_PROPRIA:
+                super(SpedDocumento, documento)._compute_permite_alteracao()
+                continue
+
+            #
+            # É emissão própria de NF-e ou NFC-e, permite alteração
+            # somente quando estiver em digitação ou rejeitada
+            #
+            documento.permite_alteracao = documento.permite_alteracao or \
+                documento.situacao_nfe in (SITUACAO_NFE_EM_DIGITACAO,
+                                        SITUACAO_NFE_REJEITADA)
+
+
     def _check_permite_alteracao(self, operacao='create', dados={},
                                  campos_proibidos=[]):
+
         CAMPOS_PERMITIDOS = [
+            'message_follower_ids',
             'justificativa',
-            'arquivo_xml_cancelamento_id',
-            'arquivo_xml_autorizacao_cancelamento_id',
-            'data_hora_cancelamento',
-            'protocolo_cancelamento',
-            'arquivo_pdf_id',
-            'situacao_fiscal',
-            'situacao_nfe',
+            'chave_cancelamento',
         ]
         for documento in self:
-            if documento.modelo not in (MODELO_FISCAL_NFE,
-                                        MODELO_FISCAL_NFCE):
+            if documento.modelo != MODELO_FISCAL_CFE:
                 super(SpedDocumento, documento)._check_permite_alteracao(
                     operacao,
                     dados,
@@ -84,10 +163,7 @@ class SpedDocumento(models.Model):
                 continue
 
             permite_alteracao = False
-            #
-            # Trata alguns campos que é permitido alterar depois da nota
-            # autorizada
-            #
+
             if documento.situacao_nfe == SITUACAO_NFE_AUTORIZADA:
                 for campo in dados:
                     if campo in CAMPOS_PERMITIDOS:
@@ -98,46 +174,6 @@ class SpedDocumento(models.Model):
 
             if permite_alteracao:
                 continue
-
-            super(SpedDocumento, documento)._check_permite_alteracao(
-                operacao,
-                dados,
-                campos_proibidos
-            )
-
-    @api.depends('data_hora_autorizacao', 'modelo', 'emissao', 'justificativa',
-                 'situacao_nfe')
-    def _compute_permite_cancelamento(self):
-        #
-        # Este método deve ser alterado por módulos integrados, para verificar
-        # regras de negócio que proíbam o cancelamento de um documento fiscal,
-        # como por exemplo, a existência de boletos emitidos no financeiro,
-        # que precisariam ser cancelados antes, caso tenham sido enviados
-        # para o banco, a verificação de movimentações de estoque confirmadas,
-        # a contabilização definitiva do documento etc.
-        #
-        for documento in self:
-            if documento.modelo not in (MODELO_FISCAL_CFE):
-                super(SpedDocumento, documento)._compute_permite_cancelamento()
-                continue
-
-            if documento.emissao != TIPO_EMISSAO_PROPRIA:
-                super(SpedDocumento, documento)._compute_permite_cancelamento()
-                continue
-
-            documento.permite_cancelamento = False
-
-            # FIXME retirar apost teste
-            documento.permite_cancelamento = True
-
-            if documento.data_hora_autorizacao:
-                tempo_autorizado = UTC.normalize(agora())
-                tempo_autorizado -= \
-                    parse_datetime(documento.data_hora_autorizacao + ' GMT')
-
-                if (documento.situacao_nfe == SITUACAO_NFE_AUTORIZADA and
-                        tempo_autorizado.days < 1):
-                    documento.permite_cancelamento = True
 
     def processador_cfe(self):
         """
@@ -156,14 +192,48 @@ class SpedDocumento(models.Model):
             from mfecfe.clientelocal import ClienteSATLocal
             from mfecfe import BibliotecaSAT
             cliente = ClienteSATLocal(
-                BibliotecaSAT('/opt/Integrador'),  # FIXME: Caminho do integrador nas configurações
+                BibliotecaSAT(self.configuracoes_pdv.path_integrador),
                 codigo_ativacao=self.configuracoes_pdv.codigo_ativacao
             )
         elif self.configuracoes_pdv.tipo_sat == 'rede_interna':
             from mfecfe.clientesathub import ClienteSATHub
             cliente = ClienteSATHub(
                 self.configuracoes_pdv.ip,
-                5000,  # FIXME: Colocar a porta nas configurações
+                self.configuracoes_pdv.porta,
+                numero_caixa=int(self.configuracoes_pdv.numero_caixa)
+            )
+        elif self.configuracoes_pdv.tipo_sat == 'remoto':
+            cliente = None
+            # NotImplementedError
+
+        return cliente
+
+    def processador_vfpe(self):
+        """
+        Busca classe do processador do cadastro da empresa, onde podemos ter três tipos de processamento dependendo
+        de onde o equipamento esta instalado:
+
+        - Instalado no mesmo servidor que o Odoo;
+        - Instalado na mesma rede local do servidor do Odoo;
+        - Instalado em um local remoto onde o browser vai ser responsável por se comunicar com o equipamento
+
+        :return:
+        """
+        self.ensure_one()
+
+        if self.configuracoes_pdv.tipo_sat == 'local':
+            from mfecfe import BibliotecaSAT
+            from mfecfe import ClienteVfpeLocal
+            cliente = ClienteVfpeLocal(
+                BibliotecaSAT(self.configuracoes_pdv.path_integrador),
+                chave_acesso_validador=
+                self.configuracoes_pdv.chave_acesso_validador
+            )
+        elif self.configuracoes_pdv.tipo_sat == 'rede_interna':
+            from mfecfe.clientesathub import ClienteVfpeHub
+            cliente = ClienteVfpeHub(
+                self.configuracoes_pdv.ip,
+                self.configuracoes_pdv.porta,
                 numero_caixa=int(self.configuracoes_pdv.numero_caixa)
             )
         elif self.configuracoes_pdv.tipo_sat == 'remoto':
@@ -189,7 +259,7 @@ class SpedDocumento(models.Model):
     def grava_cfe_cancelamento(self, chave, canc):
         self.ensure_one()
         nome_arquivo = self.chave + '-01-can.xml'
-        conteudo = canc.xml.encode('utf-8')
+        conteudo = canc.documento().encode('utf-8')
         self.arquivo_xml_cancelamento_id = False
         self.arquivo_xml_cancelamento_id = \
             self._grava_anexo(nome_arquivo, conteudo).id
@@ -197,9 +267,10 @@ class SpedDocumento(models.Model):
     def grava_cfe_autorizacao_cancelamento(self, chave, canc):
         self.ensure_one()
         nome_arquivo = chave + '-01-proc-can.xml'
+        conteudo = canc.encode('utf-8')
         self.arquivo_xml_autorizacao_cancelamento_id = False
         self.arquivo_xml_autorizacao_cancelamento_id = \
-            self._grava_anexo(nome_arquivo, canc).id
+            self._grava_anexo(nome_arquivo, conteudo).id
 
     def monta_cfe(self, processador=None):
         self.ensure_one()
@@ -223,7 +294,9 @@ class SpedDocumento(models.Model):
         #
         # Destinatário
         #
-        destinatario = self._monta_cfe_destinatario()
+        if self.participante_id and self.participante_id.cnpj_cpf:
+            kwargs['destinatario'] = self._monta_cfe_destinatario()
+            kwargs['entrega'] = self._monta_cfe_entrega()
 
         #
         # Itens
@@ -291,10 +364,34 @@ class SpedDocumento(models.Model):
             #     limpa_formatacao(participante.cnpj_cpf or '')
 
         elif len(participante.cnpj_cpf or '') == 14:
-            return Destinatario(CPF=limpa_formatacao(participante.cnpj_cpf))
+            return Destinatario(
+                CPF=limpa_formatacao(participante.cnpj_cpf),
+                xNome=participante.nome
+            )
 
         elif len(participante.cnpj_cpf or '') == 18:
-            return Destinatario(CNPJ=limpa_formatacao(participante.cnpj_cpf))
+            return Destinatario(
+                CNPJ=limpa_formatacao(participante.cnpj_cpf),
+                xNome=participante.nome
+            )
+
+    def _monta_cfe_entrega(self,):
+
+        participante = self.participante_id
+
+        if self.modelo == MODELO_FISCAL_CFE and not participante.cnpj_cpf:
+            return
+
+        entrega = LocalEntrega(
+           xLgr=participante.endereco,
+           nro=participante.numero,
+           xBairro=participante.bairro,
+           xMun=participante.municipio_id.nome,
+           UF=participante.municipio_id.estado
+        )
+        entrega.validar()
+
+        return entrega
 
     def _monta_cfe_pagamentos(self, pag):
         if self.modelo != MODELO_FISCAL_CFE:
@@ -372,25 +469,9 @@ class SpedDocumento(models.Model):
             numeroCaixa=int(numero_caixa),
         )
 
-    def grava_xml_cancelamento(self, chave, canc):
-        self.ensure_one()
-        nome_arquivo = chave + '-01-can.xml'
-        conteudo = canc.documento().encode('utf-8')
-        self.arquivo_xml_cancelamento_id = False
-        self.arquivo_xml_cancelamento_id = \
-            self._grava_anexo(nome_arquivo, conteudo).id
-
-    def grava_xml_autorizacao_cancelamento(self, chave, canc):
-        self.ensure_one()
-        nome_arquivo = chave + '-01-proc-can.xml'
-        conteudo = canc.encode('utf-8')
-        self.arquivo_xml_autorizacao_cancelamento_id = False
-        self.arquivo_xml_autorizacao_cancelamento_id = \
-            self._grava_anexo(nome_arquivo, conteudo).id
-
     def cancela_nfe(self):
         self.ensure_one()
-        result = super(SpedDocumento, self).envia_nfe()
+        result = super(SpedDocumento, self).cancela_nfe()
         if not self.modelo == MODELO_FISCAL_CFE:
             return result
 
@@ -399,10 +480,18 @@ class SpedDocumento(models.Model):
         try:
             cancelamento = self._monta_cancelamento()
 
-            processo = processador.cancelar_ultima_venda(
-                cancelamento.chCanc,
-                cancelamento
-            )
+            if self.configuracoes_pdv.tipo_sat == 'local':
+                processo = processador.cancelar_ultima_venda(
+                    cancelamento.chCanc,
+                    cancelamento
+                )
+            elif self.configuracoes_pdv.tipo_sat == 'rede_interna':
+                processo = processador.cancelar_ultima_venda(
+                    cancelamento.chCanc,
+                    cancelamento,
+                    self.configuracoes_pdv.codigo_ativacao,
+                    self.configuracoes_pdv.path_integrador
+                )
 
             #
             # O cancelamento foi aceito e vinculado à CF-E
@@ -411,8 +500,18 @@ class SpedDocumento(models.Model):
                 #
                 # Grava o protocolo de cancelamento
                 #
-                self.grava_xml_cancelamento(self.chave, cancelamento)
-                self.grava_xml_autorizacao_cancelamento(self.chave, processo.xml())
+                self.grava_cfe_cancelamento(self.chave, cancelamento)
+                self.grava_cfe_autorizacao_cancelamento(self.chave, processo.xml())
+                self.chave_cancelamento = processo.chaveConsulta
+                impressao = self.configuracoes_pdv.impressora
+
+                if impressao:
+                    processador.imprimir_cupom_cancelamento(
+                        self.arquivo_xml_autorizacao_id.datas,
+                        processo.arquivoCFeBase64,
+                        impressao.modelo,
+                        impressao.conexao
+                    )
 
                 # data_cancelamento = retevento.infEvento.dhRegEvento.valor
                 # data_cancelamento = UTC.normalize(data_cancelamento)
@@ -453,9 +552,9 @@ class SpedDocumento(models.Model):
             mensagem += '\nMotivo: ' + resposta.resposta.mensagem
             raise UserError(mensagem)
 
-    def envia_nfe(self):
+    def _envia_documento(self):
         self.ensure_one()
-        result = super(SpedDocumento, self).envia_nfe()
+        result = super(SpedDocumento, self)._envia_documento()
         if not self.modelo == MODELO_FISCAL_CFE:
             return result
 
@@ -473,21 +572,37 @@ class SpedDocumento(models.Model):
         # Processa resposta
         #
         try:
-            resposta = cliente.enviar_dados_venda(cfe)
+            impressao = self.configuracoes_pdv.impressora
+            if self.configuracoes_pdv.tipo_sat == 'local':
+                resposta = cliente.enviar_dados_venda(cfe)
+            elif self.configuracoes_pdv.tipo_sat == 'rede_interna':
+                resposta = cliente.enviar_dados_venda(
+                    cfe, self.configuracoes_pdv.codigo_ativacao,
+                    self.configuracoes_pdv.path_integrador
+                )
             if resposta.EEEEE in '06000':
+                if impressao:
+                    cliente.imprimir_cupom_venda(
+                        resposta.arquivoCFeSAT,
+                        impressao.modelo,
+                        impressao.conexao,
+                        self.configuracoes_pdv.site_consulta_qrcode.encode(
+                            "utf-8")
+                    )
                 self.executa_antes_autorizar()
-                self.situacao_fiscal = SITUACAO_FISCAL_REGULAR
-                self.situacao_nfe = SITUACAO_NFE_AUTORIZADA
                 self.executa_depois_autorizar()
                 self.data_hora_autorizacao = fields.Datetime.now()
 
                 chave = ChaveCFeSAT(resposta.chaveConsulta)
-
                 self.numero = chave.numero_cupom_fiscal
                 self.serie = chave.numero_serie
                 self.chave = resposta.chaveConsulta[3:]
-
                 self.grava_cfe_autorizacao(resposta.xml())
+
+
+                self.situacao_fiscal = SITUACAO_FISCAL_REGULAR
+                self.situacao_nfe = SITUACAO_NFE_AUTORIZADA
+
 
                 # # self.grava_pdf(nfe, procNFe.danfe_pdf)
 
@@ -501,11 +616,13 @@ class SpedDocumento(models.Model):
             elif resposta.EEEEE in ('06001', '06002', '06003', '06004', '06005',
                                     '06006', '06007', '06008', '06009', '06010',
                                     '06098', '06099'):
+                self.codigo_rejeicao_cfe = resposta.EEEEE
                 self.executa_antes_denegar()
                 self.situacao_fiscal = SITUACAO_FISCAL_DENEGADO
                 self.situacao_nfe = SITUACAO_NFE_DENEGADA
                 self.executa_depois_denegar()
         except (ErroRespostaSATInvalida, ExcecaoRespostaSAT) as resposta:
+            self.codigo_rejeicao_cfe = resposta.EEEEE
             mensagem = 'Código de retorno: ' + \
                        resposta.EEEEE
             mensagem += '\nMensagem: ' + \
@@ -513,20 +630,34 @@ class SpedDocumento(models.Model):
             self.mensagem_nfe = mensagem
             self.situacao_nfe = SITUACAO_NFE_REJEITADA
         except Exception as resposta:
-            mensagem = 'Código de retorno: ' + \
-                       resposta.resposta.EEEEE
-            mensagem += '\nMensagem: ' + \
-                        resposta.resposta.mensagem
+            if resposta.resposta.EEEEE:
+                self.codigo_rejeicao_cfe = resposta.resposta.EEEEE
+            mensagem = '\nMensagem: ' + resposta.message
             self.mensagem_nfe = mensagem
             self.situacao_nfe = SITUACAO_NFE_REJEITADA
+
+    @api.multi
+    def reimprimir_cfe(self):
+        self.ensure_one()
+        impressao = self.configuracoes_pdv.impressora
+        if impressao:
+            cliente = self.processador_cfe()
+            resposta = self.arquivo_xml_autorizacao_id.datas
+            cliente.imprimir_cupom_venda(
+                resposta,
+                impressao.modelo,
+                impressao.conexao,
+                self.configuracoes_pdv.site_consulta_qrcode.encode("utf-8")
+            )
+        else:
+            raise Warning("Não existem configurações para impressão no PDV!")
 
     @api.multi
     def _verificar_formas_pagamento(self):
         pagamentos_cartoes = []
         for pagamento in self.pagamento_ids:
             if pagamento.condicao_pagamento_id.forma_pagamento in ["03", "04"]:
-                for duplicata in pagamento.duplicata_ids:
-                    pagamentos_cartoes.append(duplicata)
+                pagamentos_cartoes.append(pagamento)
 
         return pagamentos_cartoes
 
@@ -538,32 +669,40 @@ class SpedDocumento(models.Model):
         else:
             pagamentos_autorizados = True
             config = self.configuracoes_pdv
-            from mfecfe import BibliotecaSAT
-            from mfecfe import ClienteVfpeLocal
-            cliente = ClienteVfpeLocal(
-                BibliotecaSAT('/opt/Integrador'),
-                chave_acesso_validador=config.chave_acesso_validador
-            )
+            cliente = self.processador_vfpe()
 
             for duplicata in pagamentos_cartoes:
                 if not duplicata.id_fila_status:
-                    resposta = cliente.enviar_pagamento(
-                        config.chave_requisicao, config.estabelecimento,
-                        config.serial_pos, config.cnpjsh, self.bc_icms_proprio,
-                        duplicata.valor, config.id_fila_validador,config.multiplos_pag,
-                        config.anti_fraude, 'BRL', config.numero_caixa
-                    )
+                    if self.configuracoes_pdv.tipo_sat == 'local':
+                        resposta = cliente.enviar_pagamento(
+                            config.chave_requisicao, config.estabelecimento,
+                            config.serial_pos, config.cnpjsh,
+                            self.bc_icms_proprio,
+                            duplicata.valor, config.id_fila_validador,
+                            config.multiplos_pag,
+                            config.anti_fraude, 'BRL', config.numero_caixa
+                        )
+                    elif self.configuracoes_pdv.tipo_sat == 'rede_interna':
+                        resposta = cliente.enviar_pagamento(
+                            config.chave_requisicao, config.estabelecimento,
+                            config.serial_pos, config.cnpjsh,
+                            self.bc_icms_proprio, duplicata.valor,
+                            config.id_fila_validador,config.multiplos_pag,
+                            config.anti_fraude, 'BRL', config.numero_caixa,
+                            self.configuracoes_pdv.chave_acesso_validador,
+                            self.configuracoes_pdv.path_integrador
+                        )
                     duplicata.id_fila_status = resposta
                 # FIXME status sempre vai ser negativo na homologacao
-                resposta_status_pagamento = cliente.verificar_status_validador(
-                    config.cnpjsh, duplicata.id_fila_status
-                )
+                # resposta_status_pagamento = cliente.verificar_status_validador(
+                #     config.cnpjsh, duplicata.id_fila_status
+                # )
                 #
                 # resposta_status_pagamento = cliente.verificar_status_validador(
                 #     config.cnpjsh, '214452'
                 # )
-                if resposta_status_pagamento.ValorPagamento == '0' and resposta_status_pagamento.IdFila == '0':
-                    pagamentos_autorizados = False
-                    break
+                # if resposta_status_pagamento.ValorPagamento == '0' and resposta_status_pagamento.IdFila == '0':
+                #     pagamentos_autorizados = False
+                #     break
 
             self.pagamento_autorizado_cfe = pagamentos_autorizados

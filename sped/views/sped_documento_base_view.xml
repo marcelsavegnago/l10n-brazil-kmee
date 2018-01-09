@@ -11,7 +11,7 @@
         <field name="priority">9999</field>
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <form string="Emissão de NF-e">
+            <form string="Emissão de NF-e" duplicate="false">
                 <header>
                     <!-- HEADER VAZIO PARA SE ADICIONAR OS BOTOES EM OUTRAS VISOES E MODULOS HERDADOS -->
                 </header>
@@ -22,6 +22,8 @@
                     <field name="id" invisible="1"/>
                     <field name="currency_id" invisible="1"/>
                     <field name="currency_aliquota_id" invisible="1"/>
+                    <field name="importado_xml" invisible="1"/>
+                    <field name="operacao_subsequente_ids" invisible="1"/>
                     <div class="oe_button_box" name="button_box">
                     </div>
                     <group>
@@ -29,7 +31,7 @@
                             <field name="empresa_id" colspan="4" options="{'no_create': True, 'no_open': True}" required="1" attrs="{'readonly': ['|', ('id', '!=', False), ('permite_alteracao', '=', False)]}" domain="[('contribuinte', '=', '1')]" />
                             <field name="empresa_cnpj_cpf" colspan="2" readonly="1" />
                             <newline />
-                            <field name="operacao_id" colspan="4" domain="[('modelo', '=', modelo), ('emissao', '=', emissao), '|', ('empresa_id', '=', False), ('empresa_id', '=', empresa_id)]" options="{'no_create': True, 'no_open': True}" required="1" attrs="{'readonly': ['|', ('id', '!=', False), ('permite_alteracao', '=', False)]}" />
+                            <field name="operacao_id" colspan="4" domain="[('modelo', '=', modelo), ('emissao', '=', emissao), '|', ('empresa_id', '=', False), ('empresa_id', '=', empresa_id)]" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': ['|', '&amp;', ('id', '!=', False), ('importado_xml', '=', False), ('permite_alteracao', '=', False)], 'required': [('importado_xml', '=', False)]}" />
                             <newline />
                             <field name="numero" required="1" colspan="2" attrs="{'readonly': [('permite_alteracao', '=', False)]}" />
                             <field name="serie" required="1" colspan="2" attrs="{'readonly': [('permite_alteracao', '=', False)]}" />
@@ -173,6 +175,8 @@
                                                     <field name="bc_icms_proprio" string="Base de cálculo" />
                                                     <newline />
                                                     <field name="vr_icms_proprio" string="Valor" />
+                                                    <newline />
+                                                    <field name="vr_icms_desonerado" string="Valor desonerado" />
                                                     <newline />
                                                     <separator string="Diferencial de alíquota" colspan="2"  />
                                                     <newline />
@@ -341,6 +345,10 @@
                                 </group>
                             </group>
                         </page>
+                        <page name="relacionados" string="Relacionados">
+                            <field name="documento_origem_ids"/>
+                            <field name="documento_relacionado_ids"/>
+                        </page>
                     </notebook>
                 </sheet>
                 <div class="oe_chatter">
@@ -357,9 +365,12 @@
         <field name="priority">9999</field>
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <tree string="Emissão de NF-e">
+            <tree string="Emissão de NF-e" duplicate="false">
                 <field name="currency_id" invisible="1"/>
                 <field name="currency_aliquota_id" invisible="1"/>
+                <field name="emissao" invisible="1"/>
+                <field name="modelo" invisible="1"/>
+                <field name="documento_origem_relacionados_ids" widget="many2many_tags"/>
                 <field name="situacao_fiscal" />
                 <field name="empresa_id" />
                 <field name="operacao_id" />
@@ -380,10 +391,42 @@
         <field name="mode">primary</field>
         <field name="arch" type="xml">
             <search string="Emissão de NF-e">
-                <field name="empresa_id" />
-                <field name="operacao_id" />
+                <filter name="autorizada" string="Autorizada" domain="[('situacao_nfe','=','autorizada')]"/>
+                <filter name="pendente" string="Pendente" domain="[('situacao_nfe', 'in', ['em_digitacao', 'a_enviar', 'rejeitada'])]"/>
+                <separator/>
+                <filter name="em_digitacao" string="Em Digitação" domain="[('situacao_nfe','=','em_digitacao')]"/>
+                <filter name="a_enviar" string="Aguardando envio" domain="[('situacao_nfe','=','a_enviar')]"/>
+                <filter name="rejeitada" string="Rejeitada" domain="[('situacao_nfe','=','rejeitada')]"/>
+                <filter name="enviada" string="Enviada" domain="[('situacao_nfe','=','enviada')]"/>
+                <separator/>
+                <filter name="denegada" string="Denegada" domain="[('situacao_nfe','=','denegada')]"/>
+                <filter name="cancelada" string="Cancelada" domain="[('situacao_nfe','=','cancelada')]"/>
+                <filter name="inutilizada" string="Inutilizada" domain="[('situacao_nfe','=','inutilizada')]"/>
+                <separator/>
                 <field name="numero" />
+                <field name="serie" />
+                <field name="data_emissao" />
+                <field name="data_entrada_saida" />
+                <field name="chave" />
+                <separator/>
+                <field name="operacao_id" />
                 <field name="participante_id" />
+                <field name="empresa_id" />
+                <field name="produto_id" />
+                <separator/>
+                <field name="cfop_id" />
+                <field name="ncm_id" />
+                <field name="cest_id" />
+                <group expand="0" string="Group By">
+                        <filter name="group_by_participante_id" string="Participante" context="{'group_by':'participante_id'}"/>
+                        <filter name="group_by_empresa_id" string="Empresa" context="{'group_by':'empresa_id'}"/>
+                        <filter name="situacao_nfe" string="Situação" context="{'group_by':'situacao_nfe'}"/>
+                        <filter name="situacao_fiscal" string="Situação Fiscal" context="{'group_by':'situacao_fiscal'}"/>
+                        <filter name="serie" string="Série" context="{'group_by':'serie'}"/>
+                        <separator/>
+                        <filter string="Emissão" context="{'group_by':'data_emissao'}"/>
+                        <filter string="Entrada/Saída" context="{'group_by':'data_entrada_saida'}"/>
+                    </group>
             </search>
         </field>
     </record>

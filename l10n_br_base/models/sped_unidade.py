@@ -38,6 +38,7 @@ class SpedUnidade(models.Model):
     TIPO_UNIDADE_AREA = 'A'
     TIPO_UNIDADE_TEMPO = 'T'
     TIPO_UNIDADE_EMBALAGEM = 'E'
+    TIPO_UNIDATE_IMPORTADO_XML = 'X'
 
     uom_id = fields.Many2one(
         comodel_name='product.uom',
@@ -75,6 +76,10 @@ class SpedUnidade(models.Model):
         compute='_compute_nome_unico',
         store=True,
     )
+    codigos_alternativos = fields.Text(
+        string='Outros códigos alternativos',
+    )
+
     #
     # Valores nas unidades por extenso
     #
@@ -350,6 +355,8 @@ class SpedUnidade(models.Model):
                 '|',
                 ['codigo_unico', '=', name.lower()],
                 '|',
+                ['codigos_alternativos', 'ilike', name.replace(' ', '%')],
+                '|',
                 ['nome', operator, name],
                 ['nome_unico', operator, name.lower()],
             ]
@@ -362,8 +369,11 @@ class SpedUnidade(models.Model):
     def prepare_sync_to_uom(self):
         self.ensure_one()
 
-        if (self.tipo == self.TIPO_UNIDADE_UNIDADE or
-                self.tipo == self.TIPO_UNIDADE_EMBALAGEM):
+        if self.tipo in (
+                self.TIPO_UNIDADE_UNIDADE,
+                self.TIPO_UNIDADE_EMBALAGEM,
+                self.TIPO_UNIDATE_IMPORTADO_XML
+        ):
             category_id = self.env.ref('product.product_uom_categ_unit').id
 
         elif self.tipo == self.TIPO_UNIDADE_PESO:
@@ -440,8 +450,11 @@ class SpedUnidade(models.Model):
     def create(self, dados):
         dados['name'] = dados['codigo']
 
-        if dados['tipo'] == self.TIPO_UNIDADE_UNIDADE or dados[
-                'tipo'] == self.TIPO_UNIDADE_EMBALAGEM:
+        if dados['tipo'] in (
+                self.TIPO_UNIDADE_UNIDADE,
+                self.TIPO_UNIDADE_EMBALAGEM,
+                self.TIPO_UNIDATE_IMPORTADO_XML
+        ):
             dados['category_id'] = self.env.ref(
                 'product.product_uom_categ_unit').id
 
@@ -478,3 +491,18 @@ class SpedUnidade(models.Model):
         self.sync_to_uom()
         self.sync_to_currency()
         return res
+
+    def busca(self, codigo):
+        codigo = codigo.replace(' ', ' ')
+        codigo = codigo.replace('²', '2')
+        codigo = codigo.replace('³', '3')
+
+        unidade = self.search([('codigo_unico', '=', codigo.lower())])
+
+        if len(unidade) != 0:
+            return unidade
+
+        unidade = self.search(
+            [('codigos_alternativos', 'ilike', codigo.lower())])
+
+        return unidade

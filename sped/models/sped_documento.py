@@ -2,6 +2,8 @@
 #
 # Copyright 2016 Taŭga Tecnologia
 #   Aristides Caldeira <aristides.caldeira@tauga.com.br>
+# Copyright 2017 KMEE INFORMATICA LTDA
+#   Luis Felipe Miléo <mileo@kmee.com.br>
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
@@ -14,6 +16,8 @@ from odoo.exceptions import ValidationError
 from odoo.addons.sped_imposto.models.sped_calculo_imposto import SpedCalculoImposto
 
 from odoo.addons.l10n_br_base.constante_tributaria import *
+from openerp.addons.sped_imposto.models.sped_calculo_imposto import \
+    SpedCalculoImposto
 
 _logger = logging.getLogger(__name__)
 
@@ -31,7 +35,8 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     _name = b'sped.documento'
     _description = 'Documentos Fiscais'
     _inherit = ['mail.thread']
-    _order = 'emissao, modelo, data_emissao desc, serie, numero desc'
+    _order = 'emissao, modelo, data_entrada_saida desc, data_emissao desc,' + \
+             ' serie, numero desc'
     _rec_name = 'descricao'
 
     descricao = fields.Char(
@@ -76,40 +81,52 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         compute='_compute_data_hora_separadas',
         store=True,
         index=True,
+        copy=False,
     )
     hora_emissao = fields.Char(
         string='Hora de emissão',
         size=8,
         compute='_compute_data_hora_separadas',
         store=True,
+        copy=False,
     )
     data_entrada_saida = fields.Date(
         string='Data de entrada/saída',
         compute='_compute_data_hora_separadas',
         store=True,
         index=True,
+        copy=False,
     )
     hora_entrada_saida = fields.Char(
         string='Hora de entrada/saída',
         size=8,
         compute='_compute_data_hora_separadas',
         store=True,
+        copy=False,
     )
     serie = fields.Char(
         string='Série',
         size=3,
         index=True,
+        copy=False,
     )
     numero = fields.Float(
         string='Número',
         index=True,
         digits=(18, 0),
+        copy=False,
     )
     entrada_saida = fields.Selection(
         selection=ENTRADA_SAIDA,
         string='Entrada/Saída',
         index=True,
         default=ENTRADA_SAIDA_SAIDA,
+    )
+    situacao_nfe = fields.Selection(
+        selection=SITUACAO_NFE,
+        string='Situação NF-e',
+        default=SITUACAO_NFE_EM_DIGITACAO,
+        copy=False,
     )
     situacao_fiscal = fields.Selection(
         selection=SITUACAO_FISCAL,
@@ -140,6 +157,11 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         comodel_name='sped.operacao',
         string='Operação',
         ondelete='restrict',
+    )
+    operacao_subsequente_ids = fields.One2many(
+        comodel_name='sped.operacao.subsequente',
+        related='operacao_id.operacao_subsequente_ids',
+        readonly=True,
     )
     #
     # Campos da operação
@@ -391,6 +413,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     chave = fields.Char(
         string='Chave',
         size=44,
+        copy=False,
     )
     #
     # Duplicatas e pagamentos
@@ -552,6 +575,11 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     )
     vr_icms_proprio = fields.Monetary(
         string='Valor do ICMS próprio',
+        compute='_compute_soma_itens',
+        store=True
+    )
+    vr_icms_desonerado = fields.Monetary(
+        string='Valor do ICMS desonerado',
         compute='_compute_soma_itens',
         store=True
     )
@@ -774,10 +802,29 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         string='Itens',
         copy=True,
     )
-    documento_referenciado_ids = fields.One2many(
-        comodel_name='sped.documento.referenciado',
-        inverse_name='documento_id',
-        string='Documentos Referenciados',
+    produto_id = fields.Many2one(
+        comodel_name='sped.produto',
+        string='Produto/Serviço',
+        related='item_ids.produto_id',
+        readonly=True,
+    )
+    cfop_id = fields.Many2one(
+        comodel_name='sped.cfop',
+        string='CFOP',
+        related='item_ids.cfop_id',
+        readonly=True,
+    )
+    ncm_id = fields.Many2one(
+        comodel_name='sped.ncm',
+        string='NCM',
+        related='produto_id.ncm_id',
+        readonly=True,
+    )
+    cest_id = fields.Many2one(
+        comodel_name='sped.cest',
+        string='CEST',
+        related='produto_id.cest_id',
+        readonly=True,
     )
     #
     # Outras informações
@@ -810,6 +857,78 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         string='Permite inutilização?',
         compute='_compute_permite_inutilizacao',
     )
+    importado_xml = fields.Boolean(
+        string='Importado de XML?',
+    )
+    documento_referenciado_ids = fields.One2many(
+        comodel_name='sped.documento.referenciado',
+        inverse_name='documento_id',
+        string='Documentos Referenciados',
+    )
+    #
+    # O campo acima é o documento referenciado que é enviado no XML
+    #
+    #
+    # Já os campos abaixos representam relacionamentos entre os documentos que nem sempre são permitidos pelo sefaz:
+    #
+    #       Por exemplo uma nota de transferencia gerada a partir de outra operação.
+    #
+    documento_origem_ids = fields.Many2many(
+        comodel_name='sped.documento',
+        column1='documento_relacionado_ids',
+        column2='documento_origem_ids',
+        relation='sped_documento_rel',
+        string="Documento Original",
+        readonly=True,
+        copy=False,
+    )
+    documento_relacionado_ids = fields.Many2many(
+        comodel_name='sped.documento',
+        column1='documento_origem_ids',
+        column2='documento_relacionado_ids',
+        relation='sped_documento_rel',
+        string="Documento Relacionado",
+        readonly=True,
+        copy=False,
+    )
+    documento_origem_relacionados_ids = fields.Many2many(
+        comodel_name='sped.documento',
+        compute='_compute_documento_origem_relacionados_ids',
+        string='Relacionados',
+        readonly=True,
+    )
+    # display_name = fields.Char(
+    #     compute='_compute_display_name',
+    #     store=True,
+    #     index=True,
+    # )
+
+    @api.multi
+    def name_get(self):
+        res = []
+        for record in self:
+            if self._context.get('sped_documento_display') == 'completo':
+                res.append((record.id, record.descricao))
+            else:
+                txt = '{nome}/{modelo}/{serie}/{numero}'.format(
+                    nome=record.empresa_id.nome,
+                    modelo=record.modelo,
+                    serie=record.serie,
+                    numero=formata_valor(record.numero, casas_decimais=0),
+                )
+                res.append((record.id, txt))
+        return res
+
+    @api.depends('documento_relacionado_ids', 'documento_origem_ids')
+    def _compute_documento_origem_relacionados_ids(self):
+        for record in self:
+            relacionado = self.env['sped.documento']
+            if record.documento_relacionado_ids:
+                relacionado = record.documento_relacionado_ids.ids
+            elif record.documento_origem_ids:
+                relacionado = record.documento_origem_ids.ids
+
+            record.documento_origem_relacionados_ids = relacionado
 
     @api.depends('emissao', 'entrada_saida', 'modelo', 'serie', 'numero',
                  'data_emissao', 'participante_id')
@@ -837,20 +956,21 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
 
             documento.descricao = txt
 
-    @api.depends('modelo', 'emissao')
+    @api.depends('modelo', 'emissao', 'importado_xml')
     def _compute_permite_alteracao(self):
         for documento in self:
-            documento.permite_alteracao = True
+            documento.permite_alteracao = documento.importado_xml
 
-    @api.depends('modelo', 'emissao')
+    @api.depends('modelo', 'emissao', 'importado_xml')
     def _compute_permite_cancelamento(self):
         for documento in self:
             documento.permite_cancelamento = True
+            # not documento.importado_xml
 
-    @api.depends('modelo', 'emissao')
+    @api.depends('modelo', 'emissao', 'importado_xml')
     def _compute_permite_inutilizacao(self):
         for documento in self:
-            documento.permite_inutilizacao = True
+            documento.permite_inutilizacao = not documento.importado_xml
 
     @api.depends('data_hora_emissao', 'data_hora_entrada_saida')
     def _compute_data_hora_separadas(self):
@@ -869,6 +989,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
                 'item_ids.vr_desconto', 'item_ids.vr_outras',
                 'item_ids.vr_operacao', 'item_ids.vr_operacao_tributacao',
                 'item_ids.bc_icms_proprio', 'item_ids.vr_icms_proprio',
+                'item_ids.vr_icms_desonerado',
                 'item_ids.vr_difal', 'item_ids.vr_icms_estado_origem',
                 'item_ids.vr_icms_estado_destino',
                 'item_ids.vr_fcp',
@@ -891,6 +1012,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
             'vr_frete', 'vr_seguro', 'vr_desconto', 'vr_outras',
             'vr_operacao', 'vr_operacao_tributacao',
             'bc_icms_proprio', 'vr_icms_proprio',
+            'vr_icms_desonerado',
             'vr_difal', 'vr_icms_estado_origem', 'vr_icms_estado_destino',
             'vr_fcp',
             'vr_icms_sn', 'vr_simples',
@@ -1169,16 +1291,18 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         if self.modelo not in (MODELO_FISCAL_NFE, MODELO_FISCAL_NFCE):
             return res
 
+        serie = self.serie and self.serie.strip()
+
         ultimo_numero = self.search([
             ('empresa_id.cnpj_cpf', '=', self.empresa_id.cnpj_cpf),
             ('ambiente_nfe', '=', self.ambiente_nfe),
             ('emissao', '=', self.emissao),
             ('modelo', '=', self.modelo),
-            ('serie', '=', self.serie.strip()),
+            ('serie', '=', serie),
             ('numero', '!=', False),
         ], limit=1, order='numero desc')
 
-        valores['serie'] = self.serie.strip()
+        valores['serie'] = serie
 
         if len(ultimo_numero) == 0:
             valores['numero'] = 1
@@ -1241,6 +1365,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
                                  campos_proibidos=[]):
         CAMPOS_PERMITIDOS = [
             'message_follower_ids',
+            'documento_relacionado_ids',
         ]
         for documento in self:
             if documento.permite_alteracao:
@@ -1278,10 +1403,23 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
 
             raise ValidationError(_(mensagem))
 
-    def envia_nfe(self):
-        self.ensure_one()
+    def envia_documento(self):
+        """ Nunca sobrescreva este método, pois ele esta sendo modificado
+        pelo sped_queue que não chama o super. Para permtir o envio assincrono
+        do documento fiscal
+        :return:
+        """
+        return self._envia_documento()
+
+    def _envia_documento(self):
+        for record in self:
+            if not record.numero:
+                record.update(record._onchange_serie()['value'])
 
     def cancela_nfe(self):
+        self.ensure_one()
+
+    def inutiliza_nfe(self):
         self.ensure_one()
 
     def executa_antes_autorizar(self):
@@ -1290,6 +1428,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         # tarefas de integração necessárias antes de autorizar uma NF-e
         #
         self.ensure_one()
+        self.gera_operacoes_subsequentes()
 
     def executa_depois_autorizar(self):
         #
@@ -1299,16 +1438,18 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         # estoque etc.
         #
         self.ensure_one()
+        self.gera_operacoes_subsequentes()
 
     def executa_antes_cancelar(self):
         #
         # Este método deve ser alterado por módulos integrados, para realizar
-        # tarefas de integração necessárias antes de cancelar uma NF-e;
+        # tarefas de integração necessárias antes de autorizar uma NF-e;
         # não confundir com o método _compute_permite_cancelamento, que indica
         # se o botão de cancelamento vai estar disponível para o usuário na
         # interface
         #
         self.ensure_one()
+        self.gera_operacoes_subsequentes()
 
     def executa_depois_cancelar(self):
         #
@@ -1318,25 +1459,25 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         # estoque etc.
         #
         self.ensure_one()
+        self.gera_operacoes_subsequentes()
 
     def executa_antes_inutilizar(self):
         #
         # Este método deve ser alterado por módulos integrados, para realizar
-        # tarefas de integração necessárias antes de inutilizar uma NF-e;
-        # não confundir com o método _compute_permite_cancelamento, que indica
-        # se o botão de cancelamento vai estar disponível para o usuário na
-        # interface
+        # tarefas de integração necessárias antes de autorizar uma NF-e
         #
         self.ensure_one()
+        self.gera_operacoes_subsequentes()
 
     def executa_depois_inutilizar(self):
         #
         # Este método deve ser alterado por módulos integrados, para realizar
-        # tarefas de integração necessárias depois de inutilizar uma NF-e,
-        # por exemplo, excluir lançamentos financeiros, movimentações de
+        # tarefas de integração necessárias depois de autorizar uma NF-e,
+        # por exemplo, criar lançamentos financeiros, movimentações de
         # estoque etc.
         #
         self.ensure_one()
+        self.gera_operacoes_subsequentes()
 
     def executa_antes_denegar(self):
         #
@@ -1344,6 +1485,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         # tarefas de integração necessárias antes de denegar uma NF-e
         #
         self.ensure_one()
+        self.gera_operacoes_subsequentes()
 
     def executa_depois_denegar(self):
         #
@@ -1353,6 +1495,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         # etc.
         #
         self.ensure_one()
+        self.gera_operacoes_subsequentes()
 
     def envia_email(self, mail_template):
         self.ensure_one()
@@ -1366,10 +1509,8 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     @api.model
     def create(self, dados):
         dados = self.executa_antes_create(dados)
-        res = super(SpedDocumento, self).create(dados)
-        return self.executa_depois_create(res, dados)
-
-    def executa_depois_create(self, result, dados):
+        result = super(SpedDocumento, self).create(dados)
+        # result.executa_depois_create()
         return result
 
     def executa_antes_write(self, dados):
@@ -1394,3 +1535,135 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
 
     def executa_depois_unlink(self, result):
         return result
+
+    @api.model
+    def search_read(self, domain=None, fields=None, offset=0, limit=None,
+                    order=None):
+        if order is None or not order:
+            if self.env.context.get('default_order', False):
+                order = self.env.context.get('default_order', False)
+            elif self.env.context.get('order', False):
+                order = self.env.context.get('order', False)
+
+        return super(SpedDocumento, self).search_read(domain=domain,
+            fields=fields, offset=offset, limit=limit, order=order)
+
+    def _prepare_subsequente_referenciado(self):
+        vals = {
+                'documento_id': self.id,
+                'participante_id': self.participante_id.id,
+                'modelo': self.modelo,
+                'serie': self.serie,
+                'numero': self.numero,
+                'data_emissao': self.data_emissao,
+                'chave': self.chave,
+                # 'numero_ecf': self.ecf,
+                # 'numero_coo': self.coo,
+            }
+        refenciado_id = self.env['sped.documento.referenciado'].create(vals)
+        return refenciado_id
+
+    def _subsequente_referenciado(self, subsequente_id):
+        if subsequente_id.referenciar_documento:
+            return self.env.context.get(
+                'referenciado_ids',
+                self._prepare_subsequente_referenciado()
+            )
+        return []
+
+    def _subsequente_tipo_pagamento(self, subsequente_id):
+        return (subsequente_id.operacao_subsequente_id.ind_forma_pagamento or
+                self.ind_forma_pagamento)
+
+    def _subsquente_condicao_pagamento(self, subsequente_id):
+        return (subsequente_id.operacao_subsequente_id.condicao_pagamento_id or
+                self.condicao_pagamento_id)
+
+    def _subsequente_empresa(self, subsequente_id):
+        return subsequente_id.operacao_subsequente_id.empresa_id or self.empresa_id
+
+    def _subsequente_participante(self, subsequente_id):
+        return subsequente_id.participante_id or self.participante_id
+
+    def _referencia_documento(self, referencia_ids):
+        for referenciado_item in referencia_ids:
+            referenciado_item.documento_referenciado_id = self.id
+            self.documento_referenciado_ids |= referenciado_item
+
+    def _gera_operacao_subsequente(self, subsequente_id):
+
+        _logger.info("Geracao operacao subsequente")
+
+        novo_doc = self.copy()
+
+        novo_doc.participante_id = self._subsequente_participante(subsequente_id)
+        novo_doc.empresa_id = self._subsequente_empresa(subsequente_id)
+        novo_doc.operacao_id = subsequente_id.operacao_subsequente_id
+        novo_doc.condicao_pagamento_id = self._subsquente_condicao_pagamento(subsequente_id)
+        novo_doc.tipo_pagamento = self._subsequente_tipo_pagamento(subsequente_id)
+
+        #
+        # Referenciar documento
+        #
+        referencia_ids = self._subsequente_referenciado(subsequente_id)
+        novo_doc._referencia_documento(referencia_ids)
+
+        return novo_doc
+
+    @api.multi
+    def gera_operacoes_subsequentes(self):
+        """
+        Operaçoes subsequentes:
+
+            - NOTA FISCAL emitida em operaçao triangular;
+                - Simples faturamento 5922;
+                - Encomenda de entrega futura: 5117
+
+            - NOTA FISCAL MULTI EMPRESAS ;
+                - Saida;
+                - Entrada;
+
+            - Consiguinaçao:
+                - Remessa de consiguinaçao;
+                - Venda de itens;
+                - Retorno de consiguinaçao;
+
+            - Venda ambulante:
+                - Remessa fora de estabelecimento;
+                - Itens vendidos fora do estabelecimento;
+                - Retorno de venda fora do estabelecimento;
+
+
+            Caso o tipo da nota seja diferente devemos inverter os participantes;
+
+
+        :return:
+        """
+        documentos = self.env['sped.documento']
+        for record in self:
+            for subsequente_id in record.operacao_id.operacao_subsequente_ids:
+                #
+                # Verificarmos se devemos gerar a operação subsquente
+                #
+                if not subsequente_id._confirma_geracao(record):
+                    continue
+
+                novo_doc = self._gera_operacao_subsequente(subsequente_id)
+                #
+                # Gera documento
+                #
+                documento = novo_doc.gera_documento()
+                documento.situacao_nfe = SITUACAO_NFE_A_ENVIAR
+                documento.numero = False
+                documento.data_entrada_saida = False
+                documento.documento_origem_ids |= record
+                documentos |= documento
+                #
+                # Transmite o documento
+                #
+
+                # documento.envia_documento()
+
+        # TODO: Retornar usuário para os documentos criados
+
+

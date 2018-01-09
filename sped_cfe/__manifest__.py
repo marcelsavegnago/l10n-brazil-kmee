@@ -17,14 +17,17 @@
     'application': False,
     'license': 'AGPL-3',
     'data': [
+        'security/ir.model.access.csv',
         'views/pdv_config.xml',
         'views/pdv_impressora_config.xml',
         'views/sped_documento_emissao_cfe_view.xml',
         'views/sped_operacao_emissao_cfe_view.xml',
-        'views/web_asset_backend_template.xml',
+        # 'views/web_asset_backend_template.xml',
+        'views/sped_documento_pagamento_view.xml',
+        'views/sped_participante_administradora_cartao_view.xml',
     ],
     'qweb': [
-        'static/src/xml/*.xml',
+        # 'static/src/xml/*.xml',
     ],
     'external_dependencies': {
         'python': [

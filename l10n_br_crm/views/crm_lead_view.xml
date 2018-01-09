@@ -37,7 +37,18 @@
                     <field name="is_brazilian" invisible="1" />
                     <field name="participante_id" string="Customer"
                            attrs="{'invisible': [('is_brazilian', '!=', True)]}"
-                           context="{'default_eh_consumidor_final': True, 'default_fone':phone,'default_celular':mobile}"
+                           context="{'default_eh_consumidor_final': True,
+                            'default_fone':phone,
+                            'default_celular':mobile,
+                            'default_email':email_from,
+                            'default_fone_whatsapp':mobile,
+                            'default_endereco': endereco,
+                            'default_numero': numero,
+                            'default_complemento': complemento,
+                            'default_bairro': bairro,
+                            'default_municipio_id':municipio_id,
+                            'default_cep': cep,
+                            'default_fantasia':partner_name,}"
                     />
                     <field name = "endereco"/>
                     <field name="numero"/>

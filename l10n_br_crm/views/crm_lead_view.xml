@@ -48,7 +48,8 @@
                             'default_bairro': bairro,
                             'default_municipio_id':municipio_id,
                             'default_cep': cep,
-                            'default_fantasia':partner_name,}"
+                            'default_nome':partner_name,
+                            }"
                     />
                     <field name = "endereco"/>
                     <field name="numero"/>

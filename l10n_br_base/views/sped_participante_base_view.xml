@@ -4,7 +4,6 @@
     License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 -->
 <odoo>
-
     <record model="ir.ui.view" id="sped_participante_base_form" >
         <field name="name">sped.participante.base.form</field>
         <field name="model">sped.participante</field>

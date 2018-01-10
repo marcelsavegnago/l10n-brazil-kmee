@@ -31,6 +31,7 @@ except (ImportError, IOError) as err:
 
 
 class BaseParticipante(SpedBase, object):
+    _abstract = False
 
     codigo = fields.Char(
         string='Código',
@@ -772,79 +773,79 @@ class BaseParticipante(SpedBase, object):
         # if self.profissao:
         #    valores['profissao'] = primeira_maiuscula(self.profissao)
 
-    # def prepare_sync_to_partner(self):
-    #     self.ensure_one()
-    #
-    #     endereco = ''
-    #     if self.endereco:
-    #         endereco = self.endereco + ', ' + self.numero
-    #         if self.complemento:
-    #             endereco += ' - ' + self.complemento
-    #
-    #     if self.fone and '+' not in self.fone:
-    #         fone = '+55 ' + self.fone
-    #     else:
-    #         fone = self.fone
-    #
-    #     if self.celular and '+' not in self.celular:
-    #         celular = '+55 ' + self.celular
-    #     else:
-    #         celular = self.celular
-    #
-    #     if self.fone_comercial and '+' not in self.fone_comercial:
-    #         fax = '+55 ' + self.fone_comercial
-    #     else:
-    #         fax = self.fone_comercial
-    #
-    #     vat = ''
-    #     state_id = False
-    #     country_id = self.env.ref('base.br').id
-    #     if self.municipio_id:
-    #         if self.municipio_id.pais_id.iso_3166_alfa_2 == 'BR':
-    #             vat = 'BR-' + self.cnpj_cpf
-    #             state_id = self.municipio_id.estado_id.state_id.id
-    #
-    #         else:
-    #             vat = (
-    #                 self.municipio_id.pais_id.iso_3166_alfa_2 +
-    #                 '-' +
-    #                 self.cnpj_cpf[2:]
-    #             )
-    #             state_id = False
-    #
-    #     zipcode = ''
-    #     if self.cep:
-    #         zipcode = 'BR-' + self.cep
-    #
-    #     dados = {
-    #         'ref': self.codigo,
-    #         'name': self.nome,
-    #         'street': endereco,
-    #         'street2': self.bairro,
-    #         'city': self.cidade,
-    #         'zip': zipcode,
-    #         'country_id': country_id,
-    #         'state_id': state_id,
-    #         'phone': fone,
-    #         'mobile': celular,
-    #         'fax': fax,
-    #         'customer': self.eh_cliente,
-    #         'supplier': self.eh_fornecedor,
-    #         'website': self.site,
-    #         'email': self.email,
-    #         'vat': vat,
-    #         'sped_participante_id': self.id,
-    #         'is_company': self.tipo_pessoa == TIPO_PESSOA_JURIDICA,
-    #     }
-    #
-    #     if not self.partner_id.lang and self.env['res.lang'].search(
-    #             [('code', '=', 'pt_BR')]):
-    #             dados['lang'] = 'pt_BR'
-    #
-    #     if not self.partner_id.tz:
-    #         dados['tz'] = 'America/Sao_Paulo'
-    #
-    #     return dados
+    def prepare_sync_to_partner(self):
+        self.ensure_one()
+
+        endereco = ''
+        if self.endereco:
+            endereco = self.endereco + ', ' + self.numero
+            if self.complemento:
+                endereco += ' - ' + self.complemento
+
+        if self.fone and '+' not in self.fone:
+            fone = '+55 ' + self.fone
+        else:
+            fone = self.fone
+
+        if self.celular and '+' not in self.celular:
+            celular = '+55 ' + self.celular
+        else:
+            celular = self.celular
+
+        if self.fone_comercial and '+' not in self.fone_comercial:
+            fax = '+55 ' + self.fone_comercial
+        else:
+            fax = self.fone_comercial
+
+        vat = ''
+        state_id = False
+        country_id = self.env.ref('base.br').id
+        if self.municipio_id:
+            if self.municipio_id.pais_id.iso_3166_alfa_2 == 'BR':
+                vat = 'BR-' + self.cnpj_cpf
+                state_id = self.municipio_id.estado_id.state_id.id
+
+            else:
+                vat = (
+                    self.municipio_id.pais_id.iso_3166_alfa_2 +
+                    '-' +
+                    self.cnpj_cpf[2:]
+                )
+                state_id = False
+
+        zipcode = ''
+        if self.cep:
+            zipcode = 'BR-' + self.cep
+
+        dados = {
+            'ref': self.codigo,
+            'name': self.nome,
+            'street': endereco,
+            'street2': self.bairro,
+            'city': self.cidade,
+            'zip': zipcode,
+            'country_id': country_id,
+            'state_id': state_id,
+            'phone': fone,
+            'mobile': celular,
+            'fax': fax,
+            'customer': self.eh_cliente,
+            'supplier': self.eh_fornecedor,
+            'website': self.site,
+            'email': self.email,
+            'vat': vat,
+            'sped_participante_id': self.id,
+            'is_company': self.tipo_pessoa == TIPO_PESSOA_JURIDICA,
+        }
+
+        if not self.partner_id.lang and self.env['res.lang'].search(
+                [('code', '=', 'pt_BR')]):
+                dados['lang'] = 'pt_BR'
+
+        if not self.partner_id.tz:
+            dados['tz'] = 'America/Sao_Paulo'
+
+        return dados
 
     # @api.multi
     # def sync_to_partner(self, imagem=None):
@@ -861,7 +862,7 @@ class BaseParticipante(SpedBase, object):
         if 'razao_social' in dados and not dados['razao_social']:
             dados['razao_social'] = dados['nome']
 
-        dados['name'] = dados['nome']
+        dados['name'] = 'atilla'
         #
         # if not self.partner_id.lang and self.env['res.lang'].search(
         #         [('code', '=', 'pt_BR')]):
@@ -885,9 +886,9 @@ class BaseParticipante(SpedBase, object):
         #     else:
         #         imagem = participante.partner_id._get_default_image('', False, False)
         #
-        # participante.sync_to_partner(imagem)
+        # participante.sync_to_partner()
 
-        return participante.id
+        return participante
 
     @api.multi
     def write(self, dados):

@@ -30,7 +30,7 @@ except (ImportError, IOError) as err:
     _logger.debug(err)
 
 
-class BaseParticipante(SpedBase, object):
+class BaseParticipante(SpedBase):
     _abstract = False
 
     codigo = fields.Char(
@@ -862,7 +862,7 @@ class BaseParticipante(SpedBase, object):
         if 'razao_social' in dados and not dados['razao_social']:
             dados['razao_social'] = dados['nome']
 
-        dados['name'] = 'atilla'
+        dados['name'] = dados['nome']
         #
         # if not self.partner_id.lang and self.env['res.lang'].search(
         #         [('code', '=', 'pt_BR')]):

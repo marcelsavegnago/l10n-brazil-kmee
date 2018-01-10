@@ -8,7 +8,7 @@ from odoo import api, fields, models, _
 
 from .base_participante import BaseParticipante
 
-class SpedParticipante(BaseParticipante, models.Model):
+class SpedParticipante(models.Model):
     _name = b'sped.participante'
     _description = 'Participantes'
     _inherits = {'res.partner': 'partner_id'}

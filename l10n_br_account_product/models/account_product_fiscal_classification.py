@@ -85,7 +85,7 @@ class L10nBrTaxDefinitionTemplateModel(L10nBrTaxDefinitionTemplate):
 
     fiscal_classification_id = fields.Many2one(
         'account.product.fiscal.classification.template',
-        'Fiscal Classification', select=True)
+        'Fiscal Classification', index=True)
     tax_ipi_guideline_id = fields.Many2one(
         'l10n_br_account_product.ipi_guideline', string=u'Enquadramento IPI')
     tax_icms_relief_id = fields.Many2one(
@@ -155,7 +155,7 @@ class L10nBrTaxEstimateTemplate(models.Model):
 
     fiscal_classification_id = fields.Many2one(
         'account.product.fiscal.classification.template',
-        'Fiscal Classification', select=True)
+        'Fiscal Classification', index=True)
 
 
 class AccountProductFiscalClassification(models.Model):
@@ -201,7 +201,7 @@ class AccountProductFiscalClassification(models.Model):
     parent_id = fields.Many2one(
         'account.product.fiscal.classification',
         'Parent Fiscal Classification',
-        domain="[('type', 'in', ('view', 'normal'))]", select=True)
+        domain="[('type', 'in', ('view', 'normal'))]", index=True)
 
     child_ids = fields.One2many(
         'account.product.fiscal.classification', 'parent_id',
@@ -326,7 +326,7 @@ class L10nBrTaxDefinitionModel(L10nBrTaxDefinition):
 
     fiscal_classification_id = fields.Many2one(
         'account.product.fiscal.classification',
-        'Parent Fiscal Classification', select=True)
+        'Parent Fiscal Classification', index=True)
     tax_ipi_guideline_id = fields.Many2one(
         'l10n_br_account_product.ipi_guideline', string=u'Enquadramento IPI')
     tax_icms_relief_id = fields.Many2one(
@@ -353,7 +353,7 @@ class L10nBrTaxEstimate(models.Model):
 
     fiscal_classification_id = fields.Many2one(
         'account.product.fiscal.classification',
-        'Fiscal Classification', select=True)
+        'Fiscal Classification', index=True)
 
 
 class WizardAccountProductFiscalClassification(models.TransientModel):

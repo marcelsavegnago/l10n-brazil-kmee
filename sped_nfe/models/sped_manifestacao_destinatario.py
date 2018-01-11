@@ -78,7 +78,7 @@ class SpedManifestacaoDestinatario(models.Model):
     nsu = fields.Char(
         string=u'Número Sequencial',
         size=25,
-        select=True,
+        index=True,
     )
 
     tipo_operacao = fields.Selection(
@@ -147,14 +147,14 @@ class SpedManifestacaoDestinatario(models.Model):
     situacao_nfe = fields.Selection(
         string=u'Situacação da NF-e',
         selection=SITUACAO_NFE,
-        select=True,
+        index=True,
         readonly=True,
     )
 
     state = fields.Selection(
         string=u'Situacação da Manifestação',
         selection=SITUACAO_MANIFESTACAO,
-        select=True,
+        index=True,
         readonly=True,
     )
     sped_consulta_dfe_id = fields.Many2one(

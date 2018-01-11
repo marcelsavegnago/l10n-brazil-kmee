@@ -30,7 +30,7 @@ class SpedConsultaStatusDocumento(models.TransientModel):
                    ('error', 'Error'),
                    ('done', 'Done')],
         string='State',
-        select=True,
+        index=True,
         readonly=True,
         default='init')
     versao = fields.Text(
@@ -63,7 +63,7 @@ class SpedConsultaStatusDocumento(models.TransientModel):
     situacao_nfe = fields.Selection(
         string=u'Situacação da NF-e',
         selection=SITUACAO_NFE,
-        select=True,
+        index=True,
         readonly=True,
     )
     processamento_evento_nfe = fields.Text(

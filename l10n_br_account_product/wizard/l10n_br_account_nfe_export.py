@@ -39,4 +39,4 @@ class L10nBrAccountNfeExportResult(models.TransientModel):
         comodel_name='l10n_br_account_product.nfe_export',
         string='Wizard ID',
         ondelete='cascade',
-        select=True)
+        index=True)

@@ -170,7 +170,7 @@ class L10nBrAccountNfeExportInvoiceResult(models.TransientModel):
     wizard_id = fields.Many2one(
         comodel_name='l10n_br_account_product.nfe_export_invoice',
         string='Wizard ID',
-        ondelete='cascade', select=True)
+        ondelete='cascade', index=True)
     document = fields.Char(string='Documento', size=255)
     status = fields.Selection(
         selection=[

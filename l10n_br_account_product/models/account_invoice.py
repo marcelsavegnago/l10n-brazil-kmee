@@ -168,7 +168,7 @@ class AccountInvoice(models.Model):
     date_hour_invoice = fields.Datetime(
         u'Data e hora de emissão', readonly=True,
         states={'draft': [('readonly', False)]},
-        select=True, help="Deixe em branco para usar a data atual")
+        index=True, help="Deixe em branco para usar a data atual")
     ind_final = fields.Selection(
         [('0', u'Não'),
          ('1', u'Sim')],
@@ -213,7 +213,7 @@ class AccountInvoice(models.Model):
             'draft': [
                 ('readonly',
                  False)]},
-        select=True,
+        index=True,
         copy=False,
         help="Deixe em branco para usar a data atual")
     partner_shipping_id = fields.Many2one(
@@ -674,7 +674,7 @@ class AccountInvoiceLine(models.Model):
         u'Código do Produto', size=60)
     date_invoice = fields.Datetime(
         'Invoice Date', readonly=True, states={'draft': [('readonly', False)]},
-        select=True, help="Keep empty to use the current date")
+        index=True, help="Keep empty to use the current date")
     fiscal_category_id = fields.Many2one(
         'l10n_br_account.fiscal.category', 'Categoria Fiscal')
     fiscal_position = fields.Many2one(

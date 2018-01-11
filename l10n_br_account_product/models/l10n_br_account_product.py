@@ -107,11 +107,11 @@ class L10nbrAccountDocumentRelated(models.Model):
     _name = 'l10n_br_account_product.document.related'
 
     invoice_id = fields.Many2one('account.invoice', 'Documento Fiscal',
-                                 ondelete='cascade', select=True)
+                                 ondelete='cascade', index=True)
     invoice_related_id = fields.Many2one('account.invoice',
                                          'Documento Fiscal',
                                          ondelete='cascade',
-                                         select=True)
+                                         index=True)
     document_type = fields.Selection(
         [('nf', 'NF'), ('nfe', 'NF-e'), ('cte', 'CT-e'),
             ('nfrural', 'NF Produtor'), ('cf', 'Cupom Fiscal')],
@@ -266,7 +266,7 @@ class ImportDeclaration(models.Model):
 
     invoice_line_id = fields.Many2one(
         'account.invoice.line', u'Linha de Documento Fiscal',
-        ondelete='cascade', select=True)
+        ondelete='cascade', index=True)
     name = fields.Char(u'Número da DI', size=10, required=True)
     date_registration = fields.Date(u'Data de Registro', required=True)
     exporting_code = fields.Char(
@@ -320,7 +320,7 @@ class ImportDeclarationLine(models.Model):
 
     import_declaration_id = fields.Many2one(
         'l10n_br_account_product.import.declaration', u'DI',
-        ondelete='cascade', select=True)
+        ondelete='cascade', index=True)
     sequence = fields.Integer(u'Sequência', default=1, required=True)
     name = fields.Char(u'Adição', size=3, required=True)
     manufacturer_code = fields.Char(

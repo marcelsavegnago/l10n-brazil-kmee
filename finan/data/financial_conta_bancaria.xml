@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017 KMEE
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="finan.conta" id="conta_0100">
+        <field name="codigo">509</field>
+        <field name="nome">Conta de demonstração</field>
+    </record>
+
+    <record model="finan.conta" id="conta_0101">
+        <field name="codigo">237</field>
+        <field name="nome">Conta 01</field>
+    </record>
+
+</odoo>

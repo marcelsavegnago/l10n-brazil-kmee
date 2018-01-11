@@ -73,8 +73,11 @@
         'wizards/finan_lancamento_novo_pagamento_wizard.xml',
 
         # 'reports/report_py3o_finan_retorno.xml',
-        ##'data/financial_document_type_data.xml',
-        ##'data/interest_data.xml',
+        'data/financial_document_type_data.xml',
+        'data/interest_data.xml',
+        'data/financial_conta_bancaria.xml',
+        'data/financial_forma_pagamento.xml',
+        'data/financial_banco.xml',
 
         #'wizards/financial_cancel.xml',
         ## 'wizards/financial_edit.xml',
@@ -98,9 +101,11 @@
         'security/ir.model.access.csv',
     ],
     'demo': [
-        # 'demo/financial_move.xml',
-        # 'demo/financial.account.csv',
-        # 'demo/financial_demo.yml'
+        'demo/financial_move.xml',
+        # # 'demo/financial.account.csv',
+        # # 'demo/financial_demo.yml',
+        'demo/financial_contas_a_pagar.xml',
+        'demo/financial_contas_a_receber.xml',
     ],
     'test': [
         #'test/financial_move_test.yml',

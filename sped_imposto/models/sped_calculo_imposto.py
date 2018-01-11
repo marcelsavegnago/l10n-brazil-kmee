@@ -680,34 +680,41 @@ class SpedCalculoImposto(SpedBase):
         #
         sped_documento_item = self.env['sped.documento.item']
         for item in itens:
-            dados = {
-                'documento_id': documento.id,
-                'produto_id': item.produto_id.id,
-                'quantidade': item.quantidade,
-                'vr_unitario': item.vr_unitario,
-                'vr_frete': item.vr_frete,
-                'vr_seguro': item.vr_seguro,
-                'vr_desconto': item.vr_desconto,
-                'vr_outras': item.vr_outras,
-            }
-            dados.update(item.prepara_dados_documento_item())
-
-            #
-            # Passamos o vr_unitario no contexto para evitar que as
-            # configurações da operação redefinam o valor unitário durante
-            # o cáculo dos impostos
-            #
-
-            contexto = {
-                'forca_vr_unitario': dados['vr_unitario']
-            }
-
+            ctx = item.env.context.copy()
             if isinstance(item.id, models.NewId):
+                #
+                #   Caso o registro seja um novo ID, geralmente vindo
+                # de outro documento do sistema, com herança python.
+                #   Para permir o preenchimento de dados de integração.
+                #
+                dados = {
+                    'documento_id': documento.id,
+                    'produto_id': item.produto_id.id,
+                    'quantidade': item.quantidade,
+                    'vr_unitario': item.vr_unitario,
+                    'vr_frete': item.vr_frete,
+                    'vr_seguro': item.vr_seguro,
+                    'vr_desconto': item.vr_desconto,
+                    'vr_outras': item.vr_outras,
+                }
+                dados.update(item.prepara_dados_documento_item())
+
+                #
+                #   Passamos o vr_unitario no contexto para evitar que as
+                # configurações da operação redefinam o valor unitário durante
+                # o cáculo dos impostos.
+                #
+
+                ctx = {
+                    'forca_vr_unitario': dados['vr_unitario']
+                }
+
                 documento_item = sped_documento_item.create(dados)
+
             else:
                 documento_item = item
 
-            documento_item.with_context(contexto).calcula_impostos()
+            documento_item.with_context(ctx).calcula_impostos()
 
         #
         # Se certifica de que todos os campos foram totalizados

@@ -1242,7 +1242,10 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
             valores['finalidade_nfe'] = self.operacao_id.finalidade_nfe
             valores['modalidade_frete'] = self.operacao_id.modalidade_frete
             valores['infadfisco'] = self.operacao_id.infadfisco
-            valores['infcomplementar'] = self.operacao_id.infcomplementar
+
+            if not self.operacao_id.calcular_tributacao in (
+                    'somente_calcula', 'manual'):
+                valores['infcomplementar'] = self.operacao_id.infcomplementar
 
         valores['deduz_retencao'] = self.operacao_id.deduz_retencao
         valores['pis_cofins_retido'] = self.operacao_id.pis_cofins_retido
@@ -1575,7 +1578,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         return (subsequente_id.operacao_subsequente_id.ind_forma_pagamento or
                 self.ind_forma_pagamento)
 
-    def _subsquente_condicao_pagamento(self, subsequente_id):
+    def _subsequente_condicao_pagamento(self, subsequente_id):
         return (subsequente_id.operacao_subsequente_id.condicao_pagamento_id or
                 self.condicao_pagamento_id)
 
@@ -1599,7 +1602,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         novo_doc.participante_id = self._subsequente_participante(subsequente_id)
         novo_doc.empresa_id = self._subsequente_empresa(subsequente_id)
         novo_doc.operacao_id = subsequente_id.operacao_subsequente_id
-        novo_doc.condicao_pagamento_id = self._subsquente_condicao_pagamento(subsequente_id)
+        novo_doc.condicao_pagamento_id = self._subsequente_condicao_pagamento(subsequente_id)
         novo_doc.tipo_pagamento = self._subsequente_tipo_pagamento(subsequente_id)
 
         #

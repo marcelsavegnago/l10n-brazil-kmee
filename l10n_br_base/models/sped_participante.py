@@ -19,3 +19,25 @@ class SpedParticipante(models.Model):
         ondelete='restrict',
         required=True,
     )
+
+    @api.multi
+    def name_get(self):
+        res = []
+
+        for participante in self:
+            nome = participante.nome
+
+            if participante.razao_social:
+                if participante.nome.strip().upper() != \
+                        participante.razao_social.strip().upper():
+                    nome += ' - '
+                    nome += participante.razao_social
+
+            if participante.cnpj_cpf:
+                nome += ' ['
+                nome += participante.cnpj_cpf
+                nome += '] '
+
+            res.append((participante.id, nome))
+
+        return res

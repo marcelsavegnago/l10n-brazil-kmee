@@ -93,6 +93,7 @@ class BaseParticipante(SpedBase):
     eh_vendedor = fields.Boolean(
         string='É vendedor/representante?'
     )
+
     cnpj_cpf = fields.Char(
         string='CNPJ/CPF',
         size=18,
@@ -273,6 +274,11 @@ class BaseParticipante(SpedBase):
     codigo_ans = fields.Char(
         comodel_name='Código ANS',
         size=6
+    )
+    #  euro campo
+    fone_whatsapp = fields.Char(
+        string='WhatsApp',
+        size=18
     )
     #
     # Para a NFC-e, ECF, SAT
@@ -944,3 +950,4 @@ class BaseParticipante(SpedBase):
             #valores['user_id'] = False
 
         #return res
+

@@ -50,6 +50,18 @@ class SpedDocumento(models.Model):
         for record in self:
             record.configuracoes_pdv = self.env.user.configuracoes_sat_cfe
 
+    @api.multi
+    def _verificar_pagamentos_cfe(self):
+        for record in self:
+            pagamentos_validados = True
+            for pagamento in record.pagamento_ids:
+                if not pagamento.pagamento_valido:
+                    pagamentos_validados = False
+                    break
+            if record.vr_total_residual:
+                pagamentos_validados = False
+            record.pagamento_autorizado_cfe = pagamentos_validados
+
     configuracoes_pdv = fields.Many2one(
         string=u"Configurações para a venda",
         comodel_name="pdv.config",
@@ -59,7 +71,8 @@ class SpedDocumento(models.Model):
     pagamento_autorizado_cfe = fields.Boolean(
         string=u"Pagamento Autorizado",
         readonly=True,
-        default=False
+        default=False,
+        compute=_verificar_pagamentos_cfe
     )
 
     vr_total_residual = fields.Monetary(
@@ -75,6 +88,8 @@ class SpedDocumento(models.Model):
     codigo_rejeicao_cfe = fields.Char(
         string=u'Código Rejeição CFe'
     )
+
+    id_fila_validador = fields.Char(string=u'ID Fila Validador')
 
     def executa_depois_autorizar(self):
         #
@@ -564,12 +579,9 @@ class SpedDocumento(models.Model):
             return result
 
         if not self.pagamento_autorizado_cfe:
-            self.envia_pagamento()
-            if not self.pagamento_autorizado_cfe:
-                raise Warning('Pagamento(s) não autorizado(s)!')
-
+            raise Warning('Pagamento(s) não autorizado(s)!')
         cliente = self.processador_cfe()
-
+        impressao = self.configuracoes_pdv.impressora
         cfe = self.monta_cfe()
         self.grava_cfe(cfe)
 
@@ -577,7 +589,6 @@ class SpedDocumento(models.Model):
         # Processa resposta
         #
         try:
-            impressao = self.configuracoes_pdv.impressora
             if self.configuracoes_pdv.tipo_sat == 'local':
                 resposta = cliente.enviar_dados_venda(cfe)
             elif self.configuracoes_pdv.tipo_sat == 'rede_interna':
@@ -586,14 +597,6 @@ class SpedDocumento(models.Model):
                     self.configuracoes_pdv.path_integrador
                 )
             if resposta.EEEEE in '06000':
-                if impressao:
-                    cliente.imprimir_cupom_venda(
-                        resposta.arquivoCFeSAT,
-                        impressao.modelo,
-                        impressao.conexao,
-                        self.configuracoes_pdv.site_consulta_qrcode.encode(
-                            "utf-8")
-                    )
                 self.executa_antes_autorizar()
                 self.executa_depois_autorizar()
                 self.data_hora_autorizacao = fields.Datetime.now()
@@ -602,13 +605,18 @@ class SpedDocumento(models.Model):
                 self.numero = chave.numero_cupom_fiscal
                 self.serie = chave.numero_serie
                 self.chave = resposta.chaveConsulta[3:]
+                self.id_fila_validador = resposta.id_fila
                 self.grava_cfe_autorizacao(resposta.xml())
-
-
                 self.situacao_fiscal = SITUACAO_FISCAL_REGULAR
                 self.situacao_nfe = SITUACAO_NFE_AUTORIZADA
-
-
+                if impressao:
+                    cliente.imprimir_cupom_venda(
+                        resposta.arquivoCFeSAT,
+                        impressao.modelo,
+                        impressao.conexao,
+                        self.configuracoes_pdv.site_consulta_qrcode.encode(
+                            "utf-8")
+                    )
                 # # self.grava_pdf(nfe, procNFe.danfe_pdf)
 
                 # data_autorizacao = protNFe.infProt.dhRecbto.valor
@@ -677,27 +685,37 @@ class SpedDocumento(models.Model):
             cliente = self.processador_vfpe()
 
             for duplicata in pagamentos_cartoes:
-                if not duplicata.id_fila_status:
+                if not duplicata.id_pagamento:
                     if self.configuracoes_pdv.tipo_sat == 'local':
                         resposta = cliente.enviar_pagamento(
-                            config.chave_requisicao, config.estabelecimento,
-                            config.serial_pos, config.cnpjsh,
+                            config.chave_requisicao, duplicata.estabecimento,
+                            duplicata.serial_pos, config.cnpjsh,
                             self.bc_icms_proprio,
-                            duplicata.valor, config.id_fila_validador,
+                            duplicata.valor,
                             config.multiplos_pag,
                             config.anti_fraude, 'BRL', config.numero_caixa
                         )
                     elif self.configuracoes_pdv.tipo_sat == 'rede_interna':
                         resposta = cliente.enviar_pagamento(
-                            config.chave_requisicao, config.estabelecimento,
-                            config.serial_pos, config.cnpjsh,
-                            self.bc_icms_proprio, duplicata.valor,
-                            config.id_fila_validador,config.multiplos_pag,
-                            config.anti_fraude, 'BRL', config.numero_caixa,
-                            self.configuracoes_pdv.chave_acesso_validador,
-                            self.configuracoes_pdv.path_integrador
+                            config.chave_requisicao,
+                            duplicata.estabecimento,
+                            duplicata.serial_pos,
+                            config.cnpjsh,
+                            self.bc_icms_proprio,
+                            duplicata.valor,
+                            config.multiplos_pag,
+                            config.anti_fraude,
+                            'BRL',
+                            config.numero_caixa,
+                            config.chave_acesso_validador,
+                            config.path_integrador
                         )
-                    duplicata.id_fila_status = resposta
+                    resposta_pagamento = resposta.split('|')
+                    if len(resposta_pagamento[0]) >= 7:
+                        duplicata.id_pagamento = resposta_pagamento[0]
+                        duplicata.id_fila = resposta_pagamento[1]
+                    else:
+                        pagamentos_autorizados = False
                 # FIXME status sempre vai ser negativo na homologacao
                 # resposta_status_pagamento = cliente.verificar_status_validador(
                 #     config.cnpjsh, duplicata.id_fila_status

@@ -1852,6 +1852,9 @@ class SpedCalculoImpostoItem(SpedBase):
         if self.emissao != TIPO_EMISSAO_PROPRIA and not \
                 self.env.context.get('manual'):
             return res
+        elif self.operacao_id.calcular_tributacao in (
+                'somente_calcula', 'manual'):
+            return res
 
         if (self.regime_tributario == REGIME_TRIBUTARIO_SIMPLES and
                 self.cst_icms_sn != ST_ICMS_SN_OUTRAS):
@@ -1904,8 +1907,10 @@ class SpedCalculoImpostoItem(SpedBase):
         if self.emissao != TIPO_EMISSAO_PROPRIA and not \
                 self.env.context.get('manual'):
             return res
-
-        if not self.protocolo_id:
+        elif self.operacao_id.calcular_tributacao in (
+                'somente_calcula', 'manual'):
+            return res
+        elif not self.protocolo_id:
             return res
 
         if self.regime_tributario == REGIME_TRIBUTARIO_SIMPLES:
@@ -2165,6 +2170,8 @@ class SpedCalculoImpostoItem(SpedBase):
         if self.emissao != TIPO_EMISSAO_PROPRIA and not \
                 self.env.context.get('manual'):
             return res
+        elif self.operacao_id.calcular_tributacao == 'manual':
+            return res
 
         self.bc_ipi = 0
         self.vr_ipi = 0
@@ -2209,6 +2216,8 @@ class SpedCalculoImpostoItem(SpedBase):
         if self.emissao != TIPO_EMISSAO_PROPRIA and not \
                 self.env.context.get('manual'):
             return res
+        elif self.operacao_id.calcular_tributacao == 'manual':
+            return res
 
         self.vr_icms_sn = 0
 
@@ -2252,6 +2261,8 @@ class SpedCalculoImpostoItem(SpedBase):
 
         if self.emissao != TIPO_EMISSAO_PROPRIA and not \
                 self.env.context.get('manual'):
+            return res
+        elif self.operacao_id.calcular_tributacao == 'manual':
             return res
 
         if (self.cst_pis in ST_PIS_CALCULA or

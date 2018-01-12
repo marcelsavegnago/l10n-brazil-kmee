@@ -113,7 +113,7 @@
         # 'demo/financial_move.xml',
         'demo/finan_lancamento_entradas.xml',
         'demo/finan_lancamento_saidas.xml',
-        'demo/finan_fechamento_caixa.xml',
+        'demo/finan_fechamento_caixa.yml',
     ],
     'demo': [
 

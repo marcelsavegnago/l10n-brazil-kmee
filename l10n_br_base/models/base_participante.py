@@ -869,7 +869,8 @@ class BaseParticipante(SpedBase):
         if 'razao_social' in dados and not dados['razao_social']:
             dados['razao_social'] = dados['nome']
 
-        # dados['name'] = dados['nome']
+        if not dados.get('name'):
+            dados['name'] = dados.get('nome')
         #
         # if not self.partner_id.lang and self.env['res.lang'].search(
         #         [('code', '=', 'pt_BR')]):

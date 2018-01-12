@@ -601,7 +601,8 @@ class BaseParticipante(SpedBase):
             raise ValidationError(_('Inscrição estadual inválida!'))
 
         valores['ie'] = \
-            formata_inscricao_estadual(self.ie, self.municipio_id.estado_id.uf)
+            formata_inscricao_estadual(self.ie,
+                                       self.municipio_id.estado_id.uf)
 
     def _valida_ie(self):
         self.ensure_one()
@@ -868,7 +869,7 @@ class BaseParticipante(SpedBase):
         if 'razao_social' in dados and not dados['razao_social']:
             dados['razao_social'] = dados['nome']
 
-        dados['name'] = dados['nome']
+        # dados['name'] = dados['nome']
         #
         # if not self.partner_id.lang and self.env['res.lang'].search(
         #         [('code', '=', 'pt_BR')]):

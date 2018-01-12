@@ -114,6 +114,7 @@
         'data/finan_lancamento_entradas.xml',
         'data/finan_lancamento_saidas.xml',
         'data/finan_fechamento_caixa.yml',
+        'data/finan_condicao_pagamento.xml',
     ],
     'demo': [
 

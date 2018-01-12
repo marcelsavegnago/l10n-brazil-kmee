@@ -3,7 +3,7 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
 
-    <record model="finan.forma.pagamento" id="pagamento_0100">
+    <record model="finan.forma.pagamento" id="finan_forma_pagamento_001">
         <field name="nome">Dinheiro</field>
         <field name="forma_pagamento">01</field>
         <field name="exige_numero">True</field>
@@ -11,7 +11,7 @@
         <field name="quitado_somente_com_data_credito_debito">False</field>
     </record>
 
-    <record model="finan.forma.pagamento" id="pagamento_0101">
+    <record model="finan.forma.pagamento" id="finan_forma_pagamento_002">
         <field name="nome">Cheque</field>
         <field name="forma_pagamento">02</field>
         <field name="exige_numero">True</field>

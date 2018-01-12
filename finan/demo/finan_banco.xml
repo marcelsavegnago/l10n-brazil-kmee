@@ -4,7 +4,7 @@
 <odoo>
 
     <record model="finan.banco" id="banco_0100">
-        <field name="titular_id" ref="l10n_br_base.res_partner_akretion"/>
+        <field name="titular_id" ref="l10n_br_base.cliente9_mg"/>
         <field name="banco">000</field>
         <field name="agencia">1934</field>
         <field name="conta">1099</field>

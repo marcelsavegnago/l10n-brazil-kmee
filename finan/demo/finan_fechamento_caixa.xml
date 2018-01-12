@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017 KMEE
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record model="finan.banco.fechamento" id="finan_fechamento_caixa_001">
+        <field name="banco_id" ref="finan.banco_0100"/>
+        <field name="data_inicial">01/01/2018</field>
+        <field name="data_final" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
+    </record>
+
+    <record model="finan.banco.fechamento" id="finan_fechamento_caixa_002">
+        <field name="banco_id" ref="finan.banco_0101"/>
+        <field name="data_inicial">01/01/2018</field>
+        <field name="data_final" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
+    </record>
+</odoo>

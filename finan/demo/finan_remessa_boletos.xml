@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017 KMEE
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <!--<record model="finan.remessa" id="finan_remessa_001">-->
+        <!--<field name="carteira_id" ref="finan."/>-->
+        <!--<field name="data" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>-->
+        <!--<field name="numero">10</field>-->
+        <!--<field name="lancamento_ids" ref="finan.finan_lancamento_a_receber_02"/>-->
+    <!--</record>-->
+</odoo>

@@ -3,16 +3,15 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
-
     <record model="finan.lancamento" id="finan_lancamento_a_receber_01">
         <field name="situacao_divida">quitado</field>
         <field name="empresa_id" ref="l10n_br_base.sped_empresa_demo_simples_sp"/>
         <field name="participante_id" ref="l10n_br_base.cliente9_mg"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
         <field name="numero">3567</field>
-        <field name="data_documento">01/01/2018</field>
+        <field name="data_documento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
         <field name="conta_id" ref="finan.financial_account_101001"/>
-        <field name="data_vencimento">01/01/2018</field>
+        <field name="data_vencimento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_001"/>
         <field name="banco_id" ref="finan.banco_0100"/>
         <field name="vr_documento">265.92</field>
@@ -23,8 +22,8 @@
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
         <field name="numero">3567</field>
         <field name="conta_id" ref="finan.financial_account_101001"/>
-        <field name="data_pagamento">01/01/2018</field>
-        <field name="data_credito_debito">01/01/2018</field>
+        <field name="data_pagamento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
+        <field name="data_credito_debito" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_001"/>
         <field name="banco_id" ref="finan.banco_0100"/>
         <field name="vr_documento">265.90</field>
@@ -39,44 +38,38 @@
         <field name="divida_id" ref="finan.finan_lancamento_a_receber_01"/>
     </record>
 
-    <!--<record model="finan.lancamento" id="recebimento_0101">-->
-        <!--<field name="situacao_divida">a_vencer</field>-->
-        <!--<field name="empresa_id" ref="l10n_br_base.sped_empresa_demo_simples_sp"/>-->
-        <!--<field name="participante_id" ref="l10n_br_base.res_partner_cliente8_rs"/>-->
-        <!--<field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>-->
-        <!--<field name="numero">1267</field>-->
-        <!--<field name="data_documento">09/01/2018</field>-->
-        <!--<field name="conta_id" ref="finan.conta_0100"/>-->
-        <!--<field name="data_vencimento">12/01/2018</field>-->
-        <!--<field name="forma_pagamento_id" ref="finan.pagamento_0101"/>-->
-        <!--<field name="banco_id" ref="finan.banco_0101"/>-->
-        <!--<field name="vr_documento">678.90</field>-->
-        <!--<field name="tipo">a_receber</field>-->
-        <!--&lt;!&ndash;<field name="pagamento_ids"  eval="[(6, 0, [ref('module_name.xml_id')]"/>&ndash;&gt;-->
+    <record model="finan.lancamento" id="finan_lancamento_a_receber_02">
+        <field name="situacao_divida">quitado</field>
+        <field name="empresa_id" ref="l10n_br_base.sped_empresa_demo_simples_rj"/>
+        <field name="participante_id" ref="l10n_br_base.res_partner_cliente8_rs"/>
+        <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
+        <field name="numero">0056</field>
+        <field name="data_documento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
+        <field name="conta_id" ref="finan.financial_account_201012"/>
+        <field name="data_vencimento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
+        <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_002"/>
+        <field name="banco_id" ref="finan.banco_0100"/>
+        <field name="vr_documento">45.76</field>
+        <field name="tipo">a_receber</field>
+    </record>
 
-    <!--</record>-->
-
-
-    <!--<record model="finan.lancamento" id="recebimento_0104">-->
-        <!--<field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>-->
-        <!--<field name="numero">1267</field>-->
-        <!--<field name="conta_id" ref="finan.conta_0100"/>-->
-        <!--<field name="data_pagamento">09/01/2018</field>-->
-        <!--<field name="data_credito_debito">09/01/2018</field>-->
-        <!--<field name="forma_pagamento_id" ref="finan.pagamento_0100"/>-->
-        <!--<field name="banco_id" ref="finan.banco_0101"/>-->
-        <!--<field name="vr_documento">678.90</field>-->
-        <!--<field name="vr_movimentado">678.90</field>-->
-        <!--<field name="vr_juros">0</field>-->
-        <!--<field name="vr_multa">0</field>-->
-        <!--<field name="vr_adiantado">0</field>-->
-        <!--<field name="vr_desconto">0</field>-->
-        <!--<field name="vr_tarifas">0</field>-->
-        <!--<field name="tipo">recebimento</field>-->
-        <!--<field name="empresa_id" ref="l10n_br_base.sped_empresa_demo_simples_sp"/>-->
-        <!--<field name="divida_id" ref="recebimento_0101"/>-->
-    <!--</record>-->
-
-
-
+    <record model="finan.lancamento" id="finan_lancamento_recebimento_02">
+        <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
+        <field name="numero">0056</field>
+        <field name="conta_id" ref="finan.financial_account_201012"/>
+        <field name="data_pagamento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
+        <field name="data_credito_debito" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
+        <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_002"/>
+        <field name="banco_id" ref="finan.banco_0100"/>
+        <field name="vr_documento">45.76</field>
+        <field name="vr_movimentado">45.76</field>
+        <field name="vr_juros">0</field>
+        <field name="vr_multa">3</field>
+        <field name="vr_adiantado">0</field>
+        <field name="vr_desconto">0</field>
+        <field name="vr_tarifas">0</field>
+        <field name="tipo">recebimento</field>
+        <field name="empresa_id" ref="l10n_br_base.sped_empresa_demo_simples_rj"/>
+        <field name="divida_id" ref="finan.finan_lancamento_a_receber_02"/>
+    </record>
 </odoo>

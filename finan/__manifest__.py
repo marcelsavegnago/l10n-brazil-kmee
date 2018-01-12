@@ -111,7 +111,9 @@
         'demo/finan_lancamento_a_receber.xml',
         # 'demo/financial_demo.yml',
         # 'demo/financial_move.xml',
-
+        'demo/finan_lancamento_entradas.xml',
+        'demo/finan_lancamento_saidas.xml',
+        'demo/finan_fechamento_caixa.xml',
     ],
     'demo': [
 

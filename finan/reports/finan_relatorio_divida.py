@@ -98,7 +98,8 @@ class FinanRelatorioDivida(ReportXlsxBase):
         from
             finan_lancamento fl
             join finan_conta fc on fc.id = fl.conta_id
-            join sped_participante p on p.id = fl.participante_id
+            join sped_participante sped_p on sped_p.id = fl.participante_id
+            join res_partner p on p.id=sped_p.partner_id
             join finan_documento d on d.id = fl.documento_id
 
         where

@@ -104,16 +104,16 @@
         #
         # Dados de demonstracao
         #
-        'demo/finan_banco.xml',
-        'demo/finan.conta.csv',
-        'demo/finan_forma_pagamento.xml',
-        'demo/finan_lancamento_a_pagar.xml',
-        'demo/finan_lancamento_a_receber.xml',
+        'data/finan_banco.xml',
+        'data/finan.conta.csv',
+        'data/finan_forma_pagamento.xml',
+        'data/finan_lancamento_a_pagar.xml',
+        'data/finan_lancamento_a_receber.xml',
         # 'demo/financial_demo.yml',
         # 'demo/financial_move.xml',
-        'demo/finan_lancamento_entradas.xml',
-        'demo/finan_lancamento_saidas.xml',
-        'demo/finan_fechamento_caixa.yml',
+        'data/finan_lancamento_entradas.xml',
+        'data/finan_lancamento_saidas.xml',
+        'data/finan_fechamento_caixa.yml',
     ],
     'demo': [
 

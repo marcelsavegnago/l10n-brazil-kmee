@@ -109,6 +109,8 @@
         'data/finan_forma_pagamento.xml',
         'data/finan_lancamento_a_pagar.xml',
         'data/finan_lancamento_a_receber.xml',
+        'data/finan_carteira.xml',
+
         # 'demo/financial_demo.yml',
         # 'demo/financial_move.xml',
         'data/finan_lancamento_entradas.xml',

@@ -18,6 +18,7 @@
         <field name="banco_id" ref="finan.banco_0100"/>
         <field name="vr_documento">265.92</field>
         <field name="tipo">a_receber</field>
+        <field name="carteira_id" ref="finan.finan_carteira_001"/>
     </record>
 
     <record model="finan.lancamento" id="finan_lancamento_recebimento_01">
@@ -54,6 +55,7 @@
         <field name="banco_id" ref="finan.banco_0100"/>
         <field name="vr_documento">45.76</field>
         <field name="tipo">a_receber</field>
+        <field name="carteira_id" ref="finan.finan_carteira_002"/>
     </record>
 
     <record model="finan.lancamento" id="finan_lancamento_recebimento_02">
@@ -90,6 +92,7 @@
         <field name="banco_id" ref="finan.banco_0101"/>
         <field name="vr_documento">76.90</field>
         <field name="tipo">a_receber</field>
+        <field name="carteira_id" ref="finan.finan_carteira_001"/>
     </record>
 
     <!--Lançamento financeiro a vencer-->
@@ -106,6 +109,7 @@
         <field name="banco_id" ref="finan.banco_0100"/>
         <field name="vr_documento">146.73</field>
         <field name="tipo">a_receber</field>
+        <field name="carteira_id" ref="finan.finan_carteira_002"/>
     </record>
 
     <!--Lançamento financeiro vencido-->
@@ -122,6 +126,7 @@
         <field name="banco_id" ref="finan.banco_0101"/>
         <field name="vr_documento">548.30</field>
         <field name="tipo">a_receber</field>
+        <field name="carteira_id" ref="finan.finan_carteira_001"/>
     </record>
 
     <!--Lançamento financeiro baixado-->
@@ -139,6 +144,7 @@
         <field name="banco_id" ref="finan.banco_0100"/>
         <field name="vr_documento">265.92</field>
         <field name="tipo">a_receber</field>
+        <field name="carteira_id" ref="finan.finan_carteira_002"/>
     </record>
 
     <!--Lançamento financeiro baixado parcialmente-->
@@ -156,6 +162,7 @@
         <field name="banco_id" ref="finan.banco_0101"/>
         <field name="vr_documento">265.92</field>
         <field name="tipo">a_receber</field>
+        <field name="carteira_id" ref="finan.finan_carteira_001"/>
     </record>
     <record model="finan.lancamento" id="finan_lancamento_recebimento_07">
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>

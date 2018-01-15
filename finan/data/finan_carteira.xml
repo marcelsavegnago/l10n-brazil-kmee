@@ -9,7 +9,7 @@
         <field name="beneficiario">01</field>
         <field name="beneficiario_digito">2</field>
         <field name="modalidade">mod01</field>
-        <field name="convenio">conv_00123</field>
+        <field name="convenio">4969718</field>
         <field name="al_multa">2.00</field>
         <field name="al_juros">1.00</field>
         <field name="proximo_nosso_numero">2</field>
@@ -22,7 +22,7 @@
         <field name="beneficiario">02</field>
         <field name="beneficiario_digito">3</field>
         <field name="modalidade">mod02</field>
-        <field name="convenio">conv_00113</field>
+        <field name="convenio">4967523</field>
         <field name="al_multa">1.00</field>
         <field name="al_juros">1.00</field>
         <field name="proximo_nosso_numero">1</field>

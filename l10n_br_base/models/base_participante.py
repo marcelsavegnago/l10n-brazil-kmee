@@ -680,6 +680,9 @@ class BaseParticipante(SpedBase):
 
         valores = {}
         res = {'value': valores}
+        # validacao para dados de demonstracao do core
+        if self.email and 'yourcompany' in  self.email:
+            return res
 
         if 'valida_email' in self.env.context:
             return res
@@ -902,6 +905,9 @@ class BaseParticipante(SpedBase):
     def write(self, dados):
         if 'nome' in dados:
             dados['name'] = dados['nome']
+
+        if not dados:
+            return {}
 
         res = super(BaseParticipante, self).write(dados)
         # self.sync_to_partner()

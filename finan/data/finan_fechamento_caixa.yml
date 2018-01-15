@@ -1,16 +1,16 @@
 -
   Um boleto de pagamento é gerado
 -
-  !record {model: finan.lancamento, id: finan_lancamento_pagamento_05}:
+  !record {model: finan.lancamento, id: finan_lancamento_pagamento_02}:
     documento_id: finan.DOCUMENTO_FINANCEIRO_BOLETO
-    numero: 7239
+    numero: 2121
     conta_id: finan.financial_account_101001
     data_pagamento: 2018-01-12
     data_credito_debito: 2018-01-12
     forma_pagamento_id: finan.finan_forma_pagamento_001
     banco_id: finan.banco_0100
-    vr_documento: 201.88
-    vr_movimentado: 201.88
+    vr_documento: 240.00
+    vr_movimentado: 240.00
     vr_juros: 0
     vr_multa: 0
     vr_adiantado: 0
@@ -18,7 +18,7 @@
     vr_tarifas: 0
     tipo: pagamento
     empresa_id: l10n_br_base.sped_empresa_demo_simples_sp
-    divida_id: finan.finan_lancamento_a_pagar_01
+    divida_id: finan.finan_lancamento_a_pagar_02
 -
   Um fechamento de banco é criado
 -

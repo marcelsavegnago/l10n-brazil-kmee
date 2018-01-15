@@ -6,7 +6,7 @@
 <!--Lançamento financeiro quitado parcialmente-->
     <record model="finan.lancamento" id="finan_lancamento_a_pagar_01">
         <field name="situacao_divida">quitado_parcialmente</field>
-        <field name="empresa_id" ref="l10n_br_base.sped_empresa_demo_simples_sp"/>
+        <field name="empresa_id" ref="l10n_br_base.sped_empresa_regime_normal_sp"/>
         <field name="participante_id" ref="l10n_br_base.cliente9_mg"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
         <field name="numero">3527</field>
@@ -42,43 +42,24 @@
     <!--Lançamento financeiro quitado-->
     <record model="finan.lancamento" id="finan_lancamento_a_pagar_02">
         <field name="situacao_divida">quitado</field>
-        <field name="empresa_id" ref="l10n_br_base.sped_empresa_demo_simples_rj"/>
+        <field name="empresa_id" ref="l10n_br_base.sped_empresa_regime_normal_sp"/>
         <field name="participante_id" ref="l10n_br_base.res_partner_cliente8_rs"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
-        <field name="numero">0151</field>
-        <field name="data_documento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
-        <field name="conta_id" ref="finan.financial_account_201012"/>
-        <field name="data_vencimento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
-        <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_002"/>
+        <field name="numero">2121</field>
+        <field name="data_documento" eval="time.strftime(str(DateTime.today().year) + '-01-12 9:00:00')"></field>
+        <field name="conta_id" ref="finan.financial_account_101001"/>
+        <field name="data_vencimento" eval="time.strftime(str(DateTime.today().year) + '-01-12 9:00:00')"></field>
+        <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_001"/>
         <field name="banco_id" ref="finan.banco_0100"/>
         <field name="vr_documento">240.00</field>
         <field name="tipo">a_pagar</field>
     </record>
 
-    <record model="finan.lancamento" id="finan_lancamento_pagamento_02">
-        <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
-        <field name="numero">0151</field>
-        <field name="conta_id" ref="finan.financial_account_201012"/>
-        <field name="data_pagamento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
-        <field name="data_credito_debito" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
-        <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_002"/>
-        <field name="banco_id" ref="finan.banco_0100"/>
-        <field name="vr_documento">240.00</field>
-        <field name="vr_movimentado">240.00</field>
-        <field name="vr_juros">0</field>
-        <field name="vr_multa">3</field>
-        <field name="vr_adiantado">0</field>
-        <field name="vr_desconto">0</field>
-        <field name="vr_tarifas">0</field>
-        <field name="tipo">pagamento</field>
-        <field name="empresa_id" ref="l10n_br_base.sped_empresa_demo_simples_rj"/>
-        <field name="divida_id" ref="finan.finan_lancamento_a_pagar_02"/>
-    </record>
 
     <!--Lançamento financeiro vence hoje-->
     <record model="finan.lancamento" id="finan_lancamento_a_receber_03">
         <field name="situacao_divida">vence_hoje</field>
-        <field name="empresa_id" ref="l10n_br_base.sped_empresa_demo_simples_rj"/>
+        <field name="empresa_id" ref="l10n_br_base.sped_empresa_regime_normal_sp"/>
         <field name="participante_id" ref="l10n_br_base.res_partner_akretion"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
         <field name="numero">6003</field>
@@ -94,7 +75,7 @@
     <!--Lançamento financeiro a vencer-->
     <record model="finan.lancamento" id="finan_lancamento_a_pagar_04">
         <field name="situacao_divida">a_vencer</field>
-        <field name="empresa_id" ref="l10n_br_base.sped_empresa_demo_simples_sp"/>
+        <field name="empresa_id" ref="l10n_br_base.sped_empresa_regime_normal_sp"/>
         <field name="participante_id" ref="l10n_br_base.res_partner_kmee"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
         <field name="numero">8033</field>
@@ -143,7 +124,7 @@
     <!--Lançamento financeiro baixado parcialmente-->
     <record model="finan.lancamento" id="finan_lancamento_a_pagar_07">
         <field name="situacao_divida">baixado_parcialmente</field>
-        <field name="empresa_id" ref="l10n_br_base.sped_empresa_demo_simples_rj"/>
+        <field name="empresa_id" ref="l10n_br_base.sped_empresa_regime_normal_sp"/>
         <field name="participante_id" ref="l10n_br_base.res_partner_cliente12_sp"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
         <field name="numero">1001</field>
@@ -172,7 +153,7 @@
         <field name="vr_desconto">0</field>
         <field name="vr_tarifas">0</field>
         <field name="tipo">pagamento</field>
-        <field name="empresa_id" ref="l10n_br_base.sped_empresa_demo_simples_rj"/>
+        <field name="empresa_id" ref="l10n_br_base.sped_empresa_regime_normal_sp"/>
         <field name="divida_id" ref="finan.finan_lancamento_a_pagar_07"/>
     </record>
 

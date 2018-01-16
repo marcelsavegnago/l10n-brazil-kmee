@@ -94,6 +94,15 @@
                                 <field name="data_documento" required="1" string="Data" attrs="{'readonly': [('state', '!=', 'draft')]}" />
                                 <field name="conta_id" required="1" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('state', '!=', 'draft')]}" />
                                 <field name="data_vencimento" required="1" string="Vencimento" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+
+                                <field name="banco_id" options="{'no_create': True, 'no_open': True}" domain="[('cnpj_cpf_raiz', '=', cnpj_cpf_raiz)]" />
+                                <field name="banco" invisible="1" />
+                                <field name="forma_pagamento_id" options="{'no_create': True, 'no_open': True}" />
+                                <field name="forma_pagamento" invisible="1" />
+                                <field name="cheque_id" attrs="{'invisible': [('forma_pagamento', '!=', '02')]}" />
+                                <field name="carteira_id" domain="[('banco_id', '=', banco_id)]" attrs="{'invisible': ['|', ('banco_id', '=', False), ('banco', '=', '000'), ('forma_pagamento', '!=', '15')]}" options="{'no_create': True, 'no_open': True}" />
+                                <field name="nosso_numero" attrs="{'invisible': ['|', ('banco_id', '=', False), ('carteira_id', '=', False)]}" />
+
                             </group>
                             <group name="valores">
                                 <separator string="Valores" />

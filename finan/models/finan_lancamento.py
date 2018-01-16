@@ -509,6 +509,12 @@ class FinanLancamento(SpedBase, models.Model):
         ondelete='cascade',
     )
 
+    #Cheque
+    cheque_id = fields.Many2one(
+        comodel_name='finan.cheque',
+        string='Cheque Referente',
+    )
+
     @api.depends('tipo')
     def _compute_sinal(self):
         for lancamento in self:

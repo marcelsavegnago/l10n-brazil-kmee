@@ -8,7 +8,7 @@
     data_pagamento: 2018-01-12
     data_credito_debito: 2018-01-12
     forma_pagamento_id: finan.finan_forma_pagamento_001
-    banco_id: finan.banco_0100
+    banco_id: finan.finan_banco_001
     vr_documento: 240.00
     vr_movimentado: 240.00
     vr_juros: 0
@@ -23,7 +23,7 @@
   Um fechamento de banco é criado
 -
   !record {model: finan.banco.fechamento, id: finan_fechamento_caixa_001}:
-    banco_id: finan.banco_0100
+    banco_id: finan.finan_banco_001
     data_inicial: 2018-01-01
     data_final: 2018-01-30
 -

@@ -76,8 +76,8 @@
         #
         # Data
         #
-        'data/finan_documento_data.xml',
         'data/finan.conta.csv',
+        'data/finan_documento_data.xml',
         'data/finan_forma_pagamento.xml',
         'data/finan_condicao_pagamento.xml',
         # 'data/ir_cron_interest_data.xml',
@@ -104,23 +104,15 @@
         'security/finan_lancamento_ir_rule.xml',
         'security/ir.model.access.csv',
 
-        #
-        # Dados de demonstracao
-        #
+    ],
+    'demo': [
+        'demo/finan_banco.xml',
+        'demo/finan_carteira.xml',
         'demo/finan_lancamento_a_pagar.xml',
         'demo/finan_lancamento_a_receber.xml',
-        'demo/finan_carteira.xml',
-        'demo/finan_banco.xml',
-        # 'demo/financial_demo.yml',
-        # 'demo/financial_move.xml',
         'demo/finan_lancamento_entradas.xml',
         'demo/finan_lancamento_saidas.xml',
         'demo/finan_fechamento_caixa.yml',
-        'demo/finan_fechamento_caixa.xml',
-
-    ],
-    'demo': [
-
     ],
     'test': [
         #'test/financial_move_test.yml',

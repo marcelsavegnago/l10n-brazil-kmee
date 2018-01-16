@@ -15,7 +15,7 @@
         <field name="conta_id" ref="finan.financial_account_101001"/>
         <field name="data_vencimento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_001"/>
-        <field name="banco_id" ref="finan.banco_0100"/>
+        <field name="banco_id" ref="finan.finan_banco_237"/>
         <field name="vr_documento">265.92</field>
         <field name="tipo">a_receber</field>
         <field name="carteira_id" ref="finan.finan_carteira_001"/>
@@ -28,7 +28,7 @@
         <field name="data_pagamento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
         <field name="data_credito_debito" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_001"/>
-        <field name="banco_id" ref="finan.banco_0100"/>
+        <field name="banco_id" ref="finan.finan_banco_237"/>
         <field name="vr_documento">265.90</field>
         <field name="vr_movimentado">265.90</field>
         <field name="vr_juros">0</field>
@@ -52,7 +52,7 @@
         <field name="conta_id" ref="finan.financial_account_201012"/>
         <field name="data_vencimento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_002"/>
-        <field name="banco_id" ref="finan.banco_0100"/>
+        <field name="banco_id" ref="finan.finan_banco_237"/>
         <field name="vr_documento">45.76</field>
         <field name="tipo">a_receber</field>
         <field name="carteira_id" ref="finan.finan_carteira_002"/>
@@ -65,7 +65,7 @@
         <field name="data_pagamento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
         <field name="data_credito_debito" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_002"/>
-        <field name="banco_id" ref="finan.banco_0100"/>
+        <field name="banco_id" ref="finan.finan_banco_237"/>
         <field name="vr_documento">45.76</field>
         <field name="vr_movimentado">45.76</field>
         <field name="vr_juros">0</field>
@@ -89,7 +89,7 @@
         <field name="conta_id" ref="finan.financial_account_205007"/>
         <field name="data_vencimento" eval="time.strftime(str(DateTime.today().year) + '-' + str(DateTime.today().month) + '-' + str(DateTime.today().day) + ' 9:00:00')"></field>
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_003"/>
-        <field name="banco_id" ref="finan.banco_0101"/>
+        <field name="banco_id" ref="finan.finan_banco_000"/>
         <field name="vr_documento">76.90</field>
         <field name="tipo">a_receber</field>
         <field name="carteira_id" ref="finan.finan_carteira_001"/>
@@ -106,7 +106,7 @@
         <field name="conta_id" ref="finan.financial_account_101999"/>
         <field name="data_vencimento" eval="time.strftime(str(DateTime.today().year) + '-' + str(DateTime.today().month) + '-' + str(DateTime.today().day + 2) + ' 9:00:00')"></field>
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_002"/>
-        <field name="banco_id" ref="finan.banco_0100"/>
+        <field name="banco_id" ref="finan.finan_banco_237"/>
         <field name="vr_documento">146.73</field>
         <field name="tipo">a_receber</field>
         <field name="carteira_id" ref="finan.finan_carteira_002"/>
@@ -123,7 +123,7 @@
         <field name="conta_id" ref="finan.financial_account_201003"/>
         <field name="data_vencimento">01/01/2018</field>
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_001"/>
-        <field name="banco_id" ref="finan.banco_0101"/>
+        <field name="banco_id" ref="finan.finan_banco_000"/>
         <field name="vr_documento">548.30</field>
         <field name="tipo">a_receber</field>
         <field name="carteira_id" ref="finan.finan_carteira_001"/>
@@ -141,7 +141,7 @@
         <field name="conta_id" ref="finan.financial_account_201005"/>
         <field name="data_vencimento">01/01/2018</field>
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_001"/>
-        <field name="banco_id" ref="finan.banco_0100"/>
+        <field name="banco_id" ref="finan.finan_banco_237"/>
         <field name="vr_documento">265.92</field>
         <field name="tipo">a_receber</field>
         <field name="carteira_id" ref="finan.finan_carteira_002"/>
@@ -159,7 +159,7 @@
         <field name="conta_id" ref="finan.financial_account_201008"/>
         <field name="data_vencimento">01/01/2018</field>
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_001"/>
-        <field name="banco_id" ref="finan.banco_0101"/>
+        <field name="banco_id" ref="finan.finan_banco_000"/>
         <field name="vr_documento">265.92</field>
         <field name="tipo">a_receber</field>
         <field name="carteira_id" ref="finan.finan_carteira_001"/>
@@ -171,7 +171,7 @@
         <field name="data_pagamento">01/01/2018</field>
         <field name="data_credito_debito">01/01/2018</field>
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_002"/>
-        <field name="banco_id" ref="finan.banco_0100"/>
+        <field name="banco_id" ref="finan.finan_banco_237"/>
         <field name="vr_documento">45.76</field>
         <field name="vr_movimentado">45.76</field>
         <field name="vr_juros">0</field>

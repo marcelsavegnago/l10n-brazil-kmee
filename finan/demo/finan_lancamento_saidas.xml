@@ -9,7 +9,7 @@
         <field name="numero">2156</field>
         <field name="data_documento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
         <field name="conta_id" ref="finan.financial_account_201004"/>
-        <field name="banco_id" ref="finan.banco_0101"/>
+        <field name="banco_id" ref="finan.finan_banco_000"/>
         <field name="data_credito_debito" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
         <field name="vr_documento">29.87</field>
         <field name="vr_juros">0</field>
@@ -27,7 +27,7 @@
         <field name="numero">4530</field>
         <field name="data_documento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
         <field name="conta_id" ref="finan.financial_account_102999"/>
-        <field name="banco_id" ref="finan.banco_0100"/>
+        <field name="banco_id" ref="finan.finan_banco_237"/>
         <field name="data_credito_debito" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
         <field name="vr_documento">325.67</field>
         <field name="vr_juros">0</field>

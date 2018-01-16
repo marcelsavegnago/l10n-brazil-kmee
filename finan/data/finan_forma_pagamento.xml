@@ -25,6 +25,20 @@
         <field name="exige_numero">True</field>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
         <field name="quitado_somente_com_data_credito_debito">False</field>
-    </record>
+     </record>
+
+     <record model="finan.forma.pagamento" id="finan_forma_pagamento_004">
+        <field name="nome">Cartão de crédito</field>
+        <field name="forma_pagamento">03</field>
+        <field name="exige_numero">True</field>
+        <field name="quitado_somente_com_data_credito_debito">False</field>
+     </record>
+
+    <record model="finan.forma.pagamento" id="finan_forma_pagamento_005">
+        <field name="nome">Cartão de débito</field>
+        <field name="forma_pagamento">04</field>
+        <field name="exige_numero">True</field>
+        <field name="quitado_somente_com_data_credito_debito">False</field>
+     </record>
 
 </odoo>

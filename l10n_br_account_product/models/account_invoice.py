@@ -1443,8 +1443,22 @@ class AccountInvoiceLine(models.Model):
             result['code'] = product.default_code
             result['icms_origin'] = product.origin
 
+        # Em caso de notas complementares
+        ctx = self.env.context.copy()
+
+        if self.env['account.invoice'].browse(
+                values.get('invoice_id')).nfe_purpose == '2':
+            ctx.update(
+                {
+                    'icms_base_total': values.get('icms_base') + values.get('icms_base_other'),
+                    'ipi_base_total': values.get('ipi_base') + values.get('ipi_base_other'),
+                    'pis_base_total': values.get('pis_base'),
+                    'cofins_base_total': values.get('cofins_base')
+
+                })
+
         taxes_calculed = taxes.compute_all(
-            price, quantity, product=product, partner=partner,
+            price, quantity, product=product, partner=partner.with_context(ctx),
             fiscal_position=fiscal_position,
             insurance_value=insurance_value,
             freight_value=freight_value,
@@ -1817,15 +1831,25 @@ class AccountInvoiceTax(models.Model):
         currency = invoice.currency_id.with_context(
             date=invoice.date_invoice or fields.Date.context_today(invoice))
         company_currency = invoice.company_id.currency_id
+        ctx = dict(self.env.context.copy())
+
         for line in invoice.invoice_line:
+            # Em caso de notas complementares
+            if invoice.nfe_purpose == '2':
+                ctx.update(
+                    {
+                        'ipi_base_total': line.ipi_base + line.ipi_base_other,
+                    })
+
             taxes = line.invoice_line_tax_id.compute_all(
                 (line.price_unit * (1 - (line.discount or 0.0) / 100.0)),
                 line.quantity, product=line.product_id,
-                partner=invoice.partner_id,
+                partner=invoice.with_context(ctx).partner_id,
                 fiscal_position=line.fiscal_position,
                 insurance_value=line.insurance_value,
                 freight_value=line.freight_value,
                 other_costs_value=line.other_costs_value)['taxes']
+
             for tax in taxes:
                 val = {
                     'invoice_id': invoice.id,

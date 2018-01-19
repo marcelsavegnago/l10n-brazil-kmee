@@ -53,6 +53,9 @@ class AccountTax(models.Model):
                      precision, base_tax=0.0):
         result = {'tax_discount': 0.0, 'taxes': []}
 
+        if not total_line:
+            total_line = 0.0
+
         for tax in taxes:
             if tax.get('type') == 'weight' and product:
                 product_read = self.pool.get('product.product').read(
@@ -165,7 +168,6 @@ class AccountTax(models.Model):
         totaldc = icms_value = 0.0
         ipi_value = 0.0
         calculed_taxes = []
-
         for tax in result['taxes']:
             tax_list = [tx for tx in taxes if tx.id == tax['id']]
             if tax_list:
@@ -193,7 +195,8 @@ class AccountTax(models.Model):
 
         # Calcula o IPI
         specific_ipi = [tx for tx in result['taxes'] if tx['domain'] == 'ipi']
-        result_ipi = self._compute_tax(cr, uid, specific_ipi, result['total'],
+        result_ipi = self._compute_tax(cr, uid, specific_ipi, result['total']
+                                       or partner._context.get('ipi_base_total'),
                                        product, quantity, precision, base_tax)
         totaldc += result_ipi['tax_discount']
         calculed_taxes += result_ipi['taxes']

@@ -8,7 +8,7 @@ from odoo.tests.common import SingleTransactionCase
 class FinancialTestCase(SingleTransactionCase):
     """ This class extends the base TransactionCase, in order to test the
     financial with localization setups. It is configured to run the tests
-    after the installation of all modules, and will SKIP TESTS ifit cannot
+    after the installation of all modules, and will SKIP TESTS if it cannot
     find an already configured accounting (which means no localization
     module has been installed).
     """

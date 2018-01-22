@@ -71,6 +71,7 @@
                         <h1 name="nome">
                             <field name="nome" />
                         </h1>
+
 <!--                        <h2>
                             <group>
                                 <field name="motivo_baixa_id" options="{'no_create': True, 'no_open': True}"
@@ -98,6 +99,10 @@
                                 <field name="data_documento" required="1" string="Data" attrs="{'readonly': [('state', '!=', 'draft')]}" />
                                 <field name="conta_id" required="1" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('state', '!=', 'draft')]}" />
                                 <field name="data_vencimento" required="1" string="Vencimento" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                <field name="banco_id" options="{'no_create': True, 'no_open': True}" domain="[('cnpj_cpf_raiz', '=', cnpj_cpf_raiz)]" />
+                                <field name="banco" invisible="1" />
+                                <field name="forma_pagamento_id" options="{'no_create': True, 'no_open': True}" />
+                                <field name="forma_pagamento" invisible="1" />
                             </group>
                             <group name="valores">
                                 <separator string="Valores" />

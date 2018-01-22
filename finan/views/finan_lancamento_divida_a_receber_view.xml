@@ -21,20 +21,12 @@
                     attrs="{'invisible': ['|', ('carteira_id', '=', False), '|', ('provisorio', '=', True), ('situacao_divida', 'in', ['quitado', 'baixado', 'baixado_parcialmente'])]}" />
             </xpath>
 
-            <!-- Controle de forma de pagamento e cobrança -->
-            <field name="data_vencimento" position="after">
-                <field name="forma_pagamento_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True, 'no_open': True}" />
-                <newline />
-                <field name="forma_pagamento" invisible="1" />
-                <newline />
-                <field name="banco_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True, 'no_open': True}" domain="[('cnpj_cpf_raiz', '=', cnpj_cpf_raiz)]" />
-                <newline />
-                <field name="banco" invisible="1" />
-                <newline />
-                <field name="carteira_id" domain="[('banco_id', '=', banco_id)]" attrs="{'invisible': ['|', ('banco_id', '=', False), ('banco', '=', '000'), ('forma_pagamento', '!=', '15')]}" options="{'no_create': True, 'no_open': True}" />
-                <newline />
-                <field name="nosso_numero" attrs="{'invisible': ['|', ('banco_id', '=', False), ('carteira_id', '=', False)]}" />
-            </field>
+             <!-- Controle de forma de pagamento e cobrança -->
+             <field name="forma_pagamento_id" position="after">
+                 <field name="carteira_id" domain="[('banco_id', '=', banco_id)]" attrs="{'invisible': ['|', '|', ('banco_id', '=', False), ('banco', '=', '000'), ('forma_pagamento', '!=', '15')]}" options="{'no_create': True, 'no_open': True}" />
+                 <newline />
+                 <field name="nosso_numero" attrs="{'invisible': ['|', ('banco_id', '=', False), ('carteira_id', '=', False)]}" />
+             </field>
 
             <xpath expr="//form[1]" position="attributes">
                 <attribute name="string">Conta a receber</attribute>

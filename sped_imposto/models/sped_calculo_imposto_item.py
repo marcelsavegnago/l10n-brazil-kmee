@@ -2559,13 +2559,10 @@ class SpedCalculoImpostoItem(SpedBase):
                 return
 
         elif self.cst_icms not in ST_ICMS_CALCULA_PROPRIO:
-<<<<<<< 619419ad0d1ba59984a5bfc4574eccb0ca5546e0
             if self.cst_icms in ST_ICMS_ZERA_ICMS_PROPRIO:
                 self.al_icms_proprio = D(0)
                 self.bc_icms_proprio = D(0)
                 self.vr_icms_proprio = D(0)
-=======
->>>>>>> [FIX] Correções PEP8
             return
 
         if not self.md_icms_proprio:

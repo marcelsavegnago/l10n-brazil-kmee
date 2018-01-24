@@ -14,6 +14,7 @@
         'l10n_br_base',
         'sped_imposto',
         'sped',
+        'purchase',
     ],
     'installable': True,
     'application': False,

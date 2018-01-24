@@ -893,7 +893,6 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     )
     documento_subsequente_ids = fields.One2many(
         comodel_name='sped.documento.subsequente',
-        inverse_name='documento_origem_id',
         compute='_compute_documento_subsequente_ids',
     )
     documento_impresso = fields.Boolean(
@@ -1640,30 +1639,39 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     @api.depends('operacao_id')
     def _compute_documento_subsequente_ids(self):
         for documento in self:
-            documento.documento_subsequente_ids = \
-                self.env['sped.documento.subsequente'].search([
-                    ('documento_origem_id', '=', self.id)
-                ])
-            if not self.operacao_id:
+            if not documento.operacao_id:
                 continue
-            if documento.operacao_id.mapped('operacao_subsequente_ids') == \
-                    documento.documento_subsequente_ids.mapped(
-                        'operacao_subsequente_id'):
-                continue
-            self.env['sped.documento.subsequente'].search([
-                ('documento_origem_id', '=', documento.id)
-            ]).unlink()
-            for subsequente_id in documento.operacao_subsequente_ids:
-                self.env['sped.documento.subsequente'].create({
-                    'documento_origem_id': documento.id,
-                    'operacao_subsequente_id': subsequente_id.id,
-                    'sped_operacao_id':
-                        subsequente_id.operacao_subsequente_id.id,
-                })
-                documento.documento_subsequente_ids = \
-                    self.env['sped.documento.subsequente'].search([
-                        ('documento_origem_id', '=', self.id)
-                    ])
+            documento.documento_subsequente_ids = [(0, 0, {
+                'documento_origem_id': documento.id,
+                'operacao_subsequente_id': subsequente_id.id,
+                'sped_operacao_id':
+                    subsequente_id.operacao_subsequente_id.id,
+            }) for subsequente_id in documento.operacao_subsequente_ids]
+
+            # documento.documento_subsequente_ids = \
+            #     self.env['sped.documento.subsequente'].search([
+            #         ('documento_origem_id', '=', self.id)
+            #     ])
+            # if not self.operacao_id:
+            #     continue
+            # if documento.operacao_id.mapped('operacao_subsequente_ids') == \
+            #         documento.documento_subsequente_ids.mapped(
+            #             'operacao_subsequente_id'):
+            #     continue
+            # self.env['sped.documento.subsequente'].search([
+            #     ('documento_origem_id', '=', documento.id)
+            # ]).unlink()
+            # for subsequente_id in documento.operacao_subsequente_ids:
+            #     self.env['sped.documento.subsequente'].create({
+            #         'documento_origem_id': documento.id,
+            #         'operacao_subsequente_id': subsequente_id.id,
+            #         'sped_operacao_id':
+            #             subsequente_id.operacao_subsequente_id.id,
+            #     })
+            #     documento.documento_subsequente_ids = \
+            #         self.env['sped.documento.subsequente'].search([
+            #             ('documento_origem_id', '=', self.id)
+            #         ])
 
     @api.depends('documento_subsequente_ids.documento_subsequente_id')
     def _compute_documentos_subsequentes_gerados(self):

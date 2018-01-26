@@ -62,6 +62,9 @@
         #
         # Dados de base
         #
+        'data/sped_participante_data.xml',
+        'wizard/sped_documento_exportar_xml.xml',
+        'wizard/base_config_settings.xml',
     ],
     'external_dependencies': {
         'python': [

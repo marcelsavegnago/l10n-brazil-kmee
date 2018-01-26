@@ -3,13 +3,13 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
     <record model="finan.lancamento" id="finan_lancamento_saida_00">
-        <field name="empresa_id" ref="l10n_br_base.sped_empresa_demo_simples_rj"/>
+        <field name="empresa_id" ref="l10n_br_base.sped_empresa_regime_normal_sp"/>
         <field name="participante_id" ref="l10n_br_base.res_partner_cliente10_mg"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_CHEQUE"/>
         <field name="numero">2156</field>
         <field name="data_documento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
         <field name="conta_id" ref="finan.financial_account_201004"/>
-        <field name="banco_id" ref="finan.finan_banco_000"/>
+        <field name="banco_id" ref="finan.finan_banco_104"/>
         <field name="data_credito_debito" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
         <field name="vr_documento">29.87</field>
         <field name="vr_juros">0</field>
@@ -21,7 +21,7 @@
     </record>
 
     <record model="finan.lancamento" id="finan_lancamento_saida_01">
-        <field name="empresa_id" ref="l10n_br_base.sped_empresa_demo_simples_rj"/>
+        <field name="empresa_id" ref="l10n_br_base.sped_empresa_regime_normal_sp"/>
         <field name="participante_id" ref="l10n_br_base.res_partner_cliente12_sp"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_CHEQUE"/>
         <field name="numero">4530</field>

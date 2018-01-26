@@ -268,9 +268,3 @@ class SpedCartaCorrecao(models.Model):
     def write(self, dados):
         self._check_permite_alteracao(operacao='write', dados=dados)
         return super(SpedCartaCorrecao, self).write(dados)
-
-    @api.onchange('documento_id')
-    def _onchange_documento_id(self):
-        self.ensure_one()
-
-        pass

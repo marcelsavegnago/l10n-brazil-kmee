@@ -1140,7 +1140,8 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
             return res
 
         if self.modelo not in (
-                MODELO_FISCAL_NFE, MODELO_FISCAL_NFCE, MODELO_FISCAL_NFSE):
+                MODELO_FISCAL_NFE, MODELO_FISCAL_NFCE, MODELO_FISCAL_NFSE,
+                MODELO_FISCAL_CFE):
             return res
 
         if self.modelo == MODELO_FISCAL_NFE:

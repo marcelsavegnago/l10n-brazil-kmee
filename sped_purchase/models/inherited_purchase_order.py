@@ -49,16 +49,37 @@ class PurchaseOrder(SpedCalculoImpostoProdutoServico, models.Model):
         store=True
     )
 
-    state = fields.Selection(
-        selection_add=[('invoiced', 'Faturado pelo Fornecedor'),
-                       ('received', 'Recebido')],
+    kanban_state = fields.Selection(
+        selection=[('draft', 'Provisório'),
+                   ('purchase', 'Pedido de Compra'),
+                   ('invoiced', 'Faturado pelo Fornecedor'),
+                   ('received', 'Recebido'),
+                   ('cancel', 'Cancelado')],
         # group_expand='_read_group_stage_ids', FIXME: func. v11
+        compute='_compute_kanban_state',
         readonly=False,
+        store=True,
     )
 
     order_line_count = fields.Integer(
         compute='_compute_order_line_count'
     )
+
+    @api.depends('state',
+                 'order_line.qty_received',
+                 'invoice_status')
+    def _compute_kanban_state(self):
+        for order in self:
+            if order.invoice_status == 'invoiced':
+                order.kanban_state = 'invoiced'
+            if all(line.quantidade == line.qty_received
+                   for line in order.order_line) and order.documento_ids:
+                order.kanban_state = 'received'
+            if order.kanban_state not in ['invoiced', 'received']:
+                if order.state in ['draft', 'sent', 'to approve']:
+                    order.kanban_state = 'draft'
+                elif order.state in ['purchase', 'cancel']:
+                    order.kanban_state = order.state
 
     @api.depends('order_line')
     def _compute_order_line_count(self):
@@ -200,10 +221,10 @@ class PurchaseOrder(SpedCalculoImpostoProdutoServico, models.Model):
 
     @api.multi
     def write(self, vals):
-        if vals.get('state', False):
+        if vals.get('kanban_state', False):
             self.ensure_one()
             if not PurchaseOrder._valid_state_change(
-                    self.state, vals['state']):
+                    self.kanban_state, vals['kanban_state']):
                 raise UserError('Transição não permitida')
         return super(PurchaseOrder, self).write(vals)
 
@@ -213,49 +234,3 @@ class PurchaseOrder(SpedCalculoImpostoProdutoServico, models.Model):
         if not (res.get('res_id') or res.get('domain')):
             res['domain'] = "[('purchase_id','=',%s)]" % self.id
         return res
-
-    # @api.depends('order_line.move_ids.returned_move_ids',
-    #              'order_line.move_ids.state',
-    #              'order_line.move_ids.picking_id',
-    #              'state')
-    # def _compute_picking(self):
-    #     super(PurchaseOrder, self)._compute_picking()
-    #     for order in self:
-    #         if order.state == 'invoiced':
-    #             for picking in order.picking_ids:
-    #                 if picking.state != 'cancel':
-    #                     picking.write({'state': 'assigned'})
-
-    @api.depends('order_line.qty_invoiced',
-                 'order_line.qty_received',
-                 'order_line.product_qty',
-                 'invoice_status')
-    def _get_invoiced(self):
-        super(PurchaseOrder, self)._get_invoiced()
-        for order in self:
-            if order.invoice_status == 'invoiced':
-                order.state = 'invoiced'
-            if all(line.quantidade == line.qty_received
-                   for line in order.order_line) and order.documento_ids:
-                order.state = 'received'
-
-    @api.depends('order_id.state', 'move_ids.state')
-    def _compute_qty_received(self):
-        super(PurchaseOrder, self)._compute_qty_received()
-        for line in self:
-            if line.order_id.state not in ['purchase', 'invoiced', 'done']:
-                line.qty_received = 0.0
-                continue
-            if line.product_id and line.product_id.type not in \
-                    ['consu', 'product']:
-                line.qty_received = line.product_qty
-                continue
-            total = 0.0
-            for move in line.move_ids:
-                if move.state == 'done':
-                    if move.product_uom != line.product_uom:
-                        total += move.product_uom._compute_quantity(
-                            move.product_uom_qty, line.product_uom)
-                    else:
-                        total += move.product_uom_qty
-            line.qty_received = total

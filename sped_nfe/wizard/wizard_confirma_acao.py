@@ -59,12 +59,6 @@ class WizardConfirmaAcao(models.TransientModel):
                     self.env['sped.manifestacao.destinatario'].\
                         search([('state', '=', 'pendente')])
 
-                if not manifestacao_ciente_ids:
-                    raise UserError(
-                        _("Nenhuma manifestação atende os requisitos para a "
-                          "operação selecionada")
-                    )
-
             if self.state == 'importa_nfe':
                 return manifestacao_ciente_ids.action_importa_xmls()
 

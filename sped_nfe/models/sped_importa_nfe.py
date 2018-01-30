@@ -17,7 +17,7 @@ from lxml import objectify, etree
 import logging
 
 
-class ImportaNFe(models.Model):
+class ImportaNFe(models.TransientModel):
 
     _name = 'sped.importa.nfe'
     _description = 'Importa NFe'
@@ -25,18 +25,20 @@ class ImportaNFe(models.Model):
     chave = fields.Char(
         string='Chave',
         size=44,
-        # required=True,
+        required=True,
     )
+
     quantidade_diretorio = fields.Integer(
         string='Quantidade Diretório',
     )
     quantidade_importada = fields.Integer(
         string='Quantidade Importada',
     )
+
     empresa_id = fields.Many2one(
         comodel_name='sped.empresa',
         string='Empresa',
-        # required=True,
+        required=True,
     )
 
     purchase_id = fields.Many2one(

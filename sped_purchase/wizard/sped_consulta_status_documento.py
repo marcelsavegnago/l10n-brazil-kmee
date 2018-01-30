@@ -159,6 +159,10 @@ class SpedConsultaStatusDocumento(models.TransientModel):
                                        'options': {'mode': 'edit'}}},
                 }
 
+            else:
+                raise Warning(
+                    _(nfe_result['code'] + ' - ' + nfe_result['message']))
+
         except Exception as e:
             raise UserError(
-                _(u'Erro na consulta da chave!', e))
+                _(e))

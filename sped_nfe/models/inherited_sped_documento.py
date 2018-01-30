@@ -954,6 +954,7 @@ class SpedDocumento(models.Model):
         self.envia_email(mail_template)
 
     def _envia_email(self, mail_template):
+        self.ensure_one()
         mail_template.send_mail(self.id)
 
     def envia_email(self, mail_template):

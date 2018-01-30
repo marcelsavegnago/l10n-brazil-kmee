@@ -208,7 +208,6 @@ class SpedManifestacaoDestinatario(models.Model):
         action['view_id'] = view_id
 
         return action
-
     @api.multi
     def action_salva_xml(self):
 

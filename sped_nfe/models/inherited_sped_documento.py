@@ -424,7 +424,6 @@ class SpedDocumento(models.Model):
         self.arquivo_xml_autorizacao_id = False
         self.arquivo_xml_autorizacao_id = \
             self._grava_anexo(nome_arquivo, conteudo)
-        self.xmls_exportados = False
 
         return {
             'type' : 'ir.actions.act_url',
@@ -457,7 +456,6 @@ class SpedDocumento(models.Model):
         self.arquivo_xml_autorizacao_cancelamento_id = False
         self.arquivo_xml_autorizacao_cancelamento_id = \
             self._grava_anexo(nome_arquivo, conteudo)
-        self.xmls_exportados = False
 
         return {
             'type': 'ir.actions.act_url',
@@ -597,6 +595,7 @@ class SpedDocumento(models.Model):
                 self.executa_depois_denegar()
             else:
                 self.situacao_nfe = SITUACAO_NFE_EM_DIGITACAO
+
         #
         # Se o último processo foi o envio do lote, significa que a consulta
         # falhou, mas o envio não

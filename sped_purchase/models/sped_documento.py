@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 #
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 
 
 class SpedDocumento(models.Model):
@@ -75,10 +75,6 @@ class SpedDocumento(models.Model):
                         item.prepara_dados_documento_item()
                     )
         return {}
-
-    @api.onchange('participante_id', 'item_ids')
-    def _onchange_allowed_purchase_ids(self):
-        result = {}
 
     @api.multi
     def write(self, vals):

@@ -9,9 +9,9 @@
         <field name="participante_id" ref="l10n_br_base.cliente9_mg"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
         <field name="numero">3527</field>
-        <field name="data_documento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
+        <field name="data_documento" eval="(DateTime.today() - timedelta(days=3)).strftime('%Y-%m-%d %H:%M')"/>
         <field name="conta_id" ref="finan.financial_account_101001"/>
-        <field name="data_vencimento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
+        <field name="data_vencimento" eval="(DateTime.today() + timedelta(days=27)).strftime('%Y-%m-%d %H:%M')" />
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_001"/>
         <field name="banco_id" ref="finan.finan_banco_237"/>
         <field name="vr_documento">5.20</field>
@@ -22,8 +22,8 @@
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
         <field name="numero">3527</field>
         <field name="conta_id" ref="finan.financial_account_101001"/>
-        <field name="data_pagamento" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
-        <field name="data_credito_debito" eval="time.strftime(str(DateTime.today().year) + '-06-04 9:00:00')"></field>
+        <field name="data_pagamento" eval="DateTime.today().strftime('%Y-%m-%d %H:%M')"/>
+        <field name="data_credito_debito" eval="DateTime.today().strftime('%Y-%m-%d %H:%M')"/>
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_001"/>
         <field name="banco_id" ref="finan.finan_banco_237"/>
         <field name="vr_documento">5.00</field>
@@ -44,9 +44,9 @@
         <field name="participante_id" ref="l10n_br_base.res_partner_cliente8_rs"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
         <field name="numero">2121</field>
-        <field name="data_documento" eval="time.strftime(str(DateTime.today().year) + '-01-12 9:00:00')"></field>
+        <field name="data_documento" eval="DateTime.today().strftime('%Y-%m-%d %H:%M')"/>
         <field name="conta_id" ref="finan.financial_account_101001"/>
-        <field name="data_vencimento" eval="time.strftime(str(DateTime.today().year) + '-01-12 9:00:00')"></field>
+        <field name="data_vencimento" eval="DateTime.today().strftime('%Y-%m-%d %H:%M')"/>
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_001"/>
         <field name="banco_id" ref="finan.finan_banco_237"/>
         <field name="vr_documento">240.00</field>
@@ -60,9 +60,9 @@
         <field name="participante_id" ref="l10n_br_base.res_partner_akretion"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
         <field name="numero">6003</field>
-        <field name="data_documento" eval="time.strftime(str(DateTime.today().year) + '-' + str(DateTime.today().month) + '-' + str(DateTime.today().day) + ' 9:00:00')"></field>
+        <field name="data_documento" eval="DateTime.today().strftime('%Y-%m-%d %H:%M')"/>
         <field name="conta_id" ref="finan.financial_account_205007"/>
-        <field name="data_vencimento" eval="time.strftime(str(DateTime.today().year) + '-' + str(DateTime.today().month) + '-' + str(DateTime.today().day) + ' 9:00:00')"></field>
+        <field name="data_vencimento" eval="DateTime.today().strftime('%Y-%m-%d %H:%M')"/>
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_003"/>
         <field name="banco_id" ref="finan.finan_banco_104"/>
         <field name="vr_documento">75.90</field>
@@ -75,9 +75,9 @@
         <field name="participante_id" ref="l10n_br_base.res_partner_kmee"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
         <field name="numero">8033</field>
-        <field name="data_documento" eval="time.strftime(str(DateTime.today().year) + '-' + str(DateTime.today().month) + '-' + str(DateTime.today().day + 2) + ' 9:00:00')"></field>
+        <field name="data_documento" eval="DateTime.today().strftime('%Y-%m-%d %H:%M')" />
         <field name="conta_id" ref="finan.financial_account_101999"/>
-        <field name="data_vencimento" eval="time.strftime(str(DateTime.today().year) + '-' + str(DateTime.today().month) + '-' + str(DateTime.today().day + 2) + ' 9:00:00')"></field>
+        <field name="data_vencimento" eval="(DateTime.today() + timedelta(days=30)).strftime('%Y-%m-%d %H:%M')" />
         <field name="forma_pagamento_id" ref="finan.finan_forma_pagamento_002"/>
         <field name="banco_id" ref="finan.finan_banco_237"/>
         <field name="vr_documento">2146.30</field>

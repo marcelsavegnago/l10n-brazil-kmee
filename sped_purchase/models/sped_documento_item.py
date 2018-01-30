@@ -93,15 +93,25 @@ class SpedDocumentoItem(models.Model):
 
         return result
 
-    @api.onchange('quantidade')
-    def constrains_quantidade(self):
+    @api.constrains('purchase_line_ids', 'quantidade')
+    def _check_m2m_quantity(self):
         for item in self:
-            if item.purchase_line_ids and len(item.purchase_line_ids) == 1:
-                disponivel = item.purchase_line_ids.quantidade - \
-                             item.purchase_line_ids.qty_invoiced
-                if not (item.quantidade > disponivel):
+            if len(item.purchase_line_ids) > 1:
+                for linha in item.mapped('purchase_line_ids'):
+                    if len(linha.documento_item_ids) > 1:
+                        raise ValidationError(_(
+                            'Impossível relacionar item de documento com '
+                            'linhas de pedido de compras que não tenham '
+                            'relação única com esse item.'
+                        ))
+            elif item.purchase_line_ids:
+                total = 0.0
+                for doc_item in item.purchase_line_ids.mapped(
+                        'documento_item_ids'):
+                    total += doc_item.quantidade
+                if total > item.purchase_line_ids.quantidade:
                     raise ValidationError(_(
-                        'Quantidade do item ' + item.produto_id.nome +
+                        'Quantidade do produto ' + item.produto_id.nome +
                         'ultrapassa o disponível na linha do pedido de compra.'
                     ))
 

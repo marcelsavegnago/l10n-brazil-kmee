@@ -11,7 +11,7 @@ from __future__ import division, print_function, unicode_literals
 
 import logging
 
-from odoo import api, fields, models, _
+from odoo import api, fields, _
 import odoo.addons.decimal_precision as dp
 from odoo.exceptions import ValidationError
 from odoo.addons.l10n_br_base.models.sped_base import SpedBase
@@ -172,8 +172,8 @@ class SpedCalculoImpostoItem(SpedBase):
     # quantidade = fields.Float(
     # string='Quantidade',
     # default=1,
-    #digits=dp.get_precision('SPED - Quantidade'),
-    #)
+    # digits=dp.get_precision('SPED - Quantidade'),
+    # )
     unidade_id = fields.Many2one(
         comodel_name='sped.unidade',
         string='Unidade',
@@ -238,13 +238,13 @@ class SpedCalculoImpostoItem(SpedBase):
     vr_seguro = fields.Monetary(
         string='Valor do seguro',
     )
-    #al_desconto = fields.Monetary(
-        #string='Percentual de desconto',
-        #currency_field='currency_aliquota_rateio_id',
-        #compute='_compute_al_desconto',
-        #inverse='_inverse_al_desconto',
-        #store=True,
-    #)
+    # al_desconto = fields.Monetary(
+    # string='Percentual de desconto',
+    # currency_field='currency_aliquota_rateio_id',
+    # compute='_compute_al_desconto',
+    # inverse='_inverse_al_desconto',
+    # store=True,
+    # )
     vr_desconto = fields.Monetary(
         string='Valor do desconto',
     )
@@ -667,14 +667,14 @@ class SpedCalculoImpostoItem(SpedBase):
     fator_quantidade = fields.Float(
         string='Fator de conversão da quantidade',
     )
-    #quantidade_original = fields.Float(
-        #string='Quantidade',
-        #digits=(18, 4),
-    #)
-    #vr_unitario_original = fields.Float(
-        #string='Valor unitário original',
-        #digits=(18, 10),
-    #)
+    # quantidade_original = fields.Float(
+    # string='Quantidade',
+    # digits=(18, 4),
+    # )
+    # vr_unitario_original = fields.Float(
+    # string='Valor unitário original',
+    # digits=(18, 10),
+    # )
     cfop_original_id = fields.Many2one(
         comodel_name='sped.cfop',
         string='CFOP original',
@@ -924,21 +924,21 @@ class SpedCalculoImpostoItem(SpedBase):
         help='Indica o tipo do item',
     )
 
-    #@api.depends('vr_desconto')
-    #def _compute_al_desconto(self):
-        #for item in self:
-            #al_desconto = D(0)
-            #if item.vr_produtos and item.vr_desconto:
-                #al_desconto = D(item.vr_desconto) / D(item.vr_produtos)
-                #al_desconto *= 100
-            #item.al_desconto = al_desconto
+    # @api.depends('vr_desconto')
+    # def _compute_al_desconto(self):
+    # for item in self:
+    # al_desconto = D(0)
+    # if item.vr_produtos and item.vr_desconto:
+    # al_desconto = D(item.vr_desconto) / D(item.vr_produtos)
+    # al_desconto *= 100
+    # item.al_desconto = al_desconto
 
-    #def _inverse_al_desconto(self):
-        #for item in self:
-            #al_desconto = D(item.al_desconto) / 100
-            #vr_desconto = D(item.vr_produtos) * al_desconto
-            #vr_desconto = vr_desconto.quantize(D('0.01'))
-            #item.vr_desconto = vr_desconto
+    # def _inverse_al_desconto(self):
+    # for item in self:
+    # al_desconto = D(item.al_desconto) / 100
+    # vr_desconto = D(item.vr_produtos) * al_desconto
+    # vr_desconto = vr_desconto.quantize(D('0.01'))
+    # item.vr_desconto = vr_desconto
 
     #
     # Funções para manter a sincronia entre as CSTs do PIS e COFINS para
@@ -1081,15 +1081,15 @@ class SpedCalculoImpostoItem(SpedBase):
                     busca_item = [
                         ('operacao_id', '=', domain.get('operacao_id', False)),
                         ('tipo_protocolo', '=',
-                             domain.get('tipo_protocolo', False)),
+                         domain.get('tipo_protocolo', False)),
                         ('cfop_id.posicao', '=',
-                             domain.get('cfop_id_posicao', False)),
+                         domain.get('cfop_id_posicao', False)),
                         ('contribuinte', '=',
-                             domain.get('contribuinte', False)),
+                         domain.get('contribuinte', False)),
                         ('protocolo_id', '=',
-                             domain.get('protocolo_id', False)),
+                         domain.get('protocolo_id', False)),
                         ('tipo_produto_servico', '=',
-                             domain.get('tipo_produto_servico', False)),
+                         domain.get('tipo_produto_servico', False)),
                     ]
                     operacao_item_ids = self.operacao_id.item_ids.search(
                         busca_item)
@@ -1098,7 +1098,6 @@ class SpedCalculoImpostoItem(SpedBase):
                         return operacao_item_ids
         return False
 
-        
     def _onchange_produto_id_recebimento(self):
         self.ensure_one()
 
@@ -1645,9 +1644,9 @@ class SpedCalculoImpostoItem(SpedBase):
             #
             if (self.operacao_item_id.al_pis_cofins_id and not
                 (self.operacao_item_id.al_pis_cofins_id.cst_pis_cofins_saida
-                     in ST_PIS_CALCULA_ALIQUOTA or
+                 in ST_PIS_CALCULA_ALIQUOTA or
                  self.operacao_item_id.al_pis_cofins_id.cst_pis_cofins_saida
-                     in ST_PIS_CALCULA_QUANTIDADE)):
+                 in ST_PIS_CALCULA_QUANTIDADE)):
                 al_pis_cofins = self.operacao_item_id.al_pis_cofins_id
 
             self.al_pis_cofins_id = al_pis_cofins.id
@@ -1658,9 +1657,9 @@ class SpedCalculoImpostoItem(SpedBase):
             #
             if self.produto_id.codigo_natureza_receita_pis_cofins:
                 self.codigo_natureza_receita_pis_cofins = \
-                self.produto_id.codigo_natureza_receita_pis_cofins
+                    self.produto_id.codigo_natureza_receita_pis_cofins
             elif self.produto_id.ncm_id.al_pis_cofins_id and \
-                self.produto_id.ncm_id.codigo_natureza_receita_pis_cofins:
+                    self.produto_id.ncm_id.codigo_natureza_receita_pis_cofins:
                 self.codigo_natureza_receita_pis_cofins = \
                     self.produto_id.ncm_id.codigo_natureza_receita_pis_cofins
             elif self.operacao_item_id.codigo_natureza_receita_pis_cofins:
@@ -2073,10 +2072,10 @@ class SpedCalculoImpostoItem(SpedBase):
         vr_produtos = D(self.quantidade) * D(self.vr_unitario)
         vr_produtos = vr_produtos.quantize(D('0.01'))
 
-        #if self.al_desconto:
-            #al_desconto = D(self.al_desconto) / 100
-            #vr_desconto = vr_produtos * al_desconto
-            #self.vr_desconto = vr_desconto
+        # if self.al_desconto:
+        # al_desconto = D(self.al_desconto) / 100
+        # vr_desconto = vr_produtos * al_desconto
+        # self.vr_desconto = vr_desconto
 
         #
         # Até segunda ordem, a quantidade e valor unitário para tributação não
@@ -2483,12 +2482,12 @@ class SpedCalculoImpostoItem(SpedBase):
         # ICMS desonerado
         #
         if self.motivo_icms_desonerado and \
-            self.cst_icms in ST_ICMS_DESONERADO_TOTAL:
+                self.cst_icms in ST_ICMS_DESONERADO_TOTAL:
             self.bc_icms_proprio = 0
             self.vr_icms_proprio = 0
 
         elif ((self.cst_icms in ST_ICMS_ZERA_ICMS_PROPRIO) or
-            ((self.regime_tributario == REGIME_TRIBUTARIO_SIMPLES) and
+              ((self.regime_tributario == REGIME_TRIBUTARIO_SIMPLES) and
                 (self.cst_icms_sn not in ST_ICMS_SN_CALCULA_PROPRIO) and
                 (self.cst_icms_sn not in ST_ICMS_SN_CALCULA_ST))):
             self.bc_icms_proprio = 0
@@ -2653,7 +2652,7 @@ class SpedCalculoImpostoItem(SpedBase):
 
     def _seta_valores(self, res):
         self.ensure_one()
-        print (res)
+        print(res)
         if not (res and res.get('value')):
             return
 
@@ -2780,7 +2779,7 @@ class SpedCalculoImpostoItem(SpedBase):
             ['product_uom_qty', 'quantidade'],
         ]
         for campo_original, campo_brasil in CAMPOS:
-            if campo_original in dados and not campo_brasil in dados:
+            if campo_original in dados and campo_brasil not in dados:
                 dados[campo_brasil] = dados[campo_original]
 
         return dados

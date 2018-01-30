@@ -5,8 +5,7 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
-from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo import models, fields, api
 
 ACAO_MANIFESTACAO = [
     ('ciencia', 'Declarar Ciência da Operação'),

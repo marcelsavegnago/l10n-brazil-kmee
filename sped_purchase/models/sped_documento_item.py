@@ -55,8 +55,6 @@ class SpedDocumentoItem(models.Model):
     def _onchange_purchase_line_ids(self):
         result = {}
 
-        # A PO can be selected only if at least one PO line is not already in the invoice
-        purchase_line_ids = self.purchase_ids.mapped('order_line')
 
         result['domain'] = {'purchase_line_ids': [
             ('id', 'in', purchase_line_ids.ids),

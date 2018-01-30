@@ -5,7 +5,6 @@
 <odoo>
 <!--Lançamento financeiro quitado parcialmente-->
     <record model="finan.lancamento" id="finan_lancamento_a_pagar_01">
-        <field name="situacao_divida">quitado_parcialmente</field>
         <field name="empresa_id" ref="l10n_br_base.sped_empresa_regime_normal_sp"/>
         <field name="participante_id" ref="l10n_br_base.cliente9_mg"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
@@ -41,7 +40,6 @@
 
     <!--Lançamento financeiro quitado-->
     <record model="finan.lancamento" id="finan_lancamento_a_pagar_02">
-        <field name="situacao_divida">quitado</field>
         <field name="empresa_id" ref="l10n_br_base.sped_empresa_regime_normal_sp"/>
         <field name="participante_id" ref="l10n_br_base.res_partner_cliente8_rs"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
@@ -58,7 +56,6 @@
 
     <!--Lançamento financeiro vence hoje-->
     <record model="finan.lancamento" id="finan_lancamento_a_pagar_03">
-        <field name="situacao_divida">vence_hoje</field>
         <field name="empresa_id" ref="l10n_br_base.sped_empresa_regime_normal_sp"/>
         <field name="participante_id" ref="l10n_br_base.res_partner_akretion"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>
@@ -74,7 +71,6 @@
 
     <!--Lançamento financeiro a vencer-->
     <record model="finan.lancamento" id="finan_lancamento_a_pagar_04">
-        <field name="situacao_divida">a_vencer</field>
         <field name="empresa_id" ref="l10n_br_base.sped_empresa_regime_normal_sp"/>
         <field name="participante_id" ref="l10n_br_base.res_partner_kmee"/>
         <field name="documento_id" ref="finan.DOCUMENTO_FINANCEIRO_BOLETO"/>

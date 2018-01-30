@@ -25,6 +25,7 @@ class SpedDocumentoItem(models.Model):
 
     pode_alterar_quantidade = fields.Boolean(
         string='Pode alterar a quantidade?',
+        compute='_compute_quantidade_alteravel',
         default=True,
     )
 
@@ -90,15 +91,6 @@ class SpedDocumentoItem(models.Model):
                 ('vr_unitario', '=', self.vr_unitario)
             )
 
-        if len(self.purchase_line_ids) > 1:
-            self.pode_alterar_quantidade = False
-            quantidade = 0
-            for linha in self.purchase_line_ids:
-                quantidade += linha.quantidade
-            self.quantidade = quantidade
-        else:
-            self.pode_alterar_quantidade = True
-
         return result
 
     @api.onchange('quantidade')
@@ -112,3 +104,15 @@ class SpedDocumentoItem(models.Model):
                         'Quantidade do item ' + item.produto_id.nome +
                         'ultrapassa o disponível na linha do pedido de compra.'
                     ))
+
+    @api.depends('purchase_line_ids')
+    def _compute_quantidade_alteravel(self):
+        for item in self:
+            if len(item.purchase_line_ids) > 1:
+                item.pode_alterar_quantidade = False
+                quantidade = 0.0
+                for linha in item.mapped('purchase_line_ids'):
+                    quantidade += linha.quantidade
+                item.quantidade = quantidade
+            else:
+                item.pode_alterar_quantidade = True

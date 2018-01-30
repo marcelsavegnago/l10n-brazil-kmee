@@ -4,8 +4,6 @@
 
 from __future__ import division, print_function, unicode_literals
 
-import logging
-
 from odoo import api, fields, models, _
 import odoo.addons.decimal_precision as dp
 from odoo.addons.sped_imposto.models.sped_calculo_imposto_item import (

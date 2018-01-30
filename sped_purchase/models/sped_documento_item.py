@@ -54,16 +54,19 @@ class SpedDocumentoItem(models.Model):
 
     @api.onchange('purchase_ids', 'purchase_line_ids')
     def _onchange_purchase_line_ids(self):
-        result = {}
 
+        for purchase in self.mapped('purchase_ids'):
+            if purchase not in self.documento_id.mapped('purchase_order_ids'):
+                self.documento_id.purchase_order_ids += purchase
 
-        result['domain'] = {'purchase_line_ids': [
-            ('id', 'in', purchase_line_ids.ids),
-            ('id', 'not in', self.purchase_line_ids.ids),
-        ], 'purchase_ids': [
-            ('invoice_status', '=', 'to invoice'),
-            ('id', 'not in', self.purchase_ids.ids),
-        ]}
+        result = {'domain': {
+            'purchase_line_ids': [],
+            'purchase_ids': [('invoice_status', '=', 'to invoice')]}}
+
+        if self.purchase_ids:
+            result['domain']['purchase_line_ids'].append(
+                ('order_id', 'in', self.purchase_ids.ids)
+            )
 
         if self.participante_id:
             result['domain']['purchase_line_ids'].append(

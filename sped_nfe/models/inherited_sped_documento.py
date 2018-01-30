@@ -515,17 +515,17 @@ class SpedDocumento(models.Model):
             if processo.resposta.cStat.valor in ('100', '150'):
                 self.chave = processo.resposta.chNFe.valor
 
-                if not (
-                            self.protocolo_autorizacao or
-                            self.arquivo_xml_autorizacao_id
-                        ):
-
+                if not self.protocolo_autorizacao:
                     consulta = processador.consultar_nota(
                         processador.ambiente,
                         self.chave,
                         nfe,
                     )
+<<<<<<< 053c6027fe8448df1dd7b9c481c95f4c23f3e43a
                     if nfe.procNFe and consulta:
+=======
+                    if nfe.procNFe:
+>>>>>>> [REF] Consulta de nf-e já enviada
                         procNFe = nfe.procNFe
                         self.grava_xml(procNFe.NFe)
                         self.grava_xml_autorizacao(procNFe)

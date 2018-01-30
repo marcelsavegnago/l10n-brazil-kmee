@@ -119,9 +119,9 @@ class PurchaseOrder(SpedCalculoImpostoProdutoServico, models.Model):
     @api.depends('documento_ids.situacao_fiscal')
     def _compute_quantidade_documentos_fiscais(self):
         for purchase in self:
-            if not self.id:
+            if not purchase.id:
                 continue
-            purchase.quantidade_documentos = len(self.documento_ids)
+            purchase.quantidade_documentos = len(purchase.documento_ids)
 
     @api.depends('order_line.documento_item_ids.documento_id')
     def _compute_invoice(self):

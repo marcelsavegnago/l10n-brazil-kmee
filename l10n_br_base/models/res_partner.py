@@ -54,6 +54,10 @@ class ResPartner(models.Model):
 
     cnpj_cpf = fields.Char('CNPJ/CPF', size=18)
 
+    whatsapp = fields.Boolean('Whatsapp')
+
+    gender = fields.Char('Sexo', size=1)
+
     inscr_est = fields.Char('Inscr. Estadual/RG', size=16)
 
     inscr_mun = fields.Char('Inscr. Municipal', size=18)

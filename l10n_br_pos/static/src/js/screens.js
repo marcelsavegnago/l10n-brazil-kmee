@@ -263,6 +263,12 @@ function l10n_br_pos_screens(instance, module) {
                         $('.client-address-city').val(result.l10n_br_city)
                     });
                 }
+                else{
+                    self.pos_widget.screen_selector.show_popup('error',{
+                        message: _t('Erro no campo!'),
+                        comment:_t('CEP inválido!')
+                    });
+                }
             });
         },
 

@@ -28,3 +28,4 @@ class L10nBrZip(models.Model, WebServiceClient):
                 'l10n_br_city': object.l10n_br_city_id.id, 'district': object.district, 'street': object.street,
                 'zip':object.zip}
         return json
+

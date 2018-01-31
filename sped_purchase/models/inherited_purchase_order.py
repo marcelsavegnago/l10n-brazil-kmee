@@ -13,6 +13,11 @@ from odoo.addons.sped_imposto.models.sped_calculo_imposto_produto_servico \
 class PurchaseOrder(SpedCalculoImpostoProdutoServico, models.Model):
     _inherit = 'purchase.order'
 
+    name = fields.Char(
+        string='Order Reference',
+        default='Novo',
+    )
+
     item_ids = fields.One2many(
         comodel_name='purchase.order.line',
         inverse_name='order_id',

@@ -27,6 +27,7 @@ _logger = logging.getLogger(__name__)
 class ConsultaDFe(models.Model):
     _name = b'sped.consulta.dfe'
     _description = 'Consulta DFe'
+    _rec_name = 'display_name'
 
     empresa_id = fields.Many2one(
         comodel_name='sped.empresa',
@@ -67,6 +68,19 @@ class ConsultaDFe(models.Model):
         help='Se ativo, permite que novas manifestações sejam buscadas '
              'automaticamente conforme configuração do cron',
     )
+
+    display_name = fields.Char(
+        compute='compute_display_name',
+        store=True,
+        string='Display Name',
+    )
+
+    @api.multi
+    @api.depends('empresa_id')
+    def compute_display_name(self):
+        for consulta in self:
+            consulta.display_name = \
+                consulta.empresa_id.razao_social or consulta.empresa_id.id
 
     @api.multi
     def action_gerencia_manifestacoes(self):

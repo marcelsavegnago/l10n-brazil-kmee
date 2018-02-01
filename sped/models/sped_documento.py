@@ -166,8 +166,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     # Campos da operação
     #
     regime_tributario = fields.Selection(
-        selection=REGIME_TRIBUTARIO,
-        string='Regime tributário',
+        related=False,
     )
     ind_forma_pagamento = fields.Selection(
         selection=IND_FORMA_PAGAMENTO,

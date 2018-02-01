@@ -105,7 +105,9 @@
                                 <field name="operacao_entrada_id"/>
                                 <field name="operacao_devolucao_id"/>
                             </group>
-                            <field name="operacao_subsequente_ids" context="{'tree_view_ref': 'sped_imposto.sped_operacao_subsequente_tree_view'}"/>
+                            <group name="sub_grupo_operacoes_subsequentes" string="Operações Subsequentes">
+                                <field name="operacao_subsequente_ids" context="{'tree_view_ref': 'sped_imposto.sped_operacao_subsequente_tree_view'}" nolabel="1"/>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>

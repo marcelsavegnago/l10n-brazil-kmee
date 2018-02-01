@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Copyright 2017 Taŭga Tecnologia - Aristides Caldeira <ari.caldeira@tauga.com.br>
+    Copyright 2018 KMEE INFORMATICA LTDA
     License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 -->
 <odoo>
@@ -14,8 +15,10 @@
             <group name="parametros" position="inside">
                 <field name="enviar_pelo_estoque" attrs="{'invisible': ['!', ('modelo', 'in', ['55', '65', '59'])]}" />
             </group>
-            <group name="sub_grupo_operacoes" position="inside">
-                <field name="stock_picking_type_id" attrs="{'invisible': ['!', ('modelo', 'in', ['55', '65', '59', '2D'])]}" options="{'no_create': True, 'no_open': True}" />
+            <group name="sub_grupo_operacoes" position="after">
+                <group name="sub_grupo_operacoes_estoque" string="Operações de estoque">
+                    <field name="stock_picking_type_ids" nolabel="1"/>
+                </group>
             </group>
         </field>
     </record>

@@ -10,11 +10,12 @@ from odoo import api, fields, models, _
 class SpedStockSpedOperacao(models.Model):
     _inherit = 'sped.operacao'
 
-    stock_picking_type_id = fields.Many2one(
-        comodel_name='stock.picking.type',
+    stock_picking_type_ids = fields.Many2many(
         string='Tipo de Operação de Estoque',
-        domain="[('default_location_src_id', '!=', False)," + \
-               " ('default_location_dest_id', '!=', False)]"
+        comodel_name='stock.picking.type',
+        relation='stock_picking_type_operacao_rel',
+        domain="""[('default_location_src_id', '!=', False),
+            ('default_location_dest_id', '!=', False)]"""
     )
     enviar_pelo_estoque = fields.Boolean(
         string='Autorizar a partir do estoque?',

@@ -163,6 +163,10 @@ class SpedManifestacaoDestinatario(models.Model):
         comodel_name='sped.consulta.dfe',
         readonly=True,
     )
+    operacao_id = fields.Many2one(
+        string='Operação',
+        comodel_name='sped.operacao',
+    )
 
     @api.multi
     def cria_wizard_gerenciamento(self, state=''):
@@ -372,7 +376,8 @@ class SpedManifestacaoDestinatario(models.Model):
                 nfe = objectify.fromstring(nfe_result['nfe'])
                 documento = self.env['sped.documento'].new()
                 documento.modelo = nfe.NFe.infNFe.ide.mod.text
-                dados = documento.le_nfe(xml=nfe_result['nfe'])
+                dados = documento.le_nfe(xml=nfe_result['nfe'],
+                                         operacao_id=self.operacao_id)
                 record.documento_id = dados
                 return {
                     'name': _("Associar Pedido de Compras"),

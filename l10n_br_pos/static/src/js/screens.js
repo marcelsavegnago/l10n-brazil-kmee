@@ -253,13 +253,13 @@ function l10n_br_pos_screens(instance, module) {
         saved_client_details: function(partner_id){
             var self = this;
             this.reload_partners().then(function(){
-                var partner = self.pos.db.get_partner_by_id(partner_id);
+                    var partner = self.pos.db.get_partner_by_id(partner_id);
                 if (partner) {
                     partner.birthdate = $('.birthdate').val()
                     partner.street2 = $('.client-address-street2').val()
                     partner.gender = $('.gender').val()
-                    partner.whatsapp = new Boolean($('.whatsapp').val())
-                    partner.opt_out = new Boolean($('.opt_out').val())
+                    partner.whatsapp = 'sim' === $('.whatsapp').val()
+                    partner.opt_out = 'sim' === $('.opt_out').val()
 
                     self.new_client = partner;
                     self.toggle_save_button();

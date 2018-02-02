@@ -225,16 +225,12 @@
                 <span class='label'>Whatsapp?</span>
                 <select class='detail whatsapp' name="whatsapp" style='width:10%;'>
                     <t t-if="partner.whatsapp">
-                        <option value="f" selected="selected">Sim</option>
-                        <option value="f" >Não</option>
-                    </t>
-                    <t t-if="partner.whatsapp">
-                        <option value="f">Sim</option>
-                        <option value="f" selected="selected">Não</option>
+                        <option value="sim" selected="selected">Sim</option>
+                        <option value="nao" >Não</option>
                     </t>
                     <t t-if="!partner.whatsapp">
-                        <option value="f" selected="selected">Sim</option>
-                        <option value="f" >Não</option>
+                        <option value="sim" >Sim</option>
+                        <option value="nao" selected="selected">Não</option>
                     </t>
                 </select>
             </div>
@@ -323,14 +319,9 @@
             <div class="client-detail">
                 <span class='label'>Publicidade</span>
                 <select class='detail opt_out' name="opt_out">
-                    <t t-if="partner.opt_out">
-                        <option value="true" selected="selected">Sim</option>
-                        <option value="false">Não</option>
-                    </t>
-                    <t t-if="!partner.opt_out">
-                        <option value="true">Sim</option>
-                        <option value="false" selected="selected">Não</option>
-                    </t>
+                        <option value="sim" selected="selected">Sim</option>
+                        <option value="nao">Não</option>
+
                 </select>
             </div>
         </t>

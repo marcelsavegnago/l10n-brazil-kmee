@@ -55,8 +55,63 @@
             </div>-->
         </t>
     </t>
+
     <t t-extend="ClientDetails">
-        <t t-jquery="div.client-details-left > div.client-detail:has(.client-address)" t-operation="prepend">
+        <t t-jquery="div.client-details-left > div.client-detail:has(.client-address-zip)" t-operation="replace">
+        </t>
+    </t>
+    <t t-extend="ClientDetails">
+        <t t-jquery="div.client-details-left > div.client-detail:has(.client-cnpj)" t-operation="after">
+            <div class='client-detail'>
+                <span class='label'>CEP</span>
+                <span class='detail client-address-zip'><t t-esc='partner.zip'/></span>
+            </div>
+        </t>
+    </t>
+
+    <t t-extend="ClientDetails">
+        <t t-jquery="div.client-details-left > div.client-detail:has(.client-phone)" t-operation="replace">
+        </t>
+    </t>
+    <t t-extend="ClientDetails">
+        <t t-jquery="div.client-details-left > div.client-detail:has(.client-address-zip)" t-operation="after">
+            <div class='client-detail'>
+                <span class='label'>Telefone</span>
+                <span class='detail client-phone'><t t-esc='partner.phone' /></span>
+                <span class='label'>Whatsapp?</span>
+                <t t-if="partner.whatsapp">
+                    <span>Sim</span>
+                </t>
+                <t t-if="!partner.whatsapp">
+                    <span>Não</span>
+                </t>
+            </div>
+        </t>
+    </t>
+
+    <t t-extend="ClientDetails">
+        <t t-jquery="div.client-details-right > div.client-detail:has(.client-email)" t-operation="replace">
+        </t>
+    </t>
+
+    <t t-extend="ClientDetails">odoo
+        <t t-jquery="div.client-details-left > div.client-detail:has(.client-address)" t-operation="replace" />
+    </t>
+    <t t-extend="ClientDetails">
+        <t t-jquery="div.client-details-left > div.client-detail:has(.client-email)" t-operation="after">
+            <div class='client-detail'>
+                <span class='label'>Endereço</span>
+                <span class='detail client-address-street'><t t-esc='partner.street' /></span>
+            </div>
+        </t>
+    </t>
+
+
+    <t t-extend="ClientDetails">
+        <t t-jquery="div.client-details-left > div.client-detail:has(.client-address-number)" t-operation="replace" />
+    </t>
+    <t t-extend="ClientDetails">
+        <t t-jquery="div.client-details-left > div.client-detail:has(.client-address-street)" t-operation="after">
             <div class='client-detail'>
                 <span class='label'>Numero:</span>
                 <span class='detail client-address-number'><t t-esc='partner.number' /></span>
@@ -67,7 +122,7 @@
         <t t-jquery="div.client-details-left > div.client-detail:has(.client-address-number)" t-operation="after">
             <div class='client-detail'>
                 <span class='label'>Comp.</span>
-                <span class='detail street2'><t t-esc='partner.street2' /></span>
+                <span class='detail client-address-street2'><t t-esc='partner.street2' /></span>
             </div>
         </t>
     </t>
@@ -76,14 +131,16 @@
             <button class="buscar-produto-backend mode-button" style="display:inline-block; text-align:left; float:right; margin:10px;">Buscar +</button>
         </t>
     </t>
+
     <t t-extend="ClientDetails">
-        <t t-jquery="div.client-details-left > div.client-detail:has(.client-address-number)" t-operation="after">
+        <t t-jquery="div.client-details-left > div.client-detail:has(.client-address-street2)" t-operation="after">
             <div class='client-detail'>
                 <span class='label'>Pais:</span>
                 <span class='detail client-country'><t t-esc='partner.country_id' /></span>
             </div>
         </t>
     </t>
+
     <t t-extend="ClientDetails">
         <t t-jquery="div.client-details-left > div.client-detail:has(.client-country)" t-operation="after">
             <div class='client-detail'>
@@ -94,10 +151,20 @@
     </t>
 
     <t t-extend="ClientDetails">
+        <t t-jquery="div.client-details-left > div.client-detail:has(.client-state)" t-operation="after">
+            <div class='client-detail'>
+                <span class='label'>Cidade:</span>
+                <span class='detail client-city'><t t-esc='partner.l10n_br_city_id' /></span>
+
+            </div>
+        </t>
+    </t>
+
+    <t t-extend="ClientDetails">
         <t t-jquery="div.client-details-right" t-operation="prepend">
             <div class='client-detail'>
                 <span class='label'>Aniversário</span>
-                <span class='detail birthdate'><t t-esc='partner.birthdate' /></span>
+                <span class='detail birthdate'><t t-esc="partner.birthdate"/></span>
             </div>
         </t>
     </t>
@@ -106,39 +173,32 @@
         <t t-jquery="div.client-details-right > div.client-detail:has(.birthdate)" t-operation="after">
             <div class='client-detail'>
                 <span class='label'>Sexo</span>
-                <t t-if="partner.gender == False">
-                    <span value="Feminino" />
+                <t t-if="partner.gender == 'f'">
+                    <span class="detail gender">Feminino</span>
                 </t>
-                <t t-if="False == False">
-                    <span value="Masculino" />
+                <t t-if="partner.gender == 'm'">
+                    <span class="detail gender">Masculino</span>
+                </t>
+                <t t-if="!partner.gender">
+                    <span class="detail gender"/>
                 </t>
             </div>
         </t>
     </t>
 
     <t t-extend="ClientDetails">
-        <t t-jquery="div.client-details-left > div.client-detail:has(.client-address-zip)" t-operation="after">
-            <div class='client-detail'>
-                <span class='label'>Telefone</span>
-                <span class='detail client-phone'><t t-esc='partner.client-phone' /></span>
-                <span class='label'>Whatsapp?</span>
-                <span class='detail whatsapp'><t t-esc='partner.whatsapp' /></span>
+        <t t-jquery="div.client-details-right > div.client-detail:has(.gender)" t-operation="after">
+            <div class="client-detail">
+                <span class='label'>Publicidade</span>
+                    <t t-if="partner.opt_out">
+                        <span class="detail opt_out">Sim</span>
+                    </t>
+                    <t t-if="!partner.opt_out">
+                        <span class="detail opt_out">Não</span>
+                    </t>
             </div>
         </t>
     </t>
-
-    <t t-extend="ClientDetails">
-        <t t-jquery="div.client-details-left > div.client-detail:has(.client-state)" t-operation="after">
-            <div class='client-detail'>
-                <span class='label'>Cidade:</span>
-                <span class='detail client-city'><t t-esc='partner.l10n_br_city_id' /></span>
-            </div>
-        </t>
-    </t>
-
-
-
-
 
     <t t-extend="ClientDetailsEdit">
         <t t-jquery="div.client-details-left > div.client-detail:has(.client-address-zip)" t-operation="replace">
@@ -164,8 +224,18 @@
                 <input class='detail client-phone'  name='phone'    type='tel'      t-att-value='partner.phone || ""'></input>
                 <span class='label'>Whatsapp?</span>
                 <select class='detail whatsapp' name="whatsapp" style='width:10%;'>
-                    <option value="t">Sim</option>
-                    <option value="f">Não</option>
+                    <t t-if="partner.whatsapp">
+                        <option value="f" selected="selected">Sim</option>
+                        <option value="f" >Não</option>
+                    </t>
+                    <t t-if="partner.whatsapp">
+                        <option value="f">Sim</option>
+                        <option value="f" selected="selected">Não</option>
+                    </t>
+                    <t t-if="!partner.whatsapp">
+                        <option value="f" selected="selected">Sim</option>
+                        <option value="f" >Não</option>
+                    </t>
                 </select>
             </div>
         </t>
@@ -190,8 +260,8 @@
     <t t-extend="ClientDetailsEdit">
         <t t-jquery="div.client-details-left > div.client-detail:has(.client-email)" t-operation="after">
             <div class='client-detail'>
-                <span class='label'>Rua</span>
-                <input class='detail client-address-street' name='street' t-att-value='partner.street' placeholder='Rua'></input>
+                <span class='label'>Endereço</span>
+                <input class='detail client-address-street' name='street' t-att-value='partner.street' placeholder='Endereço'></input>
             </div>
         </t>
     </t>
@@ -212,7 +282,7 @@
         <t t-jquery="div.client-details-left > div.client-detail:has(.client-address-number)" t-operation="after">
             <div class='client-detail'>
                 <span class='label'>Comp.</span>
-                <input class='detail street2' name='street2' t-att-value='partner.street2' placeholder='Complemento'/>
+                <input class='detail client-address-street2' name='street2' t-att-value='partner.street2' placeholder='Complemento'/>
             </div>
         </t>
     </t>
@@ -220,7 +290,7 @@
     <t t-extend="ClientDetailsEdit">
         <t t-jquery="div.client-details-right" t-operation="prepend">
             <div class='client-detail'>
-                <span class='label'>Aniversário</span>
+                <span class='label'>Aniversario</span>
                 <input type="date" class='detail birthdate' name='birthdate' t-att-value='partner.birthdate' placeholder='Aniversário'/>
             </div>
         </t>
@@ -231,8 +301,18 @@
             <div class='client-detail'>
                 <span class='label'>Sexo</span>
                 <select class='detail gender' name="gender">
-                    <option value="f" selected="selected">Feminino</option>
-                    <option value="m">Masculino</option>
+                    <t t-if="partner.gender == 'm' ">
+                        <option value="f" >Feminino</option>
+                        <option value="m" selected="selected">Masculino</option>
+                    </t>
+                    <t t-if="partner.gender == 'f'">
+                        <option value="f" selected="selected">Feminino</option>
+                        <option value="m" >Masculino</option>
+                    </t>
+                    <t t-if="!partner.gender">
+                        <option value="f" selected="selected">Feminino</option>
+                        <option value="m" >Masculino</option>
+                    </t>
                 </select>
             </div>
         </t>
@@ -243,8 +323,14 @@
             <div class="client-detail">
                 <span class='label'>Publicidade</span>
                 <select class='detail opt_out' name="opt_out">
-                    <option selected="selected" value="t">Sim</option>
-                    <option value="f">Não</option>
+                    <t t-if="partner.opt_out">
+                        <option value="true" selected="selected">Sim</option>
+                        <option value="false">Não</option>
+                    </t>
+                    <t t-if="!partner.opt_out">
+                        <option value="true">Sim</option>
+                        <option value="false" selected="selected">Não</option>
+                    </t>
                 </select>
             </div>
         </t>
@@ -267,13 +353,21 @@
         <t t-jquery="div.client-details-right" t-operation="prepend">
             <!--<div class='client-detail'>
                 <span class='label'>IM:</span>
-                <input class='detail client-im'
-                 name='inscr_mun' t-att-value='partner.inscr_mun' placeholder="IM"></input>
+                <input class='detail client-im' name='inscr_mun' t-att-value='partner.inscr_mun' placeholder="IM"></input>
             </div>-->
             <!--<div class='client-detail'>
                 <span class='label'>Suframa:</span>
                 <input class='detail client-suframa' name='suframa' t-att-value='partner.suframa' placeholder="Suframa"></input>
             </div>-->
+        </t>
+    </t>
+
+    <t t-extend="ClientDetailsEdit">
+        <t t-jquery="div.client-details-left > div.client-detail:has(.client-address-zip)" t-operation="inner">
+            <div class='client-detail'>
+                <span class='label'>Codigo Postal</span>
+                <input class='detail client-address-zip' name='zip' t-att-value='partner.zip' placeholder='CEP'></input>
+            </div>
         </t>
     </t>
 

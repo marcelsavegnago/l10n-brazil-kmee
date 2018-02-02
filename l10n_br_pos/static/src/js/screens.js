@@ -238,7 +238,7 @@ function l10n_br_pos_screens(instance, module) {
                 });
             } else {
                 var cliente_cpf = fields.cnpj_cpf;
-                if (self.pos_widget.order_widget.verificar_cpf_cnpj(cliente_cpf)){
+                if (self.pos_widget.order_widget.verificar_cpf_cnpj(cliente_cpf.replace(/[^\d]+/g,''))){
                     this._super(partner);
                 } else {
                    this.pos_widget.screen_selector.show_popup('error',{
@@ -247,6 +247,29 @@ function l10n_br_pos_screens(instance, module) {
                     });
                 }
             }
+        },
+
+        // what happens when we've just pushed modifications for a partner of id partner_id
+        saved_client_details: function(partner_id){
+            var self = this;
+            this.reload_partners().then(function(){
+                var partner = self.pos.db.get_partner_by_id(partner_id);
+                if (partner) {
+                    partner.birthdate = $('.birthdate').val()
+                    partner.street2 = $('.client-address-street2').val()
+                    partner.gender = $('.gender').val()
+                    partner.whatsapp = new Boolean($('.whatsapp').val())
+                    partner.opt_out = new Boolean($('.opt_out').val())
+
+                    self.new_client = partner;
+                    self.toggle_save_button();
+                    self.display_client_details('show',partner);
+                } else {
+                    // should never happen, because create_from_ui must return the id of the partner it
+                    // has created, and reload_partner() must have loaded the newly created partner.
+                    self.display_client_details('hide');
+                }
+            });
         },
 
         edit_client_details: function(partner) {
@@ -568,6 +591,7 @@ function l10n_br_pos_screens(instance, module) {
             }
         }
     });
+
 
     module.PosOrderListScreenWidget = module.ScreenWidget.extend({
         template: 'PosOrderListScreenWidget',

@@ -349,6 +349,9 @@ class SpedDocumento(models.Model):
             # dados['data_hora_entrada_saida'] = False
             emitente.eh_fornecedor = True
 
+            dados['operacao_id'] = \
+                operacao_id.id
+
         #
         # Natureza da operação só pode ser importada no caso de emissão própria
         #
@@ -371,7 +374,8 @@ class SpedDocumento(models.Model):
                 })
 
             dados['natureza_operacao_id'] = natureza.id
-            dados['operacao_id'] = self._busca_operacao(natureza)
+            dados['operacao_id'] = \
+                operacao_id.id or self._busca_operacao(natureza)
 
         return True
 

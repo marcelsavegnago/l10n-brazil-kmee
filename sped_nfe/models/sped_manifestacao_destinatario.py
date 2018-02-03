@@ -36,6 +36,8 @@ class SpedManifestacaoDestinatario(models.Model):
     _name = b'sped.manifestacao.destinatario'
     _description = 'Manifestação do Destinatário'
 
+    _order = 'nsu'
+
     @api.multi
     def name_get(self):
         return [(rec.id,
@@ -376,8 +378,11 @@ class SpedManifestacaoDestinatario(models.Model):
                 nfe = objectify.fromstring(nfe_result['nfe'])
                 documento = self.env['sped.documento'].new()
                 documento.modelo = nfe.NFe.infNFe.ide.mod.text
-                dados = documento.le_nfe(xml=nfe_result['nfe'],
-                                         operacao_id=self.operacao_id)
+                dados = documento.le_nfe(
+                    xml=nfe_result['nfe'],
+                    operacao_id=record.operacao_id
+                )
+                dados.manitestacao_id = self
                 record.documento_id = dados
                 return {
                     'name': _("Associar Pedido de Compras"),

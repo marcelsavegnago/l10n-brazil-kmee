@@ -146,9 +146,9 @@ class SpedDocumento(models.Model):
 
         stock_picking_type_ids = self.operacao_id.stock_picking_type_ids
 
-        stock_warehouse_id = self.env['stock.warehouse'].search(
-            ('company_id', '=', self.empresa_id.company_id.id),
-        )
+        stock_warehouse_id = self.env['stock.warehouse'].search([
+                ('company_id', '=', self.empresa_id.company_id.id),
+        ])
 
         if stock_warehouse_id:
             stock_picking_type_ids = stock_picking_type_ids.filtered(
@@ -191,7 +191,7 @@ class SpedDocumento(models.Model):
                     'name': "[" + line.produto_id.codigo + "] " +
                             line.produto_id.nome,
                     'date_expected': documento.data_hora_entrada_saida,
-                    'location_id': doc_picking_type.default_location_src_id.id,
+                    'location_id': doc_picking_type.default_location_dest_id.id,
                     'location_dest_id':
                         doc_picking_type.default_location_dest_id.id,
                 }]
@@ -204,7 +204,7 @@ class SpedDocumento(models.Model):
                 'company_id': documento.empresa_id.company_id.id,
                 'empresa_id': documento.empresa_id.id,
                 'picking_type_id': doc_picking_type.id,
-                'location_id': doc_picking_type.default_location_src_id.id,
+                'location_id': doc_picking_type.default_location_dest_id.id,
                 'location_dest_id':
                     doc_picking_type.default_location_dest_id.id,
                 'move_lines': move_lines,

@@ -6,7 +6,6 @@
 #
 from odoo import api, fields, models, _
 
-from .base_participante import BaseParticipante
 
 class SpedParticipante(models.Model):
     _name = b'sped.participante'

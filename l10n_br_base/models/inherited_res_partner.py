@@ -6,11 +6,11 @@
 #
 
 from __future__ import division, print_function, unicode_literals
-from .sped_participante import BaseParticipante
+from .base_participante import Participante
 from odoo import api, fields, models
 
 
-class ResPartner(BaseParticipante, models.Model):
+class ResPartner(Participante, models.Model):
     _inherit = 'res.partner'
     _rec_name = 'nome'
     _order = 'nome, cnpj_cpf'

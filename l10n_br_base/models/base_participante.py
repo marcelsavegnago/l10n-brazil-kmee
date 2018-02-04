@@ -6,7 +6,6 @@
 
 from __future__ import division, print_function, unicode_literals
 
-
 from odoo import api, fields, models, _
 from .sped_base import SpedBase
 from odoo.exceptions import ValidationError
@@ -32,7 +31,6 @@ except (ImportError, IOError) as err:
 
 class BaseParticipante(SpedBase):
     _abstract = False
-
     codigo = fields.Char(
         string='Código',
         size=60,
@@ -43,6 +41,92 @@ class BaseParticipante(SpedBase):
         size=60,
         index=True
     )
+    endereco = fields.Char(
+        string='Endereço',
+        size=60
+    )
+    numero = fields.Char(
+        string='Número',
+        size=60
+    )
+    complemento = fields.Char(
+        string='Complemento',
+        size=60
+    )
+    bairro = fields.Char(
+        string='Bairro',
+        size=60
+    )
+    municipio_id = fields.Many2one(
+        comodel_name='sped.municipio',
+        string='Município',
+        ondelete='restrict'
+    )
+    cidade = fields.Char(
+        string='Município',
+        related='municipio_id.nome',
+        store=True,
+        index=True
+    )
+    estado = fields.Char(
+        string='Estado',
+        related='municipio_id.estado',
+        store=True,
+        index=True
+    )
+    cep = fields.Char(
+        string='CEP',
+        size=9
+    )
+    endereco_completo = fields.Char(
+        string='Endereço',
+        compute='_compute_endereco_completo',
+    )
+    fone = fields.Char(
+        string='Fone',
+        size=18
+    )
+    fone_comercial = fields.Char(
+        string='Fone Comercial',
+        size=18
+    )
+    celular = fields.Char(
+        string='Celular',
+        size=18
+    )
+    email = fields.Char(
+        string='Email',
+        size=60
+    )
+
+
+class Pessoa(BaseParticipante):
+    _abstract = False
+
+    cpf = fields.Char(
+        string='CPF',
+        size=15,
+        index=True,
+    )
+    cpf_numero = fields.Char(
+        string='CNPJ/CPF (somente números)',
+        size=14,
+        compute='_compute_cpf_numero',
+        store=True,
+        index=True,
+    )
+
+    @api.depends('cpf')
+    def _compute_cpf_numero(self):
+        for record in self:
+            if not record.cpf:
+                continue
+            record.cnpj_cpf_numero = limpa_formatacao(record.cnpj_cpf)
+
+
+class Participante(BaseParticipante):
+    _abstract = False
+
     eh_orgao_publico = fields.Boolean(
         string='É órgão público?',
     )
@@ -92,7 +176,6 @@ class BaseParticipante(SpedBase):
     eh_vendedor = fields.Boolean(
         string='É vendedor/representante?'
     )
-
     cnpj_cpf = fields.Char(
         string='CNPJ/CPF',
         size=18,
@@ -131,47 +214,7 @@ class BaseParticipante(SpedBase):
         size=60,
         index=True
     )
-    endereco = fields.Char(
-        string='Endereço',
-        size=60
-    )
-    numero = fields.Char(
-        string='Número',
-        size=60
-    )
-    complemento = fields.Char(
-        string='Complemento',
-        size=60
-    )
-    bairro = fields.Char(
-        string='Bairro',
-        size=60
-    )
-    municipio_id = fields.Many2one(
-        comodel_name='sped.municipio',
-        string='Município',
-        ondelete='restrict'
-    )
-    cidade = fields.Char(
-        string='Município',
-        related='municipio_id.nome',
-        store=True,
-        index=True
-    )
-    estado = fields.Char(
-        string='Estado',
-        related='municipio_id.estado',
-        store=True,
-        index=True
-    )
-    cep = fields.Char(
-        string='CEP',
-        size=9
-    )
-    endereco_completo = fields.Char(
-        string='Endereço',
-        compute='_compute_endereco_completo',
-    )
+
     endereco_ids = fields.One2many(
         comodel_name='sped.endereco',
         inverse_name='participante_id',
@@ -180,22 +223,6 @@ class BaseParticipante(SpedBase):
     #
     # Telefone e email para a emissão da NF-e
     #
-    fone = fields.Char(
-        string='Fone',
-        size=18
-    )
-    fone_comercial = fields.Char(
-        string='Fone Comercial',
-        size=18
-    )
-    celular = fields.Char(
-        string='Celular',
-        size=18
-    )
-    email = fields.Char(
-        string='Email',
-        size=60
-    )
     site = fields.Char(
         string='Site',
         size=60
@@ -210,7 +237,7 @@ class BaseParticipante(SpedBase):
     contribuinte = fields.Selection(
         selection=INDICADOR_IE_DESTINATARIO,
         string='Contribuinte',
-        required = True ,
+        required=True,
     )
     ie = fields.Char(
         string='Inscrição estadual',
@@ -274,7 +301,6 @@ class BaseParticipante(SpedBase):
         comodel_name='Código ANS',
         size=6
     )
-    #  euro campo
     fone_whatsapp = fields.Char(
         string='WhatsApp',
         size=18
@@ -305,12 +331,12 @@ class BaseParticipante(SpedBase):
     #
     # Para o faturamento
     #
-    #representante_id = fields.Many2one(
-        #comodel_name='sped.participante',
-        #string='Representante',
-        #ondelete='restrict',
-        #domain=[('eh_vendedor', '=', True)],
-    #)
+    # representante_id = fields.Many2one(
+    # comodel_name='sped.participante',
+    # string='Representante',
+    # ondelete='restrict',
+    # domain=[('eh_vendedor', '=', True)],
+    # )
     transportadora_id = fields.Many2one(
         comodel_name='sped.participante',
         string='Transportadora',
@@ -372,8 +398,8 @@ class BaseParticipante(SpedBase):
             participante.exige_cnpj_cpf = False
 
             if (participante.endereco or participante.numero or
-                participante.complemento or
-                participante.bairro or participante.cep):
+                    participante.complemento or
+                    participante.bairro or participante.cep):
                 participante.exige_endereco = True
             else:
                 participante.exige_endereco = False
@@ -452,9 +478,9 @@ class BaseParticipante(SpedBase):
             participantes = self.search(args, limit=limit)
             return participantes.name_get()
 
-        return super(BaseParticipante, self).name_search(name=name, args=args,
-                                                         operator=operator,
-                                                         limit=limit)
+        return super(Participante, self).name_search(name=name, args=args,
+                                                     operator=operator,
+                                                     limit=limit)
 
     def _valida_cnpj_cpf(self):
         self.ensure_one()
@@ -597,7 +623,7 @@ class BaseParticipante(SpedBase):
         self.ensure_one()
 
         if not valida_inscricao_estadual(self.ie,
-            self.municipio_id.estado_id.uf):
+                                         self.municipio_id.estado_id.uf):
             raise ValidationError(_('Inscrição estadual inválida!'))
 
         valores['ie'] = \
@@ -631,7 +657,7 @@ class BaseParticipante(SpedBase):
                     INDICADOR_IE_DESTINATARIO_NAO_CONTRIBUINTE
 
             elif self.ie.strip().upper()[:6] == 'ISENTO' or \
-                self.ie.strip().upper()[:6] == 'ISENTA':
+                            self.ie.strip().upper()[:6] == 'ISENTA':
                 valores['contribuinte'] = INDICADOR_IE_DESTINATARIO_ISENTO
 
             else:
@@ -646,8 +672,8 @@ class BaseParticipante(SpedBase):
 
         elif self.ie:
             if self.contribuinte == INDICADOR_IE_DESTINATARIO_ISENTO or \
-                self.contribuinte == \
-                    INDICADOR_IE_DESTINATARIO_NAO_CONTRIBUINTE:
+                            self.contribuinte == \
+                            INDICADOR_IE_DESTINATARIO_NAO_CONTRIBUINTE:
                 valores['ie'] = ''
             else:
                 if not self.municipio_id:
@@ -656,7 +682,7 @@ class BaseParticipante(SpedBase):
                         informar o município!'''))
 
                 if self.ie.strip().upper()[:6] == 'ISENTO' or \
-                    self.ie.strip().upper()[:6] == 'ISENTA':
+                                self.ie.strip().upper()[:6] == 'ISENTA':
                     raise ValidationError(
                         _('Inscrição estadual inválida para contribuinte!'))
 
@@ -681,7 +707,7 @@ class BaseParticipante(SpedBase):
         valores = {}
         res = {'value': valores}
         # validacao para dados de demonstracao do core
-        if self.email and 'yourcompany' in  self.email:
+        if self.email and 'yourcompany' in self.email:
             return res
 
         if 'valida_email' in self.env.context:
@@ -746,7 +772,7 @@ class BaseParticipante(SpedBase):
                 'force_email'):
             view_id = self.env.ref(
                 'sped.cadastro_participante_cliente_form').id
-        res = super(BaseParticipante, self).fields_view_get(
+        res = super(Participante, self).fields_view_get(
             view_id=view_id, view_type=view_type, toolbar=toolbar,
             submenu=submenu)
         # if view_type == 'form':
@@ -850,7 +876,7 @@ class BaseParticipante(SpedBase):
 
         if not self.partner_id.lang and self.env['res.lang'].search(
                 [('code', '=', 'pt_BR')]):
-                dados['lang'] = 'pt_BR'
+            dados['lang'] = 'pt_BR'
 
         if not self.partner_id.tz:
             dados['tz'] = 'America/Sao_Paulo'
@@ -882,7 +908,7 @@ class BaseParticipante(SpedBase):
         if 'tz' not in dados:
             dados['tz'] = 'America/Sao_Paulo'
 
-        participante = super(BaseParticipante, self).create(dados)
+        participante = super(Participante, self).create(dados)
 
         # imagem = None
         # if not 'image' in dados or not dados['image']:
@@ -909,7 +935,7 @@ class BaseParticipante(SpedBase):
         if not dados:
             return {}
 
-        res = super(BaseParticipante, self).write(dados)
+        res = super(Participante, self).write(dados)
         # self.sync_to_partner()
 
         return res
@@ -945,51 +971,50 @@ class BaseParticipante(SpedBase):
         else:
             valores['eh_usuario'] = False
 
-    #@api.depends('representante_id')
-    #def onchange_representante_id(self):
-        #res = {}
-        #valores = {}
-        #res['value'] = valores
+            # @api.depends('representante_id')
+            # def onchange_representante_id(self):
+            # res = {}
+            # valores = {}
+            # res['value'] = valores
 
-        #if self.representante_id:
-            #valores['user_id'] = self.representante_id.partner_id.id
-        #else:
-            #valores['user_id'] = False
+            # if self.representante_id:
+            # valores['user_id'] = self.representante_id.partner_id.id
+            # else:
+            # valores['user_id'] = False
 
-        #return res
-        # update
-        # res_partner
-        # set
-        # (fone, profissao, celular, eh_funcionario, complemento,
-        #  eh_orgao_publico, eh_grupo, eh_consumidor_final, contribuinte,
-        #  suframa, cei, codigo_ans, cep, rg_data_expedicao, municipio_id,
-        #  eh_usuario, rg_orgao_emissor, eh_cliente, eh_convenio, crc,
-        #  email_nfe, create_date, eh_cooperativa, codigo_sindical,
-        #  razao_social, email, regime_tributario, rntrc, tipo_pessoa, cidade,
-        #  eh_empresa, write_date, eh_transportadora, create_uid,
-        #  transportadora_id, nome, message_last_post, cnpj_cpf, eh_fornecedor,
-        #  fone_comercial, codigo, site, im, rg_numero, ie,
-        #  bairro, numero, eh_sindicato, estado, fantasia, crc_uf,
-        #  pais_nacionalidade_id, endereco, date_localization,
-        #  partner_latitude, partner_longitude, condicao_pagamento_id,
-        #  eh_vendedor,
-        #  cnpj_cpf_raiz, fone_whatsapp, cnpj_cpf_numero) = (
-        # p.fone, p.profissao, p.celular, p.eh_funcionario,
-        # p.complemento, p.eh_orgao_publico, p.eh_grupo, p.eh_consumidor_final,
-        # p.contribuinte, p.suframa, p.cei, p.codigo_ans, p.cep,
-        # p.rg_data_expedicao, p.municipio_id, p.eh_usuario, p.rg_orgao_emissor,
-        # p.eh_cliente, p.eh_convenio, p.crc, p.email_nfe, p.create_date,
-        # p.eh_cooperativa, p.codigo_sindical, p.razao_social,
-        # p.email, p.regime_tributario, p.rntrc, p.tipo_pessoa, p.cidade,
-        # p.eh_empresa, p.write_date, p.eh_transportadora, p.create_uid,
-        # p.transportadora_id, p.nome, p.message_last_post, p.cnpj_cpf,
-        # p.eh_fornecedor, p.fone_comercial, p.codigo,
-        # p.site, p.im, p.rg_numero, p.ie, p.bairro, p.numero, p.eh_sindicato,
-        # p.estado, p.fantasia, p.crc_uf, p.pais_nacionalidade_id, p.endereco,
-        # p.date_localization, p.partner_latitude,p.partner_longitude,
-        # p.condicao_pagamento_id, p.eh_vendedor, p.cnpj_cpf_raiz,
-        # p.fone_whatsapp, p.cnpj_cpf_numero)
-        # from sped_participante p
-        # where
-        # res_partner.id = p.partner_id
-
+            # return res
+            # update
+            # res_partner
+            # set
+            # (fone, profissao, celular, eh_funcionario, complemento,
+            #  eh_orgao_publico, eh_grupo, eh_consumidor_final, contribuinte,
+            #  suframa, cei, codigo_ans, cep, rg_data_expedicao, municipio_id,
+            #  eh_usuario, rg_orgao_emissor, eh_cliente, eh_convenio, crc,
+            #  email_nfe, create_date, eh_cooperativa, codigo_sindical,
+            #  razao_social, email, regime_tributario, rntrc, tipo_pessoa, cidade,
+            #  eh_empresa, write_date, eh_transportadora, create_uid,
+            #  transportadora_id, nome, message_last_post, cnpj_cpf, eh_fornecedor,
+            #  fone_comercial, codigo, site, im, rg_numero, ie,
+            #  bairro, numero, eh_sindicato, estado, fantasia, crc_uf,
+            #  pais_nacionalidade_id, endereco, date_localization,
+            #  partner_latitude, partner_longitude, condicao_pagamento_id,
+            #  eh_vendedor,
+            #  cnpj_cpf_raiz, fone_whatsapp, cnpj_cpf_numero) = (
+            # p.fone, p.profissao, p.celular, p.eh_funcionario,
+            # p.complemento, p.eh_orgao_publico, p.eh_grupo, p.eh_consumidor_final,
+            # p.contribuinte, p.suframa, p.cei, p.codigo_ans, p.cep,
+            # p.rg_data_expedicao, p.municipio_id, p.eh_usuario, p.rg_orgao_emissor,
+            # p.eh_cliente, p.eh_convenio, p.crc, p.email_nfe, p.create_date,
+            # p.eh_cooperativa, p.codigo_sindical, p.razao_social,
+            # p.email, p.regime_tributario, p.rntrc, p.tipo_pessoa, p.cidade,
+            # p.eh_empresa, p.write_date, p.eh_transportadora, p.create_uid,
+            # p.transportadora_id, p.nome, p.message_last_post, p.cnpj_cpf,
+            # p.eh_fornecedor, p.fone_comercial, p.codigo,
+            # p.site, p.im, p.rg_numero, p.ie, p.bairro, p.numero, p.eh_sindicato,
+            # p.estado, p.fantasia, p.crc_uf, p.pais_nacionalidade_id, p.endereco,
+            # p.date_localization, p.partner_latitude,p.partner_longitude,
+            # p.condicao_pagamento_id, p.eh_vendedor, p.cnpj_cpf_raiz,
+            # p.fone_whatsapp, p.cnpj_cpf_numero)
+            # from sped_participante p
+            # where
+            # res_partner.id = p.partner_id

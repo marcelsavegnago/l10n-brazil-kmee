@@ -147,7 +147,7 @@ class ConsultaDFe(models.Model):
         # Coletando os erros para caso seja de importância no futuro
         erros = []
 
-        nfe_ids = []
+        nfe_ids = self.env['sped.documento']
         if not manifestos or isinstance(manifestos,dict):
             manifestos = self.env['sped.manifestacao.destinatario'].\
                 search([('empresa_id','=',self.empresa_id.id)])
@@ -191,14 +191,14 @@ class ConsultaDFe(models.Model):
 
                 manifesto.documento_id = nfe
 
-                nfe_ids.append(nfe)
+                nfe_ids += nfe
 
             else:
                 erros.append(('nfe', False,
                               nfe_result['code'] + ' - ' +
                               nfe_result['message']))
 
-        dados = [nfe.id for nfe in nfe_ids] + self.nfe_importada_ids.ids
+        dados = nfe_ids.ids + self.nfe_importada_ids.ids
 
         self.update({'nfe_importada_ids': [(6, False, dados)]})
 

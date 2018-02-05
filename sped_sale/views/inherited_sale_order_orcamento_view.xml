@@ -47,7 +47,7 @@
                         <newline />
                         <field name="participante_id" string="Cliente"
                                colspan="4"
-                               domain="[('eh_cliente', '=', True)]"
+                               domain="[('customer', '=', True)]"
                                options='{"always_reload": True}'
                                required="1" attrs="{'readonly': [('state', 'not in', ['draft', 'sent'])]}" />
                         <newline />

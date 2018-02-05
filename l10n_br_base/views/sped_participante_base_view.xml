@@ -26,10 +26,6 @@
                     <h1>
                         <field name="nome" default_focus="1" placeholder="Nome (uso interno)" required="1" />
                     </h1>
-                    <h2>
-                        <field name="cnpj_cpf" placeholder="CNPJ ou CPF" attrs="{'required': [('exige_cnpj_cpf', '=', True)]}" />
-                        <field name="tipo_pessoa" invisible="1" />
-                    </h2>
                 </div>
                 <group>
                     <field name="razao_social" string="Nome completo Razão Social" attrs="{'required': [('exige_cnpj_cpf', '=', True)]}" />
@@ -58,38 +54,7 @@
                 </group>
 
                 <notebook>
-                    <page name="inscricoes" string="Inscrições e registros">
-                        <group col="4">
-                            <group col="4" colspan="4">
-                                <separator string="Inscrição Estadual" colspan="4" />
-                                <field name="contribuinte" colspan="2" />
-                                <field name="ie" attrs="{'invisible': [('contribuinte', '!=', '1')], 'required': [('contribuinte', '=', '1')]}" colspan="2" />
-                            </group>
-                            <newline />
-                            <group col="6" colspan="4" attrs="{'invisible': [('tipo_pessoa', '!=', 'F')]}">
-                                <separator string="RG" colspan="6"  />
-                                <field name="rg_numero" string="Número" colspan="2" />
-                                <field name="rg_orgao_emissor" string="Órgão emissor" colspan="2" />
-                                <field name="rg_data_expedicao" string="Data de emissão" colspan="2" />
-                            </group>
-                            <newline />
-                            <group col="4" colspan="4" attrs="{'invisible': [('tipo_pessoa', '=', 'F')]}" >
-                                <separator string="Outras inscrições" colspan="6" />
-                                <separator string="Inscrição Municipal" colspan="2" />
-                                <separator string="CEI" colspan="2" />
-                                <field name="im" colspan="2" nolabel="1" />
-                                <field name="cei" colspan="2" nolabel="1" />
-                                <separator string="SUFRAMA" colspan="2" />
-                                <separator string="RNTRC" colspan="2" />
-                                <field name="suframa" colspan="2" nolabel="1" />
-                                <field name="rntrc" colspan="2" nolabel="1" />
-                                <separator string="CRC" />
-                                <newline />
-                                <field name="crc" colspan="2" />
-                                <field name="crc_uf" colspan="2" options="{'no_open': True, 'no_create': True}" />
-                            </group>
-                        </group>
-                    </page>
+
                     <page name="contatos" string="Contatos e endereços">
                         <field name="endereco_ids" context="{'default_endereco': endereco, 'default_numero': numero, 'default_complemento': complemento, 'default_bairro': bairro, 'default_municipio_id': municipio_id, 'default_cep': cep}" />
                     </page>

@@ -832,23 +832,29 @@ class FinanLancamento(SpedBase, models.Model):
     def _check_amount(self):
         for lancamento in self:
             if lancamento.vr_documento < 0:
-                raise ValidationError('O valor do documento precisa ser maior'
-                    ' do que zero!')
+                raise ValidationError(
+                    'O valor do documento precisa ser maior do que zero!')
             elif lancamento.vr_documento == 0:
-                raise ValidationError('O valor do documento não pode ser'
-                    ' zero!')
+                # Para casos que o pagamento só será validado posteriormente
+                # como é o caso do cheque, e outras formas de pagamento que a
+                # a indicação "quitado_somente_com_data_credito_debito"
+                # estiver marcada como verdadeiro
+                if not lancamento.forma_pagamento_id.\
+                        quitado_somente_com_data_credito_debito:
+                    raise ValidationError(
+                        'O valor do documento não pode ser zero!')
 
             if lancamento.vr_juros < 0:
-                raise ValidationError('O valor dos juros precisa ser maior'
-                    ' do que zero!')
+                raise ValidationError(
+                    'O valor dos juros precisa ser maior do que zero!')
 
             if lancamento.vr_multa < 0:
-                raise ValidationError('O valor da multa precisa ser maior'
-                    ' do que zero!')
+                raise ValidationError(
+                    'O valor da multa precisa ser maior  do que zero!')
 
             if lancamento.vr_outros_creditos < 0:
-                raise ValidationError('O valor de outros créditos precisa ser '
-                    'maior do que zero!')
+                raise ValidationError(
+                    'O valor de outros créditos precisa ser maior do que zero!')
 
             if lancamento.vr_desconto < 0:
                 raise ValidationError('O valor do desconto precisa ser maior'

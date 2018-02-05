@@ -336,8 +336,10 @@ class SpedDocumento(models.Model):
 
                 if dados['entrada_saida'] == ENTRADA_SAIDA_SAIDA:
                     destinatario.eh_cliente = True
+                    destinatario.customer = True
                 else:
                     destinatario.eh_fornecedor = True
+                    destinatario.supplier = True
 
         #
         # É nota de terceiros

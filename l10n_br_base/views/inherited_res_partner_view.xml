@@ -28,16 +28,19 @@
                     <field name="fantasia" attrs="{'invisible': [('tipo_pessoa', '=', 'F')]}" />
                 </group>
             </xpath>
-            <field name="zip" position="replace"/>
-            <field name="street" position="before">
-                <field name="zip" placeholder="99999-999"/>
-            </field>
+            <field name="zip" position="replace" />
             <field name="state_id" position="replace"/>
             <field name="country_id" position="replace"/>
-            <field name="city" position="replace">
+            <field name="city" position="replace"/>
+            <field name="street2" position="replace"/>
+            <field name="street" position="replace">
                 <field name="city" invisible="1"/>
                 <field name="state_id" invisible="1"/>
                 <field name="country_id" invisible="1"/>
+                <field name="zip" placeholder="99999-999" attrs="{'required': [('exige_endereco', '=', True)]}"/>
+                <field name="numero" placeholder="Número ou S/N" attrs="{'required': [('exige_endereco', '=', True)]}" />
+                <field name="street" placeholder="Street..." class="o_address_street" attrs="{'required': [('exige_endereco', '=', True)]}"/>
+                <field name="street2" placeholder="Street 2..." class="o_address_street"/>
                 <field name="bairro" colspan="6" placeholder="District" attrs="{'required': [('exige_endereco', '=', True)]}" />
                 <field name="municipio_id" placeholder="Municipio" options="{'no_open': True, 'no_create': True}" colspan="6" attrs="{'required': [('exige_endereco', '=', True)]}" />
             </field>
@@ -46,7 +49,7 @@
                     <group col="4">
                         <group col="4" colspan="4">
                             <separator string="Inscrição Estadual" colspan="4" />
-                            <field name="contribuinte" colspan="2" />
+                            <field name="contribuinte" colspan="2" required="1"/>
                             <field name="ie" attrs="{'invisible': [('contribuinte', '!=', '1')], 'required': [('contribuinte', '=', '1')]}" colspan="2" />
                         </group>
                         <newline />
@@ -115,4 +118,14 @@
         </field>
     </record>
 
+    <!--<record id="view_res_partner_filter" model="ir.ui.view">-->
+        <!--<field name="name">res.partner.select (in l10n_br_base)</field>-->
+        <!--<field name="model">res.partner</field>-->
+        <!--<field name="inherit_id" ref="base.view_res_partner_filter"/>-->
+        <!--<field name="arch" type="xml">-->
+               <!--<field name="name" position="replace">-->
+                   <!--<field name="name" filter_domain="['|','|','|','|',('display_name','ilike',self),('ref','=',self),('email','ilike',self),('cnpj_cpf_numero', 'ilike', self),('razao_social','ilike',self),('fantasia','ilike',self)]"/>-->
+               <!--</field>-->
+        <!--</field>-->
+    <!--</record>-->
 </odoo>

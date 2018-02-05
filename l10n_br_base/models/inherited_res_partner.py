@@ -12,8 +12,6 @@ from odoo import api, fields, models
 
 class ResPartner(Participante, models.Model):
     _inherit = 'res.partner'
-    _rec_name = 'nome'
-    _order = 'nome, cnpj_cpf'
 
     sped_participante_id = fields.Many2one(
         comodel_name='sped.participante',

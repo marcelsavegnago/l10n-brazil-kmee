@@ -266,3 +266,12 @@ class SaleOrder(SpedCalculoImpostoProdutoServico, models.Model):
                 #documento_servico.envia_nfse()
 
         return documento_produto, documento_servico
+
+    @api.onchange('partner_id')
+    def onchange_partner_participante_id(self):
+        for record in self:
+            if record.partner_id:
+                participante_id = self.env['sped.participante'].search(
+                    [('partner_id', '=', record.partner_id.id)], limit=1
+                )
+                record.participante_id = participante_id

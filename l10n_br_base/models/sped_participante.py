@@ -22,21 +22,12 @@ class SpedParticipante(models.Model):
     @api.multi
     def name_get(self):
         res = []
-
-        for participante in self:
-            nome = participante.nome
-
-            if participante.razao_social:
-                if participante.nome.strip().upper() != \
-                        participante.razao_social.strip().upper():
-                    nome += ' - '
-                    nome += participante.razao_social
-
-            if participante.cnpj_cpf:
-                nome += ' ['
-                nome += participante.cnpj_cpf
-                nome += '] '
-
-            res.append((participante.id, nome))
-
+        for record in self:
+            res.append((record.id, record.partner_id.name_get()[0][1]))
         return res
+
+    @api.model
+    def create(self, vals):
+        participante = super(SpedParticipante, self.with_context(
+            create_sped_participante=True)).create(vals)
+        return participante

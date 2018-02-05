@@ -115,6 +115,10 @@ class Pessoa(BaseParticipante):
         store=True,
         index=True,
     )
+    rg = fields.Char(
+        string='RG',
+        size=14
+    )
 
     @api.depends('cpf')
     def _compute_cpf_numero(self):
@@ -237,7 +241,7 @@ class Participante(BaseParticipante):
     contribuinte = fields.Selection(
         selection=INDICADOR_IE_DESTINATARIO,
         string='Contribuinte',
-        required=True,
+        # required=True,
     )
     ie = fields.Char(
         string='Inscrição estadual',
@@ -434,21 +438,21 @@ class Participante(BaseParticipante):
     def name_get(self):
         res = []
 
-        for participante in self:
-            nome = participante.nome
+        for record in self:
+            nome = record.name
 
-            if participante.razao_social:
-                if participante.nome.strip().upper() != \
-                        participante.razao_social.strip().upper():
+            if record.razao_social:
+                if record.name.strip().upper() != \
+                        record.razao_social.strip().upper():
                     nome += ' - '
-                    nome += participante.razao_social
+                    nome += record.razao_social
 
-            if participante.cnpj_cpf:
+            if record.cnpj_cpf:
                 nome += ' ['
-                nome += participante.cnpj_cpf
+                nome += record.cnpj_cpf
                 nome += '] '
 
-            res.append((participante.id, nome))
+            res.append((record.id, nome))
 
         return res
 
@@ -463,7 +467,7 @@ class Participante(BaseParticipante):
                 '|',
                 ('codigo', '=', name),
                 '|',
-                ('nome', 'ilike', name),
+                ('name', 'ilike', name),
                 '|',
                 ('razao_social', 'ilike', name),
                 '|',
@@ -513,17 +517,17 @@ class Participante(BaseParticipante):
             valores['tipo_pessoa'] = TIPO_PESSOA_ESTRANGEIRO
             valores['regime_tributario'] = REGIME_TRIBUTARIO_LUCRO_PRESUMIDO
 
-        if self.id:
-            cnpj_ids = self.search(
-                [('cnpj_cpf', '=', cnpj_cpf), ('id', '!=', self.id),
-                 ('eh_empresa', '=', False), ('eh_grupo', '=', False)])
-        else:
-            cnpj_ids = self.search(
-                [('cnpj_cpf', '=', cnpj_cpf), ('eh_empresa', '=', False),
-                 ('eh_grupo', '=', False)])
-
-        if len(cnpj_ids) > 0:
-            raise ValidationError(_('CNPJ/CPF já existe no cadastro!'))
+        # if self.id:
+        #     cnpj_ids = self.search(
+        #         [('cnpj_cpf', '=', cnpj_cpf), ('id', '!=', self.id),
+        #          ('eh_empresa', '=', False), ('eh_grupo', '=', False)])
+        # else:
+        #     cnpj_ids = self.search(
+        #         [('cnpj_cpf', '=', cnpj_cpf), ('eh_empresa', '=', False),
+        #          ('eh_grupo', '=', False)])
+        #
+        # if len(cnpj_ids) > 0:
+        #     raise ValidationError(_('CNPJ/CPF já existe no cadastro!'))
 
         self.with_context(valida_cnpj_cpf=True).update(valores)
 
@@ -707,8 +711,11 @@ class Participante(BaseParticipante):
         valores = {}
         res = {'value': valores}
         # validacao para dados de demonstracao do core
-        if self.email and 'yourcompany' in self.email:
-            return res
+        if self.email:
+            if 'yourcompany' in self.email:
+                return res
+            if 'example' in self.email:
+                return res
 
         if 'valida_email' in self.env.context:
             return res
@@ -893,22 +900,22 @@ class Participante(BaseParticipante):
     #
     #         participante.partner_id.write(dados)
 
-    @api.model
-    def create(self, dados):
-        if 'razao_social' in dados and not dados['razao_social']:
-            dados['razao_social'] = dados['nome']
-
-        if not dados.get('name'):
-            dados['name'] = dados.get('nome')
-        #
-        # if not self.partner_id.lang and self.env['res.lang'].search(
-        #         [('code', '=', 'pt_BR')]):
-        #         dados['lang'] = 'pt_BR'
-
-        if 'tz' not in dados:
-            dados['tz'] = 'America/Sao_Paulo'
-
-        participante = super(Participante, self).create(dados)
+    # @api.model
+    # def create(self, dados):
+    #     if 'razao_social' in dados and not dados['razao_social']:
+    #         dados['razao_social'] = dados['nome']
+    #
+    #     if not dados.get('name'):
+    #         dados['name'] = dados.get('nome')
+    #     #
+    #     # if not self.partner_id.lang and self.env['res.lang'].search(
+    #     #         [('code', '=', 'pt_BR')]):
+    #     #         dados['lang'] = 'pt_BR'
+    #
+    #     if 'tz' not in dados:
+    #         dados['tz'] = 'America/Sao_Paulo'
+    #
+    #     participante = super(Participante, self).create(dados)
 
         # imagem = None
         # if not 'image' in dados or not dados['image']:

@@ -703,7 +703,15 @@ class FinanLancamento(SpedBase, models.Model):
                  'vr_saldo', 'vr_quitado_documento', 'data_baixa',
                  'data_credito_debito', 'provisorio')
     def _compute_situacao_divida(self):
+        """
+        
+        :return: 
+        """
         for lancamento in self:
+
+            #
+            # Se for do tipo dívida
+            #
             if lancamento.tipo in FINAN_TIPO_DIVIDA:
                 if lancamento.data_baixa:
                     if lancamento.vr_quitado_documento > 0:
@@ -806,6 +814,13 @@ class FinanLancamento(SpedBase, models.Model):
             if lancamento.forma_pagamento_id.documento_id:
                 lancamento.documento_id = \
                     lancamento.forma_pagamento_id.documento_id
+            # Se a forma de pagamento for do tipo que só é confirmada com
+            # a data de credito, o valor abatido no pagamento deve ser 0,
+            # enquanto nao tem uma data de credito/bebito
+            if lancamento.forma_pagamento_id.quitado_somente_com_data_credito_debito and not lancamento.data_credito_debito:
+                lancamento.vr_documento = 0
+            else:
+                lancamento.vr_documento = lancamento.vr_movimentado
 
     @api.depends('empresa_id.data_referencia_financeira')
     def _compute_dias_atraso(self):

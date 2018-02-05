@@ -81,3 +81,20 @@ class ResPartner(Participante, models.Model):
                 partner.original_user_id = user_ids[0]
             else:
                 partner.original_user_id = False
+
+    @api.model
+    def create(self, vals):
+        partner = super(ResPartner, self).create(vals)
+        if "create_sped_participante" not in self._context:
+            partner.with_context(
+                create_from_partner=True).create_participante_id()
+        return partner
+    
+    @api.multi
+    def create_participante_id(self):
+        Participante = self.env["sped.participante"]
+        for partner_id in self.with_context(active_test=False):
+            new_participante = Participante.create({
+                'partner_id': partner_id.id,
+            })
+        return True

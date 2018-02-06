@@ -98,8 +98,8 @@ class SpedManifestacaoDestinatario(models.Model):
         string='Inscrição estadual',
         size=18,
     )
-    participante_id = fields.Many2one(
-        comodel_name='sped.participante',
+    partner_id = fields.Many2one(
+        comodel_name='res.partner',
         string='Fornecedor',
         invisible=True,
     )

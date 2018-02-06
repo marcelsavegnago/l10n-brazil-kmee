@@ -293,7 +293,7 @@ class ConsultaDFe(models.Model):
                             if not exists_chnfe:
                                 cnpj_forn = self._mask_cnpj(
                                     ('%014d' % root.NFe.infNFe.emit.CNPJ))
-                                partner = self.env['sped.participante'].search(
+                                partner = self.env['res.partner'].search(
                                     [('cnpj_cpf', '=', cnpj_forn)])
 
                                 invoice_eletronic = {
@@ -309,7 +309,7 @@ class ConsultaDFe(models.Model):
                                     'data_hora_inclusao': datetime.now(),
                                     'cnpj_cpf': cnpj_forn,
                                     'ie': root.NFe.infNFe.emit.IE,
-                                    'participante_id': partner.id,
+                                    'partner_id': partner.id,
                                     'data_hora_emissao': datetime.strptime(
                                         str(root.NFe.infNFe.ide.dhEmi)[:19],
                                         '%Y-%m-%dT%H:%M:%S'),
@@ -358,7 +358,7 @@ class ConsultaDFe(models.Model):
                             if not exists_chnfe:
                                 cnpj_forn = self._mask_cnpj(
                                     ('%014d' % root.CNPJ))
-                                partner = self.env['sped.participante'].search(
+                                partner = self.env['res.partner'].search(
                                     [('cnpj_cpf', '=', cnpj_forn)])
 
                                 invoice_eletronic = {
@@ -373,7 +373,7 @@ class ConsultaDFe(models.Model):
                                     'data_hora_inclusao': datetime.now(),
                                     'cnpj_cpf': cnpj_forn,
                                     'ie': root.IE,
-                                    'participante_id': partner.id,
+                                    'partner_id': partner.id,
                                     'data_hora_emissao': datetime.strptime(
                                         str(root.dhEmi)[:19],
                                         '%Y-%m-%dT%H:%M:%S'),

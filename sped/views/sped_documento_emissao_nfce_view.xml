@@ -40,7 +40,7 @@
             <xpath expr="//tree[1]" position="attributes">
                 <attribute name="string">Emissão de NFC-e</attribute>
             </xpath>
-            <field name="participante_id" position="attributes">
+            <field name="partner_id" position="attributes">
                 <attribute name="string">Consumidor</attribute>
             </field>
             <field name="data_entrada_saida" position="attributes">

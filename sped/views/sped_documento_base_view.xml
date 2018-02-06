@@ -52,7 +52,7 @@
                         </group>
                     </group>
                     <notebook>
-                        <page name="participante" string="Destinatário/Remetente">
+                        <page name="partner" string="Destinatário/Remetente">
                             <group>
                                 <group colspan="6" col="6">
                                     <separator string="Destinatário" colspan="6" attrs="{'invisible': [('entrada_saida', '=', '0')]}" />

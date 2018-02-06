@@ -194,7 +194,7 @@ class SpedManifestacaoDestinatario(models.Model):
 
         if len(documento) > 1:
             view_id = self.env.ref(
-                'sped_nfe.sped_documento_ajuste_recebimento_tree').id
+                'sped.sped_documento_recebimento_nfe_tree').id
             view_type = 'tree'
             action['domain'] = [('id', 'in', documento.ids)]
 

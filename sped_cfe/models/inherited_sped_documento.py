@@ -441,7 +441,7 @@ class SpedDocumento(models.Model):
         #
         # Destinatário
         #
-        if self.participante_id and self.participante_id.cnpj_cpf:
+        if self.partner_id and self.partner_id.cnpj_cpf:
             kwargs['destinatario'] = self._monta_cfe_destinatario()
             kwargs['entrega'] = self._monta_cfe_entrega()
 
@@ -520,7 +520,7 @@ class SpedDocumento(models.Model):
 
     def _monta_cfe_destinatario(self,):
 
-        participante = self.participante_id
+        participante = self.partner_id
 
         #
         # Trata a possibilidade de ausência do destinatário na NFC-e
@@ -552,7 +552,7 @@ class SpedDocumento(models.Model):
 
     def _monta_cfe_entrega(self,):
 
-        participante = self.participante_id
+        participante = self.partner_id
 
         if self.modelo == MODELO_FISCAL_CFE and not participante.cnpj_cpf:
             return

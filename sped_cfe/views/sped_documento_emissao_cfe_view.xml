@@ -129,7 +129,7 @@
                 <attribute name="decoration-primary">situacao_nfe == 'enviada'</attribute>
                 <attribute name="decoration-danger">situacao_nfe == 'rejeitada'</attribute>
             </xpath>
-            <field name="participante_id" position="attributes">
+            <field name="partner_id" position="attributes">
                 <attribute name="string">Consumidor</attribute>
             </field>
             <field name="data_entrada_saida" position="attributes">

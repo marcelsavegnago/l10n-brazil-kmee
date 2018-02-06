@@ -11,7 +11,7 @@
         web_icon="sped,static/description/icon.png"
         />
 
-    <menuitem id="menu_cadastro_participante"
+    <menuitem id="menu_cadastro_partner"
         name="Pessoas e empresas"
         sequence="1"
         parent="menu_cadastro"

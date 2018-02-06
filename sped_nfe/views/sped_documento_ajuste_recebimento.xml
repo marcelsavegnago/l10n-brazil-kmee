@@ -40,7 +40,7 @@
                         </group>
                     </group>
                     <notebook>
-                        <page name="participante" string="Destinatário/Remetente">
+                        <page name="partner" string="Destinatário/Remetente">
                             <group>
                                 <group colspan="6" col="6">
                                     <separator string="Destinatário" colspan="6" readonly="True"/>

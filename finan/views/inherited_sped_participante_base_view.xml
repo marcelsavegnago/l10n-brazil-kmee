@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record model="ir.ui.view" id="sped_participante_base_form" >
-        <field name="name">sped.participante.base.form (in finan)</field>
-        <field name="model">sped.participante</field>
-        <field name="inherit_id" ref="l10n_br_base.sped_participante_base_form"/>
+    <record model="ir.ui.view" id="res_partner_base_form" >
+        <field name="name">res.partner.base.form (in finan)</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="l10n_br_base.res_partner_base_form"/>
         <field name="arch" type="xml">
             <field name="eh_cliente" position="after">
                 <newline />
@@ -27,11 +27,11 @@
         </field>
     </record>
 
-    <record model="ir.ui.view" id="sped_participante_base_kanban">
-        <field name="name">sped.participante.base.kanban (in finan)</field>
-        <field name="model">sped.participante</field>
+    <record model="ir.ui.view" id="res_partner_base_kanban">
+        <field name="name">res.partner.base.kanban (in finan)</field>
+        <field name="model">res.partner</field>
         <field name="priority">9999</field>
-        <field name="inherit_id" ref="l10n_br_base.sped_participante_base_kanban"/>
+        <field name="inherit_id" ref="l10n_br_base.res_partner_base_kanban"/>
         <field name="arch" type="xml">
             <xpath expr="//kanban/field[@name='email']" position="after">
                 <field name="limite_credito" />

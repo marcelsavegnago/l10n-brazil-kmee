@@ -8,8 +8,8 @@ from odoo import api, fields, models
 from ..constantes import *
 
 
-class SpedParticipante(models.Model):
-    _inherit = 'sped.participante'
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
 
     limite_credito = fields.Monetary(
         string='Limite de crédito',

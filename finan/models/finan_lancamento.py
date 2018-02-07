@@ -714,12 +714,43 @@ class FinanLancamento(SpedBase, models.Model):
                             FINAN_SITUACAO_DIVIDA_BAIXADO
 
                 elif lancamento.vr_quitado_documento > 0:
-                    if lancamento.vr_saldo > 0:
-                        lancamento.situacao_divida = \
-                            FINAN_SITUACAO_DIVIDA_QUITADO_PARCIALMENTE
-                    else:
-                        lancamento.situacao_divida = \
-                            FINAN_SITUACAO_DIVIDA_QUITADO
+                    if not lancamento.pagamento_ids.forma_pagamento_id.\
+                            quitado_somente_com_data_credito_debito:
+                        if lancamento.vr_saldo > 0:
+                            lancamento.situacao_divida = \
+                                FINAN_SITUACAO_DIVIDA_QUITADO_PARCIALMENTE
+                        else:
+                            lancamento.situacao_divida = \
+                                FINAN_SITUACAO_DIVIDA_QUITADO
+
+                    elif lancamento.pagamento_ids.forma_pagamento_id.\
+                            quitado_somente_com_data_credito_debito and \
+                            lancamento.pagamento_ids.data_credito_debito:
+                        if lancamento.vr_saldo > 0:
+                            lancamento.situacao_divida = \
+                                FINAN_SITUACAO_DIVIDA_QUITADO_PARCIALMENTE
+                        else:
+                            lancamento.situacao_divida = \
+                                FINAN_SITUACAO_DIVIDA_QUITADO
+
+                    elif lancamento.pagamento_ids.forma_pagamento_id.\
+                            quitado_somente_com_data_credito_debito and \
+                            not lancamento.pagamento_ids.data_credito_debito:
+                        data_hoje = hoje()
+                        data_vencimento = parse_datetime(
+                            lancamento.data_vencimento_util).date()
+
+                        if data_vencimento < data_hoje:
+                            lancamento.situacao_divida = \
+                                FINAN_SITUACAO_DIVIDA_VENCIDO
+
+                        elif data_vencimento == data_hoje:
+                            lancamento.situacao_divida = \
+                                FINAN_SITUACAO_DIVIDA_VENCE_HOJE
+
+                        else:
+                            lancamento.situacao_divida = \
+                                FINAN_SITUACAO_DIVIDA_A_VENCER
 
                 elif lancamento.data_vencimento_util:
                     data_hoje = hoje()

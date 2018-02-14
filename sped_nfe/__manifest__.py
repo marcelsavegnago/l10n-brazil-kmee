@@ -32,9 +32,11 @@
         'data/scheduler_busca_documentos.xml',
         'wizard/wizard_confirma_acao.xml',
         'views/sped_inutilizacao_documento_view.xml',
+        'views/sped_inutilizacao_tipo_documento_view.xml',
         'security/ir.model.access.csv',
         'wizard/sped_documento_exportar_xml.xml',
         'wizard/base_config_settings.xml',
+        'data/sped.inutilizacao.tipo.documento.csv',
     ],
     'external_dependencies': {
         'python': ['pybrasil', 'pysped', 'mako'],

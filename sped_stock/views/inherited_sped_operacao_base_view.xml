@@ -11,12 +11,12 @@
         <field name="priority">99999</field>
         <field name="inherit_id" ref="sped_imposto.sped_operacao_base_form"/>
         <field name="arch" type="xml">
-            <field name="preco_automatico" position="after">
-                <newline />
+            <group name="parametros" position="inside">
                 <field name="enviar_pelo_estoque" attrs="{'invisible': ['!', ('modelo', 'in', ['55', '65', '59'])]}" />
+            </group>
+            <group name="sub_grupo_operacoes" position="inside">
                 <field name="stock_picking_type_id" attrs="{'invisible': ['!', ('modelo', 'in', ['55', '65', '59', '2D'])]}" options="{'no_create': True, 'no_open': True}" />
-                <newline />
-            </field>
+            </group>
         </field>
     </record>
 

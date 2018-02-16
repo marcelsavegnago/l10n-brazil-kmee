@@ -775,14 +775,15 @@ class SpedCalculoImposto(SpedBase):
     def action_view_documento(self):
         action = self.env.ref('sped.sped_documento_emissao_nfe_acao').read()[0]
 
-        if len(self.documento_ids) > 1:
-            action['domain'] = [('id', 'in', self.documento_ids.ids)]
+        if len(self) > 1:
+            action['domain'] = [('id', 'in', self.ids)]
 
-        elif len(self.documento_ids) == 1:
-            action['views'] = [
-                (self.env.ref('sped.sped_documento_emissao_nfe_form').id,
-                 'form')]
-            action['res_id'] = self.documento_ids.ids[0]
+        elif len(self) == 1:
+            action['views'] = [(
+                self.env.ref('sped.sped_documento_emissao_nfe_form').id,
+                'form'
+            )]
+            action['res_id'] = self.id
         else:
             action = {'type': 'ir.actions.act_window_close'}
 

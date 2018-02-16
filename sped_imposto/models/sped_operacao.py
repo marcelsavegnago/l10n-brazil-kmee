@@ -203,6 +203,10 @@ class SpedOperacaoFiscal(models.Model):
         comodel_name='sped.operacao',
         string='Operação de entrada equivalente',
     )
+    operacao_devolucao_id = fields.Many2one(
+        comodel_name='sped.operacao',
+        string='Operação de Devolução',
+    )
     consumidor_final = fields.Selection(
         selection=TIPO_CONSUMIDOR_FINAL,
         string='Tipo do consumidor',

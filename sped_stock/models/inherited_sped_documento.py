@@ -145,6 +145,8 @@ class SpedDocumento(models.Model):
         stock_obj = self.env['stock.picking']
         for documento in self:
             doc_picking_type = documento.operacao_id.stock_picking_type_id
+            if not doc_picking_type:
+                continue
             move_lines = []
             for line in documento.item_ids:
                 vals_produtos = [0, False, {
@@ -180,8 +182,7 @@ class SpedDocumento(models.Model):
         result = super(SpedDocumento, self).executa_depois_create(
             result, dados)
 
-        for documento in self:
+        for documento in result:
             if documento.entrada_saida == ENTRADA_SAIDA_ENTRADA:
                 documento._criar_picking()
-
         return result

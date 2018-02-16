@@ -12,7 +12,7 @@ class SpedStockSpedOperacao(models.Model):
 
     stock_picking_type_id = fields.Many2one(
         comodel_name='stock.picking.type',
-        string='Operação de Estoque',
+        string='Tipo de Operação de Estoque',
         domain="[('default_location_src_id', '!=', False)," + \
                " ('default_location_dest_id', '!=', False)]"
     )

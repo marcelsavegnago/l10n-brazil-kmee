@@ -1669,7 +1669,8 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     def _prepare_subsequente_referenciado(self):
         vals = {
                 'documento_id': self.id,
-                'participante_id': self.participante_id.id,
+                'participante_id': self.participante_id and
+                                   self.participante_id.id,
                 'modelo': self.modelo,
                 'serie': self.serie,
                 'numero': self.numero,

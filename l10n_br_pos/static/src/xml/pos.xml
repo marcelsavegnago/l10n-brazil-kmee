@@ -154,7 +154,7 @@
         <t t-jquery="div.client-details-left > div.client-detail:has(.client-state)" t-operation="after">
             <div class='client-detail'>
                 <span class='label'>Cidade:</span>
-                <span class='detail client-city'><t t-esc='partner.l10n_br_city_id' /></span>
+                <span class='detail client-address-city'><t t-esc='partner.l10n_br_city_id' /></span>
 
             </div>
         </t>

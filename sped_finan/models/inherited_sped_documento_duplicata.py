@@ -51,10 +51,13 @@ class SpedDocumentoDuplicata(models.Model):
             dados['carteira_id'] = self.documento_id.carteira_id.id
             dados['banco_id'] = self.documento_id.carteira_id.banco_id.id
 
-        if self.documento_id.emissao == TIPO_EMISSAO_PROPRIA:
-            dados['tipo'] = FINAN_DIVIDA_A_RECEBER
-        else:
+        # Se for operação de Entrada
+        if self.documento_id.eh_compra or self.documento_id.eh_devolucao_venda:
             dados['tipo'] = FINAN_DIVIDA_A_PAGAR
+
+        # Se for uma operação de Saída
+        elif self.documento_id.eh_venda or self.documento_id.eh_devolucao_compra:
+            dados['tipo'] = FINAN_DIVIDA_A_RECEBER
 
         return dados
 

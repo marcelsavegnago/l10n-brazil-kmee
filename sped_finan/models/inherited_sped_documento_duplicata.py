@@ -58,6 +58,8 @@ class SpedDocumentoDuplicata(models.Model):
         # Se for uma operação de Saída
         elif self.documento_id.eh_venda or self.documento_id.eh_devolucao_compra:
             dados['tipo'] = FINAN_DIVIDA_A_RECEBER
+        else:
+            dados['tipo'] = FINAN_DIVIDA_A_PAGAR
 
         return dados
 

@@ -111,9 +111,11 @@ class SpedDocumento(models.Model):
                     SITUACAO_FISCAL_SPED_CONSIDERA_ATIVO:
                 continue
 
-            if documento.emissao == TIPO_EMISSAO_PROPRIA and \
-                documento.entrada_saida == ENTRADA_SAIDA_ENTRADA:
-                continue
+            # Devolução é uma operação de entrada de emissão própria mas que
+            # deverá gerar o financeiro
+            # if documento.emissao == TIPO_EMISSAO_PROPRIA and \
+            #     documento.entrada_saida == ENTRADA_SAIDA_ENTRADA:
+            #     continue
 
             if not documento.finan_conta_id:
                 operacao_id = self._busca_operacao()

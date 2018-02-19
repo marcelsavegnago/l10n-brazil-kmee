@@ -182,6 +182,16 @@ class SpedDocumento(models.Model):
             doc_picking_type = documento._busca_stock_picking_type()
             if not doc_picking_type:
                 continue
+
+            if documento.eh_devolucao_compra:
+                location_id = self.env.ref('stock.stock_location_suppliers')
+            elif documento.eh_devolucao_venda:
+                location_id = self.env.ref('stock.stock_location_customers')
+            elif documento.eh_venda:
+                location_id = self.env.ref('stock.stock_location_stock')
+            elif documento.eh_compra:
+                location_id = self.env.ref('stock.stock_location_suppliers')
+
             move_lines = []
             for line in documento.item_ids:
                 vals_produtos = [0, False, {
@@ -191,7 +201,7 @@ class SpedDocumento(models.Model):
                     'name': "[" + line.produto_id.codigo + "] " +
                             line.produto_id.nome,
                     'date_expected': documento.data_hora_entrada_saida,
-                    'location_id': doc_picking_type.default_location_dest_id.id,
+                    'location_id': location_id.id,
                     'location_dest_id':
                         doc_picking_type.default_location_dest_id.id,
                 }]
@@ -204,7 +214,7 @@ class SpedDocumento(models.Model):
                 'company_id': documento.empresa_id.company_id.id,
                 'empresa_id': documento.empresa_id.id,
                 'picking_type_id': doc_picking_type.id,
-                'location_id': doc_picking_type.default_location_dest_id.id,
+                'location_id': location_id.id,
                 'location_dest_id':
                     doc_picking_type.default_location_dest_id.id,
                 'move_lines': move_lines,
@@ -213,11 +223,7 @@ class SpedDocumento(models.Model):
             documento.stock_picking_id = res.id
             documento._confirma_estoque()
 
-    def executa_depois_create(self, result, dados):
-        result = super(SpedDocumento, self).executa_depois_create(
-            result, dados)
-
-        for documento in result:
+    def gera_estoque(self):
+        for documento in self:
             if documento.entrada_saida == ENTRADA_SAIDA_ENTRADA:
                 documento._criar_picking()
-        return result

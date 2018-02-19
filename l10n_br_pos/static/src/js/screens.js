@@ -311,6 +311,29 @@ function l10n_br_pos_screens(instance, module) {
                 contents.empty();
                 contents.append($(QWeb.render('ClientDetailsEdit',{widget:this,partner:partner})));
                 this.toggle_save_button();
+		
+		       $('.client-address-country', this.el).change(function(e){
+                var country_id = $('.client-address-country').val();
+                new instance.web.Model('res.partner').call('get_states_ids', [country_id]).then(function (result) {
+                    $('.client-address-state').children('option:not(:first)').remove();
+                        $.each(result, function(key, value){
+                            $('.client-address-state').append($("<option></option>")
+                                                  .attr("value",key)
+                                                  .text(value));
+                        });
+                    });
+               });
+               $('.client-address-state', this.el).change(function(e){
+                var city_id = $('.client-address-state').val();
+                new instance.web.Model('res.partner').call('get_city_ids', [city_id]).then(function (result) {
+                    $('.client-address-city').children('option:not(:first)').remove();
+                        $.each(result, function(key, value){
+                            $('.client-address-city').append($("<option></option>")
+                                                  .attr("value",key)
+                                                  .text(value));
+                        });
+                    });
+                });
 
                 $('.client-address-zip', this.el).blur(function(e){
                     var cep = $('.client-address-zip').val().replace(/[^\d]+/g,'');
@@ -656,7 +679,6 @@ function l10n_br_pos_screens(instance, module) {
             }
         }
     });
-
 
     module.PosOrderListScreenWidget = module.ScreenWidget.extend({
         template: 'PosOrderListScreenWidget',

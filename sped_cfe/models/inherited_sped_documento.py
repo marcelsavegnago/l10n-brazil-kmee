@@ -676,15 +676,17 @@ class SpedDocumento(models.Model):
                 self.grava_cfe_autorizacao_cancelamento(
                     self.chave, processo.xml())
                 self.chave_cancelamento = processo.chaveConsulta[3:]
-                impressao = self.configuracoes_pdv.impressora
 
-                if impressao:
-                    processador.imprimir_cupom_cancelamento(
-                        self.arquivo_xml_autorizacao_id.datas,
-                        processo.arquivoCFeBase64,
-                        impressao.modelo,
-                        impressao.conexao
-                    )
+                dh_cancelamento = processo.timeStamp
+                # impressao = self.configuracoes_pdv.impressora
+
+                # if impressao:
+                #     processador.imprimir_cupom_cancelamento(
+                #         self.arquivo_xml_autorizacao_id.datas,
+                #         processo.arquivoCFeBase64,
+                #         impressao.modelo,
+                #         impressao.conexao
+                #     )
 
                 # data_cancelamento = retevento.infEvento.dhRegEvento.valor
                 # data_cancelamento = UTC.normalize(data_cancelamento)

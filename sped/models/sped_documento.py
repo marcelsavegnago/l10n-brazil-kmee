@@ -1257,7 +1257,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
             valores['infadfisco'] = self.operacao_id.infadfisco
 
         if self.infcomplementar:
-            valores['infcomplementar'] += (
+            valores['infcomplementar'] = self.infcomplementar + (
                 ' ' + self.operacao_id.infcomplementar
             )
         else:

@@ -46,6 +46,24 @@ except (ImportError, IOError) as err:
 class SpedDocumentoItem(models.Model):
     _inherit = 'sped.documento.item'
 
+    def _monta_cfe_informacoes_adicionais(self):
+        self.ensure_one()
+        #
+        # Prepara a observação do item
+        #
+        infcomplementar = self.infcomplementar or ''
+
+        dados_infcomplementar = {
+            'nf': self.documento_id,
+            'item': self,
+        }
+
+        #
+        # Aplica um template na observação do item
+        #
+        return self._renderizar_informacoes_template(
+            dados_infcomplementar, infcomplementar)
+
     def monta_cfe(self):
         """
         FIXME: Impostos
@@ -173,6 +191,8 @@ class SpedDocumentoItem(models.Model):
         )
         imposto.validar()
 
+        inf_ad_prod = self._monta_cfe_informacoes_adicionais() or ''
+
         detalhe = Detalhamento(
             produto=ProdutoServico(
                 cProd=self.produto_id.codigo or str(self.produto_id.id),
@@ -186,7 +206,7 @@ class SpedDocumentoItem(models.Model):
                 **kwargs
             ),
             imposto=imposto,
-            infAdProd=self._monta_informacoes_adicionais() or '',
+            infAdProd=inf_ad_prod,
         )
         detalhe.validar()
 

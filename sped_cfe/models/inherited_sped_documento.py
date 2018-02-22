@@ -475,16 +475,6 @@ class SpedDocumento(models.Model):
 
         return dados_informacoes_venda
 
-    def _monta_informacoes_adicionais(self):
-        infcomplementar = self.infcomplementar or ''
-
-        dados_infcomplementar = {
-            'nf': self,
-        }
-
-        return self._renderizar_informacoes_template(
-            dados_infcomplementar, infcomplementar)
-
     def _monta_cfe_identificacao(self):
         # FIXME: Buscar dados do cadastro da empresa / cadastro do caixa
         cnpj_software_house = self.configuracoes_pdv.cnpj_software_house

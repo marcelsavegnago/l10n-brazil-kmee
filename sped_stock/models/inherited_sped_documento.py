@@ -196,7 +196,7 @@ class SpedDocumento(models.Model):
             for line in documento.item_ids:
                 vals_produtos = [0, False, {
                     'produto_id': line.produto_id.id,
-                    'product_uom': 1,
+                    'product_uom': line.unidade_id.uom_id.id,
                     'product_uom_qty': line.quantidade,
                     'name': "[" + line.produto_id.codigo + "] " +
                             line.produto_id.nome,

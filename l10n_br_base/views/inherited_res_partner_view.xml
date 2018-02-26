@@ -38,10 +38,13 @@
                 <field name="state_id" invisible="1"/>
                 <field name="country_id" invisible="1"/>
                 <field name="zip" placeholder="99999-999" attrs="{'required': [('exige_endereco', '=', True)]}"/>
-                <field name="numero" placeholder="Número ou S/N" attrs="{'required': [('exige_endereco', '=', True)]}" />
+                <br/>
                 <field name="street" placeholder="Street..." class="o_address_street" attrs="{'required': [('exige_endereco', '=', True)]}"/>
+                <field name="numero" placeholder="Número ou S/N" attrs="{'required': [('exige_endereco', '=', True)]}" />
+                <br/>
                 <field name="street2" placeholder="Street 2..." class="o_address_street"/>
                 <field name="bairro" colspan="6" placeholder="District" attrs="{'required': [('exige_endereco', '=', True)]}" />
+                <br/>
                 <field name="municipio_id" placeholder="Municipio" options="{'no_open': True, 'no_create': True}" colspan="6" attrs="{'required': [('exige_endereco', '=', True)]}" />
             </field>
             <xpath expr="//notebook/page" position="before">

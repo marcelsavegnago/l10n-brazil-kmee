@@ -1725,7 +1725,8 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
 
         try:
             template = TemplateBrasil(infcomplementar.encode('utf-8'))
-            infcomplementar = template.render(**dados_infcomplementar)
+            infcomplementar = template.render(
+                **dados_infcomplementar).decode('utf-8')
 
             return infcomplementar
         except Exception as e:

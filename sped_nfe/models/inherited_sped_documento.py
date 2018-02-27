@@ -651,18 +651,6 @@ class SpedDocumento(models.Model):
                 self.mensagem_nfe = mensagem
                 self.situacao_nfe = SITUACAO_NFE_REJEITADA
 
-        if self.situacao_nfe in (
-                SITUACAO_NFE_AUTORIZADA,
-                SITUACAO_NFE_DENEGADA,
-                SITUACAO_NFE_REJEITADA,
-                SITUACAO_NFE_ENVIADA,
-        ) and not (
-                self.protocolo_autorizacao and
-                self.arquivo_xml_id and
-                self.arquivo_xml_autorizacao_id
-        ):
-            self._consultar_nfe(processador, nfe)
-
     def cancela_nfe(self):
         self.ensure_one()
         res = super(SpedDocumento, self).cancela_nfe()

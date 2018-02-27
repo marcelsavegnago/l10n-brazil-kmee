@@ -1411,13 +1411,13 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
             # Trata alguns campos que é permitido alterar depois da nota
             # autorizada
             #
-            if documento.situacao_nfe == SITUACAO_NFE_AUTORIZADA:
-                for campo in dados:
-                    if campo in CAMPOS_PERMITIDOS:
-                        permite_alteracao = True
-                        break
-                    elif campo not in campos_proibidos:
-                        campos_proibidos.append(campo)
+            # if documento.situacao_nfe == SITUACAO_NFE_AUTORIZADA:
+            for campo in dados:
+                if campo not in CAMPOS_PERMITIDOS:
+                    permite_alteracao = True
+                    break
+                elif campo not in campos_proibidos:
+                    campos_proibidos.append(campo)
 
             if permite_alteracao:
                 continue

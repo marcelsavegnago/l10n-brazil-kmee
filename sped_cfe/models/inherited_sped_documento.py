@@ -753,7 +753,8 @@ class SpedDocumento(models.Model):
             elif self.configuracoes_pdv.tipo_sat == 'rede_interna':
                 resposta = cliente.enviar_dados_venda(
                     cfe, self.configuracoes_pdv.codigo_ativacao,
-                    self.configuracoes_pdv.path_integrador
+                    self.configuracoes_pdv.path_integrador,
+                    self.numero_identificador_sessao
                 )
             else:
                 resposta = None
@@ -796,12 +797,21 @@ class SpedDocumento(models.Model):
                        resposta.EEEEE
             mensagem += '\nMensagem: ' + \
                         resposta.mensagem
+            if resposta.resposta.mensagem == u'Erro interno' and \
+                    resposta.resposta.mensagemSEFAZ == u'ERRO' \
+                    and not self.numero_identificador_sessao:
+                    self.numero_identificador_sessao = \
+                        resposta.resposta.numeroSessao
             self.mensagem_nfe = mensagem
             self.situacao_nfe = SITUACAO_NFE_REJEITADA
         except Exception as resposta:
             if hasattr(resposta, 'resposta'):
                 self.codigo_rejeicao_cfe = resposta.resposta.EEEEE
-            self.mensagem_nfe = "Falha na conexão com SATHUB"
+                self.numero_identificador_sessao = \
+                    resposta.resposta.numeroSessao
+                self.mensagem_nfe = resposta.resposta.mensagem
+            else:
+                self.mensagem_nfe = resposta.message
             self.situacao_nfe = SITUACAO_NFE_REJEITADA
 
     @api.multi

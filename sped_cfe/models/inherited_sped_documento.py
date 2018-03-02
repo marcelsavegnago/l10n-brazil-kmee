@@ -206,6 +206,7 @@ class SpedDocumento(models.Model):
         copy=False,
         compute='_compute_cfe_cancel_image',
     )
+
     numero_identificador_sessao = fields.Char(
         string=u'Numero identificador sessao'
     )
@@ -918,7 +919,8 @@ class SpedDocumento(models.Model):
                             'BRL',
                             int(config.numero_caixa),
                             config.chave_acesso_validador,
-                            config.path_integrador
+                            config.path_integrador,
+                            self.numero_identificador_sessao
                         )
                     resposta_pagamento = resposta.split('|')
                     if len(resposta_pagamento[0]) >= 7:

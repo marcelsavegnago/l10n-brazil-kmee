@@ -214,7 +214,7 @@ class SpedDocumento(models.Model):
         # relançado os movimentos financeiros
         campos_afetam_financeiro = [
             'duplicata_ids', 'vr_nf', 'vr_fatura', 'condicao_pagamento_id',
-            'carteira_id', 'item_ids', 'participante_id', 'ind_forma_pagamento',
+            'carteira_id', 'item_ids', 'parnter_id', 'ind_forma_pagamento',
         ]
 
         for campo in dados:

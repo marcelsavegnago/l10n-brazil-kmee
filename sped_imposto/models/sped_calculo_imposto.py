@@ -394,35 +394,10 @@ class SpedCalculoImposto(SpedBase):
     #     copy=True,
     # )
 
-
     @api.depends('company_id', 'partner_id')
     def _compute_is_brazilian(self):
         for documento in self:
-            if documento.company_id.country_id:
-                if documento.company_id.country_id.id == \
-                        self.env.ref('base.br').id:
-                    documento.is_brazilian = True
-
-                    if documento.partner_id.sped_partner_id:
-                        documento.partner_id = \
-                            documento.partner_id.sped_partner_id
-
-                    if documento.empresa_id:
-                        if 'operacao_produto_id' in documento._fields:
-                            if (documento.partner_id.tipo_pessoa ==
-                                    TIPO_PESSOA_FISICA):
-                                documento.operacao_produto_id = \
-                                    documento.empresa_id.\
-                                    operacao_produto_pessoa_fisica_id
-                            else:
-                                documento.operacao_produto_id = \
-                                    documento.empresa_id.operacao_produto_id
-
-                        if 'operacao_servico_id' in documento._fields:
-                            documento.operacao_servico_id = \
-                                documento.empresa_id.operacao_servico_id
-                    continue
-            documento.is_brazilian = False
+            documento.is_brazilian = True
 
     @api.onchange('item_ids')
     def _onchange_soma_itens(self):

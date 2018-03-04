@@ -26,7 +26,7 @@ class SpedDocumentoDuplicata(models.Model):
     def prepara_finan_lancamento(self):
         dados = {
             'data_documento': self.documento_id.data_emissao,
-            'participante_id': self.documento_id.participante_id.id,
+            'partner_id': self.documento_id.partner_id.id,
             'empresa_id': self.documento_id.empresa_id.id,
             'referencia_id': 'sped.documento,' + str(self.documento_id.id),
             'sped_documento_id': self.documento_id.id,

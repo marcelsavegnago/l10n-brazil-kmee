@@ -46,7 +46,7 @@
         />
 
     <menuitem
-        sequence="-99"
+        sequence="40"
         id="menu_fiscal"
         name="Fiscal"
         web_icon="sped,static/description/icon.png"

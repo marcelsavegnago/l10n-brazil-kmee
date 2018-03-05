@@ -118,7 +118,7 @@ class AccountTax(models.Model):
             if costs[tax]:
                 result.append({
                     'domain': tax.domain,
-                    'ref_tax_code_id': tax.ref_tax_code_id,
+                    'ref_tax_code_id': tax.ref_tax_code_id.id,
                     'sequence': tax.sequence,
                     'total_base': costs[tax],
                     'account_paid_id': tax.account_paid_id.id,

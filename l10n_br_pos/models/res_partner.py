@@ -8,6 +8,8 @@ from openerp import models, fields, api
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
+    data_alteracao = fields.Date()
+
     @api.model
     def get_credit_limit(self, partner):
         partner_id = self.browse(partner)
@@ -32,7 +34,15 @@ class ResPartner(models.Model):
         from openerp.addons.l10n_br_base.tools import misc
         cnpj_cpf = misc.punctuation_rm(partner['cnpj_cpf'])
         cnpj_cpf_type = 'cpf' if len(cnpj_cpf) == 11 else 'cnpj'
+        partner['data_alteracao'] = fields.Date.today()
         partner['cnpj_cpf'] = self._mask_cnpj_cpf(cnpj_cpf_type, cnpj_cpf)
+        if partner.get('whatsapp') and partner.get('opt_out'):
+            partner['whatsapp'] = 'sim' == partner['whatsapp']
+            partner['opt_out']  = 'sim' == partner['opt_out']
+        else:
+            partner['whatsapp'] = False
+            partner['opt_out'] = True
+
         res = super(ResPartner, self).create_from_ui(partner)
         partner_id = self.browse(res)
         partner_id.legal_name = partner['name']

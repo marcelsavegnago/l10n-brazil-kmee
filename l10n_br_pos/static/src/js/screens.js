@@ -238,7 +238,7 @@ function l10n_br_pos_screens(instance, module) {
                 });
             } else {
                 var cliente_cpf = fields.cnpj_cpf;
-                if (self.pos_widget.order_widget.verificar_cpf_cnpj(cliente_cpf)){
+                if (self.pos_widget.order_widget.verificar_cpf_cnpj(cliente_cpf.replace(/[^\d]+/g,''))){
                     this._super(partner);
                 } else {
                    this.pos_widget.screen_selector.show_popup('error',{
@@ -248,6 +248,188 @@ function l10n_br_pos_screens(instance, module) {
                 }
             }
         },
+
+        // what happens when we've just pushed modifications for a partner of id partner_id
+        saved_client_details: function(partner_id){
+            var self = this;
+            this.reload_partners().then(function(){
+                    var partner = self.pos.db.get_partner_by_id(partner_id);
+                if (partner) {
+//                  usando o pricelist da loja por padrao
+                    partner['property_product_pricelist'][0] = self.pos.pricelist.id;
+                    partner.birthdate = $('.birthdate').val()
+                    partner.street2 = $('.client-address-street2').val()
+                    partner.gender = $('.gender').val()
+                    partner.whatsapp = 'sim' === $('.whatsapp').val()
+                    partner.opt_out = 'sim' === $('.opt_out').val()
+
+                    self.new_client = partner;
+                    self.toggle_save_button();
+                    self.pos.get('selectedOrder').set_client(self.new_client);
+                    var ss = self.pos.pos_widget.screen_selector;
+                    ss.set_current_screen('products');
+//                    self.display_client_details('show',partner);
+                } else {
+                    // should never happen, because create_from_ui must return the id of the partner it
+                    // has created, and reload_partner() must have loaded the newly created partner.
+                    self.display_client_details('hide');
+                }
+            });
+        },
+
+        display_client_details: function(visibility,partner,clickpos){
+            var self = this;
+            var contents = this.$('.client-details-contents');
+            var parent   = this.$('.client-list').parent();
+            var scroll   = parent.scrollTop();
+            var height   = contents.height();
+
+            contents.off('click','.button.edit');
+            contents.off('click','.button.save');
+            contents.off('click','.button.undo');
+            contents.on('click','.button.edit',function(){ self.edit_client_details(partner); });
+            contents.on('click','.button.save',function(){ self.save_client_details(partner); });
+            contents.on('click','.button.undo',function(){ self.undo_client_details(partner); });
+            this.editing_client = false;
+            this.uploaded_picture = null;
+
+            if(visibility === 'show'){
+                contents.empty();
+                contents.append($(QWeb.render('ClientDetails',{widget:this,partner:partner})));
+
+                var new_height   = contents.height();
+
+                if(!this.details_visible){
+                    if(clickpos < scroll + new_height + 20 ){
+                        parent.scrollTop( clickpos - 20 );
+                    }else{
+                        parent.scrollTop(parent.scrollTop() + new_height);
+                    }
+                }else{
+                    parent.scrollTop(parent.scrollTop() - height + new_height);
+                }
+
+                this.details_visible = true;
+                this.toggle_save_button();
+            } else if (visibility === 'edit') {
+                this.editing_client = true;
+                contents.empty();
+                contents.append($(QWeb.render('ClientDetailsEdit',{widget:this,partner:partner})));
+                this.toggle_save_button();
+
+               $( document ).ready(function() {
+                    if( partner.country_id != null){
+                        new instance.web.Model('res.country.state').call('get_states_ids', [partner.country_id[0]]).then(function (result) {
+                        $('.client-address-state').children('option:not(:first)').remove();
+                            $.each(result, function(key, value){
+                                if(partner.state_id != null && partner.state_id[0] == key){
+                                     $('.client-address-state').append($("<option></option>")
+                                                  .attr("value",key)
+                                                  .attr("selected",true)
+                                                  .text(value));
+                                }
+                                else{
+                                    $('.client-address-state').append($("<option></option>")
+                                                  .attr("value",key)
+                                                  .text(value));
+                                }
+                            });
+                        });
+                    }
+                    if(partner.state_id != null){
+                            new instance.web.Model('l10n_br_base.city').call('get_city_ids', [partner.state_id[0]]).then(function (result) {
+                            $('.client-address-city').children('option:not(:first)').remove();
+                                $.each(result, function(key, value){
+                                    if(partner.l10n_br_city_id != null && partner.l10n_br_city_id[0] == key){
+                                    $('.client-address-city').append($("<option></option>")
+                                                      .attr("value",key)
+                                                      .attr("selected", true)
+                                                      .text(value));
+                                    }
+                                    else{
+                                     $('.client-address-city').append($("<option></option>")
+                                                      .attr("value",key)
+                                                      .text(value));
+                                    }
+                                });
+                            });
+                    }
+                });
+		       $('.client-address-country', this.el).change(function(e){
+                var country_id = $('.client-address-country').val();
+                if (country_id != ""){
+                    new instance.web.Model('res.country.state').call('get_states_ids', [country_id]).then(function (result) {
+                        $('.client-address-state').children('option:not(:first)').remove();
+                            $.each(result, function(key, value){
+                                $('.client-address-state').append($("<option></option>")
+                                                      .attr("value",key)
+                                                      .text(value));
+                            });
+                        });
+                }
+                   });
+               $('.client-address-state', this.el).change(function(e){
+                var state_id = $('.client-address-state').val();
+                if (state_id != ""){
+                new instance.web.Model('l10n_br_base.city').call('get_city_ids', [state_id]).then(function (result) {
+                    $('.client-address-city').children('option:not(:first)').remove();
+                        $.each(result, function(key, value){
+                            $('.client-address-city').append($("<option></option>")
+                                                  .attr("value",key)
+                                                  .text(value));
+                        });
+                    });
+                    }
+                });
+
+                $('.client-address-zip', this.el).blur(function(e){
+                    var cep = $('.client-address-zip').val().replace(/[^\d]+/g,'');
+                        if (cep.length == 8){
+                            new instance.web.Model('l10n_br.zip').call('zip_search_multi_json', [[]], {'zip_code': cep}).then(function (result) {
+                                $('.client-address-street').val(result.street)
+                                $('.client-address-country').val(result.country_id)
+                                $('.client-address-state').val(result.state_id)
+                                $('.client-address-city').val(result.l10n_br_city)
+                            });
+                        }
+                        else{
+                            self.pos_widget.screen_selector.show_popup('error',{
+                                message: _t('Erro no campo!'),
+                                comment:_t('CEP inválido!')
+                            });
+                        }
+                });
+
+                contents.find('.image-uploader').on('change',function(event){
+                    self.load_image_file(event.target.files[0],function(res){
+                        if (res) {
+                            contents.find('.client-picture img, .client-picture .fa').remove();
+                            contents.find('.client-picture').append("<img src='"+res+"'>");
+                            contents.find('.detail.picture').remove();
+                            self.uploaded_picture = res;
+                        }
+                    });
+                });
+            } else if (visibility === 'hide') {
+                contents.empty();
+                if( height > scroll ){
+                    contents.css({height:height+'px'});
+                    contents.animate({height:0},400,function(){
+                        contents.css({height:''});
+                    });
+                }else{
+                    parent.scrollTop( parent.scrollTop() - height);
+                }
+                this.details_visible = false;
+                this.toggle_save_button();
+            }
+        },
+
+        edit_client_details: function(partner) {
+            this._super(partner);
+
+        },
+
         re_update_products: function(partner) {
             if (!partner.cnpj_cpf){
                this._super(partner);
@@ -544,6 +726,7 @@ function l10n_br_pos_screens(instance, module) {
             }
         }
     });
+
 
     module.PosOrderListScreenWidget = module.ScreenWidget.extend({
         template: 'PosOrderListScreenWidget',

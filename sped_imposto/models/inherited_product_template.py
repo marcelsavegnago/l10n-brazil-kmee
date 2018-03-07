@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-#
-# Copyright 2016 Taŭga Tecnologia -
-#   Aristides Caldeira <aristides.caldeira@tauga.com.br>
+# Copyright 2018 KMEE INFORMATICA LTDA
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 #
 
@@ -9,9 +7,13 @@ from __future__ import division, print_function, unicode_literals
 
 from odoo import api, fields, models
 
+from ..constante_tributaria import (
+    TIPO_PRODUTO_SERVICO_SERVICOS,
+)
 
-class SpedProduto(models.Model):
-    _inherit = 'sped.produto'
+
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
 
     ncm_id = fields.Many2one(
         comodel_name='sped.ncm',
@@ -71,32 +73,32 @@ class SpedProduto(models.Model):
 
     @api.depends('ncm_id', 'unidade_id')
     def _compute_exige_fator_conversao_ncm(self):
-        for produto in self:
-            if produto.unidade_id and produto.unidade_tributacao_ncm_id:
-                produto.exige_fator_conversao_unidade_tributacao_ncm = (
-                    produto.unidade_id.id !=
-                    produto.unidade_tributacao_ncm_id.id
+        for product_template_id in self:
+            if product_template_id.unidade_id and product_template_id.unidade_tributacao_ncm_id:
+                product_template_id.exige_fator_conversao_unidade_tributacao_ncm = (
+                    product_template_id.unidade_id.id !=
+                    product_template_id.unidade_tributacao_ncm_id.id
                 )
             else:
-                produto.exige_fator_conversao_unidade_tributacao_ncm = False
-                produto.fator_conversao_unidade_tributacao_ncm = 1
+                product_template_id.exige_fator_conversao_unidade_tributacao_ncm = False
+                product_template_id.fator_conversao_unidade_tributacao_ncm = 1
 
     def _ajusta_cest(self):
-        for produto in self:
-            if not produto.ncm_id:
-                produto.exige_cest = False
-                produto.cest_id = False
+        for product_template_id in self:
+            if not product_template_id.ncm_id:
+                product_template_id.exige_cest = False
+                product_template_id.cest_id = False
                 continue
 
-            if len(produto.ncm_id.cest_ids) == 0:
-                produto.exige_cest = False
-                produto.cest_id = False
+            if len(product_template_id.ncm_id.cest_ids) == 0:
+                product_template_id.exige_cest = False
+                product_template_id.cest_id = False
                 continue
 
-            produto.exige_cest = True
+            product_template_id.exige_cest = True
 
-            if len(produto.ncm_id.cest_ids) == 1:
-                produto.cest_id = produto.ncm_id.cest_ids[0].id
+            if len(product_template_id.ncm_id.cest_ids) == 1:
+                product_template_id.cest_id = product_template_id.ncm_id.cest_ids[0].id
 
     @api.depends('ncm_id')
     def _compute_exige_cest(self):
@@ -107,7 +109,7 @@ class SpedProduto(models.Model):
         self._ajusta_cest()
 
     @api.depends('tipo')
-    def _onchange_tipo():
+    def _onchange_tipo(self):
         for produto in self:
             if produto.tipo == TIPO_PRODUTO_SERVICO_SERVICOS:
                 produto.ncm_id = \

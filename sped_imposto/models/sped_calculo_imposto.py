@@ -603,7 +603,6 @@ class SpedCalculoImposto(SpedBase):
             'modelo': operacao.modelo,
             'emissao': operacao.emissao,
             'partner_id': self.partner_id.id,
-            'partner_id': self.partner_id.id,
             'condicao_pagamento_id': self.condicao_pagamento_id.id if \
                 self.condicao_pagamento_id else False,
             'transportadora_id': self.transportadora_id.id if \
@@ -647,6 +646,7 @@ class SpedCalculoImposto(SpedBase):
                 dados = {
                     'documento_id': documento.id,
                     'produto_id': item.produto_id.id,
+                    'product_id': item.product_id.id,
                     'quantidade': item.quantidade,
                     'vr_unitario': item.vr_unitario,
                     'vr_frete': item.vr_frete,

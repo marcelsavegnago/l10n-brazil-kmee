@@ -21,10 +21,11 @@ class SpedDocumentoItemDevolucao(models.TransientModel):
     _rec_name = 'product_id'
 
     product_id = fields.Many2one(
-        comodel_name='sped.produto',
+        comodel_name='product.product',
         string="Produto",
         required=True
     )
+
     quantity = fields.Float(
         string='Quantidade',
         digits=dp.get_precision('Product Unit of Measure'),
@@ -74,7 +75,7 @@ class SpedDocumentoDevolucao(models.TransientModel):
 
             for item in documento.item_ids:
                 devolucao_itens.append((0, 0, {
-                    'product_id': item.produto_id.id,
+                    'product_id': item.product_id.id,
                     'quantity': item.quantidade,
                     'item_id': item.id
                 }))

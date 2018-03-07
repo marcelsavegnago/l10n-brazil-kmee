@@ -819,6 +819,14 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         related='item_ids.produto_id',
         readonly=True,
     )
+
+    product_id = fields.Many2one(
+        comodel_name='product.product',
+        string='Produto/Serviço',
+        related='item_ids.product_id',
+        readonly=True,
+    )
+
     cfop_id = fields.Many2one(
         comodel_name='sped.cfop',
         string='CFOP',
@@ -828,13 +836,13 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     ncm_id = fields.Many2one(
         comodel_name='sped.ncm',
         string='NCM',
-        related='produto_id.ncm_id',
+        related='product_id.ncm_id',
         readonly=True,
     )
     cest_id = fields.Many2one(
         comodel_name='sped.cest',
         string='CEST',
-        related='produto_id.cest_id',
+        related='product_id.cest_id',
         readonly=True,
     )
     #

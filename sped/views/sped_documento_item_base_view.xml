@@ -24,7 +24,7 @@
                 <field name="currency_unitario_id" invisible="1"/>
                 <field name="currency_peso_id" invisible="1"/>
                 <field name="currency_unidade_id" invisible="1"/>
-                <!--                <field name="empresa_id" invisible="0"/>
+                <!--<field name="empresa_id" invisible="0"/>
                 <field name="partner_id" invisible="0"/>
                 <field name="operacao_id" invisible="0"/> -->
 
@@ -33,7 +33,7 @@
                 <field name="quantidade_tributacao" invisible="1"/>
                 <field name="partilha" invisible="1"/>
                 <field name="al_bc_icms_proprio_partilha" invisible="1"/>
-                <!--                     <field name="uf_partilha_id" invisible="1"/> -->
+                <!--<field name="uf_partilha_id" invisible="1"/> -->
                 <field name="repasse" invisible="1"/>
                 <field name="md_icms_st_retido" invisible="1"/>
                 <field name="pr_icms_st_retido" invisible="1"/>
@@ -42,7 +42,7 @@
                 <field name="al_icms_st_retido" invisible="1"/>
                 <field name="vr_icms_st_retido" invisible="1"/>
                 <field name="apuracao_ipi" invisible="1"/>
-                <!--                    <field name="md_pis_st" invisible="1"/>
+                <!--<field name="md_pis_st" invisible="1"/>
                 <field name="bc_pis_st" invisible="1"/>
                 <field name="al_pis_st" invisible="1"/>
                 <field name="vr_pis_st" invisible="1"/>
@@ -54,7 +54,7 @@
                 <field name="bc_inss_retido" invisible="1"/>
                 <field name="al_inss_retido" invisible="1"/>
                 <field name="vr_inss_retido" invisible="1"/>
-<!--                <field name="forca_recalculo_st_compra" invisible="1"/>
+                <!--<field name="forca_recalculo_st_compra" invisible="1"/>
                 <field name="md_icms_st_compra" invisible="1"/>
                 <field name="pr_icms_st_compra" invisible="1"/>
                 <field name="rd_icms_st_compra" invisible="1"/>

@@ -894,7 +894,7 @@ class SpedSomaImposto(SpedBase, models.Model):
         valores = {}
         res['value'] = valores
 
-        if not self.produto_id:
+        if not self.product_id:
             return res
 
         #
@@ -917,33 +917,33 @@ class SpedSomaImposto(SpedBase, models.Model):
         # Se já ocorreu o preenchimento da descrição, não sobrepõe
         #
         if not self.produto_nome:
-            valores['produto_nome'] = self.produto_id.nome
+            valores['produto_nome'] = self.product_id.nome
 
-        valores['org_icms'] = (self.produto_id.org_icms or
+        valores['org_icms'] = (self.product_id.org_icms or
                                ORIGEM_MERCADORIA_NACIONAL)
-        valores['unidade_id'] = self.produto_id.unidade_id.id
+        valores['unidade_id'] = self.product_id.unidade_id.id
 
-        if self.produto_id.unidade_tributacao_ncm_id:
+        if self.product_id.unidade_tributacao_ncm_id:
             valores['unidade_tributacao_id'] = \
-                self.produto_id.unidade_tributacao_ncm_id.id
+                self.product_id.unidade_tributacao_ncm_id.id
             valores['fator_conversao_unidade_tributacao'] = \
-                self.produto_id.fator_conversao_unidade_tributacao_ncm
+                self.product_id.fator_conversao_unidade_tributacao_ncm
 
         else:
-            valores['unidade_tributacao_id'] = self.produto_id.unidade_id.id
+            valores['unidade_tributacao_id'] = self.product_id.unidade_id.id
             valores['fator_conversao_unidade_tributacao'] = 1
 
         if self.operacao_id.preco_automatico == 'V':
-            valores['vr_unitario'] = self.produto_id.preco_venda
+            valores['vr_unitario'] = self.product_id.preco_venda
 
         elif self.operacao_id.preco_automatico == 'C':
-            valores['vr_unitario'] = self.produto_id.preco_custo
+            valores['vr_unitario'] = self.product_id.preco_custo
 
-        valores['peso_bruto_unitario'] = self.produto_id.peso_bruto
-        valores['peso_liquido_unitario'] = self.produto_id.peso_liquido
-        valores['especie'] = self.produto_id.especie
+        valores['peso_bruto_unitario'] = self.product_id.peso_bruto
+        valores['peso_liquido_unitario'] = self.product_id.peso_liquido
+        valores['especie'] = self.product_id.especie
         valores['fator_quantidade_especie'] = \
-            self.produto_id.fator_quantidade_especie
+            self.product_id.fator_quantidade_especie
 
         estado_origem, estado_destino, destinatario = \
             self._estado_origem_estado_destino_destinatario()
@@ -960,13 +960,13 @@ class SpedSomaImposto(SpedBase, models.Model):
         #
         protocolo = None
 
-        if self.produto_id.protocolo_id:
-            protocolo = self.produto_id.protocolo_id
+        if self.product_id.protocolo_id:
+            protocolo = self.product_id.protocolo_id
 
-        if (protocolo is None and self.produto_id.ncm_id and
-                self.produto_id.ncm_id.protocolo_ids):
+        if (protocolo is None and self.product_id.ncm_id and
+                self.product_id.ncm_id.protocolo_ids):
             busca_protocolo = [
-                ('ncm_ids.ncm_id', '=', self.produto_id.ncm_id.id),
+                ('ncm_ids.ncm_id', '=', self.product_id.ncm_id.id),
                 '|',
                 ('estado_ids', '=', False),
                 ('estado_ids.uf', '=', estado_destino)
@@ -1003,7 +1003,7 @@ class SpedSomaImposto(SpedBase, models.Model):
                     protocolo = self.empresa_id.protocolo_id
 
                 else:
-                    if self.produto_id.ncm_id:
+                    if self.product_id.ncm_id:
                         mensagem_erro = \
                             'Não há protocolo padrão para a empresa, ' \
                             'e o protocolo “{protocolo}” não pode ' \
@@ -1012,8 +1012,8 @@ class SpedSomaImposto(SpedBase, models.Model):
                             .format(
                                 protocolo=protocolo.descricao,
                                 estado=estado_destino,
-                                produto=self.produto_id.nome,
-                                ncm=self.produto_id.ncm_id.codigo_formatado
+                                produto=self.product_id.nome,
+                                ncm=self.product_id.ncm_id.codigo_formatado
                             )
                     else:
                         mensagem_erro = \
@@ -1023,7 +1023,7 @@ class SpedSomaImposto(SpedBase, models.Model):
                             '(produto “{produto}”)!'\
                             .format(protocolo=protocolo.descricao,
                                     estado=estado_destino,
-                                    produto=self.produto_id.nome)
+                                    produto=self.product_id.nome)
 
                     raise ValidationError(_(mensagem_erro))
 
@@ -1198,10 +1198,10 @@ class SpedSomaImposto(SpedBase, models.Model):
             # 2º - se o NCM tem uma específica
             # 3º - a geral da empresa
             #
-            if self.produto_id.al_pis_cofins_id:
-                al_pis_cofins = self.produto_id.al_pis_cofins_id
-            # elif self.produto_id.ncm_id.al_pis_cofins_id:
-                # al_pis_cofins = self.produto_id.ncm_id.al_pis_cofins_id
+            if self.product_id.al_pis_cofins_id:
+                al_pis_cofins = self.product_id.al_pis_cofins_id
+            # elif self.product_id.ncm_id.al_pis_cofins_id:
+                # al_pis_cofins = self.product_id.ncm_id.al_pis_cofins_id
             else:
                 al_pis_cofins = self.empresa_id.al_pis_cofins_id
 
@@ -1223,13 +1223,13 @@ class SpedSomaImposto(SpedBase, models.Model):
         # Busca a alíquota do IBPT quando venda
         #
         if self.operacao_item_id.cfop_id.eh_venda:
-            if self.produto_id.ncm_id:
+            if self.product_id.ncm_id:
                 ibpt = self.env['sped.ibptax.ncm']
 
                 ibpt_ids = ibpt.search([
                     ('estado_id', '=',
                         self.empresa_id.municipio_id.estado_id.id),
-                    ('ncm_id', '=', self.produto_id.ncm_id.id),
+                    ('ncm_id', '=', self.product_id.ncm_id.id),
                 ])
 
                 if len(ibpt_ids) > 0:
@@ -1244,13 +1244,13 @@ class SpedSomaImposto(SpedBase, models.Model):
             # NBS por ser mais detalhado tem prioridade sobre o código do
             # serviço
             #
-            elif self.produto_id.nbs_id:
+            elif self.product_id.nbs_id:
                 ibpt = self.env['sped.ibptax.nbs']
 
                 ibpt_ids = ibpt.search([
                     ('estado_id', '=',
                         self.empresa_id.municipio_id.estado_id.id),
-                    ('nbs_id', '=', self.produto_id.nbs_id.id),
+                    ('nbs_id', '=', self.product_id.nbs_id.id),
                 ])
 
                 if len(ibpt_ids) > 0:
@@ -1261,13 +1261,13 @@ class SpedSomaImposto(SpedBase, models.Model):
                             POSICAO_CFOP_ESTRANGEIRO):
                         valores['al_ibpt'] += ibpt_ids[0].al_ibpt_internacional
 
-            elif self.produto_id.servico_id:
+            elif self.product_id.servico_id:
                 ibpt = self.env['sped.ibptax.servico']
 
                 ibpt_ids = ibpt.search([
                     ('estado_id', '=',
                         self.empresa_id.municipio_id.estado_id.id),
-                    ('servico_id', '=', self.produto_id.servico_id.id),
+                    ('servico_id', '=', self.product_id.servico_id.id),
                 ])
 
                 if len(ibpt_ids) > 0:
@@ -1401,10 +1401,10 @@ class SpedSomaImposto(SpedBase, models.Model):
         # 1º - se o produto tem uma específica
         # 2º - se o NCM tem uma específica
         #
-        if self.produto_id.al_ipi_id:
-            al_ipi = self.produto_id.al_ipi_id
-        elif self.produto_id.ncm_id.al_ipi_id:
-            al_ipi = self.produto_id.ncm_id.al_ipi_id
+        if self.product_id.al_ipi_id:
+            al_ipi = self.product_id.al_ipi_id
+        elif self.product_id.ncm_id.al_ipi_id:
+            al_ipi = self.product_id.ncm_id.al_ipi_id
         else:
             al_ipi = None
 
@@ -1422,7 +1422,7 @@ class SpedSomaImposto(SpedBase, models.Model):
         return res
 
     @api.onchange('protocolo_id', 'cfop_id', 'calcula_difal',
-                  'org_icms', 'cst_icms', 'cst_icms_sn', 'produto_id')
+                  'org_icms', 'cst_icms', 'cst_icms_sn', 'product_id')
     def _onchange_cst_icms_cst_icms_sn(self):
         self.ensure_one()
 
@@ -1514,7 +1514,7 @@ class SpedSomaImposto(SpedBase, models.Model):
         #
         if ((self.cst_icms in ST_ICMS_CALCULA_ST or
                 self.cst_icms_sn in ST_ICMS_SN_CALCULA_ST) and
-                self.produto_id.tipo != TIPO_PRODUTO_SERVICO_SERVICOS):
+                self.product_id.tipo != TIPO_PRODUTO_SERVICO_SERVICOS):
             al_icms_st = aliquota_origem_destino.al_icms_st_id
 
             valores['md_icms_st'] = al_icms_st.md_icms
@@ -1528,7 +1528,7 @@ class SpedSomaImposto(SpedBase, models.Model):
             if (al_icms_st.md_icms ==
                     MODALIDADE_BASE_ICMS_ST_MARGEM_VALOR_AGREGADO and
                     (not al_icms_st.pr_icms)):
-                protocolo_ncm = self.produto_id.ncm_id.busca_mva(
+                protocolo_ncm = self.product_id.ncm_id.busca_mva(
                     self.protocolo_id)
 
                 if (protocolo_ncm is not None) and protocolo_ncm:

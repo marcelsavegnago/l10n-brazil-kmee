@@ -90,61 +90,66 @@ class SpedDocumentoItem(models.Model):
         return unidade[0]
 
     def _busca_produto(self, dados):
-        if dados['codigo_barras']:
-            produto = self.env['sped.produto'].search(
+        """
+        Retorna o produto que mais se assimila com as informações de "dados"
+        :param dados: 
+        :return: product.product
+        """
+        if dados.get('codigo_barras'):
+            product_id = self.env['product.product'].search(
                 [('codigo_barras', '=', dados['codigo_barras'])])
 
-            if len(produto) != 0:
-                return produto[0]
+            if len(product_id) != 0:
+                return product_id[0]
 
-        produto = self.env['sped.produto'].search(
+        product_id = self.env['product.product'].search(
             [('codigo', '=', dados['codigo'])])
 
-        if len(produto) != 0:
-            return produto[0]
+        if len(product_id) != 0:
+            return product_id[0]
 
-        produto = self.env['sped.produto'].search(
+        product_id = self.env['product.product'].search(
             [('codigo_cliente', '=', dados['codigo'])])
 
-        if len(produto) != 0:
-            return produto[0]
+        if len(product_id) != 0:
+            return product_id[0]
 
-        produto = self.env['sped.produto'].create(dados)
+        product_id = self.env['product.product'].create(dados)
 
-        return produto
+        return product_id
 
     def _busca_produto_terceiros(self, dados):
-        if dados['codigo_barras']:
-            produto = self.env['sped.produto'].search(
+        if dados.get('codigo_barras'):
+            product_id = self.env['product.product'].search(
                 [('codigo_barras', '=', dados['codigo_barras'])])
 
-            if len(produto) != 0:
-                return produto[0]
+            if len(product_id) != 0:
+                return product_id[0]
 
-        if dados['codigo_barras_tributacao']:
-            produto = self.env['sped.produto'].search(
+        if dados.get('codigo_barras_tributacao'):
+            product_id = self.env['product.product'].search(
                 [('codigo_barras', '=',
                   dados['codigo_barras_tributacao'])])
 
-            if len(produto) != 0:
-                return produto[0]
+            if len(product_id) != 0:
+                return product_id[0]
 
-        produto = self.env['sped.produto'].search(
+        product_id = self.env['product.product'].search(
             [('codigo_cliente', '=', dados['codigo'])])
 
-        if len(produto) != 0:
-            return produto[0]
+        if len(product_id) != 0:
+            return product_id[0]
 
         #
         # Produtos que são a própria CFOP
         #
         if dados['codigo'].upper().startswith('CFOP'):
-            produto = self.env['sped.produto'].search(
-                [('codigo', '=',
-                  dados['codigo'].upper())])
+            produto_id = self.env['product.product'].search(
+                [('codigo', '=', dados['codigo'].upper())]
+            )
 
-            if len(produto) != 0:
-                return produto[0]
+            if len(produto_id) != 0:
+                return produto_id[0]
 
         return False
 
@@ -329,17 +334,17 @@ class SpedDocumentoItem(models.Model):
             dados_produto['codigo_barras_tributacao'] = False
 
         if dados_documento['emissao'] == TIPO_EMISSAO_TERCEIROS:
-            produto = self._busca_produto_terceiros(dados_produto)
-            if produto:
-                dados['produto_id'] = produto.id
-                dados['unidade_id'] = produto.unidade_id.id
-                dados['currency_unidade_id'] = produto.currency_unidade_id.id
+            product_id = self._busca_produto_terceiros(dados_produto)
+            if product_id:
+                dados['product_id'] = product_id.id
+                dados['unidade_id'] = product_id.unidade_id.id
+                dados['currency_unidade_id'] = product_id.currency_unidade_id.id
 
-                if produto.unidade_tributacao_id:
+                if product_id.unidade_tributacao_id:
                     dados['unidade_tributacao_id'] = \
-                        produto.unidade_tributacao_id.id
+                        product_id.unidade_tributacao_id.id
                     dados['currency_unidade_tributacao_id'] = \
-                        produto.currency_unidade_tributacao_id.id
+                        product_id.currency_unidade_tributacao_id.id
                 else:
                     unidade = self._busca_unidade(det.prod.uCom.valor, False)
                     if unidade:
@@ -416,7 +421,7 @@ class SpedDocumentoItem(models.Model):
                     #dados_produto['nome'].replace(' EAN:' + cb, '')
                 #dados_produto['nome'] = dados_produto['nome'].strip()
 
-            dados['produto_id'] = self._busca_produto(dados_produto).id
+            dados['product_id'] = self._busca_produto(dados_produto).id
 
         ##
         ## Declaração de Importação

@@ -30,6 +30,7 @@
         'views/account_invoice_view.xml',
         'wizard/l10n_br_account_invoice_costs_ratio_view.xml',
         'views/nfe/account_invoice_nfe_view.xml',
+        'views/cte/account_invoice_cte_view.xml',
         'views/res_partner_view.xml',
         'views/res_company_view.xml',
         'views/account_product_fiscal_classification_view.xml',

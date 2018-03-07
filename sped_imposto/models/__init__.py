@@ -48,7 +48,7 @@ from . import sped_operacao_item
 #
 # Cadastro de produtos e serviços
 #
-from . import inherited_sped_produto
+from . import inherited_product_template
 
 #
 # Cadastros básicos

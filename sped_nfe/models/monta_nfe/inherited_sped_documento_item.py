@@ -112,9 +112,9 @@ class SpedDocumentoItem(models.Model):
 
         det.nItem.valor = numero_item
         det.prod.cProd.valor = \
-            self.produto_id.codigo_cliente or \
-            self.produto_id.codigo or str(self.produto_id.id)
-        det.prod.cEAN.valor = self.produto_id.codigo_barras or ''
+            self.product_id.codigo_cliente or \
+            self.product_id.codigo or str(self.product_id.id)
+        det.prod.cEAN.valor = self.product_id.codigo_barras or ''
 
         #
         # O 1º item da NFC-e tem que ter uma descrição específica em
@@ -129,7 +129,7 @@ class SpedDocumentoItem(models.Model):
             if self.produto_nome:
                 descricao = self.produto_nome
             else:
-                descricao = self.produto_id.nome
+                descricao = self.product_id.nome
 
         descricao = descricao.replace('—', '-').replace('–', '-')
         descricao = descricao.replace('”', '"').replace('“', '"')
@@ -137,9 +137,9 @@ class SpedDocumentoItem(models.Model):
         descricao = descricao.replace('—', '-').replace('–', '-')
         det.prod.xProd.valor = descricao.strip()
 
-        if self.produto_id.ncm_id:
-            det.prod.NCM.valor = self.produto_id.ncm_id.codigo
-            det.prod.EXTIPI.valor = self.produto_id.ncm_id.ex
+        if self.product_id.ncm_id:
+            det.prod.NCM.valor = self.product_id.ncm_id.codigo
+            det.prod.EXTIPI.valor = self.product_id.ncm_id.ex
         else:
             det.prod.NCM.valor = ''
 
@@ -243,13 +243,13 @@ class SpedDocumentoItem(models.Model):
 
         if self.documento_id.regime_tributario == REGIME_TRIBUTARIO_SIMPLES:
             if self.cst_icms_sn in ST_ICMS_CODIGO_CEST:
-                if self.produto_id.cest_id:
-                    det.prod.CEST.valor = self.produto_id.cest_id.codigo or ''
+                if self.product_id.cest_id:
+                    det.prod.CEST.valor = self.product_id.cest_id.codigo or ''
 
         else:
             if self.cst_icms in ST_ICMS_CODIGO_CEST:
-                if self.produto_id.cest_id:
-                    det.prod.CEST.valor = self.produto_id.cest_id.codigo or ''
+                if self.product_id.cest_id:
+                    det.prod.CEST.valor = self.product_id.cest_id.codigo or ''
 
         #
         # IPI

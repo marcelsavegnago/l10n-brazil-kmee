@@ -76,7 +76,7 @@
         #
         # Data
         #
-        'data/finan.conta.csv',
+
         'data/finan_documento_data.xml',
         'data/finan_forma_pagamento.xml',
         'data/finan_condicao_pagamento.xml',
@@ -106,6 +106,7 @@
 
     ],
     'demo': [
+        'demo/finan.conta.csv',
         'demo/finan_banco.xml',
         'demo/finan_carteira.xml',
         'demo/finan_lancamento_a_pagar.xml',

@@ -93,9 +93,7 @@ class SpedCalculoImposto(SpedBase):
         string='Empresa',
         default=lambda self: self.env['sped.empresa']._empresa_ativa('sped.empresa')
     )
-    partner_id = fields.Many2one(
-        comodel_name='res.partner',
-    )
+
     partner_id = fields.Many2one(
         comodel_name='res.partner',
         string='Destinatário/Remetente'

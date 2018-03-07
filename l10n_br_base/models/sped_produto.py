@@ -7,8 +7,20 @@
 
 from __future__ import division, print_function, unicode_literals
 
+import logging
+
 from odoo import api, fields, models
+
 from .sped_base import SpedBase
+
+_logger = logging.getLogger(__name__)
+
+try:
+    from pybrasil.produto import valida_ean
+    from pybrasil.base import tira_acentos
+
+except (ImportError, IOError) as err:
+    _logger.debug(err)
 
 
 class SpedProduto(SpedBase, models.Model):
@@ -33,5 +45,5 @@ class SpedProduto(SpedBase, models.Model):
     @api.model
     def create(self, vals):
         produto = super(SpedProduto, self.with_context(
-            create_sped_produto=True)).create(vals)
+            create_from_sped_produto=True)).create(vals)
         return produto

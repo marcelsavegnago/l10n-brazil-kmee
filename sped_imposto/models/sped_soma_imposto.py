@@ -136,6 +136,15 @@ class SpedSomaImposto(SpedBase, models.Model):
         ondelete='restrict',
         index=True,
     )
+
+    # campo para remocão do sped.produto
+    product_id = fields.Many2one(
+        comodel_name='product.product',
+        string='Produto/Serviço',
+        ondelete='restrict',
+        index=True,
+    )
+
     protocolo_id = fields.Many2one(
         comodel_name='sped.protocolo.icms',
         string='Protocolo ICMS',

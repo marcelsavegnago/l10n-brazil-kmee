@@ -147,6 +147,15 @@ class SpedCalculoImpostoItem(SpedBase):
         ondelete='restrict',
         index=True,
     )
+    
+    # campo para remoção do sped.produto
+    product_id = fields.Many2one(
+        comodel_name='product.product',
+        string='Produto/Serviço',
+        ondelete='restrict',
+        index=True,
+    )
+
     ncm_id = fields.Many2one(
         comodel_name='sped.ncm',
         string='NCM',

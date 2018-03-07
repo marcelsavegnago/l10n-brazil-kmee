@@ -77,8 +77,12 @@
                 <field name="vr_custo_comercial" invisible="1" />
 
                 <group colspan="4" col="4">
-<!--                     options="{'no_open': True, 'no_create': True}" -->
+
                     <field name="produto_id" colspan="4" options="{'no_create': True}"
+                           invisible="True"
+                           context="{'form_view_ref': (modelo != 'SE' and 'l10n_br_base.sped_produto_produto_form' or 'l10n_br_base.sped_produto_servico_form')}"
+                    />
+                    <field name="product_id" colspan="4" options="{'no_create': True}"
                            context="{'form_view_ref': (modelo != 'SE' and 'l10n_br_base.sped_produto_produto_form' or 'l10n_br_base.sped_produto_servico_form')}"
                     />
                     <newline />

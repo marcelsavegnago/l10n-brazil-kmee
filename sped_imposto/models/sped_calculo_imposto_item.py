@@ -151,6 +151,7 @@ class SpedCalculoImpostoItem(SpedBase):
     # campo para remoção do sped.produto
     product_id = fields.Many2one(
         comodel_name='product.product',
+        related='produto_id.product_id',
         string='Produto/Serviço',
         ondelete='restrict',
         index=True,
@@ -1042,15 +1043,23 @@ class SpedCalculoImpostoItem(SpedBase):
 
         return (estado_origem, estado_destino, destinatario)
 
-    @api.onchange('produto_id')
+    @api.onchange('product_id')
+    def _onchange_product_id(self):
+        """
+        onchange para setar o spedproduto enquanto nao substituimos
+        completamente da localizacao
+        :return: 
+        """
+        for record in self:
+            record.produto_id = record.product_id.sped_produto_id
+
+    @api.onchange('product_id')
     def _onchange_produto_id(self):
         self.ensure_one()
 
         if self.emissao == TIPO_EMISSAO_PROPRIA:
             res = self._onchange_produto_id_emissao_propria()
 
-            if hasattr(self, 'product_id'):
-                self.product_id = self.produto_id.product_id.id
             if hasattr(self, 'product_uom'):
                 self.product_uom = self.produto_id.unidade_id.uom_id
             if hasattr(self, 'uom_id'):
@@ -1061,8 +1070,7 @@ class SpedCalculoImpostoItem(SpedBase):
                 res = self._onchange_produto_id_emissao_propria()
             else:
                 res = self._onchange_produto_id_recebimento()
-            if hasattr(self, 'product_id'):
-                self.product_id = self.produto_id.product_id.id
+
             if hasattr(self, 'product_uom'):
                 self.product_uom = self.produto_id.unidade_id.uom_id
             if hasattr(self, 'uom_id'):

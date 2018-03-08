@@ -77,12 +77,12 @@ class StockMove(SpedCalculoImpostoItem, models.Model):
     especie = fields.Char(
         string='Espécie/embalagem',
         size=60,
-        related='produto_id.especie',
+        related='product_id.especie',
     )
     fator_quantidade_especie = fields.Float(
         string='Quantidade por espécie/embalagem',
         digits=dp.get_precision('SPED - Quantidade'),
-        related='produto_id.fator_quantidade_especie',
+        related='product_id.fator_quantidade_especie',
     )
     quantidade_especie = fields.Float(
         string='Quantidade em espécie/embalagem',
@@ -124,7 +124,7 @@ class StockMove(SpedCalculoImpostoItem, models.Model):
     def create(self, dados):
         dados = self._mantem_sincronia_cadastros(dados)
 
-        if 'produto_id' in dados:
+        if 'produto_id' in dados and not 'product_id' in dados:
             produto = self.env['sped.produto'].browse(dados['produto_id'])
             dados['product_id'] = produto.product_id.id
 
@@ -138,7 +138,7 @@ class StockMove(SpedCalculoImpostoItem, models.Model):
     def write(self, dados):
         dados = self._mantem_sincronia_cadastros(dados)
 
-        if 'produto_id' in dados:
+        if 'produto_id' in dados and not 'product_id' in dados:
             produto = self.env['sped.produto'].browse(dados['produto_id'])
             dados['product_id'] = produto.product_id.id
 
@@ -159,24 +159,22 @@ class StockMove(SpedCalculoImpostoItem, models.Model):
                                    debit_account_id):
         return []
 
-    @api.onchange('produto_id')
+    @api.onchange('product_id')
     def _onchange_produto_id(self):
         self.ensure_one()
         res = super(StockMove, self)._onchange_produto_id()
 
-        if hasattr(self, 'product_id'):
-            self.product_id = self.produto_id.product_id.id
         if hasattr(self, 'product_uom'):
-            self.product_uom = self.produto_id.unidade_id.uom_id
+            self.product_uom = self.product_id.unidade_id.uom_id
         if hasattr(self, 'uom_id'):
-            self.uom_id = self.produto_id.unidade_id.uom_id
+            self.uom_id = self.product_id.unidade_id.uom_id
 
         self.fator_quantidade_especie = \
-            self.produto_id.fator_quantidade_especie
+            self.product_id.fator_quantidade_especie
 
         return res
 
-    @api.depends('produto_id', 'quantidade', 'fator_quantidade_especie',
+    @api.depends('product_id', 'quantidade', 'fator_quantidade_especie',
                  'especie')
     def _compute_quantidade_especie(self):
         for item in self:

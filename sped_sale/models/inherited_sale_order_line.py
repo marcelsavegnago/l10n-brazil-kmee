@@ -238,16 +238,16 @@ class SaleOrderLine(SpedCalculoImpostoItem, models.Model):
             item.qty_invoiced = item.quantidade_faturada
             item.qty_to_invoice = item.quantidade_a_faturar
 
-    @api.onchange('produto_id')
+    @api.onchange('product_id')
     def _onchange_produto_id(self):
         for item in self:
             if not item.order_id:
                 item.operacao_id = False
 
-            if not item.produto_id:
+            if not item.product_id:
                 item.operacao_id = False
 
-            if item.produto_id.tipo == TIPO_PRODUTO_SERVICO_SERVICOS:
+            if item.product_id.tipo == TIPO_PRODUTO_SERVICO_SERVICOS:
                 if item.order_id.operacao_servico_id:
                     item.operacao_id = item.order_id.operacao_servico_id
             else:
@@ -272,9 +272,8 @@ class SaleOrderLine(SpedCalculoImpostoItem, models.Model):
                 }
                 return {'warning': warning}
 
-            item.name = item.produto_id.nome
-            item.produto_nome = item.produto_id.nome
-            item.product_id = item.produto_id.product_id
+            item.name = item.product_id.nome
+            item.produto_nome = item.product_id.nome
             item.price_unit = item.vr_unitario
 
         super(SaleOrderLine, self)._onchange_produto_id()
@@ -329,6 +328,7 @@ class SaleOrderLine(SpedCalculoImpostoItem, models.Model):
         res = super(SaleOrderLine, self)._prepare_invoice_line(qty)
         if self.is_brazilian:
             res['produto_id'] = self.produto_id.id
+            res['product_id'] = self.product_id.id
             res['quantidade'] = self.quantidade
             res['vr_unitario'] = self.vr_unitario
             res['vr_desconto'] = self.vr_desconto

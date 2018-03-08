@@ -261,7 +261,7 @@ class SpedDocumento(models.Model):
         dest.enderDest.xBairro.valor = partner.bairro or ''
 
         if not partner.cnpj_cpf.startswith('EX'):
-            dest.enderDest.CEP.valor = limpa_formatacao(partner.cep)
+            dest.enderDest.CEP.valor = limpa_formatacao(partner.cep or '')
         else:
             dest.enderDest.CEP.valor = '99999999'
 

@@ -12,6 +12,6 @@ from . import inherited_sped_documento
 from . import inherited_sped_documento_item
 from . import inherited_sped_operacao
 from . import stock_move_entrada_saida
-from . import inherited_sped_produto
+# from . import inherited_sped_produto
 from . import inherited_stock_inventory
 from . import inherited_stock_inventory_line

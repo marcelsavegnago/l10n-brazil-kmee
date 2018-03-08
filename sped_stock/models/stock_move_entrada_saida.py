@@ -24,7 +24,7 @@ select
     m.sped_documento_id as documento_id,
     m.picking_id,
     m.location_id,
-    m.produto_id,
+    m.product_id,
     m.data,
     sdi.cfop_id,
     -1 as sinal,
@@ -51,7 +51,7 @@ select
     m.sped_documento_id as documento_id,
     m.picking_id,
     m.location_dest_id as location_id,
-    m.produto_id,
+    m.product_id,
     m.data,
     sdi.cfop_id,
     1 as sinal,
@@ -87,7 +87,7 @@ where
 -- create index stock_move_entrada_saida_documento_index on stock_move_entrada_saida (documento_id);
 -- create index stock_move_entrada_saida_picking_index on stock_move_entrada_saida (picking_id);
 -- create index stock_move_entrada_saida_location_index on stock_move_entrada_saida (location_id);
--- create index stock_move_entrada_saida_produto_index on stock_move_entrada_saida (produto_id);
+-- create index stock_move_entrada_saida_product_index on stock_move_entrada_saida (product_id);
 -- create index stock_move_entrada_saida_cfop_index on stock_move_entrada_saida (cfop_id);
 '''
 
@@ -96,7 +96,7 @@ class StockMoveCusto(models.Model):
     _name = b'stock.move.entrada.saida'
     _description = 'Movimento de Estoque - Entradas e Saídas'
     _auto = False
-    _order = 'produto_id, data, sinal desc, quantidade desc'
+    _order = 'product_id, data, sinal desc, quantidade desc'
 
     @api.model_cr
     def init(self):
@@ -126,6 +126,10 @@ class StockMoveCusto(models.Model):
         comodel_name='sped.produto',
         string='Produto',
     )
+    product_id = fields.Many2one(
+        comodel_name='product.product',
+        string='Product',
+    )
     data = fields.Date(
         string='Data',
     )
@@ -142,7 +146,7 @@ class StockMoveCusto(models.Model):
     unidade_id = fields.Many2one(
         comodel_name='sped.unidade',
         string='Unidade',
-        related='produto_id.unidade_id',
+        related='product_id.unidade_id',
         readonly=True,
     )
     currency_unidade_id = fields.Many2one(

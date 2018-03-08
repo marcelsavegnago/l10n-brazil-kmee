@@ -140,7 +140,6 @@ class SpedSomaImposto(SpedBase, models.Model):
     # campo para remocão do sped.produto
     product_id = fields.Many2one(
         comodel_name='product.product',
-        related='produto_id.product_id',
         string='Produto/Serviço',
         ondelete='restrict',
         index=True,

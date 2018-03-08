@@ -12,17 +12,18 @@ def run(session, logger):
                     __file__)
         return
 
-    # elif session.db_version < '10.0.0.0.1':
-    #     session.update_modules(['all'])
-    # elif session.db_version < '10.0.0.0.1':
-    #     session.update_modules(['all'])
+    # Atualizar a estrutura das tabelas
+    if session.db_version > '10.0.0.0.0':
+        session.update_modules(['all'])
 
+    #
     update_sped_documento = """
         update sped_documento set partner_id=p.partner_id
         from sped_participante p
         where sped_documento.participante_id = p.id;
         """
 
+    # Atualizar informaçoes do partner a partir do sped.participante
     update_res_partner = """update
        res_partner
        set
@@ -38,7 +39,7 @@ def run(session, logger):
         bairro, numero, eh_sindicato, estado, fantasia, crc_uf,
         pais_nacionalidade_id, endereco, date_localization,
         partner_latitude, partner_longitude, condicao_pagamento_id,
-        eh_vendedor,cnpj_cpf_raiz, fone_whatsapp, cnpj_cpf_numero) =
+        eh_vendedor,cnpj_cpf_raiz, fone_whatsapp) =
         (p.fone, p.profissao, p.celular, p.eh_funcionario,
          p.complemento, p.eh_orgao_publico, p.eh_grupo, p.eh_consumidor_final,
          p.contribuinte, p.suframa, p.cei, p.codigo_ans, p.cep,
@@ -53,12 +54,13 @@ def run(session, logger):
          p.estado, p.fantasia, p.crc_uf, p.pais_nacionalidade_id, p.endereco,
          p.date_localization, p.partner_latitude,p.partner_longitude,
          p.condicao_pagamento_id, p.eh_vendedor, p.cnpj_cpf_raiz,
-         p.fone_whatsapp, p.cnpj_cpf_numero)
+         p.fone_whatsapp)
        from sped_participante p
        where
        res_partner.id = p.partner_id;
     """
 
+    # Atualizar o product.template com as informaçoes do sped.produto
     update_product_template = """WiTH t AS(
     SELECT sp.*, pp.product_tmpl_id as tmpl_id FROM sped_produto as sp
     INNER JOIN product_product pp ON pp.id = sp.product_id
@@ -77,7 +79,3 @@ def run(session, logger):
       )
         
       from t where product_template.id = t.tmpl_id;"""
-
-
-    if session.db_version > '10.0.0.0.0':
-        session.update_modules(['all'])

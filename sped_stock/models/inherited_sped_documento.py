@@ -195,11 +195,12 @@ class SpedDocumento(models.Model):
             move_lines = []
             for line in documento.item_ids:
                 vals_produtos = [0, False, {
+                    'product_id': line.product_id.id,
                     'produto_id': line.produto_id.id,
                     'product_uom': line.unidade_id.uom_id.id,
                     'product_uom_qty': line.quantidade,
-                    'name': "[" + line.produto_id.codigo + "] " +
-                            line.produto_id.nome,
+                    'name': "[" + line.product_id.codigo + "] " +
+                            line.product_id.nome,
                     'date_expected': documento.data_hora_entrada_saida,
                     'location_id': location_id.id,
                     'location_dest_id':

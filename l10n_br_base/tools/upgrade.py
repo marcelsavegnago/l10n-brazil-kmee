@@ -14,14 +14,7 @@ def run(session, logger):
 
     # Atualizar a estrutura das tabelas
     if session.db_version > '10.0.0.0.0':
-        session.update_modules(['all'])
-
-    #
-    update_sped_documento = """
-        update sped_documento set partner_id=p.partner_id
-        from sped_participante p
-        where sped_documento.participante_id = p.id;
-        """
+        session.update_modules(['l10n_br_base', 'sped_sale'])
 
     # Atualizar informaçoes do partner a partir do sped.participante
     update_res_partner = """update
@@ -66,16 +59,31 @@ def run(session, logger):
     INNER JOIN product_product pp ON pp.id = sp.product_id
     ) UPDATE product_template SET 
     
-    (fator_quantidade_especie, codigo_barras, nome, preco_venda, peso_bruto,
-       nome_unico, codigo_unico, org_icms, peso_liquido, marca, preco_custo,
-       especie, codigo, unidade_id, tipo, 
-       preco_transferencia    
-       ) =
-        (
+    (
+        name, codigo_cliente,
+        fator_quantidade_especie, codigo_barras, nome, preco_venda, peso_bruto,
+        nome_unico, codigo_unico, org_icms, peso_liquido, marca, preco_custo,
+        especie, codigo, unidade_id, tipo, 
+        preco_transferencia,
+        ncm_id, cest_id, taxa_administrativa, al_ipi_id, al_pis_cofins_id,
+        codigo_natureza_receita_pis_cofins, unidade_tributacao_id,
+        codigo_barras_tributacao, fator_conversao_unidade_tributacao
+    ) =
+    (
+        t.nome, t.codigo_cliente,
         t.fator_quantidade_especie, t.codigo_barras, t.nome, t.preco_venda, t.peso_bruto,
-       t.nome_unico, t.codigo_unico, t.org_icms, t.peso_liquido, t.marca, t.preco_custo,
-       t.especie, t.codigo, t.unidade_id, t.tipo,
-       t.preco_transferencia
-      )
-        
-      from t where product_template.id = t.tmpl_id;"""
+        t.nome_unico, t.codigo_unico, t.org_icms, t.peso_liquido, t.marca, t.preco_custo,
+        t.especie, t.codigo, t.unidade_id, t.tipo,
+        t.preco_transferencia, 
+        t.ncm_id, t.cest_id, t.taxa_administrativa, t.al_ipi_id, t.al_pis_cofins_id,
+        t.codigo_natureza_receita_pis_cofins, t.unidade_tributacao_id,
+        t.codigo_barras_tributacao, t.fator_conversao_unidade_tributacao
+    )
+    from t where product_template.id = t.tmpl_id;"""
+
+
+    update_sped_documento = """
+        update sped_documento set partner_id=p.partner_id
+        from sped_participante p
+        where sped_documento.participante_id = p.id;
+        """

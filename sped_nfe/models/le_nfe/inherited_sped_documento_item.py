@@ -95,46 +95,51 @@ class SpedDocumentoItem(models.Model):
         :param dados: 
         :return: product.product
         """
+        product_product_obj = self.env['product.product']
+
         if dados.get('codigo_barras'):
-            product_id = self.env['product.product'].search(
+            product_id = product_product_obj.search(
                 [('codigo_barras', '=', dados['codigo_barras'])])
 
             if len(product_id) != 0:
                 return product_id[0]
 
-        product_id = self.env['product.product'].search(
+        product_id = product_product_obj.search(
             [('codigo', '=', dados['codigo'])])
 
         if len(product_id) != 0:
             return product_id[0]
 
-        product_id = self.env['product.product'].search(
+        product_id = product_product_obj.search(
             [('codigo_cliente', '=', dados['codigo'])])
 
         if len(product_id) != 0:
             return product_id[0]
 
-        product_id = self.env['product.product'].create(dados)
+        product_id = product_product_obj.create(dados)
 
         return product_id
 
     def _busca_produto_terceiros(self, dados):
+
+        product_product_obj = self.env['product.product']
+
         if dados.get('codigo_barras'):
-            product_id = self.env['product.product'].search(
+            product_id = product_product_obj.search(
                 [('codigo_barras', '=', dados['codigo_barras'])])
 
             if len(product_id) != 0:
                 return product_id[0]
 
         if dados.get('codigo_barras_tributacao'):
-            product_id = self.env['product.product'].search(
+            product_id = product_product_obj.search(
                 [('codigo_barras', '=',
                   dados['codigo_barras_tributacao'])])
 
             if len(product_id) != 0:
                 return product_id[0]
 
-        product_id = self.env['product.product'].search(
+        product_id = product_product_obj.search(
             [('codigo_cliente', '=', dados['codigo'])])
 
         if len(product_id) != 0:
@@ -144,12 +149,12 @@ class SpedDocumentoItem(models.Model):
         # Produtos que são a própria CFOP
         #
         if dados['codigo'].upper().startswith('CFOP'):
-            produto_id = self.env['product.product'].search(
+            product_id = product_product_obj.search(
                 [('codigo', '=', dados['codigo'].upper())]
             )
 
-            if len(produto_id) != 0:
-                return produto_id[0]
+            if len(product_id) != 0:
+                return product_id[0]
 
         return False
 

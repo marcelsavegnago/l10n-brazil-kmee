@@ -732,6 +732,15 @@ class SpedCalculoImposto(SpedBase):
 
     @api.multi
     def action_view_documento(self):
+        """
+        Rotina para retornar uma view contendo os documentos fiscais
+        :return: action 
+        """
+        # Caso seja um model que tem herança da classe base, pegar os
+        # sed.documentos que estao relacionados
+        if not self._name == 'sped.documento':
+            self = self.documento_ids
+
         action = self.env.ref('sped.sped_documento_emissao_nfe_acao').read()[0]
 
         if len(self) > 1:

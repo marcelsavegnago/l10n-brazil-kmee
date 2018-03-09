@@ -7,7 +7,8 @@ from __future__ import division, print_function, unicode_literals
 
 from odoo import api, fields, models
 
-from odoo.addons.l10n_br_base.constante_tributaria import *
+from odoo.addons.l10n_br_base.constante_tributaria import \
+    TIPO_PRODUTO_SERVICO_SERVICOS
 
 
 class ProductTemplate(models.Model):
@@ -15,7 +16,8 @@ class ProductTemplate(models.Model):
 
     ncm_id = fields.Many2one(
         comodel_name='sped.ncm',
-        string='NCM')
+        string='NCM',
+    )
     cest_ids = fields.Many2many(
         comodel_name='sped.cest',
         related='ncm_id.cest_ids',

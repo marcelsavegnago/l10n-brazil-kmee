@@ -283,9 +283,11 @@ function l10n_br_pos_screens(instance, module) {
             this.reload_partners().then(function(){
                     var partner = self.pos.db.get_partner_by_id(partner_id);
                 if (partner) {
+                    var date = new Date();
 //                  usando o pricelist da loja por padrao
                     partner['property_product_pricelist'][0] = self.pos.pricelist.id;
-                    partner.birthdate = $('.birthdate').val()
+                    partner.birthdate = $('.birthdate').val();
+                    partner.data_alteracao = date.getFullYear() + '-' + date.getMonth();
                     partner.street2 = $('.client-address-street2').val()
                     partner.gender = $('.gender').val()
                     partner.whatsapp = 'sim' === $('.whatsapp').val()
@@ -303,6 +305,45 @@ function l10n_br_pos_screens(instance, module) {
                     self.display_client_details('hide');
                 }
             });
+        },
+
+        carrega_cep: function(country_id, state_id, l10n_br_city){
+            if( country_id != null){
+                new instance.web.Model('res.country.state').call('get_states_ids', [country_id]).then(function (result) {
+                $('.client-address-state').children('option:not(:first)').remove();
+                    $.each(result, function(key, value){
+                        if(state_id != null && state_id == key){
+                             $('.client-address-state').append($("<option></option>")
+                                          .attr("value",key)
+                                          .attr("selected",true)
+                                          .text(value));
+                        }
+                        else{
+                            $('.client-address-state').append($("<option></option>")
+                                          .attr("value",key)
+                                          .text(value));
+                        }
+                    });
+                });
+            }
+            if(state_id != null){
+                    new instance.web.Model('l10n_br_base.city').call('get_city_ids', [state_id]).then(function (result) {
+                    $('.client-address-city').children('option:not(:first)').remove();
+                        $.each(result, function(key, value){
+                            if(l10n_br_city != null && l10n_br_city == key){
+                            $('.client-address-city').append($("<option></option>")
+                                              .attr("value",key)
+                                              .attr("selected", true)
+                                              .text(value));
+                            }
+                            else{
+                             $('.client-address-city').append($("<option></option>")
+                                              .attr("value",key)
+                                              .text(value));
+                            }
+                        });
+                    });
+            }
         },
 
         display_client_details: function(visibility,partner,clickpos){
@@ -414,10 +455,9 @@ function l10n_br_pos_screens(instance, module) {
                     var cep = $('.client-address-zip').val().replace(/[^\d]+/g,'');
                         if (cep.length == 8){
                             new instance.web.Model('l10n_br.zip').call('zip_search_multi_json', [[]], {'zip_code': cep}).then(function (result) {
-                                $('.client-address-street').val(result.street)
-                                $('.client-address-country').val(result.country_id)
-                                $('.client-address-state').val(result.state_id)
-                                $('.client-address-city').val(result.l10n_br_city)
+                                $('.client-address-street').val(result.street);
+                                $('.client-address-country').val(result.country_id);
+                                self.pos_widget.clientlist_screen.carrega_cep($('.client-address-country').val(), result.state_id,result.l10n_br_city);
                             });
                         }
                         else{
@@ -525,9 +565,12 @@ function l10n_br_pos_screens(instance, module) {
                         // });
                     }
                 } else {
+                    pos_db = self.pos.db;
+                    partner = pos_db.get_partner_by_identification(self.pos.partners, cpf.replace(/[^\d]+/g, ''));
                     currentOrder = self.pos.get('selectedOrder').attributes;
                     currentOrder["cpf_nota"] = cpf.replace(/[^\d]+/g,'');
-                    if(self.pos.config.crm_ativo && !this.calcula_diferenca_data(currentOrder.client.data_alteracao)){
+
+                    if(self.pos.config.crm_ativo && !this.calcula_diferenca_data(partner.data_alteracao)){
                         var ss = self.pos.pos_widget.screen_selector;
                         ss.set_current_screen('clientlist');
                     }
@@ -594,7 +637,7 @@ function l10n_br_pos_screens(instance, module) {
 
             this.$('.button.nao').click(function(){
                 this.cpf_na_nota = false;
-                self.pos_widget.screen_selector.close_popup();
+                self.pos_widget.screen_R.close_popup();
                 if(!self.pos.config.crm_ativo)
                     self.pos_widget.payment_screen.validate_order();
             });
@@ -676,6 +719,7 @@ function l10n_br_pos_screens(instance, module) {
                 if (this.pos.config.cpf_nota) {
                     this.pos_widget.action_bar.set_button_disabled('validation', true);
                 }
+
                 if( sat_status == 'connected'){
                     if(options.invoice){
                         // deactivate the validation button while we try to send the order

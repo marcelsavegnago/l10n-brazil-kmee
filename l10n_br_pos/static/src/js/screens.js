@@ -26,6 +26,7 @@ function l10n_br_pos_screens(instance, module) {
         init: function(parent, options){
             this._super(parent);
             var self = this;
+
         },
         renderElement: function() {
             var self = this;
@@ -33,7 +34,6 @@ function l10n_br_pos_screens(instance, module) {
 
             var partner = null;
             var isSave = null;
-
             this.el.querySelector('.busca-cpf-cnpj').addEventListener('keydown',this.search_handler);
             $('.busca-cpf-cnpj', this.el).keydown(function(e){
                 if(e.which == 13){
@@ -47,6 +47,33 @@ function l10n_br_pos_screens(instance, module) {
             });
 
          },
+
+        bind_order_events: function() {
+        var self = this;
+           var order = this.pos.get('selectedOrder');
+               order.unbind('change:client', this.client_change_handler);
+               order.bind('change:client', this.client_change_handler);
+           var lines = order.get('orderLines');
+               lines.unbind();
+               lines.bind('add', function(){
+                        if(lines.length == 1 && this.pos.config.crm_ativo){
+                        self.pos_widget.screen_selector.show_popup('cpf_nota_sat_popup',{
+                            message: _t('Deseja inserir o cpf no cupom fiscal?'),
+                        });
+                        }
+                       this.numpad_state.reset();
+                       this.renderElement(true);
+                   },this);
+               lines.bind('remove', function(line){
+                       this.remove_orderline(line);
+                       this.numpad_state.reset();
+                       this.update_summary();
+                   },this);
+               lines.bind('change', function(line){
+                       this.rerender_orderline(line);
+                       this.update_summary();
+                   },this);
+        },
         active_client: function (self, documento, partner) {
             pos_db = self.pos.db;
             self.old_client = partner;
@@ -65,6 +92,7 @@ function l10n_br_pos_screens(instance, module) {
                 }
             }
         },
+
         search_client_by_cpf_cnpj: function(documento) {
             var self = this;
 
@@ -239,6 +267,29 @@ function l10n_br_pos_screens(instance, module) {
             } else {
                 var cliente_cpf = fields.cnpj_cpf;
                 if (self.pos_widget.order_widget.verificar_cpf_cnpj(cliente_cpf.replace(/[^\d]+/g,''))){
+                    partner.name = fields.name;
+                    partner.birthdate = fields.birthdate;
+                    partner.cnpj_cpf = fields.cnpj_cpf;
+                    var country = this.pos.countries.find(function(element) {return element.id==fields.country_id;});
+                    partner.email = fields.email;
+                    partner.gender = fields.gender;
+                    var city = this.pos.cities.find(function(element) {return element.id==fields.l10n_br_city_id});
+                    partner.number = fields.number;
+                    partner.opt_out = 'sim'  === fields.opt_out;
+                    partner.phone = fields.phone;
+                    partner.street = fields.street;
+                    partner.street2 = fields.street2;
+                    partner.whatsapp = 'sim' === fields.whatsapp;
+                    partner.zip = fields.zip;
+                    partner.data_alteracao = self.pos_widget.clientlist_screen.date_today();
+                    $(document).ready(function(){
+                        if(country != null)
+                            partner.country_id = [country.id, country.name];
+                        if(city != null){
+                            partner.l10n_br_city_id = [city.id, city.name];
+                            partner.state_id = partner.l10n_br_city_id.state_id;
+                        }
+                    });
                     this._super(partner);
                 } else {
                    this.pos_widget.screen_selector.show_popup('error',{
@@ -249,15 +300,22 @@ function l10n_br_pos_screens(instance, module) {
             }
         },
 
+        date_today: function(){
+            var date = new Date();
+            return date.getFullYear() + '-' + (String(date.getDate()).length == 1? '0'+date.getDate() : date.getDate());
+        },
+
         // what happens when we've just pushed modifications for a partner of id partner_id
         saved_client_details: function(partner_id){
             var self = this;
             this.reload_partners().then(function(){
                     var partner = self.pos.db.get_partner_by_id(partner_id);
                 if (partner) {
+                    var date = new Date();
 //                  usando o pricelist da loja por padrao
                     partner['property_product_pricelist'][0] = self.pos.pricelist.id;
-                    partner.birthdate = $('.birthdate').val()
+                    partner.birthdate = $('.birthdate').val();
+                    partner.data_alteracao = date.getFullYear() + '-' + date.getMonth();
                     partner.street2 = $('.client-address-street2').val()
                     partner.gender = $('.gender').val()
                     partner.whatsapp = 'sim' === $('.whatsapp').val()
@@ -268,13 +326,52 @@ function l10n_br_pos_screens(instance, module) {
                     self.pos.get('selectedOrder').set_client(self.new_client);
                     var ss = self.pos.pos_widget.screen_selector;
                     ss.set_current_screen('products');
-//                    self.display_client_details('show',partner);
+//                  self.display_client_details('show',partner);
                 } else {
                     // should never happen, because create_from_ui must return the id of the partner it
                     // has created, and reload_partner() must have loaded the newly created partner.
                     self.display_client_details('hide');
                 }
             });
+        },
+
+        carrega_cep: function(country_id, state_id, l10n_br_city){
+            if( country_id != null){
+                new instance.web.Model('res.country.state').call('get_states_ids', [country_id]).then(function (result) {
+                $('.client-address-state').children('option:not(:first)').remove();
+                    $.each(result, function(key, value){
+                        if(state_id != null && state_id == key){
+                             $('.client-address-state').append($("<option></option>")
+                                          .attr("value",key)
+                                          .attr("selected",true)
+                                          .text(value));
+                        }
+                        else{
+                            $('.client-address-state').append($("<option></option>")
+                                          .attr("value",key)
+                                          .text(value));
+                        }
+                    });
+                });
+            }
+            if(state_id != null){
+                    new instance.web.Model('l10n_br_base.city').call('get_city_ids', [state_id]).then(function (result) {
+                    $('.client-address-city').children('option:not(:first)').remove();
+                        $.each(result, function(key, value){
+                            if(l10n_br_city != null && l10n_br_city == key){
+                            $('.client-address-city').append($("<option></option>")
+                                              .attr("value",key)
+                                              .attr("selected", true)
+                                              .text(value));
+                            }
+                            else{
+                             $('.client-address-city').append($("<option></option>")
+                                              .attr("value",key)
+                                              .text(value));
+                            }
+                        });
+                    });
+            }
         },
 
         display_client_details: function(visibility,partner,clickpos){
@@ -318,42 +415,10 @@ function l10n_br_pos_screens(instance, module) {
                 this.toggle_save_button();
 
                $( document ).ready(function() {
-                    if( partner.country_id != null){
-                        new instance.web.Model('res.country.state').call('get_states_ids', [partner.country_id[0]]).then(function (result) {
-                        $('.client-address-state').children('option:not(:first)').remove();
-                            $.each(result, function(key, value){
-                                if(partner.state_id != null && partner.state_id[0] == key){
-                                     $('.client-address-state').append($("<option></option>")
-                                                  .attr("value",key)
-                                                  .attr("selected",true)
-                                                  .text(value));
-                                }
-                                else{
-                                    $('.client-address-state').append($("<option></option>")
-                                                  .attr("value",key)
-                                                  .text(value));
-                                }
-                            });
-                        });
-                    }
-                    if(partner.state_id != null){
-                            new instance.web.Model('l10n_br_base.city').call('get_city_ids', [partner.state_id[0]]).then(function (result) {
-                            $('.client-address-city').children('option:not(:first)').remove();
-                                $.each(result, function(key, value){
-                                    if(partner.l10n_br_city_id != null && partner.l10n_br_city_id[0] == key){
-                                    $('.client-address-city').append($("<option></option>")
-                                                      .attr("value",key)
-                                                      .attr("selected", true)
-                                                      .text(value));
-                                    }
-                                    else{
-                                     $('.client-address-city').append($("<option></option>")
-                                                      .attr("value",key)
-                                                      .text(value));
-                                    }
-                                });
-                            });
-                    }
+                    if(partner.country_id != null && partner.state_id != null)
+                        self.pos_widget.clientlist_screen.carrega_cep(partner.country_id[0], partner.state_id[0], partner.l10n_br_city_id[0]);
+                    else if(partner.country_id != null)
+                      self.pos_widget.clientlist_screen.carrega_cep(partner.country_id[0]);
                 });
 		       $('.client-address-country', this.el).change(function(e){
                 var country_id = $('.client-address-country').val();
@@ -386,10 +451,9 @@ function l10n_br_pos_screens(instance, module) {
                     var cep = $('.client-address-zip').val().replace(/[^\d]+/g,'');
                         if (cep.length == 8){
                             new instance.web.Model('l10n_br.zip').call('zip_search_multi_json', [[]], {'zip_code': cep}).then(function (result) {
-                                $('.client-address-street').val(result.street)
-                                $('.client-address-country').val(result.country_id)
-                                $('.client-address-state').val(result.state_id)
-                                $('.client-address-city').val(result.l10n_br_city)
+                                $('.client-address-street').val(result.street);
+                                $('.client-address-country').val(result.country_id);
+                                self.pos_widget.clientlist_screen.carrega_cep($('.client-address-country').val(), result.state_id,result.l10n_br_city);
                             });
                         }
                         else{
@@ -453,7 +517,12 @@ function l10n_br_pos_screens(instance, module) {
                             self.pos.get('selectedOrder').set_client(partner);
                             currentOrder = self.pos.get('selectedOrder').attributes;
                             currentOrder["cpf_nota"] = cpf.replace(/[^\d]+/g,'');
-                            self.pos_widget.payment_screen.validate_order();
+                            if(self.pos.config.crm_ativo && !this.calcula_diferenca_data(partner.data_alteracao)){
+                                var ss = self.pos.pos_widget.screen_selector;
+                                ss.set_current_screen('clientlist');
+                            }
+                            if(!self.pos.config.crm_ativo)
+                                self.pos_widget.payment_screen.validate_order();
                         } else {
                             new_partner = {};
                             new_partner["name"] = cpf;
@@ -472,6 +541,10 @@ function l10n_br_pos_screens(instance, module) {
                                     self.old_client = new_partner;
                                     self.new_client = self.old_client;
                                     self.pos.get('selectedOrder').set_client(self.new_client);
+                                    if (self.pos.config.crm_ativo) {
+                                        var ss = self.pos.pos_widget.screen_selector;
+                                        ss.set_current_screen('clientlist');
+                                    }
                                     if (self.pos.config.pricelist_id) {
                                         self.pos.pricelist_engine.update_products_ui(self.new_client);
                                     }
@@ -480,7 +553,8 @@ function l10n_br_pos_screens(instance, module) {
                                 }).then(function () {
                                     currentOrder = self.pos.get('selectedOrder').attributes;
                                     currentOrder["cpf_nota"] = cpf.replace(/[^\d]+/g,'');
-                                    self.pos_widget.payment_screen.validate_order();
+                                    if(!self.pos.config.crm_ativo)
+                                        self.pos_widget.payment_screen.validate_order();
                                 });
                             });
                         }
@@ -491,14 +565,39 @@ function l10n_br_pos_screens(instance, module) {
                         // });
                     }
                 } else {
+                    pos_db = self.pos.db;
+                    partner = pos_db.get_partner_by_identification(self.pos.partners, cpf.replace(/[^\d]+/g, ''));
                     currentOrder = self.pos.get('selectedOrder').attributes;
                     currentOrder["cpf_nota"] = cpf.replace(/[^\d]+/g,'');
-                    self.pos_widget.payment_screen.validate_order();
+
+                    if(self.pos.config.crm_ativo && !this.calcula_diferenca_data(partner.data_alteracao)){
+                        var ss = self.pos.pos_widget.screen_selector;
+                        ss.set_current_screen('clientlist');
+                    }
+                    if(!self.pos.config.crm_ativo)
+                        self.pos_widget.payment_screen.validate_order();
                 }
             } else {
                 alert('O cpf deve ser inserido no campo para que seja transmitido no cupom fiscal.');
             }
         },
+
+        calcula_diferenca_data: function(data_alteracao){
+            if(data_alteracao){
+                var today = new Date();
+                var month = parseInt(today.getMonth())+1;
+                var year = today.getFullYear();
+                var year_partner = parseInt(data_alteracao.substring(0,4));
+                var month_partner  = parseInt(data_alteracao.substring(5,7));
+                var lim_data_alteracao = parseInt(this.pos.config.lim_data_alteracao);
+                if ((year - year_partner) == 0 && (month_partner + lim_data_alteracao) >= month)
+                    return true;
+                else if ((year - year_partner) == 1 && (month_partner + lim_data_alteracao) >= 12+month)
+                    return true;
+            }
+            return false;
+        },
+
         show: function(options){
             var self = this;
             this._super();
@@ -508,10 +607,18 @@ function l10n_br_pos_screens(instance, module) {
             var cliente_cpf = '';
             var currentOrder = this.pos.get('selectedOrder').attributes;
             if (currentOrder.client) {
-                cliente_cpf = currentOrder.client.cnpj_cpf;
+                this.cpf_nota = currentOrder.client.cnpj_cpf;
+                this.create_date = currentOrder.client.create_date.substring(0,7);
+                this.atualizacao = this.calcula_diferenca_data(currentOrder.client.data_alteracao);
+                this.renderElement();
             }
-            this.cpf_nota = cliente_cpf;
-            this.renderElement();
+            else{
+                this.cpf_nota = '';
+                this.renderElement();
+                $('#cliente_label_popup').hide();
+                $('#checkbox_popup').hide();
+
+            }
 
             this.hotkey_handler = function (event) {
                 if (event.which === 13) {
@@ -522,12 +629,15 @@ function l10n_br_pos_screens(instance, module) {
             $('.busca-cpf-cnpj-popup').on('keyup',this.hotkey_handler);
 
             this.$('.button.sim').click(function(){
+                this.cpf_na_nota = true;
                 self.cpf_cupom_fiscal(currentOrder);
             });
 
             this.$('.button.nao').click(function(){
+                this.cpf_na_nota = false;
                 self.pos_widget.screen_selector.close_popup();
-                self.pos_widget.payment_screen.validate_order();
+                if(!self.pos.config.crm_ativo)
+                    self.pos_widget.payment_screen.validate_order();
             });
         }
     });
@@ -607,6 +717,7 @@ function l10n_br_pos_screens(instance, module) {
                 if (this.pos.config.cpf_nota) {
                     this.pos_widget.action_bar.set_button_disabled('validation', true);
                 }
+
                 if( sat_status == 'connected'){
                     if(options.invoice){
                         // deactivate the validation button while we try to send the order
@@ -711,7 +822,10 @@ function l10n_br_pos_screens(instance, module) {
                     name: 'venda_sat',
                     icon: '/point_of_sale/static/src/img/icons/png48/validate.png',
                     click: function () {
-                        self.validar_cpf_nota();
+                        if(self.cpf_na_nota || !self.pos.config.crm_ativo)
+                            self.validar_cpf_nota();
+                        else
+                            self.pos_widget.payment_screen.validate_order();
                     }
                 });
                 this.update_payment_summary();

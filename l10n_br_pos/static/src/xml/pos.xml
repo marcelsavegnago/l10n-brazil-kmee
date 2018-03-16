@@ -137,7 +137,9 @@
         <t t-jquery="div.client-details-left > div.client-detail:has(.client-address-street2)" t-operation="after">
             <div class='client-detail'>
                 <span class='label'>Pais:</span>
-                <span class='detail client-country'><t t-esc='partner.country_id[1]' /></span>
+                <t t-if="partner.country_id">
+                    <span class='detail client-country'><t t-esc='partner.country_id[1]' /></span>
+                </t>
             </div>
         </t>
     </t>
@@ -146,7 +148,10 @@
         <t t-jquery="div.client-details-left > div.client-detail:has(.client-country)" t-operation="after">
             <div class='client-detail'>
                 <span class='label'>Estado:</span>
+                                <t t-if="partner.state_id">
+
                 <span class='detail client-state'><t t-esc='partner.state_id[1]' /></span>
+                                </t>
             </div>
         </t>
     </t>
@@ -155,8 +160,10 @@
         <t t-jquery="div.client-details-left > div.client-detail:has(.client-state)" t-operation="after">
             <div class='client-detail'>
                 <span class='label'>Cidade:</span>
-                <span class='detail client-city'><t t-esc='partner.l10n_br_city_id[1]' /></span>
+                                <t t-if="partner.l10n_br_city_id">
 
+                <span class='detail client-city'><t t-esc='partner.l10n_br_city_id[1]' /></span>
+                                </t>
             </div>
         </t>
     </t>
@@ -351,7 +358,7 @@
         <t t-jquery="div.client-details-left" t-operation="prepend">
             <div class='client-detail'>
                 <span class='label'>CPF:</span>
-                <input class='detail client-cnpj' name='cnpj_cpf' t-att-value='partner.cnpj_cpf' placeholder="CNPJ/CPF"></input>
+                <input class='detail client-cnpj' name='cnpj_cpf' t-att-value='partner.cnpj_cpf' placeholder="CNPJ/CPF"/>
             </div>
             <!--<div class='client-detail'>
                 <span class='label'>IE:</span>
@@ -374,7 +381,7 @@
         <t t-jquery="div.client-details-left > div.client-detail:has(.client-address-zip)" t-operation="inner">
             <div class='client-detail'>
                 <span class='label'>Codigo Postal</span>
-                <input class='detail client-address-zip' name='zip' t-att-value='partner.zip' placeholder='CEP'></input>
+                <input class='detail client-address-zip' name='zip' t-att-value='partner.zip' placeholder='CEP'/>
             </div>
         </t>
     </t>
@@ -478,6 +485,19 @@
                 <p class="message"><t t-esc=" widget.message" /></p>
                 <div clss="paymentline">
                     <input class='busca-cpf-cnpj-popup' name="busca-cpf-cnpj-popup" placeholder="Insira o CPF/CNPJ" t-att-value="widget.cpf_nota" />
+                    <div id="cliente_label_popup">
+                        <span class='label'>Cliente desde</span>
+                        <spam class='busca-create-date-popup' name="busca-create-date-popup"><t t-esc="widget.create_date" /></spam>
+                    </div>
+                    <div id="checkbox_popup">
+                    <span class='label' id="atualizado_label_popup">Atualizado?</span>
+                        <t t-if="widget.atualizacao">
+                           <input type="checkbox" checked="checked" disabled="disabled"/>
+                        </t>
+                        <t t-if="!(widget.atualizacao)">
+                           <input type="checkbox" disabled="disabled"/>
+                    </t>
+                    </div>
                 </div>
                 <div class="footer">
                     <div class="button nao">

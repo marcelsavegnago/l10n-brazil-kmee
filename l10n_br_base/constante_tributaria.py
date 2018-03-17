@@ -261,6 +261,7 @@ MODELO_FISCAL = (
     ('09', 'Conhec. de transporte aquaviário de cargas - 09'),
     ('8B', 'Conhec. de transporte de cargas avulso - 8B'),
     ('57', 'CT-e - 57'),
+    ('58', 'MDF-e - 58'),
     ('11', 'Conhec. de transporte ferroviário de cargas - 11'),
     ('26', 'Conhec. de transporte multimodal de cargas - 26'),
     ('08', 'Conhec. de transporte rodoviário de cargas - 08'),
@@ -289,6 +290,7 @@ MODELO_FISCAL_CUPOMFISCAL_DICT = dict(MODELO_FISCAL_CUPOMFISCAL)
 MODELO_FISCAL_NFE = '55'
 MODELO_FISCAL_NFCE = '65'
 MODELO_FISCAL_NFSE = 'SE'
+MODELO_FISCAL_MDFE = '58'
 MODELO_FISCAL_CFE = '59'
 MODELO_FISCAL_CUPOM_FISCAL_ECF = '2D'
 MODELO_FISCAL_CTE = '57'
@@ -4949,3 +4951,82 @@ TIPO_EMISSAO_CFE_NORMAL = '1'
 TIPO_EMISSAO_CFE_INTEGRADOR_FISCAL = '2'
 TIPO_EMISSAO_CFE_CONTINGENCIA_OFFLINE_NFCE = '9'
 TIPO_EMISSAO_CFE_CONTINGENCIA_ONLINE_NFCE = '10'
+
+#
+# Definições para a emissão e controle da MDF-E
+#
+AMBIENTE_MDFE = (
+    ('1', 'Produção'),
+    ('2', 'Homologação'),
+)
+AMBIENTE_MDFE_DICT = dict(AMBIENTE_NFE)
+
+AMBIENTE_MDFE_PRODUCAO = '1'
+AMBIENTE_MDFE_HOMOLOGACAO = '2'
+
+TIPO_EMISSAO_MDFE = (
+    ('1', 'Normal'),
+    ('2', 'Contingência'),
+)
+TIPO_EMISSAO_MDFE_DICT = dict(TIPO_EMISSAO_MDFE)
+
+TIPO_EMISSAO_MDFE_NORMAL = '1'
+TIPO_EMISSAO_MDFE_CONTINGENCIA = '2'
+
+TIPO_UNIDADE_TRANSPORTE = (
+    ('1', 'Rodoviário Tração'),
+    ('2', 'Rodoviário Reboque'),
+    ('3', 'Navio'),
+    ('4', 'Balsa'),
+    ('5', 'Aeronave'),
+    ('6', 'Vagão'),
+    ('7', 'Outros'),
+)
+TIPO_UNIDADE_TRANSPORTE_DICT = dict(TIPO_UNIDADE_TRANSPORTE)
+
+TIPO_UNIDADE_TRANSPORTE_RODOVIARIO_TRACAO = '1'
+TIPO_UNIDADE_TRANSPORTE_RODOVIARIO_REBOQUE = '2'
+TIPO_UNIDADE_TRANSPORTE_NAVIO = '3'
+TIPO_UNIDADE_TRANSPORTE_BALSA = '4'
+TIPO_UNIDADE_TRANSPORTE_AERONAVE = '5'
+TIPO_UNIDADE_TRANSPORTE_VAGAO = '6'
+TIPO_UNIDADE_TRANSPORTE_OUTROS = '7'
+
+TIPO_PROPRIETARIO = (
+    ('0', 'TAC - Agregado'),
+    ('1', 'TAC - Independente'),
+    ('2', 'Outros'),
+)
+TIPO_PROPRIETARIO_DICT = dict(TIPO_PROPRIETARIO)
+
+TIPO_PROPRIETARIO_TAC_AGREGADO = '0'
+TIPO_PROPRIETARIO_TAC_INDEPENDENTE = '1'
+TIPO_PROPRIETARIO_OUTROS = '2'
+
+#D17
+TIPO_CARROCERIA = (
+    ('00', 'Não aplicável'),
+    ('01', 'Aberta'),
+    ('02', 'Fechada/Baú'),
+    ('03', 'Granelera'),
+    ('04', 'Porta container'),
+    ('05', 'Slider'),
+)
+TIPO_CARROCERIA_DICT = dict(TIPO_CARROCERIA)
+
+TIPO_CARROCERIA_NAO_APLICAVEL = '00'
+TIPO_CARROCERIA_ABERTA = '01'
+TIPO_CARROCERIA_FECHADA_BAU = '02'
+TIPO_CARROCERIA_GRANELERA = '03'
+TIPO_CARROCERIA_PORTA_CONTAINER = '04'
+TIPO_CARROCERIA_SLIDER = '05'
+
+#D11
+RESPONSAVEL_SEGURO = (
+    ('1', 'Emitente MDF-e'),
+    ('2', 'Responsável pela contratação do serviço de transporte (contratante)'),
+)
+RESPONSAVEL_SEGURO_DICT = dict(RESPONSAVEL_SEGURO)
+
+RESPONSAVEL_SEGURO_EMITENTE = '1'
+RESPONSAVEL_SEGURO_CONTRATANTE = '2'

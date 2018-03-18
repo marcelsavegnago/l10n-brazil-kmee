@@ -50,6 +50,9 @@ class SpedVeiculo(models.Model):
         valores = {}
         res['value'] = valores
 
+        if not self.placa:
+            return res
+
         placa = self.placa.strip().replace(
             '-', '').replace(' ', '').replace(
             ' ', '').upper()

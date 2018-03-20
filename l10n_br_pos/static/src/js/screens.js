@@ -83,7 +83,8 @@ function l10n_br_pos_screens(instance, module) {
             } else {
                 if (self.pos.config.save_identity_automatic) {
                     new_partner = {};
-                    new_partner["name"] = pos_db.add_pontuation_document(documento);
+//                  new_partner["name"] = pos_db.add_pontuation_document(documento);
+                    new_partner["name"] = 'Anonimo';
                     if (new_partner["name"].length > 14) {
                         new_partner["is_company"] = true;
                     }
@@ -144,7 +145,12 @@ function l10n_br_pos_screens(instance, module) {
             new instance.web.Model('res.partner').call('create_from_ui',[partner]).then(function(partner_id){
                 self.pos.pos_widget.clientlist_screen.reload_partners().then(function(){
                     var new_partner = self.pos.db.get_partner_by_id(partner_id);
-                    new_partner['cnpj_cpf'] = new_partner['name'];
+                    for (key in new_partner){
+                        if (new_partner[key] == false)
+                            new_partner[key] = null;
+                    }
+                    new_partner['country_id'] = false
+//                    new_partner['cnpj_cpf'] = new_partner['name'];
                     if (self.pos.config.pricelist_id){
                        new_partner['property_product_pricelist'][0] = self.pos.pricelist.id;
                     }
@@ -520,12 +526,13 @@ function l10n_br_pos_screens(instance, module) {
                             if(self.pos.config.crm_ativo && !this.calcula_diferenca_data(partner.data_alteracao)){
                                 var ss = self.pos.pos_widget.screen_selector;
                                 ss.set_current_screen('clientlist');
+                                self.pos_widget.clientlist_screen.edit_client_details(partner);
                             }
                             if(!self.pos.config.crm_ativo)
                                 self.pos_widget.payment_screen.validate_order();
                         } else {
                             new_partner = {};
-                            new_partner["name"] = cpf;
+                            new_partner["name"] = 'Anonimo';
                             if (new_partner["name"].length > 14) {
                                 new_partner["is_company"] = true;
                             }
@@ -534,7 +541,12 @@ function l10n_br_pos_screens(instance, module) {
                             new instance.web.Model('res.partner').call('create_from_ui', [new_partner]).then(function (partner_id) {
                                 self.pos.pos_widget.clientlist_screen.reload_partners().then(function () {
                                     var new_partner = self.pos.db.get_partner_by_id(partner_id);
-                                    new_partner['cnpj_cpf'] = new_partner['name'];
+                                    for (key in new_partner){
+                                        if (new_partner[key] == false)
+                                            new_partner[key] = null;
+                                    }
+                                    new_partner['country_id'] = false
+                                    new_partner['cnpj_cpf'] = cpf;
                                     if (self.pos.config.pricelist_id) {
                                         new_partner['property_product_pricelist'][0] = self.pos.pricelist.id;
                                     }
@@ -544,6 +556,7 @@ function l10n_br_pos_screens(instance, module) {
                                     if (self.pos.config.crm_ativo) {
                                         var ss = self.pos.pos_widget.screen_selector;
                                         ss.set_current_screen('clientlist');
+                                        self.pos_widget.clientlist_screen.edit_client_details(self.old_client);
                                     }
                                     if (self.pos.config.pricelist_id) {
                                         self.pos.pricelist_engine.update_products_ui(self.new_client);
@@ -573,6 +586,7 @@ function l10n_br_pos_screens(instance, module) {
                     if(self.pos.config.crm_ativo && !this.calcula_diferenca_data(partner.data_alteracao)){
                         var ss = self.pos.pos_widget.screen_selector;
                         ss.set_current_screen('clientlist');
+                        self.pos_widget.clientlist_screen.edit_client_details(partner);
                     }
                     if(!self.pos.config.crm_ativo)
                         self.pos_widget.payment_screen.validate_order();
@@ -585,14 +599,9 @@ function l10n_br_pos_screens(instance, module) {
         calcula_diferenca_data: function(data_alteracao){
             if(data_alteracao){
                 var today = new Date();
-                var month = parseInt(today.getMonth())+1;
-                var year = today.getFullYear();
-                var year_partner = parseInt(data_alteracao.substring(0,4));
-                var month_partner  = parseInt(data_alteracao.substring(5,7));
+                var date_partner = new Date(data_alteracao)
                 var lim_data_alteracao = parseInt(this.pos.config.lim_data_alteracao);
-                if ((year - year_partner) == 0 && (month_partner + lim_data_alteracao) >= month)
-                    return true;
-                else if ((year - year_partner) == 1 && (month_partner + lim_data_alteracao) >= 12+month)
+                if( Math.floor((today.getTime() - date_partner.getTime())*3.81E-10) <= lim_data_alteracao)
                     return true;
             }
             return false;

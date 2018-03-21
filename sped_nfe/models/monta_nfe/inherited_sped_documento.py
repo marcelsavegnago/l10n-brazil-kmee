@@ -255,9 +255,9 @@ class SpedDocumento(models.Model):
         # Para a NFC-e, o endereço do partner pode não ter sido
         # preenchido
         #
-        dest.enderDest.xLgr.valor = partner.endereco or ''
+        dest.enderDest.xLgr.valor = partner.street or ''
         dest.enderDest.nro.valor = partner.numero or ''
-        dest.enderDest.xCpl.valor = partner.complemento or ''
+        dest.enderDest.xCpl.valor = partner.street2 or ''
         dest.enderDest.xBairro.valor = partner.bairro or ''
 
         if not partner.cnpj_cpf.startswith('EX'):
@@ -280,7 +280,7 @@ class SpedDocumento(models.Model):
                 dest.enderDest.xPais.valor = \
                     partner.municipio_id.pais_id.nome
 
-        dest.enderDest.fone.valor = limpa_formatacao(partner.fone or '')
+        dest.enderDest.fone.valor = limpa_formatacao(partner.phone or '')
         email_dest = partner.email_nfe or ''
         dest.email.valor = email_dest[:60]
 

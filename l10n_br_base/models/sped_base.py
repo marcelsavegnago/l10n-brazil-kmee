@@ -67,6 +67,14 @@ class SpedBase(object):
         context={'only_currencies': False},
         domain=[['is_symbol', '=', True]],
     )
+    currency_volume_id = fields.Many2one(
+        comodel_name='res.currency',
+        string='Volume',
+        compute='_compute_currency_id',
+        default=lambda self: self.env.ref('l10n_br_base.SIMBOLO_VOLUME'),
+        context={'only_currencies': False},
+        domain=[['is_symbol', '=', True]]
+    )
 
     def _compute_currency_id(self):
         for item in self:
@@ -79,6 +87,8 @@ class SpedBase(object):
                 'l10n_br_base.SIMBOLO_VALOR_UNITARIO').id
             item.currency_peso_id = self.env.ref(
                 'l10n_br_base.SIMBOLO_PESO').id
+            item.currency_volume_id = self.env.ref(
+                'l10n_br_base.SIMBOLO_VOLUME').id
 
     def _separa_data_hora(self, data_hora_odoo):
         if not data_hora_odoo:

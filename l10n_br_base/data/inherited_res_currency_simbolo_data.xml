@@ -41,4 +41,12 @@
         <field name="is_symbol" eval="True" />
     </record>
 
+    <record id="SIMBOLO_VOLUME" model="res.currency">
+        <field name="name">VOLUME - SIMBOLO</field>
+        <field name="symbol">m³</field>
+        <field name="rounding">0.001</field>
+        <field name="active" eval="True"/>
+        <field name="position">after</field>
+        <field name="is_symbol" eval="True" />
+    </record>
 </odoo>

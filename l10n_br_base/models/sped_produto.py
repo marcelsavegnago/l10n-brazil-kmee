@@ -104,6 +104,10 @@ class SpedProduto(SpedBase, models.Model):
         string='Peso líquido',
         currency_field='currency_peso_id',
     )
+    volume_liquido = fields.Monetary(
+        string='Volume',
+        currency_field='currency_volume_id',
+    )
     tipo = fields.Selection(
         selection=TIPO_PRODUTO_SERVICO,
         string='Tipo',

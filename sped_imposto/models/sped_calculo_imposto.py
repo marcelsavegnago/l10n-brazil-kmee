@@ -366,6 +366,16 @@ class SpedCalculoImposto(SpedBase):
         store=True,
     )
     #
+    # Total do volume
+    #
+    volume_liquido = fields.Monetary(
+        string='Volume líquido',
+        currency_field='currency_volume_id',
+        compute='_compute_soma_itens',
+        store=True,
+    )
+
+    #
     # Transporte
     #
     modalidade_frete = fields.Selection(
@@ -462,7 +472,9 @@ class SpedCalculoImposto(SpedBase):
                 'item_ids.vr_nf', 'item_ids.vr_fatura',
                 'item_ids.vr_ibpt',
                 'item_ids.vr_custo_comercial',
-                'item_ids.peso_bruto', 'item_ids.peso_liquido')
+                'item_ids.peso_bruto',
+                'item_ids.peso_liquido',
+                'item_ids.volume_liquido')
     def _compute_soma_itens(self):
         CAMPOS_SOMA_ITENS = [
             'vr_produtos', 'vr_produtos_tributacao',
@@ -483,7 +495,8 @@ class SpedCalculoImposto(SpedBase):
             'vr_nf', 'vr_fatura',
             'vr_ibpt',
             'vr_custo_comercial',
-            'peso_bruto', 'peso_liquido'
+            'peso_bruto', 'peso_liquido',
+            'volume_liquido'
         ]
 
         for documento in self:

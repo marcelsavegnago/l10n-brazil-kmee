@@ -807,6 +807,14 @@ class SpedCalculoImpostoItem(SpedBase):
         string='Peso líquido',
         currency_field='currency_peso_id',
     )
+    volume_liquido_unitario = fields.Monetary(
+        string='Volume líquido unitário',
+        currency_field='currency_peso_id',
+    )
+    volume_liquido = fields.Monetary(
+        string='Volume líquido',
+        currency_field='currency_volume_id',
+    )
     especie = fields.Char(
         string='Espécie/embalagem',
         size=60,
@@ -890,6 +898,11 @@ class SpedCalculoImpostoItem(SpedBase):
     peso_liquido_readonly = fields.Monetary(
         string='Peso líquido',
         currency_field='currency_peso_id',
+        compute='_compute_readonly',
+    )
+    volume_liquido_readonly = fields.Monetary(
+        string='Volume líquido',
+        currency_field='currency_volume_id',
         compute='_compute_readonly',
     )
     especie_readonly = fields.Char(
@@ -1174,6 +1187,7 @@ class SpedCalculoImpostoItem(SpedBase):
 
         self.peso_bruto_unitario = self.produto_id.peso_bruto
         self.peso_liquido_unitario = self.produto_id.peso_liquido
+        self.volume_liquido_unitario = self.produto_id.volume_liquido
         self.especie = self.produto_id.especie
         self.fator_quantidade_especie = \
             self.produto_id.fator_quantidade_especie
@@ -1401,6 +1415,7 @@ class SpedCalculoImpostoItem(SpedBase):
 
         self.peso_bruto_unitario = self.produto_id.peso_bruto
         self.peso_liquido_unitario = self.produto_id.peso_liquido
+        self.volume_liquido_unitario = self.produto_id.volume_liquido
         self.especie = self.produto_id.especie
         self.fator_quantidade_especie = \
             self.produto_id.fator_quantidade_especie
@@ -2040,6 +2055,7 @@ class SpedCalculoImpostoItem(SpedBase):
                   'vr_ii',
                   'fator_conversao_unidade_tributacao',
                   'peso_bruto_unitario', 'peso_liquido_unitario',
+                  'volume_liquido_unitario',
                   'especie', 'fator_quantidade_especie')
     def _onchange_calcula_valor_operacao(self):
         self.ensure_one()
@@ -2124,6 +2140,9 @@ class SpedCalculoImpostoItem(SpedBase):
         peso_liquido = D(self.quantidade) * D(self.peso_liquido_unitario)
         peso_liquido = peso_liquido.quantize(D('0.0001'))
 
+        volume_liquido = D(self.quantidade) * D(self.volume_liquido_unitario)
+        volume_liquido = volume_liquido.quantize(D('0.0001'))
+
         if self.fator_quantidade_especie > 0 and self.especie:
             quantidade_especie = D(self.quantidade) / \
                 D(self.fator_quantidade_especie)
@@ -2134,6 +2153,7 @@ class SpedCalculoImpostoItem(SpedBase):
 
         self.peso_bruto = peso_bruto
         self.peso_liquido = peso_liquido
+        self.volume_liquido = volume_liquido
         self.quantidade_especie = quantidade_especie
 
         return res
@@ -2679,6 +2699,7 @@ class SpedCalculoImpostoItem(SpedBase):
                  'vr_nf', 'vr_fatura',
                  'vr_unitario_custo_comercial', 'vr_custo_comercial',
                  'peso_bruto', 'peso_liquido',
+                 'volume_liquido',
                  'especie', 'marca', 'fator_quantidade_especie',
                  'quantidade_especie')
     def _compute_readonly(self):
@@ -2704,6 +2725,7 @@ class SpedCalculoImpostoItem(SpedBase):
             item.vr_custo_comercial_readonly = item.vr_custo_comercial
             item.peso_bruto_readonly = item.peso_bruto
             item.peso_liquido_readonly = item.peso_liquido
+            item.volume_liquido_readonly = item.volume_liquido
             item.especie_readonly = item.especie
             item.marca_readonly = item.marca
             item.fator_quantidade_especie_readonly = \

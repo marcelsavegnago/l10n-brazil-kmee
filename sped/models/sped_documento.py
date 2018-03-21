@@ -1487,12 +1487,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
 
             raise ValidationError(_(mensagem))
 
-    def confirma_documento(self):
-        """ Nunca sobrescreva este método, pois ele esta sendo modificado
-        pelo sped_queue que não chama o super. Para permtir o envio assincrono
-        do documento fiscal
-        :return:
-        """
+    def _confirma_documento(self):
         for record in self:
             infcomplementar = record.infcomplementar or ''
             if record.operacao_id.infcomplementar:
@@ -1506,6 +1501,14 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
                 if item.mensagens_complementares:
                     infcomplementar += ' ' + item.mensagens_complementares
                 item.infcomplementar = infcomplementar
+
+    def confirma_documento(self):
+        """ Nunca sobrescreva este método, pois ele esta sendo modificado
+        pelo sped_queue que não chama o super. Para permtir o envio assincrono
+        do documento fiscal
+        :return:
+        """
+        return self._confirma_documento()
 
     def envia_documento(self):
         """ Nunca sobrescreva este método, pois ele esta sendo modificado

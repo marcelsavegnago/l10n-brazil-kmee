@@ -316,7 +316,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     participante_endereco = fields.Char(
         string='Endereço',
         size=60,
-        related='partner_id.endereco',
+        related='partner_id.street',
         readonly=True,
     )
     participante_numero = fields.Char(
@@ -328,7 +328,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     participante_complemento = fields.Char(
         string='Complemento',
         size=60,
-        related='partner_id.complemento',
+        related='partner_id.street2',
         readonly=True,
     )
     participante_bairro = fields.Char(
@@ -356,7 +356,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     participante_cep = fields.Char(
         string='CEP',
         size=9,
-        related='partner_id.cep',
+        related='partner_id.zip',
         readonly=True,
     )
     #
@@ -365,7 +365,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     participante_fone = fields.Char(
         string='Fone',
         size=18,
-        related='partner_id.fone',
+        related='partner_id.phone',
         readonly=True,
     )
     participante_fone_comercial = fields.Char(
@@ -377,7 +377,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     participante_celular = fields.Char(
         string='Celular',
         size=18,
-        related='partner_id.celular',
+        related='partner_id.mobile',
         readonly=True,
     )
     participante_email = fields.Char(

@@ -331,6 +331,10 @@
                                     <field name="peso_liquido_readonly" />
                                     <field name="peso_liquido" invisible="1" />
                                     <newline />
+                                    <field name="volume_liquido_unitario" />
+                                    <field name="volume_liquido_readonly" />
+                                    <field name="volume_liquido" invisible="1" />
+                                    <newline />
                                     <field name="especie" />
                                     <field name="marca" />
                                     <newline />

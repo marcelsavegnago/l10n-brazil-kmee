@@ -267,6 +267,9 @@
                                     <newline />
                                     <field name="endereco_entrega_id" colspan="4" domain="[('participante_id', '=', participante_id)]" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': ['!', ('modalidade_frete', 'in', ['0', '1', '2'])], 'readonly': [('permite_alteracao', '=', False)]}" />
                                     <newline />
+                                    <field name="peso_bruto"/>
+                                    <field name="peso_liquido"/>
+                                    <field name="volume_liquido"/>
                                     <separator string="Volumes" />
                                     <newline />
                                     <field name="volume_ids" colspan="4" nolabel="1" attrs="{'readonly': [('permite_alteracao', '=', False)]}">

@@ -674,12 +674,16 @@ function l10n_br_pos_screens(instance, module) {
 
             this.$('.button.sim').click(function(){
                 this.cpf_na_nota = true;
+                $(".pos-leftpane :input").attr('disabled',false);
+                $(".pos-topheader *").attr('disabled',false);
                 self.cpf_cupom_fiscal(currentOrder);
             });
 
             this.$('.button.nao').click(function(){
                 this.cpf_na_nota = false;
                 self.pos_widget.screen_selector.close_popup();
+                $(".pos-leftpane :input").attr('disabled', false);
+                $(".pos-topheader *").attr('disabled', false);
                 if(!self.pos.config.crm_ativo)
                     self.pos_widget.payment_screen.validate_order();
             });

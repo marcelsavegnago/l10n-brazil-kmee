@@ -1,0 +1,10 @@
+    def equisicao_api(self, tipo_requisicao):
+        headers = {
+            'x-api-key': '54b0318df7fafe591b9b3ff3c678240b',
+            'x-app-key': 'pu8raN2CunAc5UpUs8uwratHawe7he'
+        }
+        request = Request('http://avatti.xtechcommerce.com/api-v1/'+tipo_requisicao, headers=headers)
+
+        response_body = urlopen(request)
+        # converte para json os dados recebidos da API
+	return json.load(response_body)

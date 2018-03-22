@@ -682,6 +682,11 @@ function l10n_br_pos_screens(instance, module) {
             this.$('.button.nao').click(function(){
                 this.cpf_na_nota = false;
                 self.pos_widget.screen_selector.close_popup();
+                var ss = self.pos.pos_widget.screen_selector;
+                ss.set_current_screen('clientlist');
+                self.pos_widget.clientlist_screen.display_client_details('edit',{
+                    'country_id': self.pos.company.country_id,
+                });
                 $(".pos-leftpane :input").attr('disabled', false);
                 $(".pos-topheader *").attr('disabled', false);
                 if(!self.pos.config.crm_ativo)

@@ -421,8 +421,17 @@ class SpedDocumentoItem(models.Model):
         ##
         ## Declaração de Importação
         ##
-        #for declaracao in self.declaracao_ids:
-            #det.prod.DI.append(declaracao.monta_nfe())
+        dados['declaracao_ids'] = []
+        if self.declaracao_ids:
+            for declaracao in self.declaracao_ids:
+                det.prod.DI.append(declaracao.monta_nfe())
+        elif det.prod.DI:
+            dados['declaracao_ids'].append(
+                (
+                    0 ,0 ,
+                    self.declaracao_ids.le_nfe(
+                        det.prod.DI[0], dados_documento['participante_id']))
+            )
 
         ##
         ## Rastreabilidade

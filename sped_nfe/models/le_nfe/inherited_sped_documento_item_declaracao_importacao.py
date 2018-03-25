@@ -8,7 +8,7 @@
 from __future__ import division, print_function, unicode_literals
 
 import logging
-from odoo import api, models
+from odoo import api, models, fields
 from odoo.addons.l10n_br_base.constante_tributaria import (
     MODELO_FISCAL_NFCE,
     MODELO_FISCAL_NFE,
@@ -33,8 +33,8 @@ class SpedDocumentoItemDeclaracaoImportacao(models.Model):
     def monta_nfe(self):
         self.ensure_one()
 
-        if self.documento_id.modelo != MODELO_FISCAL_NFE and \
-                self.documento_id.modelo != MODELO_FISCAL_NFCE:
+        if self.item_id.documento_id.modelo != MODELO_FISCAL_NFE and \
+                self.item_id.documento_id.modelo != MODELO_FISCAL_NFCE:
             return
 
         di = ClasseDI()
@@ -50,7 +50,8 @@ class SpedDocumentoItemDeclaracaoImportacao(models.Model):
 
         if self.participante_id:
             di.CNPJ.valor = limpa_formatacao(self.participante_id.cnpj_cpf)
-            di.UFTerceiro.valor = self.participante_id.estado
+            if not 'EX' in self.participante_id.estado:
+                di.UFTerceiro.valor = self.participante_id.estado
             di.cExportador.valor = \
                 limpa_formatacao(self.participante_id.cnpj_cpf)
 
@@ -90,3 +91,55 @@ class SpedDocumentoItemDeclaracaoImportacao(models.Model):
             di.adi.append(adi)
 
         return di
+
+    def le_nfe(self, di, participante=False):
+        dados = {}
+        dados['numero_documento'] = di.nDI.valor
+        dados['data_registro'] = fields.Date.to_string(di.dDI.valor)
+        dados['local_desembaraco'] = di.xLocDesemb.valor  # TODO: buscar local
+        dados['uf_desembaraco_id']= self.env['sped.estado'].search([
+            ('uf', '=', di.UFDesemb.valor)]).id
+        dados['data_desembaraco'] = fields.Date.to_string(di.dDesemb.valor)
+        dados['via_trans_internacional'] = di.tpViaTransp.valor
+        dados['vr_afrmm'] = D(di.vAFRMM.valor)
+        dados['forma_importacao'] = di.tpIntermedio.valor
+
+        #busca participante
+        dados['participante_id'] = self.env['sped.participante'].search(
+            [
+                ('cnpj_cpf', '=', di.CNPJ.valor),
+            ]
+        )
+        if not dados['participante_id']:
+            dados['participante_id'] = participante
+
+        #
+        # Sempre existe pelo menos uma adição
+        #
+        dados['numero_adicao'] = di.adi[0].nAdicao.valor
+        dados['sequencial'] = di.adi[0].nSeqAdic.valor
+        dados['vr_desconto'] = di.adi[0].vDescDI.valor
+        dados['numero_drawback'] = di.adi[0].nDraw.valor
+
+        #
+        # Se houver mais
+        #
+        # if len(di.adi) > 1:
+        #     dados['adicao_ids'] = self.le_nfe_di_adicao(di.adi.pop(di.adi[0]))
+
+        return dados
+
+    def le_nfe_di_adicao(self, adicao):
+        adicoes = []
+        particip = self.env['sped.participante'].search([
+                ('cnpj_cpf', '=', adicao.cFabricante.valor)])
+        dados_adi = {
+            'numero_adicao': adicao.nAdicao.valor,
+            'sequencial': adicao.nSeqAdic.valor,
+            'participante_id': particip,
+            'vr_desconto': adicao.vDescDI.valor,
+            'numero_drawback': adicao.nDraw.valor,
+        }
+        adicoes.append((0,0, dados_adi))
+
+        return adicoes

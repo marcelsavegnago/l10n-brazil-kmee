@@ -93,7 +93,8 @@ class SpedDocumento(models.Model):
                     descEvento == 'Cancelamento'):
                 return self.importa_nfe_cancelada(xml)
 
-        if self.modelo not in (MODELO_FISCAL_NFE, MODELO_FISCAL_NFCE):
+        if self.modelo and nfe.infNFe.ide.mod not in \
+                (MODELO_FISCAL_NFE, MODELO_FISCAL_NFCE):
             _logger.info(u'Modelo não suportado')
             return
 
@@ -601,7 +602,7 @@ class SpedDocumento(models.Model):
                     limpa_formatacao(self.endereco_entrega_id.cnpj_cpf)
 
     def _le_nfe_transporte(self, transp, dados):
-        if self.modelo != MODELO_FISCAL_NFE:
+        if dados['modelo'] != MODELO_FISCAL_NFE:
             return
 
         if transp.modFrete.valor == MODALIDADE_FRETE_REMETENTE_CIF:
@@ -699,6 +700,21 @@ class SpedDocumento(models.Model):
         for volume in self.volume_ids:
             transp.vol.append(volume.monta_nfe())
         '''
+
+        volumes = []
+        if transp.vol:
+            for volume in transp.vol:
+                dados_vol = {
+                    'quantidade': volume.qVol.valor,
+                    'especie': volume.esp.valor,
+                    'peso_bruto': volume.pesoB.valor,
+                    'peso_liquido': volume.pesoL.valor,
+                }
+                volumes.append((0,0,dados_vol))
+
+        dados_transportadora['volume_ids'] = volumes
+
+        dados.update(dados_transportadora)
 
     def _le_nfe_cobranca(self, cobr, dados):
         if self.modelo != MODELO_FISCAL_NFE:

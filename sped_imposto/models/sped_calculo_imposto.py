@@ -596,7 +596,8 @@ class SpedCalculoImposto(SpedBase):
 
     def _inverse_rateio_vr_outras(self):
         self.ensure_one()
-        self._inverse_rateio_campo_total('vr_outras')
+        # self._inverse_rateio_campo_total('vr_outras')
+        pass
 
     #def _inverse_rateio_al_desconto(self):
         #self.ensure_one()

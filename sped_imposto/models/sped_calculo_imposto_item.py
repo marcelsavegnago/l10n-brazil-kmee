@@ -2105,8 +2105,12 @@ class SpedCalculoImpostoItem(SpedBase):
         else:
             self.exibe_tributacao = False
 
-        vr_operacao = vr_produtos + self.vr_frete + \
+        vr_operacao = vr_produtos  + \
             self.vr_seguro + self.vr_outras - self.vr_desconto
+        vr_operacao_tributacao = \
+            vr_produtos_tributacao + self.vr_frete + self.vr_seguro + \
+            self.vr_outras - self.vr_desconto + self.vr_ii
+
         vr_operacao_tributacao = \
             vr_produtos_tributacao + self.vr_frete + self.vr_seguro + \
             self.vr_outras - self.vr_desconto + self.vr_ii
@@ -2589,7 +2593,7 @@ class SpedCalculoImpostoItem(SpedBase):
         #         self.env.context.get('manual'):
         #     return res
 
-        vr_nf = self.vr_operacao + self.vr_ipi + self.vr_icms_st + self.vr_ii
+        vr_nf = self.vr_operacao + self.vr_ipi + self.vr_icms_st
         vr_nf -= self.vr_icms_desonerado
 
         #

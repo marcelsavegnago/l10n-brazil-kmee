@@ -1160,15 +1160,15 @@ INDICADOR_IE_DESTINATARIO_NAO_CONTRIBUINTE = '9'
 
 VIA_TRANSPORTE_IMPORTACAO = (
     ('1', 'Marítima'),
-    ('1', 'Fluvial'),
-    ('1', 'Lacustre'),
-    ('1', 'Aérea'),
-    ('1', 'Postal'),
-    ('1', 'Ferroviária'),
-    ('1', 'Rodoviária'),
-    ('1', 'Rede de transmissão'),
-    ('1', 'Meios próprios'),
-    ('1', 'Entrada/saída fictícia'),
+    ('2', 'Fluvial'),
+    ('3', 'Lacustre'),
+    ('4', 'Aérea'),
+    ('5', 'Postal'),
+    ('6', 'Ferroviária'),
+    ('7', 'Rodoviária'),
+    ('8', 'Rede de transmissão'),
+    ('0', 'Meios próprios'),
+    ('10', 'Entrada/saída fictícia'),
 )
 
 INTERMEDIACAO_IMPORTACAO = (

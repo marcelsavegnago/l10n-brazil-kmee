@@ -92,6 +92,7 @@ class ImportaNFe(models.Model):
                     if 'Nenhum documento encontrado' in (e.message or e.name):
                         arquivos_eventos.append(filename)
                     _logger.error(u"Exception: " + filename)
+                    _logger.error(e)
 
         self.quantidade_diretorio = 0
         self.quantidade_importada = 0

@@ -37,6 +37,8 @@
         'wizard/sped_documento_exportar_xml.xml',
         'wizard/base_config_settings.xml',
         'data/sped.inutilizacao.tipo.documento.csv',
+        'wizard/sped_consulta_status_documento.xml',
+
     ],
     'external_dependencies': {
         'python': ['pybrasil', 'pysped', 'mako'],

@@ -523,13 +523,15 @@ class SpedDocumento(models.Model):
         if dest.idEstrangeiro.valor:
             if not dest.idEstrangeiro.valor.startswith('EX'):
                 ultimo_participante_ex = self.env['sped.participante'].search(
-                    [('cnpj_cpf','ilike', 'EX%')], order='cnpj_cpf desc',
+                    [('cnpj_cpf', 'ilike', 'EX%')], order='cnpj_cpf desc',
                     limit=1).cnpj_cpf[-4:]
-                ultimo_codigo_ex = str(int(ultimo_participante_ex) + 1).zfill(4) if \
+                ultimo_codigo_ex = \
+                    str(int(ultimo_participante_ex) + 1).zfill(4) if \
                     ultimo_participante_ex != 'None' else '0000'
 
                 dados['cnpj_cpf'] = 'EX' + (
-                    dest.idEstrangeiro.valor if dest.idEstrangeiro.valor != 'None' else
+                    dest.idEstrangeiro.valor if
+                    dest.idEstrangeiro.valor != 'None' else
                     ultimo_codigo_ex)
             else:
                 dados['cnpj_cpf'] = dest.idEstrangeiro.valor

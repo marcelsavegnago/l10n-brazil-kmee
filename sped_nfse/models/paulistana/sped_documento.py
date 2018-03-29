@@ -17,12 +17,12 @@ from odoo.addons.l10n_br_base.constante_tributaria import (
     SITUACAO_NFE_CANCELADA,
 )
 
-from pytrustnfe.nfse.ginfes import xml_recepcionar_lote_rps
-from pytrustnfe.nfse.ginfes import recepcionar_lote_rps
-from pytrustnfe.nfse.ginfes import consultar_situacao_lote
-from pytrustnfe.nfse.ginfes import consultar_lote_rps
-from pytrustnfe.nfse.ginfes import cancelar_nfse
-from pytrustnfe.nfse.ginfes import xml_cancelar_nfse
+from pytrustnfe.nfse.paulistana import xml_recepcionar_lote_rps
+from pytrustnfe.nfse.paulistana import envio_lote_rps
+from pytrustnfe.nfse.paulistana import consultar_situacao_lote
+from pytrustnfe.nfse.paulistana import consultar_lote_rps
+from pytrustnfe.nfse.paulistana import cancelar_nfse
+from pytrustnfe.nfse.paulistana import xml_cancelar_nfse
 
 from lxml import etree
 from odoo.addons.l10n_br_base.constante_tributaria import (
@@ -66,32 +66,32 @@ class SpedDocumento(models.Model):
 
         return res
 
-    def envia_nfe(self):
+    def envia_documento(self):
         self.ensure_one()
-        result = super(SpedDocumento, self).envia_nfe()
+        result = super(SpedDocumento, self).envia_documento()
         if self.modelo not in (MODELO_FISCAL_NFSE) or\
-                self.empresa_id.provedor_nfse != 'ginfes':
+                self.empresa_id.provedor_nfse != 'paulistana':
             return result
 
-        self.envia_rps()
+        self.envia_rps_paulistana()
 
-    def envia_rps(self):
+    def envia_rps_paulistana(self):
         pfx = self.empresa_id.certificado_id.certificado_nfse()
 
         dados_nfse = self.monta_lote_rps()
 
-        lote_rps = xml_recepcionar_lote_rps(
-            certificado=pfx, nfse=dados_nfse,
-            ambiente=self.empresa_id.ambiente_nfse)
+        # lote_rps = xml_recepcionar_lote_rps(
+        #     certificado=pfx
+        #     ambiente=self.empresa_id.ambiente_nfse)
+        #
+        # erros = self.validar_schema(
+        #     lote_rps, 'servico_enviar_lote_rps_envio_v03.xsd')
 
-        erros = self.validar_schema(
-            lote_rps, 'servico_enviar_lote_rps_envio_v03.xsd')
-
-        if not erros:
-            retorno = recepcionar_lote_rps(certificado=pfx, xml=lote_rps,
-                                       ambiente=self.empresa_id.ambiente_nfse)
-        else:
-            raise exceptions.UserError('Erro de validação do xml: \n' + erros)
+        # if not erros:
+        retorno = envio_lote_rps(certificado=pfx, nfse=dados_nfse,
+                                 ambiente=self.empresa_id.ambiente_nfse)
+        # else:
+        #     raise exceptions.UserError('Erro de validação do xml: \n' + erros)
 
         obj_retorno = retorno['object']
 
@@ -302,8 +302,8 @@ class SpedDocumento(models.Model):
         rps[0].update(servico)
 
         lote_rps = {
-            'numero_lote': self.empresa_id.ultimo_lote_rps._next(),
-            'cnpj_prestador': re.sub('[^0-9]', '', empresa.cnpj_cpf or ''),
+            # 'numero_lote': self.empresa_id.ultimo_lote_rps._next(),
+            'cpf_cnpj': re.sub('[^0-9]', '', empresa.cnpj_cpf or ''),
             'inscricao_municipal': re.sub('[^0-9]', '', empresa.im or ''),
             'lista_rps': rps,
         }

@@ -12,8 +12,8 @@
     'website': 'www.kmee.com.br',
     'depends': [
         'sped_imposto',
-        'sped',
         'sped_nfe',
+        'sped',
         'stock',
     ],
     'data': [

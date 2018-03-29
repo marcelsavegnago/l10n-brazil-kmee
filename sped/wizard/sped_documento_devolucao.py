@@ -32,7 +32,7 @@ class SpedDocumentoItemDevolucao(models.TransientModel):
         required=True
     )
     wizard_id = fields.Many2one(
-        'sped.documento.devolucao',
+        comodel_name='sped.documento.devolucao',
         string="Wizard"
     )
     item_id = fields.Many2one('sped.documento.item', "Item")

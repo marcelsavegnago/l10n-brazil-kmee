@@ -20,6 +20,7 @@
     'license': 'AGPL-3',
     'data': [
         'wizards/wizard_nfe_motivo_cancelamento.xml',
+        'wizard/sped_documento_devolucao_view.xml',
         'views/sped_certificado_view.xml',
         'views/inherited_sped_empresa_view.xml',
         'views/inherited_sped_documento_emissao_nfe_view.xml',

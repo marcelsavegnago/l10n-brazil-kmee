@@ -30,7 +30,6 @@
         #
         # Wizards
         #
-        'wizard/sped_documento_devolucao_view.xml',
         #
         # Fiscal
         #

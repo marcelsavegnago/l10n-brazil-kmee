@@ -18,6 +18,11 @@
                     <div class="clear"></div>
                 </div>
                 <div class="row">
+                    <div class="col client_mostra" style="display:none; font-size: 20px;">
+                        <b><span class='name_cliente' name="name_cliente"/></b>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col client_mostra" style="display:none; font-size: 15px;">
                             <b><span class='label'>Cliente desde:</span></b>
                             <b><span class='date_cliente' name="date_cliente"/></b>
@@ -27,12 +32,6 @@
                     <div class="col client_mostra" style="display:none; font-size: 15px;">
                         <b><span class='label'>Cliente há:</span></b>
                         <b><span class='tempo_cliente' name="tempo_cliente"/></b>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col client_mostra" style="display:none; font-size: 15px;">
-                        <b><span class='label'>Nome:</span></b>
-                        <b><span class='name_cliente' name="name_cliente"/></b>
                     </div>
                 </div>
             </div>

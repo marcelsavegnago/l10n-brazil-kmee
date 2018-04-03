@@ -34,6 +34,11 @@ function l10n_br_pos_screens(instance, module) {
             $(".pos-leftpane *").prop('disabled', save_state);
             var partner = null;
             var isSave = null;
+
+            $('.deleteorder-button').click(function(e){
+                save_state = false;
+            });
+
             this.el.querySelector('.busca-cpf-cnpj').addEventListener('keydown',this.search_handler);
             $('.busca-cpf-cnpj', this.el).keydown(function(e){
                 if(e.which == 13){
@@ -56,18 +61,18 @@ function l10n_br_pos_screens(instance, module) {
             return false
         },
 
-        tempo_cliente: function(data_alteracao){
-            if(data_alteracao){
+        tempo_cliente: function(create_date){
+            if(create_date){
                 var today = new Date();
-                var date_partner = new Date(data_alteracao);
-                var lim_data_alteracao = parseInt(this.pos.config.lim_data_alteracao);
+                var date_partner = new Date(create_date);
                 return Math.floor((today.getTime() - date_partner.getTime())*3.81E-10);
             }
        },
 
         calcula_diferenca_data: function(data_alteracao){
             if(data_alteracao){
-                var today = new Date();
+                var date = new Date();
+                var today = new Date(date.getUTCFullYear(), date.getUTCMonth());
                 var date_partner = new Date(data_alteracao);
                 var lim_data_alteracao = parseInt(this.pos.config.lim_data_alteracao);
                 if( Math.floor((today.getTime() - date_partner.getTime())*3.81E-10) <= lim_data_alteracao)
@@ -86,7 +91,7 @@ function l10n_br_pos_screens(instance, module) {
                lines.bind('add', function(){
                         if(lines.length == 1 && this.pos.config.crm_ativo){
                         self.pos_widget.screen_selector.show_popup('cpf_nota_sat_popup',{
-                            message: _t('Deseja inserir o cpf no cupom fiscal?'),
+                            message: _t('Informar CPF'),
                         });
                         }
                        this.numpad_state.reset();
@@ -112,7 +117,7 @@ function l10n_br_pos_screens(instance, module) {
                 mm = '0'+mm
             }
 
-            return mm + '/' + yyyy;
+            return mm + '-' + yyyy;
         },
 
         active_client: function (self, documento, partner) {
@@ -123,7 +128,7 @@ function l10n_br_pos_screens(instance, module) {
                 self.pos.get('selectedOrder').set_client(self.new_client);
                 $('.date_cliente').text(partner.create_date.substr(0,7));
                 $('.name_cliente').text(partner.name);
-                $('.tempo_cliente').text(this.tempo_cliente(partner.create_date.substr(0,7))+' meses');
+                $('.tempo_cliente').text(this.tempo_cliente(partner.create_date)+' meses');
                 if(self.pos.config.crm_ativo && (!this.calcula_diferenca_data(partner.data_alteracao) || this.verifica_campos_vazios(partner))){
                         var ss = self.pos.pos_widget.screen_selector;
                         ss.set_current_screen('clientlist');
@@ -134,7 +139,7 @@ function l10n_br_pos_screens(instance, module) {
                 if (self.pos.config.save_identity_automatic) {
                     new_partner = {};
 //                  new_partner["name"] = pos_db.add_pontuation_document(documento);
-                    new_partner["name"] = 'Anonimo';
+                    new_partner["name"] = 'Anônimo';
                     if (new_partner["name"].length > 14) {
                         new_partner["is_company"] = true;
                     }
@@ -147,7 +152,7 @@ function l10n_br_pos_screens(instance, module) {
                         var ss = self.pos.pos_widget.screen_selector;
                         ss.set_current_screen('clientlist');
                         self.pos_widget.clientlist_screen.display_client_details('edit',{
-                        'cnpj_cpf': new_partner['cnpj_cpf'], 'name':'Anonimo'});
+                        'cnpj_cpf': new_partner['cnpj_cpf'], 'name':'Anônimo'});
                     }
                 }
             }
@@ -354,7 +359,7 @@ function l10n_br_pos_screens(instance, module) {
                     partner.data_alteracao = self.pos_widget.clientlist_screen.date_today();
                     $('.date_cliente').text(partner.create_date.substr(0,7));
                     $('.name_cliente').text(partner.name);
-                    $('.tempo_cliente').text(this.pos_widget.order_widget.tempo_cliente(partner.create_date.substr(0,7))+' meses');
+                    $('.tempo_cliente').text(this.pos_widget.order_widget.tempo_cliente(partner.create_date)+' meses');
                     $(document).ready(function(){
                         if(country != null)
                             partner.country_id = [country.id, country.name];
@@ -582,7 +587,7 @@ function l10n_br_pos_screens(instance, module) {
             else{
                 $('.date_cliente').text(partner.create_date.substr(0,7));
                 $('.name_cliente').text(partner.name);
-                $('.tempo_cliente').text(this.pos_widget.order_widget.tempo_cliente(partner.create_date.substr(0,7))+' meses');
+                $('.tempo_cliente').text(this.pos_widget.order_widget.tempo_cliente(partner.create_date)+' meses');
             }
         }
     });
@@ -604,7 +609,7 @@ function l10n_br_pos_screens(instance, module) {
                         if (partner) {
                             $('.date_cliente').text(partner.create_date.substr(0,7));
                             $('.name_cliente').text(partner.name);
-                            $('.tempo_cliente').text(self.pos_widget.order_widget.tempo_cliente(partner.create_date.substr(0,7))+' meses');
+                            $('.tempo_cliente').text(self.pos_widget.order_widget.tempo_cliente(partner.create_date)+' meses');
                             self.pos.get('selectedOrder').set_client(partner);
                             currentOrder = self.pos.get('selectedOrder').attributes;
                             currentOrder["cpf_nota"] = cpf.replace(/[^\d]+/g,'');
@@ -617,7 +622,7 @@ function l10n_br_pos_screens(instance, module) {
                                 self.pos_widget.payment_screen.validate_order();
                         } else {
                             new_partner = {};
-                            new_partner["name"] = 'Anonimo';
+                            new_partner["name"] = 'Anônimo';
                             if (new_partner["name"].length > 14) {
                                 new_partner["is_company"] = true;
                             }
@@ -639,7 +644,7 @@ function l10n_br_pos_screens(instance, module) {
                                     self.new_client = self.old_client;
                                     $('.date_cliente').text(self.old_client.create_date.substr(0,7));
                                     $('.name_cliente').text(self.old_client.name);
-                                    $('.tempo_cliente').text(self.pos_widget.order_widget.tempo_cliente(self.old_client.create_date.substr(0,7))+' meses');
+                                    $('.tempo_cliente').text(self.pos_widget.order_widget.tempo_cliente(self.old_client.create_date)+' meses');
                                     self.pos.get('selectedOrder').set_client(self.new_client);
                                     if (self.pos.config.crm_ativo) {
                                         var ss = self.pos.pos_widget.screen_selector;
@@ -674,7 +679,7 @@ function l10n_br_pos_screens(instance, module) {
                     }
                     currentOrder = self.pos.get('selectedOrder').attributes;
                     currentOrder["cpf_nota"] = cpf.replace(/[^\d]+/g,'');
-                    this.active_client(self, documento, partner);
+                    // this.active_client(self, documento, partner);
                     if(self.pos.config.crm_ativo && (!this.pos_widget.order_widget.calcula_diferenca_data(partner.data_alteracao) || this.pos_widget.order_widget.verifica_campos_vazios(partner))){
                         var ss = self.pos.pos_widget.screen_selector;
                         ss.set_current_screen('clientlist');
@@ -697,7 +702,7 @@ function l10n_br_pos_screens(instance, module) {
             if (currentOrder.client) {
                 this.cpf_nota = currentOrder.client.cnpj_cpf;
                 this.create_date = currentOrder.client.create_date.substring(0,7);
-                this.atualizacao = self.pos.pos_widget.calcula_diferenca_data(currentOrder.client.data_alteracao);
+                this.atualizacao = self.pos_widget.order_widget.calcula_diferenca_data(currentOrder.client.data_alteracao);
                 this.renderElement();
             }
             else{

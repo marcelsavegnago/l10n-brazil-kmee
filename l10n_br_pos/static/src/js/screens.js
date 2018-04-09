@@ -610,8 +610,14 @@ function l10n_br_pos_screens(instance, module) {
             self = this;
             var cpf = $('.busca-cpf-cnpj-popup').val();
             if (cpf){
+                if(!cpf_na_nota){
+                    $(".pos-leftpane *").prop('disabled', save_state);
+                    self.pos_widget.screen_selector.close_popup();
+                }
                 if (!currentOrder.client) {
                     if (self.pos_widget.order_widget.verificar_cpf_cnpj(cpf.replace(/[^\d]+/g,''))) {
+                        $(".pos-leftpane *").prop('disabled', save_state);
+                        self.pos_widget.screen_selector.close_popup();
                         $(".pos-leftpane *").prop('disabled', save_state);
                         self.pos_widget.screen_selector.close_popup();
                         pos_db = self.pos.db;
@@ -692,6 +698,7 @@ function l10n_br_pos_screens(instance, module) {
                 }
             } else {
                 if (!cpf_na_nota && self.pos.config.crm_ativo) {
+                    $(".pos-leftpane *").prop('disabled', save_state);
                     self.pos_widget.screen_selector.close_popup();
                     var ss = self.pos.pos_widget.screen_selector;
                     ss.set_current_screen('clientlist');
@@ -832,7 +839,6 @@ function l10n_br_pos_screens(instance, module) {
                 }
                 if(!cpf_na_nota)
                     currentOrder.attributes.cpf_nota = null;
-                
                 if( sat_status == 'connected'){
                     if(options.invoice){
                         // deactivate the validation button while we try to send the order

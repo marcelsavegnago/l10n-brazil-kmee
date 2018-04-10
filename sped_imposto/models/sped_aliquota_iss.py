@@ -6,11 +6,10 @@
 #
 
 from __future__ import division, print_function, unicode_literals
-from odoo.addons.l10n_br_base.models.sped_base import SpedBase
 from odoo import fields, models
 
 
-class SpedAliquotaISS(SpedBase, models.Model):
+class SpedAliquotaISS(models.Model):
     _name = b'sped.aliquota.iss'
     _description = 'Alíquotas do ISS'
     _rec_name = 'al_iss'
@@ -28,11 +27,10 @@ class SpedAliquotaISS(SpedBase, models.Model):
         ondelete='restrict',
         required=True,
     )
-    al_iss = fields.Monetary(
+    al_iss = fields.Float(
         string='Alíquota',
         required=True,
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
     codigo = fields.Char(
         string='Código específico',

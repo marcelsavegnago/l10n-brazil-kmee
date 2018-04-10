@@ -11,7 +11,7 @@
 
     -->
 
-    <record id="ESTADO_99999990132"  model="res.country.state">
+    <record id="MUNICIPIO_99999990132"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990132</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -20,10 +20,10 @@
         <field name="name">Afeganistão</field>
         <field name="country_id" ref="base.af" />
         <field name="state_id" ref="base.state_br_ex" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997560"  model="res.country.state">
+    <record id="MUNICIPIO_99999997560"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997560</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -32,10 +32,10 @@
         <field name="name">África do Sul</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.za" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990175"  model="res.country.state">
+    <record id="MUNICIPIO_99999990175"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990175</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -44,10 +44,10 @@
         <field name="name">Albânia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.al" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990230"  model="res.country.state">
+    <record id="MUNICIPIO_99999990230"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990230</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -56,10 +56,10 @@
         <field name="name">Alemanha</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.de" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990370"  model="res.country.state">
+    <record id="MUNICIPIO_99999990370"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990370</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -68,10 +68,10 @@
         <field name="name">Andorra</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ad" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990400"  model="res.country.state">
+    <record id="MUNICIPIO_99999990400"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990400</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -80,10 +80,10 @@
         <field name="name">Angola</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ao" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990418"  model="res.country.state">
+    <record id="MUNICIPIO_99999990418"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990418</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -92,10 +92,10 @@
         <field name="name">Anguila</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ai" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990434"  model="res.country.state">
+    <record id="MUNICIPIO_99999990434"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990434</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -104,10 +104,10 @@
         <field name="name">Antígua e Barbuda</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ag" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990531"  model="res.country.state">
+    <record id="MUNICIPIO_99999990531"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990531</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -116,10 +116,10 @@
         <field name="name">Arábia Saudita</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.sa" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990590"  model="res.country.state">
+    <record id="MUNICIPIO_99999990590"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990590</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -128,10 +128,10 @@
         <field name="name">Argélia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.dz" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990639"  model="res.country.state">
+    <record id="MUNICIPIO_99999990639"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990639</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -140,10 +140,10 @@
         <field name="name">Argentina</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ar" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990647"  model="res.country.state">
+    <record id="MUNICIPIO_99999990647"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990647</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -152,10 +152,10 @@
         <field name="name">Armênia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.am" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990655"  model="res.country.state">
+    <record id="MUNICIPIO_99999990655"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990655</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -164,10 +164,10 @@
         <field name="name">Aruba</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.aw" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990698"  model="res.country.state">
+    <record id="MUNICIPIO_99999990698"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990698</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -176,10 +176,10 @@
         <field name="name">Austrália</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.au" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990728"  model="res.country.state">
+    <record id="MUNICIPIO_99999990728"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990728</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -188,10 +188,10 @@
         <field name="name">Áustria</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.at" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990736"  model="res.country.state">
+    <record id="MUNICIPIO_99999990736"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990736</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -200,10 +200,10 @@
         <field name="name">Azerbaijão</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.az" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990779"  model="res.country.state">
+    <record id="MUNICIPIO_99999990779"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990779</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -212,10 +212,10 @@
         <field name="name">Bahamas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bs" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990817"  model="res.country.state">
+    <record id="MUNICIPIO_99999990817"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990817</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -224,10 +224,10 @@
         <field name="name">Bangladeche</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bd" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990833"  model="res.country.state">
+    <record id="MUNICIPIO_99999990833"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990833</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -236,10 +236,10 @@
         <field name="name">Barbados</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bb" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990809"  model="res.country.state">
+    <record id="MUNICIPIO_99999990809"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990809</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -248,10 +248,10 @@
         <field name="name">Barêin</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bh" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990876"  model="res.country.state">
+    <record id="MUNICIPIO_99999990876"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990876</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -260,10 +260,10 @@
         <field name="name">Bélgica</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.be" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990884"  model="res.country.state">
+    <record id="MUNICIPIO_99999990884"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990884</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -272,10 +272,10 @@
         <field name="name">Belize</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bz" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992291"  model="res.country.state">
+    <record id="MUNICIPIO_99999992291"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992291</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -284,10 +284,10 @@
         <field name="name">Benin</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bj" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990906"  model="res.country.state">
+    <record id="MUNICIPIO_99999990906"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990906</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -296,10 +296,10 @@
         <field name="name">Bermudas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bm" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990850"  model="res.country.state">
+    <record id="MUNICIPIO_99999990850"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990850</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -308,10 +308,10 @@
         <field name="name">Bielorrússia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.by" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990973"  model="res.country.state">
+    <record id="MUNICIPIO_99999990973"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990973</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -320,10 +320,10 @@
         <field name="name">Bolívia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bo" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990981"  model="res.country.state">
+    <record id="MUNICIPIO_99999990981"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990981</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -332,10 +332,10 @@
         <field name="name">Bósnia Herzegóvina</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ba" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991015"  model="res.country.state">
+    <record id="MUNICIPIO_99999991015"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991015</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -344,10 +344,10 @@
         <field name="name">Botsuana</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bw" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991082"  model="res.country.state">
+    <record id="MUNICIPIO_99999991082"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991082</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -356,10 +356,10 @@
         <field name="name">Brunei</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bn" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991112"  model="res.country.state">
+    <record id="MUNICIPIO_99999991112"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991112</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -368,10 +368,10 @@
         <field name="name">Bulgária</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bg" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990310"  model="res.country.state">
+    <record id="MUNICIPIO_99999990310"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990310</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -380,10 +380,10 @@
         <field name="name">Burquina Fasso</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bf" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991155"  model="res.country.state">
+    <record id="MUNICIPIO_99999991155"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991155</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -392,10 +392,10 @@
         <field name="name">Burúndi</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bi" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991198"  model="res.country.state">
+    <record id="MUNICIPIO_99999991198"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991198</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -404,10 +404,10 @@
         <field name="name">Butão</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bt" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991279"  model="res.country.state">
+    <record id="MUNICIPIO_99999991279"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991279</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -416,10 +416,10 @@
         <field name="name">Cabo Verde</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.cv" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991376"  model="res.country.state">
+    <record id="MUNICIPIO_99999991376"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991376</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -428,10 +428,10 @@
         <field name="name">Caimã, Ilhas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ky" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991457"  model="res.country.state">
+    <record id="MUNICIPIO_99999991457"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991457</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -440,10 +440,10 @@
         <field name="name">Camarões</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.cm" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991414"  model="res.country.state">
+    <record id="MUNICIPIO_99999991414"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991414</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -452,10 +452,10 @@
         <field name="name">Camboja</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.kh" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991490"  model="res.country.state">
+    <record id="MUNICIPIO_99999991490"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991490</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -464,10 +464,10 @@
         <field name="name">Canadá</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ca" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991511"  model="res.country.state">
+    <record id="MUNICIPIO_99999991511"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991511</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -476,10 +476,10 @@
         <field name="name">Canárias, Ilhas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.es" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991546"  model="res.country.state">
+    <record id="MUNICIPIO_99999991546"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991546</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -488,10 +488,10 @@
         <field name="name">Catar</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.qa" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991538"  model="res.country.state">
+    <record id="MUNICIPIO_99999991538"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991538</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -500,10 +500,10 @@
         <field name="name">Cazaquistão</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.kz" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997889"  model="res.country.state">
+    <record id="MUNICIPIO_99999997889"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997889</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -512,10 +512,10 @@
         <field name="name">Chade</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.td" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991589"  model="res.country.state">
+    <record id="MUNICIPIO_99999991589"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991589</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -524,10 +524,10 @@
         <field name="name">Chile</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.cl" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991600"  model="res.country.state">
+    <record id="MUNICIPIO_99999991600"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991600</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -536,10 +536,10 @@
         <field name="name">China</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.cn" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991635"  model="res.country.state">
+    <record id="MUNICIPIO_99999991635"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991635</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -548,10 +548,10 @@
         <field name="name">Chipre</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.cy" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995118"  model="res.country.state">
+    <record id="MUNICIPIO_99999995118"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995118</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -560,10 +560,10 @@
         <field name="name">Christmas, Ilha</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.cx" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991651"  model="res.country.state">
+    <record id="MUNICIPIO_99999991651"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991651</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -572,10 +572,10 @@
         <field name="name">Cocos (Keeling), Ilhas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.cc" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991694"  model="res.country.state">
+    <record id="MUNICIPIO_99999991694"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991694</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -584,10 +584,10 @@
         <field name="name">Colômbia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.co" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991732"  model="res.country.state">
+    <record id="MUNICIPIO_99999991732"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991732</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -596,10 +596,10 @@
         <field name="name">Comores</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.km" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991775"  model="res.country.state">
+    <record id="MUNICIPIO_99999991775"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991775</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -608,10 +608,10 @@
         <field name="name">Congo Brazavile</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.cg" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998885"  model="res.country.state">
+    <record id="MUNICIPIO_99999998885"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998885</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -620,10 +620,10 @@
         <field name="name">Congo Quinxassa</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.cd" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991830"  model="res.country.state">
+    <record id="MUNICIPIO_99999991830"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991830</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -632,10 +632,10 @@
         <field name="name">Cook, Ilhas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ck" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991872"  model="res.country.state">
+    <record id="MUNICIPIO_99999991872"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991872</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -644,10 +644,10 @@
         <field name="name">Coreia do Norte</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.kr" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991902"  model="res.country.state">
+    <record id="MUNICIPIO_99999991902"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991902</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -656,10 +656,10 @@
         <field name="name">Coreia do Sul</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.kp" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991937"  model="res.country.state">
+    <record id="MUNICIPIO_99999991937"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991937</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -668,10 +668,10 @@
         <field name="name">Costa do Marfim</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ci" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991961"  model="res.country.state">
+    <record id="MUNICIPIO_99999991961"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991961</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -680,10 +680,10 @@
         <field name="name">Costa Rica</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.cr" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991953"  model="res.country.state">
+    <record id="MUNICIPIO_99999991953"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991953</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -692,10 +692,10 @@
         <field name="name">Croácia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.hr" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991996"  model="res.country.state">
+    <record id="MUNICIPIO_99999991996"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991996</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -704,10 +704,10 @@
         <field name="name">Cuba</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.cu" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990477"  model="res.country.state">
+    <record id="MUNICIPIO_99999990477"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990477</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -716,10 +716,10 @@
         <field name="name">Curaçao</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.cw" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990477_1"  model="res.country.state">
+    <record id="MUNICIPIO_99999990477_1"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990477</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -728,10 +728,10 @@
         <field name="name">Bonaire, Santo Eustáquio e Saba</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bq" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990477_2"  model="res.country.state">
+    <record id="MUNICIPIO_99999990477_2"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990477</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -740,10 +740,10 @@
         <field name="name">São Martinho (parte neerlandesa)</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.sx" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992321"  model="res.country.state">
+    <record id="MUNICIPIO_99999992321"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992321</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -752,10 +752,10 @@
         <field name="name">Dinamarca</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.dk" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997838"  model="res.country.state">
+    <record id="MUNICIPIO_99999997838"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997838</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -764,10 +764,10 @@
         <field name="name">Djibúti</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.dj" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992356"  model="res.country.state">
+    <record id="MUNICIPIO_99999992356"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992356</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -776,10 +776,10 @@
         <field name="name">Dominica</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.dm" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992402"  model="res.country.state">
+    <record id="MUNICIPIO_99999992402"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992402</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -788,10 +788,10 @@
         <field name="name">Egito</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.eg" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996874"  model="res.country.state">
+    <record id="MUNICIPIO_99999996874"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996874</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -800,10 +800,10 @@
         <field name="name">El Salvador</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.sv" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992445"  model="res.country.state">
+    <record id="MUNICIPIO_99999992445"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992445</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -812,10 +812,10 @@
         <field name="name">Emirados Árabes Unidos</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ae" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992399"  model="res.country.state">
+    <record id="MUNICIPIO_99999992399"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992399</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -824,10 +824,10 @@
         <field name="name">Equador</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ec" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992437"  model="res.country.state">
+    <record id="MUNICIPIO_99999992437"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992437</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -836,10 +836,10 @@
         <field name="name">Eritreia</field>
         <field name="state_id" ref="base.state_br_ex" />
        <field name="country_id" ref="base.er" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992470"  model="res.country.state">
+    <record id="MUNICIPIO_99999992470"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992470</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -848,10 +848,10 @@
         <field name="name">Eslováquia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.sk" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992461"  model="res.country.state">
+    <record id="MUNICIPIO_99999992461"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992461</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -860,10 +860,10 @@
         <field name="name">Eslovênia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.si" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992496"  model="res.country.state">
+    <record id="MUNICIPIO_99999992496"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992496</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -872,10 +872,10 @@
         <field name="name">Estados Unidos</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.us" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992518"  model="res.country.state">
+    <record id="MUNICIPIO_99999992518"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992518</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -884,10 +884,10 @@
         <field name="name">Estônia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ee" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992534"  model="res.country.state">
+    <record id="MUNICIPIO_99999992534"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992534</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -896,10 +896,10 @@
         <field name="name">Etiópia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.et" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992550"  model="res.country.state">
+    <record id="MUNICIPIO_99999992550"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992550</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -908,10 +908,10 @@
         <field name="name">Falkland, Ilhas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.fk" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992593"  model="res.country.state">
+    <record id="MUNICIPIO_99999992593"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992593</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -920,10 +920,10 @@
         <field name="name">Faroe, Ilhas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.fo" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998702"  model="res.country.state">
+    <record id="MUNICIPIO_99999998702"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998702</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -932,10 +932,10 @@
         <field name="name">Fiji</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.fj" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992674"  model="res.country.state">
+    <record id="MUNICIPIO_99999992674"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992674</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -944,10 +944,10 @@
         <field name="name">Filipinas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ph" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992712"  model="res.country.state">
+    <record id="MUNICIPIO_99999992712"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992712</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -956,10 +956,10 @@
         <field name="name">Finlândia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.fi" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992755"  model="res.country.state">
+    <record id="MUNICIPIO_99999992755"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992755</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -968,10 +968,10 @@
         <field name="name">França</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.fr" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992755_1"  model="res.country.state">
+    <record id="MUNICIPIO_99999992755_1"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992755</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -980,10 +980,10 @@
         <field name="name">São Bartolomeu</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.bl" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992755_2"  model="res.country.state">
+    <record id="MUNICIPIO_99999992755_2"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992755</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -992,10 +992,10 @@
         <field name="name">São Martinho (parte francesa)</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mf" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992755_3"  model="res.country.state">
+    <record id="MUNICIPIO_99999992755_3"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992755</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1004,10 +1004,10 @@
         <field name="name">Wallis e Futuna</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.wf" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992810"  model="res.country.state">
+    <record id="MUNICIPIO_99999992810"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992810</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1016,10 +1016,10 @@
         <field name="name">Gabão</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ga" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992852"  model="res.country.state">
+    <record id="MUNICIPIO_99999992852"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992852</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1028,10 +1028,10 @@
         <field name="name">Gâmbia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.gm" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992895"  model="res.country.state">
+    <record id="MUNICIPIO_99999992895"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992895</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1040,10 +1040,10 @@
         <field name="name">Gana</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.gh" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992917"  model="res.country.state">
+    <record id="MUNICIPIO_99999992917"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992917</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1052,10 +1052,10 @@
         <field name="name">Geórgia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ge" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992933"  model="res.country.state">
+    <record id="MUNICIPIO_99999992933"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992933</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1064,10 +1064,10 @@
         <field name="name">Gibraltar</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.gi" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999992976"  model="res.country.state">
+    <record id="MUNICIPIO_99999992976"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999992976</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1076,10 +1076,10 @@
         <field name="name">Granada</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.gd" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993018"  model="res.country.state">
+    <record id="MUNICIPIO_99999993018"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993018</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1088,10 +1088,10 @@
         <field name="name">Grécia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.gr" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993050"  model="res.country.state">
+    <record id="MUNICIPIO_99999993050"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993050</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1100,10 +1100,10 @@
         <field name="name">Groenlândia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.gl" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993093"  model="res.country.state">
+    <record id="MUNICIPIO_99999993093"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993093</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1112,10 +1112,10 @@
         <field name="name">Guadalupe</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.gp" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993131"  model="res.country.state">
+    <record id="MUNICIPIO_99999993131"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993131</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1124,10 +1124,10 @@
         <field name="name">Guam</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.gu" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993174"  model="res.country.state">
+    <record id="MUNICIPIO_99999993174"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993174</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1136,10 +1136,10 @@
         <field name="name">Guatemala</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.gt" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991504"  model="res.country.state">
+    <record id="MUNICIPIO_99999991504"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991504</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1148,10 +1148,10 @@
         <field name="name">Guérnesei</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.gg" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993379"  model="res.country.state">
+    <record id="MUNICIPIO_99999993379"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993379</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1160,10 +1160,10 @@
         <field name="name">Guiana</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.gy" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993255"  model="res.country.state">
+    <record id="MUNICIPIO_99999993255"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993255</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1172,10 +1172,10 @@
         <field name="name">Guiana Francesa</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.gf" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993298"  model="res.country.state">
+    <record id="MUNICIPIO_99999993298"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993298</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1184,10 +1184,10 @@
         <field name="name">Guiné</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.gn" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993310"  model="res.country.state">
+    <record id="MUNICIPIO_99999993310"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993310</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1196,10 +1196,10 @@
         <field name="name">Guiné Equatorial</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.gq" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993344"  model="res.country.state">
+    <record id="MUNICIPIO_99999993344"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993344</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1208,10 +1208,10 @@
         <field name="name">Guiné-Bissau</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.gw" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993417"  model="res.country.state">
+    <record id="MUNICIPIO_99999993417"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993417</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1220,10 +1220,10 @@
         <field name="name">Haiti</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ht" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993450"  model="res.country.state">
+    <record id="MUNICIPIO_99999993450"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993450</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1232,10 +1232,10 @@
         <field name="name">Honduras</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.hn" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993514"  model="res.country.state">
+    <record id="MUNICIPIO_99999993514"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993514</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1244,10 +1244,10 @@
         <field name="name">Hong Kong</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.hk" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993557"  model="res.country.state">
+    <record id="MUNICIPIO_99999993557"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993557</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1256,10 +1256,10 @@
         <field name="name">Hungria</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.hu" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993573"  model="res.country.state">
+    <record id="MUNICIPIO_99999993573"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993573</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1268,10 +1268,10 @@
         <field name="name">Iêmen</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ye" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993611"  model="res.country.state">
+    <record id="MUNICIPIO_99999993611"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993611</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1280,10 +1280,10 @@
         <field name="name">Índia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.in" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993654"  model="res.country.state">
+    <record id="MUNICIPIO_99999993654"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993654</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1292,10 +1292,10 @@
         <field name="name">Indonésia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.id" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993727"  model="res.country.state">
+    <record id="MUNICIPIO_99999993727"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993727</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1304,10 +1304,10 @@
         <field name="name">Irã</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ir" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993697"  model="res.country.state">
+    <record id="MUNICIPIO_99999993697"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993697</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1316,10 +1316,10 @@
         <field name="name">Iraque</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.iq" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993751"  model="res.country.state">
+    <record id="MUNICIPIO_99999993751"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993751</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1328,10 +1328,10 @@
         <field name="name">Irlanda</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ie" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993794"  model="res.country.state">
+    <record id="MUNICIPIO_99999993794"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993794</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1340,10 +1340,10 @@
         <field name="name">Islândia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.is" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993832"  model="res.country.state">
+    <record id="MUNICIPIO_99999993832"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993832</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1352,10 +1352,10 @@
         <field name="name">Israel</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.il" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993867"  model="res.country.state">
+    <record id="MUNICIPIO_99999993867"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993867</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1364,10 +1364,10 @@
         <field name="name">Itália</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.it" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993913"  model="res.country.state">
+    <record id="MUNICIPIO_99999993913"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993913</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1376,10 +1376,10 @@
         <field name="name">Jamaica</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.jm" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993999"  model="res.country.state">
+    <record id="MUNICIPIO_99999993999"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993999</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1388,10 +1388,10 @@
         <field name="name">Japão</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.jp" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991508"  model="res.country.state">
+    <record id="MUNICIPIO_99999991508"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991508</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1400,10 +1400,10 @@
         <field name="name">Jérsei</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.je" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993964"  model="res.country.state">
+    <record id="MUNICIPIO_99999993964"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993964</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1412,10 +1412,10 @@
         <field name="name">Johnston, Ilhas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.um" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994030"  model="res.country.state">
+    <record id="MUNICIPIO_99999994030"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994030</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1424,10 +1424,10 @@
         <field name="name">Jordânia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.jo" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991988"  model="res.country.state">
+    <record id="MUNICIPIO_99999991988"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991988</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1436,10 +1436,10 @@
         <field name="name">Kuwait</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.kw" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994200"  model="res.country.state">
+    <record id="MUNICIPIO_99999994200"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994200</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1448,10 +1448,10 @@
         <field name="name">Laos</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.la" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994260"  model="res.country.state">
+    <record id="MUNICIPIO_99999994260"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994260</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1460,10 +1460,10 @@
         <field name="name">Lesoto</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ls" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994278"  model="res.country.state">
+    <record id="MUNICIPIO_99999994278"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994278</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1472,10 +1472,10 @@
         <field name="name">Letônia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.lv" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994316"  model="res.country.state">
+    <record id="MUNICIPIO_99999994316"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994316</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1484,10 +1484,10 @@
         <field name="name">Líbano</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.lb" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994340"  model="res.country.state">
+    <record id="MUNICIPIO_99999994340"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994340</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1496,10 +1496,10 @@
         <field name="name">Libéria</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.lr" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994383"  model="res.country.state">
+    <record id="MUNICIPIO_99999994383"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994383</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1508,10 +1508,10 @@
         <field name="name">Líbia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ly" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994405"  model="res.country.state">
+    <record id="MUNICIPIO_99999994405"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994405</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1520,10 +1520,10 @@
         <field name="name">Liechtenstein</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.li" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994421"  model="res.country.state">
+    <record id="MUNICIPIO_99999994421"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994421</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1532,10 +1532,10 @@
         <field name="name">Lituânia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.lt" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994456"  model="res.country.state">
+    <record id="MUNICIPIO_99999994456"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994456</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1544,10 +1544,10 @@
         <field name="name">Luxemburgo</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.lu" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994472"  model="res.country.state">
+    <record id="MUNICIPIO_99999994472"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994472</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1556,10 +1556,10 @@
         <field name="name">Macau</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mo" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994499"  model="res.country.state">
+    <record id="MUNICIPIO_99999994499"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994499</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1568,10 +1568,10 @@
         <field name="name">Macedônia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mk" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994502"  model="res.country.state">
+    <record id="MUNICIPIO_99999994502"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994502</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1580,10 +1580,10 @@
         <field name="name">Madagascar</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mg" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994525"  model="res.country.state">
+    <record id="MUNICIPIO_99999994525"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994525</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1592,10 +1592,10 @@
         <field name="name">Madeira, Ilha da</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.pt" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994553"  model="res.country.state">
+    <record id="MUNICIPIO_99999994553"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994553</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1604,10 +1604,10 @@
         <field name="name">Malásia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.my" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994588"  model="res.country.state">
+    <record id="MUNICIPIO_99999994588"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994588</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1616,10 +1616,10 @@
         <field name="name">Malawi</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mw" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994618"  model="res.country.state">
+    <record id="MUNICIPIO_99999994618"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994618</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1628,10 +1628,10 @@
         <field name="name">Maldivas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mv" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994642"  model="res.country.state">
+    <record id="MUNICIPIO_99999994642"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994642</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1640,10 +1640,10 @@
         <field name="name">Máli</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ml" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994677"  model="res.country.state">
+    <record id="MUNICIPIO_99999994677"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994677</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1652,10 +1652,10 @@
         <field name="name">Malta</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mt" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999993595"  model="res.country.state">
+    <record id="MUNICIPIO_99999993595"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999993595</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1664,10 +1664,10 @@
         <field name="name">Man, Ilha de</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.im" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994723"  model="res.country.state">
+    <record id="MUNICIPIO_99999994723"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994723</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1676,10 +1676,10 @@
         <field name="name">Marianas do Norte, Ilhas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mp" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994740"  model="res.country.state">
+    <record id="MUNICIPIO_99999994740"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994740</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1688,10 +1688,10 @@
         <field name="name">Marrocos</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ma" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994766"  model="res.country.state">
+    <record id="MUNICIPIO_99999994766"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994766</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1700,10 +1700,10 @@
         <field name="name">Marshall, Ilhas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mh" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994774"  model="res.country.state">
+    <record id="MUNICIPIO_99999994774"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994774</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1712,10 +1712,10 @@
         <field name="name">Martinica</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mq" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994855"  model="res.country.state">
+    <record id="MUNICIPIO_99999994855"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994855</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1724,10 +1724,10 @@
         <field name="name">Maurício</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mu" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994880"  model="res.country.state">
+    <record id="MUNICIPIO_99999994880"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994880</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1736,10 +1736,10 @@
         <field name="name">Mauritânia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mr" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994885"  model="res.country.state">
+    <record id="MUNICIPIO_99999994885"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994885</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1748,10 +1748,10 @@
         <field name="name">Mayotte</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.yt" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994936"  model="res.country.state">
+    <record id="MUNICIPIO_99999994936"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994936</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1760,10 +1760,10 @@
         <field name="name">México</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mx" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999990930"  model="res.country.state">
+    <record id="MUNICIPIO_99999990930"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999990930</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1772,10 +1772,10 @@
         <field name="name">Mianmar</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mm" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994995"  model="res.country.state">
+    <record id="MUNICIPIO_99999994995"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994995</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1784,10 +1784,10 @@
         <field name="name">Micronésia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.fm" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995053"  model="res.country.state">
+    <record id="MUNICIPIO_99999995053"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995053</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1796,10 +1796,10 @@
         <field name="name">Moçambique</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mz" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994944"  model="res.country.state">
+    <record id="MUNICIPIO_99999994944"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994944</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1808,10 +1808,10 @@
         <field name="name">Moldávia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.md" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994952"  model="res.country.state">
+    <record id="MUNICIPIO_99999994952"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994952</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1820,10 +1820,10 @@
         <field name="name">Mônaco</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mc" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994979"  model="res.country.state">
+    <record id="MUNICIPIO_99999994979"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994979</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1832,10 +1832,10 @@
         <field name="name">Mongólia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.mn" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994985"  model="res.country.state">
+    <record id="MUNICIPIO_99999994985"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994985</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1844,10 +1844,10 @@
         <field name="name">Montenegro</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.me" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995010"  model="res.country.state">
+    <record id="MUNICIPIO_99999995010"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995010</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1856,10 +1856,10 @@
         <field name="name">Montserrat</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ms" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995070"  model="res.country.state">
+    <record id="MUNICIPIO_99999995070"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995070</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1868,10 +1868,10 @@
         <field name="name">Namíbia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.na" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995088"  model="res.country.state">
+    <record id="MUNICIPIO_99999995088"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995088</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1880,10 +1880,10 @@
         <field name="name">Nauru</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.nr" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995177"  model="res.country.state">
+    <record id="MUNICIPIO_99999995177"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995177</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1892,10 +1892,10 @@
         <field name="name">Nepal</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.np" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995215"  model="res.country.state">
+    <record id="MUNICIPIO_99999995215"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995215</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1904,10 +1904,10 @@
         <field name="name">Nicarágua</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ni" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995258"  model="res.country.state">
+    <record id="MUNICIPIO_99999995258"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995258</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1916,10 +1916,10 @@
         <field name="name">Níger</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ne" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995282"  model="res.country.state">
+    <record id="MUNICIPIO_99999995282"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995282</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1928,10 +1928,10 @@
         <field name="name">Nigéria</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ng" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995312"  model="res.country.state">
+    <record id="MUNICIPIO_99999995312"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995312</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1940,10 +1940,10 @@
         <field name="name">Niue</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.nu" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995355"  model="res.country.state">
+    <record id="MUNICIPIO_99999995355"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995355</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1952,10 +1952,10 @@
         <field name="name">Norfolk, Ilha</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.nf" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995380"  model="res.country.state">
+    <record id="MUNICIPIO_99999995380"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995380</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1964,10 +1964,10 @@
         <field name="name">Noruega</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.no" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995428"  model="res.country.state">
+    <record id="MUNICIPIO_99999995428"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995428</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1976,10 +1976,10 @@
         <field name="name">Nova Caledônia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.nc" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995487"  model="res.country.state">
+    <record id="MUNICIPIO_99999995487"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995487</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -1988,10 +1988,10 @@
         <field name="name">Nova Zelândia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.nz" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995568"  model="res.country.state">
+    <record id="MUNICIPIO_99999995568"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995568</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2000,10 +2000,10 @@
         <field name="name">Omã</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.om" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995738"  model="res.country.state">
+    <record id="MUNICIPIO_99999995738"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995738</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2012,10 +2012,10 @@
         <field name="name">Países Baixos (Holanda)</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.nl" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995754"  model="res.country.state">
+    <record id="MUNICIPIO_99999995754"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995754</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2024,10 +2024,10 @@
         <field name="name">Palau</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.pw" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995780"  model="res.country.state">
+    <record id="MUNICIPIO_99999995780"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995780</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2036,10 +2036,10 @@
         <field name="name">Palestina</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ps" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995800"  model="res.country.state">
+    <record id="MUNICIPIO_99999995800"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995800</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2048,10 +2048,10 @@
         <field name="name">Panamá</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.pa" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995452"  model="res.country.state">
+    <record id="MUNICIPIO_99999995452"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995452</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2060,10 +2060,10 @@
         <field name="name">Papua Nova Guiné</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.pg" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995762"  model="res.country.state">
+    <record id="MUNICIPIO_99999995762"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995762</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2072,10 +2072,10 @@
         <field name="name">Paquistão</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.pk" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995860"  model="res.country.state">
+    <record id="MUNICIPIO_99999995860"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995860</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2084,10 +2084,10 @@
         <field name="name">Paraguai</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.py" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995894"  model="res.country.state">
+    <record id="MUNICIPIO_99999995894"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995894</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2096,10 +2096,10 @@
         <field name="name">Peru</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.pe" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995932"  model="res.country.state">
+    <record id="MUNICIPIO_99999995932"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995932</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2108,10 +2108,10 @@
         <field name="name">Pitcairn</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.pn" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995991"  model="res.country.state">
+    <record id="MUNICIPIO_99999995991"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995991</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2120,10 +2120,10 @@
         <field name="name">Polinésia Francesa</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.pf" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996033"  model="res.country.state">
+    <record id="MUNICIPIO_99999996033"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996033</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2132,10 +2132,10 @@
         <field name="name">Polônia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.pl" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996114"  model="res.country.state">
+    <record id="MUNICIPIO_99999996114"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996114</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2144,10 +2144,10 @@
         <field name="name">Porto Rico</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.pr" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996238"  model="res.country.state">
+    <record id="MUNICIPIO_99999996238"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996238</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2156,10 +2156,10 @@
         <field name="name">Quênia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ke" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996254"  model="res.country.state">
+    <record id="MUNICIPIO_99999996254"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996254</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2168,10 +2168,10 @@
         <field name="name">Quirguistão</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.kg" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999994111"  model="res.country.state">
+    <record id="MUNICIPIO_99999994111"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999994111</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2180,10 +2180,10 @@
         <field name="name">Quiribati</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ki" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996289"  model="res.country.state">
+    <record id="MUNICIPIO_99999996289"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996289</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2192,10 +2192,10 @@
         <field name="name">Reino Unido</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.GBP" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996408"  model="res.country.state">
+    <record id="MUNICIPIO_99999996408"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996408</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2204,10 +2204,10 @@
         <field name="name">República Centro-Africana</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.cf" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996475"  model="res.country.state">
+    <record id="MUNICIPIO_99999996475"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996475</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2216,10 +2216,10 @@
         <field name="name">República Dominicana</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.do" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997919"  model="res.country.state">
+    <record id="MUNICIPIO_99999997919"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997919</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2228,10 +2228,10 @@
         <field name="name">República Tcheca</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.cz" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996602"  model="res.country.state">
+    <record id="MUNICIPIO_99999996602"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996602</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2240,10 +2240,10 @@
         <field name="name">Reunião</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.re" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996700"  model="res.country.state">
+    <record id="MUNICIPIO_99999996700"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996700</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2252,10 +2252,10 @@
         <field name="name">Romênia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ro" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996750"  model="res.country.state">
+    <record id="MUNICIPIO_99999996750"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996750</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2264,10 +2264,10 @@
         <field name="name">Ruanda</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.rw" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996769"  model="res.country.state">
+    <record id="MUNICIPIO_99999996769"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996769</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2276,10 +2276,10 @@
         <field name="name">Rússia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ru" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996858"  model="res.country.state">
+    <record id="MUNICIPIO_99999996858"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996858</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2288,10 +2288,10 @@
         <field name="name">Saara Ocidental</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.eh" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996777"  model="res.country.state">
+    <record id="MUNICIPIO_99999996777"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996777</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2300,10 +2300,10 @@
         <field name="name">Salomão, Ilhas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.sb" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996904"  model="res.country.state">
+    <record id="MUNICIPIO_99999996904"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996904</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2312,10 +2312,10 @@
         <field name="name">Samoa</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ws" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996912"  model="res.country.state">
+    <record id="MUNICIPIO_99999996912"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996912</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2324,10 +2324,10 @@
         <field name="name">Samoa Americana</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.as" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996971"  model="res.country.state">
+    <record id="MUNICIPIO_99999996971"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996971</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2336,10 +2336,10 @@
         <field name="name">San Marino</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.sm" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997102"  model="res.country.state">
+    <record id="MUNICIPIO_99999997102"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997102</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2348,10 +2348,10 @@
         <field name="name">Santa Helena, Ascensão e Tristão da Cunha</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.sh" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997153"  model="res.country.state">
+    <record id="MUNICIPIO_99999997153"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997153</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2360,10 +2360,10 @@
         <field name="name">Santa Lúcia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.lc" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998486"  model="res.country.state">
+    <record id="MUNICIPIO_99999998486"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998486</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2372,10 +2372,10 @@
         <field name="name">Santa Sé (Estado da Cidade do Vaticano)</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.va" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996955"  model="res.country.state">
+    <record id="MUNICIPIO_99999996955"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996955</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2384,10 +2384,10 @@
         <field name="name">São Cristóvão e Neves, Ilhas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.kn" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997005"  model="res.country.state">
+    <record id="MUNICIPIO_99999997005"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997005</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2396,10 +2396,10 @@
         <field name="name">São Pedro e Miquelon</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.pm" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997200"  model="res.country.state">
+    <record id="MUNICIPIO_99999997200"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997200</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2408,10 +2408,10 @@
         <field name="name">São Tomé e Príncipe, Ilhas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.st" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997056"  model="res.country.state">
+    <record id="MUNICIPIO_99999997056"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997056</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2420,10 +2420,10 @@
         <field name="name">São Vicente e Granadinas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.vc" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997285"  model="res.country.state">
+    <record id="MUNICIPIO_99999997285"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997285</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2432,10 +2432,10 @@
         <field name="name">Senegal</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.sn" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997358"  model="res.country.state">
+    <record id="MUNICIPIO_99999997358"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997358</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2444,10 +2444,10 @@
         <field name="name">Serra Leoa</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.sl" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997370"  model="res.country.state">
+    <record id="MUNICIPIO_99999997370"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997370</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2456,10 +2456,10 @@
         <field name="name">Sérvia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.rs" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997315"  model="res.country.state">
+    <record id="MUNICIPIO_99999997315"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997315</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2468,10 +2468,10 @@
         <field name="name">Seychelles</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.sc" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997412"  model="res.country.state">
+    <record id="MUNICIPIO_99999997412"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997412</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2480,10 +2480,10 @@
         <field name="name">Singapura</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.sg" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997447"  model="res.country.state">
+    <record id="MUNICIPIO_99999997447"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997447</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2492,10 +2492,10 @@
         <field name="name">Síria</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.sy" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997480"  model="res.country.state">
+    <record id="MUNICIPIO_99999997480"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997480</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2504,10 +2504,10 @@
         <field name="name">Somália</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.so" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997501"  model="res.country.state">
+    <record id="MUNICIPIO_99999997501"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997501</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2516,10 +2516,10 @@
         <field name="name">Sri Lanka</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.lk" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997544"  model="res.country.state">
+    <record id="MUNICIPIO_99999997544"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997544</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="SZ" eval="False" /> -->
@@ -2528,10 +2528,10 @@
         <field name="name">Suazilândia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.sz" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997595"  model="res.country.state">
+    <record id="MUNICIPIO_99999997595"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997595</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2540,10 +2540,10 @@
         <field name="name">Sudão</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.sd" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997600"  model="res.country.state">
+    <record id="MUNICIPIO_99999997600"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997600</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2552,10 +2552,10 @@
         <field name="name">Sudão do Sul</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ss" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997641"  model="res.country.state">
+    <record id="MUNICIPIO_99999997641"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997641</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2564,10 +2564,10 @@
         <field name="name">Suécia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.se" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997676"  model="res.country.state">
+    <record id="MUNICIPIO_99999997676"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997676</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2576,10 +2576,10 @@
         <field name="name">Suíça</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ch" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997706"  model="res.country.state">
+    <record id="MUNICIPIO_99999997706"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997706</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2588,10 +2588,10 @@
         <field name="name">Suriname</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.sr" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997765"  model="res.country.state">
+    <record id="MUNICIPIOPIO_99999997765"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997765</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2600,10 +2600,10 @@
         <field name="name">Tailândia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.th" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999991619"  model="res.country.state">
+    <record id="MUNICIPIO_99999991619"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999991619</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2612,10 +2612,10 @@
         <field name="name">Taiwan</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.tw" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997722"  model="res.country.state">
+    <record id="MUNICIPIO_99999997722"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997722</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2624,10 +2624,10 @@
         <field name="name">Tajiquistão</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.tj" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997803"  model="res.country.state">
+    <record id="MUNICIPIO_99999997803"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997803</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2636,10 +2636,10 @@
         <field name="name">Tanzânia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.tz" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997820"  model="res.country.state">
+    <record id="MUNICIPIO_99999997820"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997820</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2648,10 +2648,10 @@
         <field name="name">Território Britânico no Oceano Índico</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.io" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999997951"  model="res.country.state">
+    <record id="MUNICIPIO_99999997951"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999997951</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2660,10 +2660,10 @@
         <field name="name">Timor Leste</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.tp" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998001"  model="res.country.state">
+    <record id="MUNICIPIO_99999998001"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998001</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2672,10 +2672,10 @@
         <field name="name">Togo</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.tg" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998109"  model="res.country.state">
+    <record id="MUNICIPIO_99999998109"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998109</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2684,10 +2684,10 @@
         <field name="name">Tonga</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.to" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998052"  model="res.country.state">
+    <record id="MUNICIPIO_99999998052"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998052</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2696,10 +2696,10 @@
         <field name="name">Toquelau</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.tk" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998150"  model="res.country.state">
+    <record id="MUNICIPIO_99999998150"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998150</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2708,10 +2708,10 @@
         <field name="name">Trinidade e Tobago</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.tt" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998206"  model="res.country.state">
+    <record id="MUNICIPIO_99999998206"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998206</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2720,10 +2720,10 @@
         <field name="name">Tunísia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.tn" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998230"  model="res.country.state">
+    <record id="MUNICIPIO_99999998230"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998230</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2732,10 +2732,10 @@
         <field name="name">Turcas e Caicos, Ilhas</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.tc" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998249"  model="res.country.state">
+    <record id="MUNICIPIO_99999998249"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998249</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2744,10 +2744,10 @@
         <field name="name">Turcomenistão</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.tm" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998273"  model="res.country.state">
+    <record id="MUNICIPIO_99999998273"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998273</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2756,10 +2756,10 @@
         <field name="name">Turquia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.tr" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998281"  model="res.country.state">
+    <record id="MUNICIPIO_99999998281"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998281</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2768,10 +2768,10 @@
         <field name="name">Tuvalu</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.tv" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998311"  model="res.country.state">
+    <record id="MUNICIPIO_99999998311"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998311</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2780,10 +2780,10 @@
         <field name="name">Ucrânia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ua" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998338"  model="res.country.state">
+    <record id="MUNICIPIO_99999998338"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998338</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2792,10 +2792,10 @@
         <field name="name">Uganda</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ug" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998451"  model="res.country.state">
+    <record id="MUNICIPIO_99999998451"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998451</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2804,10 +2804,10 @@
         <field name="name">Uruguai</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.uy" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998478"  model="res.country.state">
+    <record id="MUNICIPIO_99999998478"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998478</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2816,10 +2816,10 @@
         <field name="name">Usbequistão</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.uz" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999995517"  model="res.country.state">
+    <record id="MUNICIPIO_99999995517"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999995517</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2828,10 +2828,10 @@
         <field name="name">Vanuatu</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.vu" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998508"  model="res.country.state">
+    <record id="MUNICIPIO_99999998508"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998508</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2840,10 +2840,10 @@
         <field name="name">Venezuela</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.ve" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998583"  model="res.country.state">
+    <record id="MUNICIPIO_99999998583"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998583</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2852,10 +2852,10 @@
         <field name="name">Vietnã</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.vn" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998630"  model="res.country.state">
+    <record id="MUNICIPIO_99999998630"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998630</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2864,10 +2864,10 @@
         <field name="name">Virgens, Ilhas (Britânicas)</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.vg" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998664"  model="res.country.state">
+    <record id="MUNICIPIO_99999998664"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998664</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2876,10 +2876,10 @@
         <field name="name">Virgens, Ilhas (EUA)</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.vi" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999998907"  model="res.country.state">
+    <record id="MUNICIPIO_99999998907"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999998907</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2888,10 +2888,10 @@
         <field name="name">Zâmbia</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.zm" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
-    <record id="ESTADO_99999996653"  model="res.country.state">
+    <record id="MUNICIPIO_99999996653"  model="l10n_br_base.city">
         <field name="codigo_ibge">99999996653</field>
         <!--<field name="codigo_siafi" eval="False" />
         <field name="codigo_anp" eval="False" /> -->
@@ -2900,7 +2900,7 @@
         <field name="name">Zimbábue</field>
         <field name="state_id" ref="base.state_br_ex" />
         <field name="country_id" ref="base.zw" />
-        <!-- <field name="cep_unico">99999-999</field> -->
+        <field name="cep_unico">99999-999</field>
     </record>
 
 </odoo>

@@ -7,7 +7,7 @@
         <record id="sped_product_product_5" model="sped.produto">
             <field name="product_id" ref="product.product_product_5"/>
             <field name="nome">Custom Computer (kit)</field>
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="codigo">E-COM06</field>
             <field name="preco_venda">600.00</field>
             <!--<field name="preco_custo">1.00</field>-->
@@ -19,7 +19,7 @@
         </record>
 
         <record id="sped_product_product_6" model="sped.produto">
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="nome">iPad Mini</field>
             <field name="codigo">E-COM07</field>
             <field name="product_id" ref="product.product_product_6"/>
@@ -33,7 +33,7 @@
         </record>
 
         <record id="sped_product_product_7" model="sped.produto">
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="nome">Apple In-Ear Headphones</field>
             <field name="codigo">E-COM08</field>
             <field name="product_id" ref="product.product_product_7"/>
@@ -47,7 +47,7 @@
         </record>
 
         <record id="sped_product_product_8" model="sped.produto">
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="nome">iMac</field>
             <field name="codigo">E-COM09</field>
             <field name="product_id" ref="product.product_product_8"/>
@@ -61,7 +61,7 @@
         </record>
 
         <record id="sped_product_product_9" model="sped.produto">
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="codigo">E-COM10</field>
             <field name="nome">Apple Wireless Keyboard</field>
             <field name="product_id" ref="product.product_product_9"/>
@@ -75,7 +75,7 @@
         </record>
 
         <record id="sped_product_product_10" model="sped.produto">
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="codigo">E-COM11</field>
             <field name="nome">Mouse, Optical</field>
             <field name="product_id" ref="product.product_product_10"/>
@@ -89,7 +89,7 @@
         </record>
 
         <record id="sped_product_product_11" model="sped.produto">
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="codigo">E-COM12</field>
             <field name="nome">iPod</field>
             <field name="product_id" ref="product.product_product_11"/>
@@ -103,7 +103,7 @@
         </record>
 
         <record id="sped_product_product_12" model="sped.produto">
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="codigo">M-Wir</field>
             <field name="nome">Mouse, Wireless</field>
             <field name="product_id" ref="product.product_product_12"/>
@@ -117,7 +117,7 @@
         </record>
 
         <record id="sped_product_product_13" model="sped.produto">
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="codigo">RAM-SR5</field>
             <field name="nome">RAM SR5</field>
             <field name="product_id" ref="product.product_product_13"/>
@@ -131,7 +131,7 @@
         </record>
 
         <record id="sped_product_product_16" model="sped.produto">
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="codigo">C-Case</field>
             <field name="nome">Computer Case</field>
             <field name="product_id" ref="product.product_product_16"/>
@@ -145,7 +145,7 @@
         </record>
 
         <record id="sped_product_product_17" model="sped.produto">
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="codigo">HDD-SH1</field>
             <field name="nome">HDD SH-1</field>
             <field name="product_id" ref="product.product_product_17"/>
@@ -159,7 +159,7 @@
         </record>
 
         <record id="sped_product_product_20" model="sped.produto">
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="nome">Motherboard I9P57</field>
             <field name="codigo">MBi9</field>
             <field name="product_id" ref="product.product_product_20"/>
@@ -173,7 +173,7 @@
         </record>
 
         <record id="sped_product_product_22" model="sped.produto">
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="nome">Processor Core i5 2.70 Ghz</field>
             <field name="codigo">CPUi5</field>
             <field name="product_id" ref="product.product_product_22"/>
@@ -187,7 +187,7 @@
         </record>
 
         <record id="sped_product_product_24" model="sped.produto">
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="codigo">CARD</field>
             <field name="nome">Graphics Card</field>
             <field name="product_id" ref="product.product_product_24"/>
@@ -201,7 +201,7 @@
         </record>
 
         <record id="sped_product_product_25" model="sped.produto">
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="codigo">LAP-E5</field>
             <field name="nome">Laptop E5023</field>
             <field name="product_id" ref="product.product_product_25"/>
@@ -215,7 +215,7 @@
         </record>
 
         <record id="sped_product_product_27" model="sped.produto">
-            <field name="unidade_id" ref="l10n_br_base.UNIDADE_UNIDADE"/>
+            <field name="unidade_id" ref="product.product_uom_unit"/>
             <field name="codigo">LAP-CUS</field>
             <field name="nome">Laptop Customized</field>
             <field name="product_id" ref="product.product_product_27"/>

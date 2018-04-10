@@ -11,7 +11,6 @@ import logging
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
-from odoo.addons.l10n_br_base.models.sped_base import SpedBase
 from odoo.addons.l10n_br_base.constante_tributaria import (
     MODALIDADE_BASE_PIS,
     MODALIDADE_BASE_PIS_ALIQUOTA,
@@ -31,23 +30,21 @@ except (ImportError, IOError) as err:
     _logger.debug(err)
 
 
-class SpedAliquotaPISCOFINS(SpedBase, models.Model):
+class SpedAliquotaPISCOFINS(models.Model):
     _name = b'sped.aliquota.pis.cofins'
     _description = 'Alíquotas do PIS-COFINS'
     _rec_name = 'descricao'
     _order = 'cst_pis_cofins_saida, al_pis, al_cofins, cst_pis_cofins_entrada'
 
-    al_pis = fields.Monetary(
+    al_pis = fields.Float(
         string='Alíquota do PIS',
         required=True,
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_cofins = fields.Monetary(
+    al_cofins = fields.Float(
         string='Alíquota da COFINS',
         required=True,
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
     md_pis_cofins = fields.Selection(
         selection=MODALIDADE_BASE_PIS,

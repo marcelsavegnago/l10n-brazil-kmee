@@ -6,7 +6,6 @@
 #
 
 from __future__ import division, print_function, unicode_literals
-from odoo.addons.l10n_br_base.models.sped_base import SpedBase
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
@@ -43,12 +42,18 @@ class SpedAliquotaSIMPLESAnexo(models.Model):
                 )
 
 
-class SpedAliquotaSIMPLESTeto(SpedBase, models.Model):
+class SpedAliquotaSIMPLESTeto(models.Model):
     _name = b'sped.aliquota.simples.teto'
     _description = 'Tetos do SIMPLES Nacional'
     _rec_name = 'nome'
     _order = 'valor'
 
+    currency_id = fields.Many2one(
+        comodel_name='res.currency',
+        string='Moeda',
+        default=lambda self: self.env.ref('base.BRL').id,
+        required=True,
+    )
     valor = fields.Monetary(
         string='Valor do teto do SIMPLES Nacional',
         required=True,
@@ -73,7 +78,7 @@ class SpedAliquotaSIMPLESTeto(SpedBase, models.Model):
                 raise ValidationError('Teto já existe na tabela!')
 
 
-class SpedAliquotaSIMPLESAliquota(SpedBase, models.Model):
+class SpedAliquotaSIMPLESAliquota(models.Model):
     _name = b'sped.aliquota.simples.aliquota'
     _description = 'Alíquotas do SIMPLES Nacional'
     _rec_name = 'al_simples'
@@ -91,43 +96,35 @@ class SpedAliquotaSIMPLESAliquota(SpedBase, models.Model):
         required=True,
         ondelete='cascade',
     )
-    al_simples = fields.Monetary(
+    al_simples = fields.Float(
         string='SIMPLES',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_irpj = fields.Monetary(
+    al_irpj = fields.Float(
         string='IRPJ',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_csll = fields.Monetary(
+    al_csll = fields.Float(
         string='CSLL',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_cofins = fields.Monetary(
+    al_cofins = fields.Float(
         string='COFINS',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_pis = fields.Monetary(
+    al_pis = fields.Float(
         string='PIS',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_cpp = fields.Monetary(
+    al_cpp = fields.Float(
         string='CPP',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_icms = fields.Monetary(
+    al_icms = fields.Float(
         string='ICMS',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_iss = fields.Monetary(
+    al_iss = fields.Float(
         string='ISS',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )

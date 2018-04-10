@@ -11,7 +11,6 @@ import logging
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
-from odoo.addons.l10n_br_base.models.sped_base import SpedBase
 from odoo.addons.l10n_br_base.constante_tributaria import (
     MODALIDADE_BASE_ICMS_PROPRIO,
     MODALIDADE_BASE_ICMS_PROPRIO_MARGEM_VALOR_AGREGADO,
@@ -29,17 +28,16 @@ except (ImportError, IOError) as err:
     _logger.debug(err)
 
 
-class SpedAliquotaICMSProprio(SpedBase, models.Model):
+class SpedAliquotaICMSProprio(models.Model):
     _name = b'sped.aliquota.icms.proprio'
     _description = 'Alíquotas do ICMS próprio'
     _rec_name = 'descricao'
     _order = 'al_icms, md_icms, pr_icms, rd_icms'
 
-    al_icms = fields.Monetary(
+    al_icms = fields.Float(
         string='Alíquota',
         required=True,
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
     md_icms = fields.Selection(
         selection=MODALIDADE_BASE_ICMS_PROPRIO,
@@ -54,10 +52,9 @@ class SpedAliquotaICMSProprio(SpedBase, models.Model):
              'máximo, de acordo com o definido na modalidade da base de '
              'cálculo.',
     )
-    rd_icms = fields.Monetary(
+    rd_icms = fields.Float(
         string='Percentual de redução da alíquota',
         digits=(5, 2),
-        currency_field='currency_aliquota_id'
     )
     importado = fields.Boolean(
         string='Padrão para produtos importados?',

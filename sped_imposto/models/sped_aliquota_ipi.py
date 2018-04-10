@@ -11,7 +11,6 @@ import logging
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
-from odoo.addons.l10n_br_base.models.sped_base import SpedBase
 from odoo.addons.l10n_br_base.constante_tributaria import (
     MODALIDADE_BASE_IPI,
     MODALIDADE_BASE_IPI_ALIQUOTA,
@@ -31,17 +30,16 @@ except (ImportError, IOError) as err:
     _logger.debug(err)
 
 
-class SpedAliquotaIPI(SpedBase, models.Model):
+class SpedAliquotaIPI(models.Model):
     _name = b'sped.aliquota.ipi'
     _description = 'Alíquotas do IPI'
     _rec_name = 'descricao'
     _order = 'al_ipi'
 
-    al_ipi = fields.Monetary(
+    al_ipi = fields.Float(
         string='Alíquota',
         required=True,
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
     md_ipi = fields.Selection(
         selection=MODALIDADE_BASE_IPI,

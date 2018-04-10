@@ -13,7 +13,6 @@ import logging
 from odoo import api, fields, models, _
 import odoo.addons.decimal_precision as dp
 from odoo.exceptions import ValidationError
-from odoo.addons.l10n_br_base.models.sped_base import SpedBase
 from odoo.addons.l10n_br_base.constante_tributaria import *
 
 _logger = logging.getLogger(__name__)
@@ -25,12 +24,16 @@ except (ImportError, IOError) as err:
     _logger.debug(err)
 
 
-class SpedSomaImposto(SpedBase, models.Model):
+class SpedSomaImposto(models.Model):
     _name = b'sped.soma.imposto'
     _description = 'Soma dos Impostos Calculados'
     _abstract = True
     # _order = 'emissao, modelo, data_emissao desc, serie, numero'
     # _rec_name = 'numero'
+
+    @api.model
+    def _default_currency(self):
+        return self.env.user.company_id.currency_id
 
     operacao_id = fields.Many2one(
         comodel_name='sped.operacao',
@@ -55,6 +58,12 @@ class SpedSomaImposto(SpedBase, models.Model):
         string='Empresa',
         #related='documento_id.empresa_id',
         #readonly=True,
+    )
+    currency_id = fields.Many2one(
+        comodel_name='res.currency',
+        string='Currency',
+        required=True,
+        default=_default_currency
     )
     partner_id = fields.Many2one(
         comodel_name='res.partner',
@@ -152,24 +161,16 @@ class SpedSomaImposto(SpedBase, models.Model):
         #digits=dp.get_precision('SPED - Quantidade'),
     #)
     unidade_id = fields.Many2one(
-        comodel_name='sped.unidade',
+        comodel_name='product.uom',
         string='Unidade',
         ondelete='restrict',
     )
-    currency_unidade_id = fields.Many2one(
-        comodel_name='res.currency',
-        string='Unidade',
-        related='unidade_id.currency_id',
-        readonly=True,
-    )
-    quantidade = fields.Monetary(
+    quantidade = fields.Float(
         string='Quantidade',
         default=1,
-        currency_field='currency_unidade_id',
     )
     vr_unitario = fields.Monetary(
         string='Valor unitário',
-        currency_field='currency_unitario_id',
     )
     # Quantidade de tributação
     fator_conversao_unidade_tributacao = fields.Float(
@@ -182,7 +183,7 @@ class SpedSomaImposto(SpedBase, models.Model):
         digits=(18, 4),
     )
     unidade_tributacao_id = fields.Many2one(
-        comodel_name='sped.unidade',
+        comodel_name='product.uom',
         string='Unidade para tributação',
         ondelete='restrict',
     )
@@ -239,10 +240,9 @@ class SpedSomaImposto(SpedBase, models.Model):
     partilha = fields.Boolean(
         string='Partilha de ICMS entre estados (CST 10 ou 90)?',
     )
-    al_bc_icms_proprio_partilha = fields.Monetary(
+    al_bc_icms_proprio_partilha = fields.Float(
         string='% da base de cálculo da operação própria',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
     estado_partilha_id = fields.Many2one(
         comodel_name='res.country.state',
@@ -262,10 +262,9 @@ class SpedSomaImposto(SpedBase, models.Model):
         string='Parâmetro do ICMS próprio',
         digits=(18, 4),
     )
-    rd_icms_proprio = fields.Monetary(
+    rd_icms_proprio = fields.Float(
         string='% de redução da base de cálculo do ICMS próprio',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
     bc_icms_proprio_com_ipi = fields.Boolean(
         string='IPI integra a base do ICMS próprio?',
@@ -273,10 +272,9 @@ class SpedSomaImposto(SpedBase, models.Model):
     bc_icms_proprio = fields.Monetary(
         string='Base do ICMS próprio',
     )
-    al_icms_proprio = fields.Monetary(
+    al_icms_proprio = fields.Float(
         string='alíquota do ICMS próprio',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
     vr_icms_proprio = fields.Monetary(
         string='valor do ICMS próprio',
@@ -290,20 +288,17 @@ class SpedSomaImposto(SpedBase, models.Model):
         string='CST ICMS - SIMPLES',
         index=True,
     )
-    al_icms_sn = fields.Monetary(
+    al_icms_sn = fields.Float(
         string='Alíquota do crédito de ICMS',
-        currency_field='currency_aliquota_id',
     )
-    rd_icms_sn = fields.Monetary(
+    rd_icms_sn = fields.Float(
         string='% estadual de redução da alíquota de ICMS',
-        currency_field='currency_aliquota_id',
     )
     vr_icms_sn = fields.Monetary(
         string='valor do crédito de ICMS - SIMPLES',
     )
-    al_simples = fields.Monetary(
+    al_simples = fields.Float(
         string='Alíquota do SIMPLES',
-        currency_field='currency_aliquota_id',
     )
     vr_simples = fields.Monetary(
         string='Valor do SIMPLES',
@@ -321,9 +316,8 @@ class SpedSomaImposto(SpedBase, models.Model):
         string='Parâmetro do ICMS ST',
         digits=(18, 4),
     )
-    rd_icms_st = fields.Monetary(
+    rd_icms_st = fields.Float(
         string='% de redução da base de cálculo do ICMS ST',
-        currency_field='currency_aliquota_id',
     )
     bc_icms_st_com_ipi = fields.Boolean(
         string='IPI integra a base do ICMS ST?',
@@ -331,10 +325,9 @@ class SpedSomaImposto(SpedBase, models.Model):
     bc_icms_st = fields.Monetary(
         string='Base do ICMS ST',
     )
-    al_icms_st = fields.Monetary(
+    al_icms_st = fields.Float(
         string='Alíquota do ICMS ST',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
     vr_icms_st = fields.Monetary(
         string='Valor do ICMS ST',
@@ -360,10 +353,9 @@ class SpedSomaImposto(SpedBase, models.Model):
     bc_icms_st_retido = fields.Monetary(
         string='Base do ICMS ST retido na origem',
     )
-    al_icms_st_retido = fields.Monetary(
+    al_icms_st_retido = fields.Float(
         string='Alíquota do ICMS ST retido na origem',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
     vr_icms_st_retido = fields.Monetary(
         string='Valor do ICMS ST retido na origem',
@@ -399,10 +391,9 @@ class SpedSomaImposto(SpedBase, models.Model):
     bc_ipi = fields.Monetary(
         string='Base do IPI',
     )
-    al_ipi = fields.Monetary(
+    al_ipi = fields.Float(
         string='Alíquota do IPI',
         digits=(18, 2),
-        currency_field='currency_aliquota_id',
     )
     vr_ipi = fields.Monetary(
         string='Valor do IPI',
@@ -461,10 +452,9 @@ class SpedSomaImposto(SpedBase, models.Model):
     bc_pis_proprio = fields.Monetary(
         string='Base do PIS próprio',
     )
-    al_pis_proprio = fields.Monetary(
+    al_pis_proprio = fields.Float(
         string='Alíquota do PIS próprio',
         digits=(18, 2),
-        currency_field='currency_aliquota_id',
     )
     vr_pis_proprio = fields.Monetary(
         string='Valor do PIS próprio',
@@ -494,10 +484,9 @@ class SpedSomaImposto(SpedBase, models.Model):
     bc_cofins_proprio = fields.Monetary(
         string='Base do COFINS próprio',
     )
-    al_cofins_proprio = fields.Monetary(
+    al_cofins_proprio = fields.Float(
         string='Alíquota da COFINS própria',
         digits=(18, 2),
-        currency_field='currency_aliquota_id',
     )
     vr_cofins_proprio = fields.Monetary(
         string='Valor do COFINS próprio',
@@ -512,10 +501,9 @@ class SpedSomaImposto(SpedBase, models.Model):
     bc_iss = fields.Monetary(
         string='Base do ISS',
     )
-    al_iss = fields.Monetary(
+    al_iss = fields.Float(
         string='Alíquota do ISS',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
     vr_iss = fields.Monetary(
         string='Valor do ISS',
@@ -532,9 +520,8 @@ class SpedSomaImposto(SpedBase, models.Model):
         string='Valor da fatura',
     )
 
-    al_ibpt = fields.Monetary(
+    al_ibpt = fields.Float(
         string='Alíquota IBPT',
-        currency_field='currency_aliquota_id'
     )
     vr_ibpt = fields.Monetary(
         string='Valor IBPT',
@@ -548,9 +535,8 @@ class SpedSomaImposto(SpedBase, models.Model):
     bc_inss_retido = fields.Monetary(
         string='Base do INSS',
     )
-    al_inss_retido = fields.Monetary(
+    al_inss_retido = fields.Float(
         string='Alíquota do INSS',
-        currency_field='currency_aliquota_id',
     )
     vr_inss_retido = fields.Monetary(
         string='Valor do INSS',
@@ -693,20 +679,17 @@ class SpedSomaImposto(SpedBase, models.Model):
     calcula_difal = fields.Boolean(
         string='Calcula diferencial de alíquota?',
     )
-    al_interna_destino = fields.Monetary(
+    al_interna_destino = fields.Float(
         string='Alíquota interna do estado destino',
-        currency_field='currency_aliquota_id',
     )
-    al_difal = fields.Monetary(
+    al_difal = fields.Float(
         string='Alíquota diferencial ICMS próprio',
-        currency_field='currency_aliquota_id',
     )
     vr_difal = fields.Monetary(
         string='Valor do diferencial de alíquota ICMS próprio',
     )
-    al_partilha_estado_destino = fields.Monetary(
+    al_partilha_estado_destino = fields.Float(
         string='Alíquota de partilha para o estado destino',
-        currency_field='currency_aliquota_id',
     )
     vr_icms_estado_origem = fields.Monetary(
         string='Valor do ICMS para o estado origem',
@@ -718,9 +701,8 @@ class SpedSomaImposto(SpedBase, models.Model):
     #
     # Fundo de combate à pobreza
     #
-    al_fcp = fields.Monetary(
+    al_fcp = fields.Float(
         string='Alíquota do fundo de combate à pobreza',
-        currency_field='currency_aliquota_id',
     )
     vr_fcp = fields.Monetary(
         string='Valor do fundo de combate à pobreza',
@@ -729,21 +711,17 @@ class SpedSomaImposto(SpedBase, models.Model):
     #
     # Automatização do preenchimento dos volumes
     #
-    peso_bruto_unitario = fields.Monetary(
+    peso_bruto_unitario = fields.Float(
         string='Peso bruto unitário',
-        currency_field='currency_peso_id',
     )
-    peso_liquido_unitario = fields.Monetary(
+    peso_liquido_unitario = fields.Float(
         string='Peso líquido unitário',
-        currency_field='currency_peso_id',
     )
-    peso_bruto = fields.Monetary(
+    peso_bruto = fields.Float(
         string='Peso bruto',
-        currency_field='currency_peso_id',
     )
-    peso_liquido = fields.Monetary(
+    peso_liquido = fields.Float(
         string='Peso líquido',
-        currency_field='currency_peso_id',
     )
     especie = fields.Char(
         string='Espécie/embalagem',

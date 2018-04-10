@@ -57,7 +57,7 @@ class ProductTemplate(models.Model):
         string='NBS',
     )
     unidade_tributacao_ncm_id = fields.Many2one(
-        comodel_name='sped.unidade',
+        comodel_name='product.uom',
         related='ncm_id.unidade_id',
         string='Unidade para tributação do NCM',
         readonly=True,
@@ -71,17 +71,21 @@ class ProductTemplate(models.Model):
         compute='_compute_exige_fator_conversao_ncm',
     )
 
-    @api.depends('ncm_id', 'unidade_id')
+    @api.depends('ncm_id', 'uom_id')
     def _compute_exige_fator_conversao_ncm(self):
         for product_template_id in self:
-            if product_template_id.unidade_id and product_template_id.unidade_tributacao_ncm_id:
-                product_template_id.exige_fator_conversao_unidade_tributacao_ncm = (
-                    product_template_id.unidade_id.id !=
-                    product_template_id.unidade_tributacao_ncm_id.id
+            if (product_template_id.uom_id and
+                    product_template_id.unidade_tributacao_ncm_id):
+                product_template_id.\
+                    exige_fator_conversao_unidade_tributacao_ncm = (
+                        product_template_id.uom_id.id !=
+                        product_template_id.unidade_tributacao_ncm_id.id
                 )
             else:
-                product_template_id.exige_fator_conversao_unidade_tributacao_ncm = False
-                product_template_id.fator_conversao_unidade_tributacao_ncm = 1
+                product_template_id.\
+                    exige_fator_conversao_unidade_tributacao_ncm = False
+                product_template_id.\
+                    fator_conversao_unidade_tributacao_ncm = 1
 
     def _ajusta_cest(self):
         for product_template_id in self:

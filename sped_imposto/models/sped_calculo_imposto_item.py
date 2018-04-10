@@ -62,7 +62,7 @@ class SpedCalculoImpostoItem(SpedBase):
         readonly=True,
     )
     empresa_id = fields.Many2one(
-        comodel_name='sped.empresa',
+        comodel_name='res.company',
         string='Empresa',
         related='documento_id.empresa_id',
         readonly=True,
@@ -140,15 +140,6 @@ class SpedCalculoImpostoItem(SpedBase):
         default=True,
     )
 
-    # Dados do produto/serviço
-    produto_id = fields.Many2one(
-        comodel_name='sped.produto',
-        string='Produto/Serviço',
-        ondelete='restrict',
-        index=True,
-    )
-    
-    # campo para remoção do sped.produto
     product_id = fields.Many2one(
         comodel_name='product.product',
         string='Produto/Serviço',

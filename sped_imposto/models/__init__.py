@@ -42,6 +42,7 @@ from . import sped_calculo_imposto_produto_servico
 from . import sped_calculo_imposto_item
 from . import sped_soma_imposto
 from . import sped_natureza_operacao
+from . import sped_operacao_subsequente
 from . import sped_operacao
 from . import sped_operacao_item
 
@@ -55,5 +56,4 @@ from . import inherited_product_template
 #
 from . import inherited_res_partner
 from . import inherited_sped_empresa
-from . import sped_operacao_subsequente
 from . import product_category

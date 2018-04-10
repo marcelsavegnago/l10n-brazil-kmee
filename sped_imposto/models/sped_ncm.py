@@ -51,7 +51,7 @@ class SpedNCM(models.Model):
         index=True,
     )
     unidade_id = fields.Many2one(
-        comodel_name='sped.unidade',
+        comodel_name='product.uom',
         string='Unidade de tributação',
         ondelete='restrict'
     )

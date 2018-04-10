@@ -32,7 +32,7 @@ class SpedIBPTax(models.Model):
     _rec_name = 'estado_id'
 
     estado_id = fields.Many2one(
-        comodel_name='sped.estado',
+        comodel_name='res.country.state',
         string='Estado',
     )
     versao = fields.Char(
@@ -172,7 +172,7 @@ class SpedIBPTaxNCM(SpedBase, models.Model):
         ondelete='cascade',
     )
     estado_id = fields.Many2one(
-        comodel_name='sped.estado',
+        comodel_name='res.country.state',
         string='Estado',
         related='ibptax_id.estado_id',
         store=True,
@@ -212,7 +212,7 @@ class SpedIBPTaxNBS(SpedBase, models.Model):
         ondelete='cascade',
     )
     estado_id = fields.Many2one(
-        comodel_name='sped.estado',
+        comodel_name='res.country.state',
         string='Estado',
         related='ibptax_id.estado_id',
         store=True,
@@ -248,7 +248,7 @@ class SpedIBPTaxServico(SpedBase, models.Model):
         ondelete='cascade',
     )
     estado_id = fields.Many2one(
-        comodel_name='sped.estado',
+        comodel_name='res.country.state',
         string='Estado',
         related='ibptax_id.estado_id',
         store=True,

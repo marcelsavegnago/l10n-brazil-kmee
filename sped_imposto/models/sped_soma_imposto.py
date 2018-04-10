@@ -51,7 +51,7 @@ class SpedSomaImposto(SpedBase, models.Model):
         readonly=True,
     )
     empresa_id = fields.Many2one(
-        comodel_name='sped.empresa',
+        comodel_name='res.company',
         string='Empresa',
         #related='documento_id.empresa_id',
         #readonly=True,
@@ -129,15 +129,6 @@ class SpedSomaImposto(SpedBase, models.Model):
         default=True,
     )
 
-    # Dados do produto/serviço
-    produto_id = fields.Many2one(
-        comodel_name='sped.produto',
-        string='Produto/Serviço',
-        ondelete='restrict',
-        index=True,
-    )
-
-    # campo para remocão do sped.produto
     product_id = fields.Many2one(
         comodel_name='product.product',
         string='Produto/Serviço',
@@ -254,7 +245,7 @@ class SpedSomaImposto(SpedBase, models.Model):
         currency_field='currency_aliquota_id',
     )
     estado_partilha_id = fields.Many2one(
-        comodel_name='sped.estado',
+        comodel_name='res.country.state',
         string='Estado para o qual é devido o ICMS ST',
         index=True,
     )

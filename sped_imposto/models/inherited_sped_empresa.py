@@ -41,11 +41,11 @@ try:
     )
 
 except (ImportError, IOError) as err:
-   _logger.debug(err)
+    _logger.debug(err)
 
 
-class SpedEmpresa(models.Model):
-    _inherit = 'sped.empresa'
+class ResCompany(models.Model):
+    _inherit = 'res.company'
 
     protocolo_id = fields.Many2one(
         comodel_name='sped.protocolo.icms',

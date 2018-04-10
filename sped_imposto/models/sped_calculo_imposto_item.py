@@ -1172,7 +1172,7 @@ class SpedCalculoImpostoItem(object):
                 ('ncm_ids.ncm_id', '=', self.product_id.ncm_id.id),
                 '|',
                 ('estado_ids', '=', False),
-                ('estado_ids.uf', '=', estado_destino)
+                ('estado_ids.code', '=', estado_destino)
             ]
             protocolo_ids = self.env[
                 'sped.protocolo.icms'].search(busca_protocolo)
@@ -1195,7 +1195,7 @@ class SpedCalculoImpostoItem(object):
         #
         if len(protocolo.estado_ids) > 0:
             estado_ids = protocolo.estado_ids.search(
-                [('uf', '=', estado_destino)])
+                [('code', '=', estado_destino)])
 
             #
             # O estado de destino não pertence ao protocolo, usamos então o
@@ -1404,7 +1404,7 @@ class SpedCalculoImpostoItem(object):
                 ('categ_ids.id', '=', self.product_id.categ_id.id),
                 '|',
                 ('estado_ids', '=', False),
-                ('estado_ids.uf', '=', estado_destino)
+                ('estado_ids.code', '=', estado_destino)
             ]
             protocolo = self.env['sped.protocolo.icms'].search(
                 busca_protocolo, limit=1
@@ -1418,7 +1418,7 @@ class SpedCalculoImpostoItem(object):
                 ('ncm_ids.ncm_id', '=', self.product_id.ncm_id.id),
                 '|',
                 ('estado_ids', '=', False),
-                ('estado_ids.uf', '=', estado_destino)
+                ('estado_ids.code', '=', estado_destino)
             ]
             protocolo = self.env['sped.protocolo.icms'].search(
                 busca_protocolo, limit=1
@@ -1439,7 +1439,7 @@ class SpedCalculoImpostoItem(object):
         #
         if len(protocolo.estado_ids) > 0:
             estado_ids = protocolo.estado_ids.search(
-                [('uf', '=', estado_destino)])
+                [('code', '=', estado_destino)])
 
             #
             # O estado de destino não pertence ao protocolo, usamos então o

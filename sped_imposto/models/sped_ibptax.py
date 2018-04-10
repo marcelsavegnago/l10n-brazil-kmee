@@ -71,9 +71,9 @@ class SpedIBPTax(models.Model):
 
         versao = '17.2.B'
         arquivo = os.path.join(DIRNAME,
-                               '../data/ibptax/TabelaIBPTax{uf}{versao}.csv')
+                               '../data/ibptax/TabelaIBPTax{code}{versao}.csv')
         arquivo = arquivo.format(
-                uf=self.estado_id.uf, versao=versao)
+            code=self.estado_id.code, versao=versao)
 
         ncm_ids = ibptax_ncm.search([('ibptax_id', '=', self.id)])
         ncm_ids.unlink()

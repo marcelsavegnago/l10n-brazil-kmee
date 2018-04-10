@@ -310,12 +310,12 @@ class SpedProtocoloICMS(models.Model):
 
         for estado_origem in ALIQUOTAS_ICMS:
             sped_estado_origem = self.env.ref(
-                'l10n_br_base.ESTADO_' + estado_origem
+                'base.state_br_' + estado_origem.lower()
             )
 
             for estado_destino in ALIQUOTAS_ICMS[estado_origem]:
                 sped_estado_destino = self.env.ref(
-                    'l10n_br_base.ESTADO_' + estado_destino
+                    'base.state_br_' + estado_destino.lower()
                 )
 
                 aliquota = ALIQUOTAS_ICMS[estado_origem][estado_destino]

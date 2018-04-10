@@ -10,7 +10,7 @@
         sequence="100"
         id="l10n_br_base.menu_fiscal_configuracao"
         name="Configuração"
-        groups="l10n_br_base.GRUPO_SUPORTE,sped_imposto.GRUPO_FISCAL_GERENTE"
+        groups="base.group_no_one,sped_imposto.GRUPO_FISCAL_GERENTE"
         />
 
     <menuitem
@@ -46,6 +46,13 @@
         sequence="4"
         id="menu_sped_operacao_recebimento"
         name="Operações de recebimento"
+        />
+
+    <menuitem
+        parent="l10n_br_base.menu_fiscal_configuracao"
+        sequence="6"
+        id="menu_sped_tabela"
+        name="Tabelas"
         />
 
 </odoo>

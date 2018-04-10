@@ -77,10 +77,6 @@ class SpedCalculoImposto(SpedBase):
     """
     _abstract = False
 
-    @api.model
-    def _default_company_id(self):
-        return self.env['res.company']._company_default_get(self._name)
-
     is_brazilian = fields.Boolean(
         string='Is a Brazilian?',
         compute='_compute_is_brazilian',
@@ -89,9 +85,9 @@ class SpedCalculoImposto(SpedBase):
         comodel_name='res.company',
     )
     empresa_id = fields.Many2one(
-        comodel_name='sped.empresa',
+        comodel_name='res.company',
         string='Empresa',
-        default=lambda self: self.env['sped.empresa']._empresa_ativa('sped.empresa')
+        default=lambda self: self.env.user.company_id,
     )
 
     partner_id = fields.Many2one(

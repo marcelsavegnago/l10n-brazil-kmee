@@ -47,7 +47,7 @@ class SpedProtocoloICMS(models.Model):
     # 'produto_id',
     #  'Produtos')
     estado_ids = fields.Many2many(
-        comodel_name='sped.estado',
+        comodel_name='res.country.state',
         relation='sped_protocolo_icms_estado',
         column1='protocolo_id',
         column2='estado_id',
@@ -67,168 +67,168 @@ class SpedProtocoloICMS(models.Model):
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Acre',
-        domain=[('estado_origem_id.uf', '=', 'AC')],
+        domain=[('estado_origem_id.code', '=', 'AC')],
     )
     aliquota_AL_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas de Alagoas',
-        domain=[('estado_origem_id.uf', '=', 'AL')],
+        domain=[('estado_origem_id.code', '=', 'AL')],
     )
     aliquota_AP_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Amapá',
-        domain=[('estado_origem_id.uf', '=', 'AP')],
+        domain=[('estado_origem_id.code', '=', 'AP')],
     )
     aliquota_AM_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Amazonas',
-        domain=[('estado_origem_id.uf', '=', 'AM')],
+        domain=[('estado_origem_id.code', '=', 'AM')],
     )
     aliquota_BA_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas da Bahia',
-        domain=[('estado_origem_id.uf', '=', 'BA')],
+        domain=[('estado_origem_id.code', '=', 'BA')],
     )
     aliquota_CE_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Ceará',
-        domain=[('estado_origem_id.uf', '=', 'CE')],
+        domain=[('estado_origem_id.code', '=', 'CE')],
     )
     aliquota_DF_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Distrito Federal',
-        domain=[('estado_origem_id.uf', '=', 'DF')],
+        domain=[('estado_origem_id.code', '=', 'DF')],
     )
     aliquota_ES_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Espírito Santo',
-        domain=[('estado_origem_id.uf', '=', 'ES')],
+        domain=[('estado_origem_id.code', '=', 'ES')],
     )
     # aliquota_EX_ids = fields.One2many(
     # comodel_name='sped.protocolo.icms.aliquota',
     # inverse_name='protocolo_id',
     # string='Alíquotas do Exterior',
-    # domain=[('estado_origem_id.uf', '=', 'EX')]
+    # domain=[('estado_origem_id.code', '=', 'EX')]
     aliquota_GO_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas de Goiás',
-        domain=[('estado_origem_id.uf', '=', 'GO')],
+        domain=[('estado_origem_id.code', '=', 'GO')],
     )
     aliquota_MA_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Maranhão',
-        domain=[('estado_origem_id.uf', '=', 'MA')],
+        domain=[('estado_origem_id.code', '=', 'MA')],
     )
     aliquota_MT_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Mato Grosso',
-        domain=[('estado_origem_id.uf', '=', 'MT')],
+        domain=[('estado_origem_id.code', '=', 'MT')],
     )
     aliquota_MS_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Mato Grosso do Sul',
-        domain=[('estado_origem_id.uf', '=', 'MS')],
+        domain=[('estado_origem_id.code', '=', 'MS')],
     )
     aliquota_MG_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas de Minas Gerais',
-        domain=[('estado_origem_id.uf', '=', 'MG')],
+        domain=[('estado_origem_id.code', '=', 'MG')],
     )
     aliquota_PA_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Pará',
-        domain=[('estado_origem_id.uf', '=', 'PA')],
+        domain=[('estado_origem_id.code', '=', 'PA')],
     )
     aliquota_PB_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas da Paraíba',
-        domain=[('estado_origem_id.uf', '=', 'PB')],
+        domain=[('estado_origem_id.code', '=', 'PB')],
     )
     aliquota_PR_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Paraná',
-        domain=[('estado_origem_id.uf', '=', 'PR')],
+        domain=[('estado_origem_id.code', '=', 'PR')],
     )
     aliquota_PE_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas de Pernambuco',
-        domain=[('estado_origem_id.uf', '=', 'PE')],
+        domain=[('estado_origem_id.code', '=', 'PE')],
     )
     aliquota_PI_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Piauí',
-        domain=[('estado_origem_id.uf', '=', 'PI')],
+        domain=[('estado_origem_id.code', '=', 'PI')],
     )
     aliquota_RJ_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Rio de Janeiro',
-        domain=[('estado_origem_id.uf', '=', 'RJ')],
+        domain=[('estado_origem_id.code', '=', 'RJ')],
     )
     aliquota_RN_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Rio Grande do Norte',
-        domain=[('estado_origem_id.uf', '=', 'RN')],
+        domain=[('estado_origem_id.code', '=', 'RN')],
     )
     aliquota_RS_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Rio Grande do Sul',
-        domain=[('estado_origem_id.uf', '=', 'RS')],
+        domain=[('estado_origem_id.code', '=', 'RS')],
     )
     aliquota_RO_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas de Rondônia',
-        domain=[('estado_origem_id.uf', '=', 'RO')],
+        domain=[('estado_origem_id.code', '=', 'RO')],
     )
     aliquota_RR_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas de Roraima',
-        domain=[('estado_origem_id.uf', '=', 'RR')],
+        domain=[('estado_origem_id.code', '=', 'RR')],
     )
     aliquota_SC_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas de Santa Catarina',
-        domain=[('estado_origem_id.uf', '=', 'SC')],
+        domain=[('estado_origem_id.code', '=', 'SC')],
     )
     aliquota_SP_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas de São Paulo',
-        domain=[('estado_origem_id.uf', '=', 'SP')],
+        domain=[('estado_origem_id.code', '=', 'SP')],
     )
     aliquota_SE_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas de Sergipe',
-        domain=[('estado_origem_id.uf', '=', 'SE')],
+        domain=[('estado_origem_id.code', '=', 'SE')],
     )
     aliquota_TO_ids = fields.One2many(
         comodel_name='sped.protocolo.icms.aliquota',
         inverse_name='protocolo_id',
         string='Alíquotas do Tocantins',
-        domain=[('estado_origem_id.uf', '=', 'TO')],
+        domain=[('estado_origem_id.code', '=', 'TO')],
     )
     ncm = fields.Char(
         string='NCM',
@@ -299,7 +299,7 @@ class SpedProtocoloICMS(models.Model):
     def atualizar_tabela(self):
         self.ensure_one()
 
-        # sped_estado = self.env['sped.estado']
+        # sped_estado = self.env['res.country.state']
         # sped_aliquota_icms = self.env['sped.aliquota.icms.proprio']
         sped_protocolo_icms_aliquota = self.env['sped.protocolo.icms.aliquota']
 
@@ -418,8 +418,8 @@ class SpedProtocoloICMS(models.Model):
 
         busca = [
             ('protocolo_id', '=', self.id),
-            ('estado_origem_id.uf', '=', estado_origem),
-            ('estado_destino_id.uf', '=', estado_destino),
+            ('estado_origem_id.code', '=', estado_origem),
+            ('estado_destino_id.code', '=', estado_destino),
             ('data_inicio', '<=', data),
         ]
 
@@ -439,8 +439,8 @@ class SpedProtocoloICMS(models.Model):
 
         busca = [
             ('protocolo_id', '=', empresa.protocolo_id.id),
-            ('estado_origem_id.uf', '=', estado_origem),
-            ('estado_destino_id.uf', '=', estado_destino),
+            ('estado_origem_id.code', '=', estado_origem),
+            ('estado_destino_id.code', '=', estado_destino),
             ('data_inicio', '<=', data),
         ]
 
@@ -471,12 +471,12 @@ class SpedProtocoloICMSAliquota(models.Model):
         ondelete='cascade',
     )
     estado_origem_id = fields.Many2one(
-        comodel_name='sped.estado',
+        comodel_name='res.country.state',
         string='Estado de origem',
         ondelete='restrict',
     )
     estado_destino_id = fields.Many2one(
-        comodel_name='sped.estado',
+        comodel_name='res.country.state',
         string='Estado de destino',
         ondelete='restrict',
     )
@@ -510,7 +510,7 @@ class SpedProtocoloICMSAliquota(models.Model):
     def _interna(self):
         for aliquota in self:
             aliquota.interna = (
-                aliquota.estado_origem_id.uf == aliquota.estado_destino_id.uf
+                aliquota.estado_origem_id.code == aliquota.estado_destino_id.code
             )
 
 

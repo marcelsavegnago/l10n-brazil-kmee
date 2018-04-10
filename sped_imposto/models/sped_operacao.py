@@ -41,7 +41,7 @@ class SpedOperacaoFiscal(models.Model):
     _rec_name = 'nome'
 
     empresa_id = fields.Many2one(
-        comodel_name='sped.empresa',
+        comodel_name='res.company',
         string='Empresa',
         ondelete='restrict'
     )

@@ -23,7 +23,7 @@ class SpedAliquotaISS(SpedBase, models.Model):
         required=True,
     )
     municipio_id = fields.Many2one(
-        comodel_name='sped.municipio',
+        comodel_name='l10n_br_base.city',
         string='Município',
         ondelete='restrict',
         required=True,

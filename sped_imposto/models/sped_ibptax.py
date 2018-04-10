@@ -9,7 +9,6 @@ from __future__ import division, print_function, unicode_literals
 
 import logging
 import os
-from odoo.addons.l10n_br_base.models.sped_base import SpedBase
 from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
@@ -162,7 +161,7 @@ class SpedIBPTax(models.Model):
         self.versao = versao
 
 
-class SpedIBPTaxNCM(SpedBase, models.Model):
+class SpedIBPTaxNCM(models.Model):
     _name = b'sped.ibptax.ncm'
     _description = 'IBPTax por NCM'
 
@@ -181,20 +180,17 @@ class SpedIBPTaxNCM(SpedBase, models.Model):
         comodel_name='sped.ncm',
         string='NCM',
     )
-    al_ibpt_nacional = fields.Monetary(
+    al_ibpt_nacional = fields.Float(
         string='Nacional',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_ibpt_internacional = fields.Monetary(
+    al_ibpt_internacional = fields.Float(
         string='Internacional',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_ibpt_estadual = fields.Monetary(
+    al_ibpt_estadual = fields.Float(
         string='Estadual',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
     al_icms_id = fields.Many2one(
         comodel_name='sped.aliquota.icms.proprio',
@@ -202,7 +198,7 @@ class SpedIBPTaxNCM(SpedBase, models.Model):
     )
 
 
-class SpedIBPTaxNBS(SpedBase, models.Model):
+class SpedIBPTaxNBS(models.Model):
     _name = b'sped.ibptax.nbs'
     _description = 'IBPTax por NBS'
 
@@ -221,24 +217,21 @@ class SpedIBPTaxNBS(SpedBase, models.Model):
         comodel_name='sped.nbs',
         string='NBS',
     )
-    al_ibpt_nacional = fields.Monetary(
+    al_ibpt_nacional = fields.Float(
         string='Nacional',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_ibpt_internacional = fields.Monetary(
+    al_ibpt_internacional = fields.Float(
         string='Internacional',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_ibpt_municipal = fields.Monetary(
+    al_ibpt_municipal = fields.Float(
         string='Municipal',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
 
 
-class SpedIBPTaxServico(SpedBase, models.Model):
+class SpedIBPTaxServico(models.Model):
     _name = b'sped.ibptax.servico'
     _description = 'IBPTax por Serviço'
 
@@ -257,18 +250,15 @@ class SpedIBPTaxServico(SpedBase, models.Model):
         comodel_name='sped.servico',
         string='Serviço',
     )
-    al_ibpt_nacional = fields.Monetary(
+    al_ibpt_nacional = fields.Float(
         string='Nacional',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_ibpt_internacional = fields.Monetary(
+    al_ibpt_internacional = fields.Float(
         string='Internacional',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_ibpt_municipal = fields.Monetary(
+    al_ibpt_municipal = fields.Float(
         string='Municipal',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )

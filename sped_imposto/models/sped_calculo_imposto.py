@@ -8,7 +8,6 @@ import logging
 
 from odoo import api, fields, models, _
 from odoo.addons.l10n_br_base.constante_tributaria import *
-from openerp.addons.l10n_br_base.models.sped_base import SpedBase
 
 _logger = logging.getLogger(__name__)
 
@@ -19,7 +18,7 @@ except (ImportError, IOError) as err:
     _logger.debug(err)
 
 
-class SpedCalculoImposto(SpedBase):
+class SpedCalculoImposto(object):
     """ Definie informações essenciais para as operações brasileiras
 
     Para entender como usar este modelo verifique os módulos:
@@ -77,19 +76,25 @@ class SpedCalculoImposto(SpedBase):
     """
     _abstract = False
 
+    @api.model
+    def _default_currency(self):
+        return self.env.user.company_id.currency_id
+
     is_brazilian = fields.Boolean(
         string='Is a Brazilian?',
         compute='_compute_is_brazilian',
-    )
-    company_id = fields.Many2one(
-        comodel_name='res.company',
     )
     empresa_id = fields.Many2one(
         comodel_name='res.company',
         string='Empresa',
         default=lambda self: self.env.user.company_id,
     )
-
+    currency_id = fields.Many2one(
+        comodel_name='res.currency',
+        string='Currency',
+        required=True,
+        default=_default_currency,
+    )
     partner_id = fields.Many2one(
         comodel_name='res.partner',
         string='Destinatário/Remetente'
@@ -106,9 +111,7 @@ class SpedCalculoImposto(SpedBase):
     regime_tributario = fields.Selection(
         selection=REGIME_TRIBUTARIO,
         string='Regime tributário',
-
         related='operacao_id.regime_tributario',
-
     )
 
     #
@@ -347,15 +350,13 @@ class SpedCalculoImposto(SpedBase):
     #
     # Total do peso
     #
-    peso_bruto = fields.Monetary(
+    peso_bruto = fields.Float(
         string='Peso bruto',
-        currency_field='currency_peso_id',
         compute='_compute_soma_itens',
         store=True,
     )
-    peso_liquido = fields.Monetary(
+    peso_liquido = fields.Float(
         string='Peso líquido',
-        currency_field='currency_peso_id',
         compute='_compute_soma_itens',
         store=True,
     )

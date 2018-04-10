@@ -15,9 +15,6 @@ from odoo.addons.l10n_br_base.constante_tributaria import (
     REGIME_TRIBUTARIO,
     REGIME_TRIBUTARIO_SIMPLES,
 )
-from openerp.addons.l10n_br_base.models.sped_base import (
-    SpedBase
-)
 
 _logger = logging.getLogger(__name__)
 

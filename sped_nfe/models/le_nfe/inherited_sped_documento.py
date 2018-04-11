@@ -329,7 +329,7 @@ class SpedDocumento(models.Model):
             #
             else:
 
-                dados['empresa_id'] = self.env['sped.empresa'].search([
+                dados['empresa_id'] = self.env['res.company'].search([
                     ('cnpj_cpf_numero', '=', emitente.cnpj_cpf_numero)]).id
                 dados['partner_id'] = destinatario.id
                 dados['regime_tributario'] = emitente.regime_tributario
@@ -345,7 +345,7 @@ class SpedDocumento(models.Model):
         # É nota de terceiros
         #
         else:
-            dados['empresa_id'] = self.env['sped.empresa'].search([
+            dados['empresa_id'] = self.env['res.company'].search([
                 ('cnpj_cpf_numero', '=', destinatario.cnpj_cpf_numero)]).id
             dados['partner_id'] = emitente.id
             dados['emissao'] = TIPO_EMISSAO_TERCEIROS

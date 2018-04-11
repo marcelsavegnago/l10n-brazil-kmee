@@ -24,7 +24,7 @@ except (ImportError, IOError) as err:
 
 
 class SpedEmpresa(models.Model):
-    _inherit = 'sped.empresa'
+    _inherit = 'res.company'
 
     certificado_id = fields.Many2one(
         comodel_name='sped.certificado',

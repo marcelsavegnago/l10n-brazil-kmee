@@ -923,7 +923,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
                 res.append((record.id, record.descricao))
             else:
                 txt = '{nome}/{modelo}/{serie}/{numero}'.format(
-                    nome=record.empresa_id.nome,
+                    nome=record.empresa_id.name,
                     modelo=record.modelo,
                     serie=record.serie,
                     numero=formata_valor(record.numero, casas_decimais=0),
@@ -948,7 +948,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
             if not documento.partner_id.cnpj_cpf:
                 txt += ' - Consumidor não identificado'
 
-            elif documento.partner_id.razao_social:
+            elif documento.partner_id.legal_name:
                 txt += ' - ' + documento.partner_id.razao_social
                 txt += ' - ' + documento.partner_id.cnpj_cpf
             else:

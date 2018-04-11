@@ -42,6 +42,9 @@ class SpedDocumentoPagamento(models.Model):
     currency_id = fields.Many2one(
         comodel_name='res.currency',
         related='documento_id.currency_id',
+        readonly=True,
+        store=True,
+        related_sudo=False,
     )
     sequence = fields.Integer(
         default=10,

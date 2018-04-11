@@ -703,15 +703,8 @@ function l10n_br_pos_screens(instance, module) {
                     }
                 }
             } else {
-                if (!cpf_na_nota && self.pos.config.crm_ativo) {
-                    $(".pos-leftpane *").prop('disabled', save_state);
-                    self.pos_widget.screen_selector.close_popup();
-                    var ss = self.pos.pos_widget.screen_selector;
-                    ss.set_current_screen('clientlist');
-                    self.pos_widget.clientlist_screen.display_client_details('edit',{
-                        'country_id': self.pos.company.country_id,
-                    });
-                }
+                $(".pos-leftpane *").prop('disabled', save_state);
+                self.pos_widget.screen_selector.close_popup();
                 if(cpf_na_nota)
                     alert('O cpf deve ser inserido no campo para que seja transmitido no cupom fiscal.');
             }

@@ -39,7 +39,7 @@ class ImportaNFe(models.Model):
         string='Quantidade Importada',
     )
     empresa_id = fields.Many2one(
-        comodel_name='sped.empresa',
+        comodel_name='res.company',
         string='Empresa',
         # required=True,
     )

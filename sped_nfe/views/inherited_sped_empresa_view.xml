@@ -6,8 +6,8 @@
 <odoo>
 
     <record model="ir.ui.view" id="sped_empresa_inherited_form" >
-        <field name="name">sped.empresa.inherited.form</field>
-        <field name="model">sped.empresa</field>
+        <field name="name">res.company.inherited.form</field>
+        <field name="model">res.company</field>
         <field name="priority">2</field>
         <field name="inherit_id" ref="sped_imposto.sped_empresa_form" />
         <field name="arch" type="xml">

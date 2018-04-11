@@ -22,9 +22,9 @@ class SpedConsultaStatusDocumento(models.TransientModel):
     _description = 'Consulta Status Documento'
 
     empresa_id = fields.Many2one(
-        comodel_name='sped.empresa',
+        comodel_name='res.company',
         string='Empresa',
-        default=lambda self: self.env.user.sped_empresa_id,
+        default=lambda self: self.env.user.company_id.id,
     )
     state = fields.Selection(
         selection=[('init', 'Init'),

@@ -44,7 +44,7 @@ class SpedManifestacaoDestinatario(models.Model):
                  ) for rec in self]
 
     empresa_id = fields.Many2one(
-        comodel_name='sped.empresa',
+        comodel_name='res.company',
         string='Razão Social',
         required=True,
     )

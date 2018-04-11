@@ -56,10 +56,9 @@ class SpedInutilizacaoDocumento(models.Model):
 
     empresa_id = fields.Many2one(
         string=u'Empresa',
-        comodel_name='sped.empresa',
+        comodel_name='res.company',
         required=True,
-        default=lambda self:
-        self.env['sped.empresa']._empresa_ativa('sped.empresa')
+        default=lambda self: self.env.user.company_id.id
     )
 
     state = fields.Selection(

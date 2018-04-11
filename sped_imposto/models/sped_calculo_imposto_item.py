@@ -971,8 +971,8 @@ class SpedCalculoImpostoItem(object):
 
         else:
             if self.entrada_saida == ENTRADA_SAIDA_SAIDA:
-                estado_origem = self.empresa_id.estado
-                estado_destino = self.partner_id.estado
+                estado_origem = self.empresa_id.state_id.code
+                estado_destino = self.partner_id.state_id.code
 
                 if self.emissao == TIPO_EMISSAO_PROPRIA:
                     destinatario = self.partner_id
@@ -980,8 +980,8 @@ class SpedCalculoImpostoItem(object):
                     destinatario = self.empresa_id
 
             else:
-                estado_origem = self.partner_id.estado
-                estado_destino = self.empresa_id.estado
+                estado_origem = self.partner_id.state_id.code
+                estado_destino = self.empresa_id.state_id.code
 
                 if self.emissao == TIPO_EMISSAO_PROPRIA:
                     destinatario = self.empresa_id
@@ -998,9 +998,9 @@ class SpedCalculoImpostoItem(object):
             res = self._onchange_produto_id_emissao_propria()
 
             if hasattr(self, 'product_uom'):
-                self.product_uom = self.product_id.unidade_id.uom_id
+                self.product_uom = self.product_id.uom_id
             if hasattr(self, 'uom_id'):
-                self.uom_id = self.product_id.unidade_id.uom_id
+                self.uom_id = self.product_id.uom_id
             return res
         elif self.emissao == TIPO_EMISSAO_TERCEIROS:
             if self.env.context.get('manual'):
@@ -1316,11 +1316,11 @@ class SpedCalculoImpostoItem(object):
         # Se já ocorreu o preenchimento da descrição, não sobrepõe
         #
         if not self.produto_nome:
-            self.produto_nome = self.product_id.nome
+            self.produto_nome = self.product_id.name
 
         self.org_icms = (self.product_id.org_icms or
                          ORIGEM_MERCADORIA_NACIONAL)
-        self.unidade_id = self.product_id.unidade_id.id
+        self.unidade_id = self.product_id.uom_id.id
 
 
         if self.product_id.unidade_tributacao_id:
@@ -1336,7 +1336,7 @@ class SpedCalculoImpostoItem(object):
                 self.product_id.fator_conversao_unidade_tributacao_ncm
 
         else:
-            self.unidade_tributacao_id = self.product_id.unidade_id.id
+            self.unidade_tributacao_id = self.product_id.uom_id.id
             self.fator_conversao_unidade_tributacao = 1
 
         if 'forca_vr_unitario' in self.env.context:
@@ -1353,11 +1353,14 @@ class SpedCalculoImpostoItem(object):
 
         self.vr_unitario_readonly = self.vr_unitario
 
-        self.peso_bruto_unitario = self.product_id.peso_bruto
-        self.peso_liquido_unitario = self.product_id.peso_liquido
-        self.especie = self.product_id.especie
-        self.fator_quantidade_especie = \
-            self.product_id.fator_quantidade_especie
+        self.peso_bruto_unitario = self.product_id.weight_gross
+        self.peso_liquido_unitario = self.product_id.weight
+
+        if self.product_id.packaging_ids:
+            # FIXME: Como vamos definir qual empacotamento deve ser utilizado?
+            self.especie = self.product_id.especie
+            self.fator_quantidade_especie = \
+                self.product_id.fator_quantidade_especie
 
         estado_origem, estado_destino, destinatario = \
             self._estado_origem_estado_destino_destinatario()
@@ -1682,7 +1685,7 @@ class SpedCalculoImpostoItem(object):
 
                 ibpt_ids = ibpt.search([
                     ('estado_id', '=',
-                        self.empresa_id.municipio_id.estado_id.id),
+                        self.empresa_id.l10n_br_city_id.state_id.id),
                     ('ncm_id', '=', self.product_id.ncm_id.id),
                 ])
 
@@ -1703,7 +1706,7 @@ class SpedCalculoImpostoItem(object):
 
                 ibpt_ids = ibpt.search([
                     ('estado_id', '=',
-                        self.empresa_id.municipio_id.estado_id.id),
+                        self.empresa_id.l10n_br_city_id.state_id.id),
                     ('nbs_id', '=', self.product_id.nbs_id.id),
                 ])
 
@@ -1720,7 +1723,7 @@ class SpedCalculoImpostoItem(object):
 
                 ibpt_ids = ibpt.search([
                     ('estado_id', '=',
-                        self.empresa_id.municipio_id.estado_id.id),
+                     self.empresa_id.l10n_br_city_id.state_id.id),
                     ('servico_id', '=', self.product_id.servico_id.id),
                 ])
 

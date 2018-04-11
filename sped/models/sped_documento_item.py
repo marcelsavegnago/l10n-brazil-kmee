@@ -64,7 +64,7 @@ class SpedDocumentoItem(SpedCalculoImpostoItem, models.Model):
         readonly=True,
     )
     empresa_id = fields.Many2one(
-        comodel_name='sped.empresa',
+        comodel_name='res.company',
         string='Empresa',
         related='documento_id.empresa_id',
         readonly=True,

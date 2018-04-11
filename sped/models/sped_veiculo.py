@@ -24,7 +24,7 @@ class SpedVeiculo(models.Model):
         index=True,
     )
     estado_id = fields.Many2one(
-        comodel_name='sped.estado',
+        comodel_name='res.country.state',
         string='Estado',
         required=True,
     )

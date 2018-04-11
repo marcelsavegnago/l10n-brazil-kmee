@@ -41,7 +41,7 @@ class SpedDocumentoItemDeclaracaoImportacao(models.Model):
         size=60,
     )
     uf_desembaraco_id = fields.Many2one(
-        comodel_name='sped.estado',
+        comodel_name='res.country.state',
         string='Estado do desembaraço',
     )
     data_desembaraco = fields.Date(

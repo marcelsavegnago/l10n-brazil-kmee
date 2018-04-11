@@ -44,13 +44,6 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         string='Documento Fiscal',
         compute='_compute_descricao',
     )
-    empresa_id = fields.Many2one(
-        comodel_name='sped.empresa',
-        string='Empresa',
-        ondelete='restrict',
-        default=lambda self:
-        self.env['sped.empresa']._empresa_ativa('sped.empresa')
-    )
     empresa_cnpj_cpf = fields.Char(
         string='CNPJ/CPF',
         size=18,
@@ -151,7 +144,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         size=14,
     )
     municipio_fato_gerador_id = fields.Many2one(
-        comodel_name='sped.municipio',
+        comodel_name='l10n_br_base.city',
         string='Município do fato gerador',
     )
     operacao_id = fields.Many2one(
@@ -298,15 +291,15 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     participante_razao_social = fields.Char(
         string='Razão Social',
         size=60,
-        related='partner_id.razao_social',
+        related='partner_id.legal_name',
         readonly=True,
     )
-    participante_fantasia = fields.Char(
-        string='Fantasia',
-        size=60,
-        related='partner_id.fantasia',
-        readonly=True,
-    )
+    # participante_fantasia = fields.Char(
+    #     string='Fantasia',
+    #     size=60,
+    #     related='partner_id.fantasia',
+    #     readonly=True,
+    # )
     participante_endereco = fields.Char(
         string='Endereço',
         size=60,
@@ -316,7 +309,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     participante_numero = fields.Char(
         string='Número',
         size=60,
-        related='partner_id.numero',
+        related='partner_id.number',
         readonly=True,
     )
     participante_complemento = fields.Char(
@@ -328,23 +321,23 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     participante_bairro = fields.Char(
         string='Bairro',
         size=60,
-        related='partner_id.bairro',
+        related='partner_id.district',
         readonly=True,
     )
     participante_municipio_id = fields.Many2one(
-        comodel_name='sped.municipio',
+        comodel_name='l10n_br_base.city',
         string='Município',
-        related='partner_id.municipio_id',
+        related='partner_id.l10n_br_city_id',
         readonly=True,
     )
     participante_cidade = fields.Char(
         string='Município',
-        related='partner_id.cidade',
+        related='participante_municipio_id.name',
         readonly=True,
     )
     participante_estado = fields.Char(
         string='Estado',
-        related='partner_id.estado',
+        related='participante_municipio_id.state_id.code',
         readonly=True,
     )
     participante_cep = fields.Char(
@@ -360,12 +353,6 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         string='Fone',
         size=18,
         related='partner_id.phone',
-        readonly=True,
-    )
-    participante_fone_comercial = fields.Char(
-        string='Fone Comercial',
-        size=18,
-        related='partner_id.fone_comercial',
         readonly=True,
     )
     participante_celular = fields.Char(
@@ -393,7 +380,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     participante_ie = fields.Char(
         string='Inscrição estadual',
         size=18,
-        related='partner_id.ie',
+        related='partner_id.inscr_est',
         readonly=True,
     )
     participante_eh_orgao_publico = fields.Boolean(
@@ -436,12 +423,12 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     # Endereços de entrega e retirada
     #
     endereco_retirada_id = fields.Many2one(
-        comodel_name='sped.endereco',
+        comodel_name='res.partner',
         string='Endereço de retirada',
         ondelete='restrict'
     )
     endereco_entrega_id = fields.Many2one(
-        comodel_name='sped.endereco',
+        comodel_name='res.partner',
         string='Endereço de entrega',
         ondelete='restrict'
     )
@@ -495,7 +482,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     # Exportação
     #
     exportacao_estado_embarque_id = fields.Many2one(
-        comodel_name='sped.estado',
+        comodel_name='res.country.state',
         string='Estado do embarque',
         ondelete='restrict',
     )
@@ -807,20 +794,12 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         string='Itens',
         copy=True,
     )
-    produto_id = fields.Many2one(
-        comodel_name='sped.produto',
-        string='Produto/Serviço',
-        related='item_ids.produto_id',
-        readonly=True,
-    )
-
     product_id = fields.Many2one(
         comodel_name='product.product',
         string='Produto/Serviço',
         related='item_ids.product_id',
         readonly=True,
     )
-
     cfop_id = fields.Many2one(
         comodel_name='sped.cfop',
         string='CFOP',

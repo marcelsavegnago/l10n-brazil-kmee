@@ -383,9 +383,9 @@ class SpedDocumento(models.Model):
 
         return True
 
-    def _busca_municipio(self, codigo_ibge):
-        municipio = self.env['sped.municipio'].search(
-            [('codigo_ibge', '=', codigo_ibge)]
+    def _busca_municipio(self, ibge_code):
+        municipio = self.env['l10n_br_base.city'].search(
+            [('ibge_code', '=', ibge_code)]
             )
 
         if len(municipio) == 0:
@@ -454,7 +454,7 @@ class SpedDocumento(models.Model):
         dados.update({
             'cnpj_cpf': emit.CNPJ.valor,
             'nome': emit.xNome.valor,
-            'razao_social': emit.xNome.valor,
+            'legal_name': emit.xNome.valor,
             'fantasia': emit.xFant.valor,
             'endereco': emit.enderEmit.xLgr.valor,
             'numero': emit.enderEmit.nro.valor,
@@ -484,13 +484,13 @@ class SpedDocumento(models.Model):
 
             if codigo.isdigit():
                 dados['codigo'] = codigo
-                dados['razao_social'] = ''.join(partes[1:]).strip()
+                dados['legal_name'] = ''.join(partes[1:]).strip()
                 dados['nome'] = '-'.join(partes[1:]).strip()
 
     def _le_nfe_destinatario(self, dest, dados):
         dados.update({
             'nome': dest.xNome.valor,
-            'razao_social': dest.xNome.valor,
+            'legal_name': dest.xNome.valor,
             'endereco': dest.enderDest.xLgr.valor,
             'numero': dest.enderDest.nro.valor,
             'complemento': dest.enderDest.xCpl.valor,
@@ -555,7 +555,7 @@ class SpedDocumento(models.Model):
 
             if codigo.isdigit():
                 dados['codigo'] = codigo
-                dados['razao_social'] = ''.join(partes[1:]).strip()
+                dados['legal_name'] = ''.join(partes[1:]).strip()
                 dados['nome'] = '-'.join(partes[1:]).strip()
 
     def _le_nfe_endereco_retirada(self, retirada):
@@ -568,7 +568,7 @@ class SpedDocumento(models.Model):
         retirada.xCpl.valor = self.endereco_retirada_id.complemento or ''
         retirada.xBairro.valor = self.endereco_retirada_id.bairro or ''
         retirada.cMun.valor = \
-            self.endereco_retirada_id.municipio_id.codigo_ibge[:7]
+            self.endereco_retirada_id.l10n_br_city_id.ibge_code[:7]
         retirada.xMun.valor = self.endereco_retirada_id.municipio_id.nome
         retirada.UF.valor = self.endereco_retirada_id.municipio_id.estado_id.uf
 
@@ -590,7 +590,7 @@ class SpedDocumento(models.Model):
         entrega.xCpl.valor = self.endereco_entrega_id.complemento or ''
         entrega.xBairro.valor = self.endereco_entrega_id.bairro or ''
         entrega.cMun.valor = \
-            self.endereco_entrega_id.municipio_id.codigo_ibge[:7]
+            self.endereco_entrega_id.l10n_br_city_id.ibge_code[:7]
         entrega.xMun.valor = self.endereco_entrega_id.municipio_id.nome
         entrega.UF.valor = self.endereco_entrega_id.municipio_id.estado_id.uf
 
@@ -635,7 +635,7 @@ class SpedDocumento(models.Model):
         '''
         if transp.transporta.xNome.valor:
             dados_transportadora['nome'] = transp.transporta.xNome.valor
-            dados_transportadora['razao_social'] = \
+            dados_transportadora['legal_name'] = \
                 transp.transporta.xNome.valor
 
         if transp.transporta.IE.valor:

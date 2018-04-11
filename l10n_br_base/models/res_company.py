@@ -135,47 +135,80 @@ class ResCompany(models.Model):
     )
 
     legal_name = fields.Char(
-        compute=_get_l10n_br_data, inverse=_set_l10n_br_legal_name,
-        size=128, string=u'Razão Social')
+        string=u'Razão Social',
+        compute=_get_l10n_br_data,
+        inverse=_set_l10n_br_legal_name,
+        size=128,
+        store=True,
+    )
 
     district = fields.Char(
-        compute=_get_l10n_br_data, inverse=_set_l10n_br_district, size=32,
-        string="Bairro", multi='address')
+        string="Bairro",
+        compute=_get_l10n_br_data,
+        inverse=_set_l10n_br_district,
+        size=32,
+        store=True,
+    )
 
     number = fields.Char(
-        compute=_get_l10n_br_data, inverse=_set_l10n_br_number, size=10,
-        string=u"Número", multi='address')
+        string=u"Número",
+        compute=_get_l10n_br_data,
+        inverse=_set_l10n_br_number,
+        size=10,
+        store=True,
+    )
 
     cnpj_cpf = fields.Char(
-        compute=_get_l10n_br_data, inverse=_set_l10n_br_cnpj_cpf,
-        size=18, string='CNPJ/CPF')
+        string='CNPJ/CPF',
+        compute=_get_l10n_br_data,
+        inverse=_set_l10n_br_cnpj_cpf,
+        size=18,
+        store=True,
+    )
 
     inscr_est = fields.Char(
-        compute=_get_l10n_br_data, inverse=_set_l10n_br_inscr_est,
-        size=16, string='Inscr. Estadual')
+        string='Inscr. Estadual',
+        compute=_get_l10n_br_data,
+        inverse=_set_l10n_br_inscr_est,
+        size=16,
+        store=True,
+    )
 
     inscr_mun = fields.Char(
-        compute=_get_l10n_br_data, inverse=_set_l10n_br_inscr_mun,
-        size=18, string='Inscr. Municipal')
+        string='Inscr. Municipal',
+        compute=_get_l10n_br_data,
+        inverse=_set_l10n_br_inscr_mun,
+        size=18,
+        store=True,
+    )
 
     suframa = fields.Char(
-        compute=_get_l10n_br_data, inverse=_set_l10n_br_suframa,
-        size=18, string='Suframa')
+        string='Suframa',
+        compute=_get_l10n_br_data,
+        inverse=_set_l10n_br_suframa,
+        size=18,
+        store=True,
+    )
 
     l10n_br_city_id = fields.Many2one(
-        'l10n_br_base.city', 'Municipio', domain="[('state_id','=',state_id)]",
-        compute=_get_l10n_br_data, inverse=_set_l10n_br_city_id)
+        string='Municipio',
+        comodel_name='l10n_br_base.city',
+        domain="[('state_id','=',state_id)]",
+        compute=_get_l10n_br_data,
+        inverse=_set_l10n_br_city_id,
+        store=True,
+    )
 
     estado = fields.Char(
         string='Estado',
         related='state_id.code',
         store=True,
-        index=True
+        index=True,
     )
     fantasia = fields.Char(
         string='Fantasia',
         size=60,
-        index=True
+        index=True,
     )
 
     @api.onchange('cnpj_cpf')

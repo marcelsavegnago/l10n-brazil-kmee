@@ -166,6 +166,18 @@ class ResCompany(models.Model):
         'l10n_br_base.city', 'Municipio', domain="[('state_id','=',state_id)]",
         compute=_get_l10n_br_data, inverse=_set_l10n_br_city_id)
 
+    estado = fields.Char(
+        string='Estado',
+        related='state_id.code',
+        store=True,
+        index=True
+    )
+    fantasia = fields.Char(
+        string='Fantasia',
+        size=60,
+        index=True
+    )
+
     @api.onchange('cnpj_cpf')
     def _onchange_cnpj_cpf(self):
         country_code = self.country_id.code or ''

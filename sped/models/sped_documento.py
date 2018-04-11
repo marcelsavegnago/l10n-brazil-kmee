@@ -973,6 +973,16 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         for documento in self:
             documento.permite_inutilizacao = not documento.importado_xml
 
+    def _separa_data_hora(self, data_hora_odoo):
+        if not data_hora_odoo:
+            return None, None
+
+        data_hora = data_hora_horario_brasilia(
+            parse_datetime(data_hora_odoo + ' UTC'))
+        data = str(data_hora)[:10]
+        hora = str(data_hora)[11:19]
+        return data, hora
+
     @api.depends('data_hora_emissao', 'data_hora_entrada_saida')
     def _compute_data_hora_separadas(self):
         for documento in self:
@@ -1378,7 +1388,7 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         # final, exceto em caso de operação com estrangeiros
         #
         if self.consumidor_final == TIPO_CONSUMIDOR_FINAL_NORMAL:
-            if self.partner_id.estado != 'EX':
+            if self.partner_id.state_id.code != 'EX':
                 if self.partner_id.contribuinte == \
                         INDICADOR_IE_DESTINATARIO_CONTRIBUINTE:
                     valores['consumidor_final'] = \

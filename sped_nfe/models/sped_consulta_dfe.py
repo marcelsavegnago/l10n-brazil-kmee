@@ -72,7 +72,7 @@ class ConsultaDFe(models.Model):
     def action_gerencia_manifestacoes(self):
 
         return {
-            'name': self.empresa_id.razao_social,
+            'name': self.empresa_id.legal_name,
             'view_mode': 'tree,form',
             'res_model': 'sped.manifestacao.destinatario',
             'type': 'ir.actions.act_window',

@@ -40,7 +40,7 @@ class SpedManifestacaoDestinatario(models.Model):
     def name_get(self):
         return [(rec.id,
                  u"NFº: {0} ({1}): {2}".format(
-                     rec.numero, rec.cnpj_cpf, rec.empresa_id.razao_social)
+                     rec.numero, rec.cnpj_cpf, rec.empresa_id.legal_name)
                  ) for rec in self]
 
     empresa_id = fields.Many2one(

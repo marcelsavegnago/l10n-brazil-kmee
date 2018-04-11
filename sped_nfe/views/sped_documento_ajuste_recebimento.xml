@@ -377,9 +377,7 @@
                 <field name="vr_custo_comercial" invisible="1" readonly="True"/>
 
                 <group colspan="4" col="4">
-                    <field name="produto_id" colspan="4"
-                           context="{'form_view_ref': (modelo != 'SE' and 'l10n_br_base.sped_produto_produto_form' or 'l10n_br_base.sped_produto_servico_form')}"
-                    attrs="{'readonly': [('produto_id', '!=', False)]}"/>
+                    <field name="product_id" colspan="4"/>
                     <newline />
                     <field name="produto_nome" colspan="4" string="Descrição alternativa" readonly="True"/>
                     <newline />

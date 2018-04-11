@@ -21,7 +21,7 @@
     'data': [
         'wizards/wizard_nfe_motivo_cancelamento.xml',
         'views/sped_certificado_view.xml',
-        # 'views/inherited_sped_empresa_view.xml',
+        'views/inherited_res_company_view.xml',
         'views/inherited_sped_documento_emissao_nfe_view.xml',
         'views/inherited_sped_documento_emissao_nfce_view.xml',
         'views/sped_documento_carta_correcao_view.xml',

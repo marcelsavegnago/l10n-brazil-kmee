@@ -12,7 +12,7 @@
         <field name="mode">primary</field>
         <field name="inherit_id" ref="sped.sped_documento_item_base_form" />
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='produto_id']" position="attributes">
+            <xpath expr="//field[@name='product_id']" position="attributes">
                 <attribute name="string">Serviço</attribute>
                 <attribute name="domain">[('tipo', '=', '09')]</attribute>
             </xpath>
@@ -29,7 +29,7 @@
         <field name="mode">primary</field>
         <field name="inherit_id" ref="sped.sped_documento_item_base_tree" />
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='produto_id']" position="attributes">
+            <xpath expr="//field[@name='product_id']" position="attributes">
                 <attribute name="string">Serviço</attribute>
                 <attribute name="domain">[('tipo', '=', '09')]</attribute>
             </xpath>

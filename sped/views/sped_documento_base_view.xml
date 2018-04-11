@@ -404,7 +404,6 @@
                 <field name="operacao_id" />
                 <field name="partner_id" />
                 <field name="empresa_id" />
-                <field name="produto_id" />
                 <separator/>
                 <field name="cfop_id" />
                 <field name="ncm_id" />

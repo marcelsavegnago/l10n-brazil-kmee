@@ -7,12 +7,12 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from odoo.addons.l10n_br_base.models.sped_base import SpedBase
+
 from odoo import fields, models
 import odoo.addons.decimal_precision as dp
 
 
-class SpedDocumentoVolume(SpedBase, models.Model):
+class SpedDocumentoVolume(models.Model):
     _name = b'sped.documento.volume'
     _description = 'Volumes do Documento Fiscal'
     # _order = 'emissao, modelo, data_emissao desc, serie, numero'
@@ -38,11 +38,9 @@ class SpedDocumentoVolume(SpedBase, models.Model):
     quantidade = fields.Integer(
         string='Quantidade',
     )
-    peso_liquido = fields.Monetary(
+    peso_liquido = fields.Float(
         string='Peso líquido',
-        currency_field='currency_peso_id',
     )
-    peso_bruto = fields.Monetary(
+    peso_bruto = fields.Float(
         string='Peso bruto',
-        currency_field='currency_peso_id',
     )

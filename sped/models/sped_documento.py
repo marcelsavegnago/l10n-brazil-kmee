@@ -214,26 +214,23 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     pis_cofins_retido = fields.Boolean(
         string='PIS-COFINS retidos?'
     )
-    al_pis_retido = fields.Monetary(
+    al_pis_retido = fields.Float(
         string='Alíquota do PIS',
         default=0.65,
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_cofins_retido = fields.Monetary(
+    al_cofins_retido = fields.Float(
         string='Alíquota da COFINS',
         default=3,
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
     csll_retido = fields.Boolean(
         string='CSLL retido?',
     )
-    al_csll = fields.Monetary(
+    al_csll = fields.Float(
         string='Alíquota da CSLL',
         default=1,
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
     limite_retencao_pis_cofins_csll = fields.Monetary(
         string='Obedecer limite de faturamento para retenção de',
@@ -245,25 +242,22 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     irrf_retido_ignora_limite = fields.Boolean(
         string='IR retido ignora limite de R$ 10,00?',
     )
-    al_irrf = fields.Monetary(
+    al_irrf = fields.Float(
         string='Alíquota do IR',
         default=1,
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
     inss_retido = fields.Boolean(
         string='INSS retido?',
         index=True,
     )
-    al_inss_retido = fields.Monetary(
+    al_inss_retido = fields.Float(
         string='Alíquota do INSS',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
-    al_inss = fields.Monetary(
+    al_inss = fields.Float(
         string='Alíquota do INSS',
         digits=(5, 2),
-        currency_field='currency_aliquota_id',
     )
     cnae_id = fields.Many2one(
         comodel_name='sped.cnae',
@@ -796,15 +790,13 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
     #
     # Total do peso
     #
-    peso_bruto = fields.Monetary(
+    peso_bruto = fields.Float(
         string='Peso bruto',
-        currency_field='currency_peso_id',
         compute='_compute_soma_itens',
         store=True,
     )
-    peso_liquido = fields.Monetary(
+    peso_liquido = fields.Float(
         string='Peso líquido',
-        currency_field='currency_peso_id',
         compute='_compute_soma_itens',
         store=True,
     )

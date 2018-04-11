@@ -7,11 +7,11 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from odoo.addons.l10n_br_base.models.sped_base import SpedBase
+
 from odoo import api, fields, models
 
 
-class SpedDocumentoDuplicata(SpedBase, models.Model):
+class SpedDocumentoDuplicata(models.Model):
     _name = b'sped.documento.duplicata'
     _description = 'Duplicatas do Documento Fiscal'
     _order = 'documento_id, data_vencimento'
@@ -21,6 +21,10 @@ class SpedDocumentoDuplicata(SpedBase, models.Model):
         comodel_name='sped.documento',
         string='Documento',
         ondelete='cascade',
+    )
+    currency_id = fields.Many2one(
+        comodel_name='res.currency',
+        related='documento_id.currency_id',
     )
     pagamento_id = fields.Many2one(
         comodel_name='sped.documento.pagamento',

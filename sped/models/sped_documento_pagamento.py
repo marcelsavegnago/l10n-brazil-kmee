@@ -10,7 +10,7 @@ from __future__ import division, print_function, unicode_literals
 import logging
 
 from odoo import api, fields, models
-from odoo.addons.l10n_br_base.models.sped_base import SpedBase
+
 from odoo.addons.l10n_br_base.constante_tributaria import (
     FORMA_PAGAMENTO,
     BANDEIRA_CARTAO,
@@ -27,7 +27,7 @@ except (ImportError, IOError) as err:
     _logger.debug(err)
 
 
-class SpedDocumentoPagamento(SpedBase, models.Model):
+class SpedDocumentoPagamento(models.Model):
     _name = b'sped.documento.pagamento'
     _description = 'Pagamentos do Documento Fiscal'
     _order = 'documento_id, sequence, condicao_pagamento_id'
@@ -38,6 +38,10 @@ class SpedDocumentoPagamento(SpedBase, models.Model):
         string='Documento',
         ondelete='cascade',
         required=True,
+    )
+    currency_id = fields.Many2one(
+        comodel_name='res.currency',
+        related='documento_id.currency_id',
     )
     sequence = fields.Integer(
         default=10,

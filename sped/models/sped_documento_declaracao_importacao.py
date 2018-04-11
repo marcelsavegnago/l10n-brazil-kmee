@@ -8,14 +8,14 @@
 from __future__ import division, print_function, unicode_literals
 
 from odoo import fields, models
-from odoo.addons.l10n_br_base.models.sped_base import SpedBase
+
 from odoo.addons.l10n_br_base.constante_tributaria import (
     FORMA_IMPORTACAO,
     VIA_TRANSPORTE_IMPORTACAO,
 )
 
 
-class SpedDocumentoItemDeclaracaoImportacao(SpedBase, models.Model):
+class SpedDocumentoItemDeclaracaoImportacao(models.Model):
     _name = b'sped.documento.item.declacarao.importacao'
     _description = 'Declarações de Importação do Item do Documento Fiscal'
 
@@ -24,6 +24,10 @@ class SpedDocumentoItemDeclaracaoImportacao(SpedBase, models.Model):
         string='Item do Documento',
         ondelete='cascade',
         required=True,
+    )
+    currency_id = fields.Many2one(
+        comodel_name='res.currency',
+        related='item_id.currency_id',
     )
     numero_documento = fields.Char(
         string='Nº do documento de importação',

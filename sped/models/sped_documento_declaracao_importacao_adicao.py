@@ -7,11 +7,11 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from odoo.addons.l10n_br_base.models.sped_base import SpedBase
+
 from odoo import fields, models
 
 
-class SpedDocumentoItemDeclaracaoImportacaoAdicao(SpedBase, models.Model):
+class SpedDocumentoItemDeclaracaoImportacaoAdicao(models.Model):
     _name = b'sped.documento.item.declacarao.importacao.adicao'
     _description = 'Adições da Declaração de Importação do Item do ' \
                    'Documento Fiscal'
@@ -21,6 +21,10 @@ class SpedDocumentoItemDeclaracaoImportacaoAdicao(SpedBase, models.Model):
         string='Declaração de Importação do Item do Documento Fiscal',
         ondelete='cascade',
         required=True,
+    )
+    currency_id = fields.Many2one(
+        comodel_name='res.currency',
+        related='declaracao_id.currency_id',
     )
     numero_adicao = fields.Integer(
         string='Nº da adição',

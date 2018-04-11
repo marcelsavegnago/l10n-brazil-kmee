@@ -47,6 +47,10 @@ class SpedDocumentoItem(SpedCalculoImpostoItem, models.Model):
         ondelete='cascade',
         required=True,
     )
+    currency_id = fields.Many2one(
+        comodel_name='res.currency',
+        related='documento_id.currency_id',
+    )
     regime_tributario = fields.Selection(
         selection=REGIME_TRIBUTARIO,
         string='Regime tributário',
@@ -111,13 +115,13 @@ class SpedDocumentoItem(SpedCalculoImpostoItem, models.Model):
     # Campos readonly
     #
     unidade_readonly_id = fields.Many2one(
-        comodel_name='sped.unidade',
+        comodel_name='product.uom',
         string='Unidade',
         ondelete='restrict',
         compute='_compute_readonly',
     )
     unidade_tributacao_readonly_id = fields.Many2one(
-        comodel_name='sped.unidade',
+        comodel_name='product.uom',
         string='Unidade para tributação',
         ondelete='restrict',
         compute='_compute_readonly',
@@ -155,14 +159,12 @@ class SpedDocumentoItem(SpedCalculoImpostoItem, models.Model):
         string='Custo comercial',
         compute='_compute_readonly',
     )
-    peso_bruto_readonly = fields.Monetary(
+    peso_bruto_readonly = fields.Float(
         string='Peso bruto',
-        currency_field='currency_peso_id',
         compute='_compute_readonly',
     )
-    peso_liquido_readonly = fields.Monetary(
+    peso_liquido_readonly = fields.Float(
         string='Peso líquido',
-        currency_field='currency_peso_id',
         compute='_compute_readonly',
     )
     quantidade_especie_readonly = fields.Float(

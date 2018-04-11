@@ -95,5 +95,5 @@ class SpedNBS(models.Model):
             nbs_ids = self.search(args, limit=limit)
             return nbs_ids.name_get()
 
-        return super(NBS, self).name_search(
+        return super(SpedNBS, self).name_search(
             name=name, args=args, operator=operator, limit=limit)

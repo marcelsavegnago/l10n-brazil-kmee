@@ -23,7 +23,6 @@
                     <field name="modelo" invisible="1" />
                     <field name="id" invisible="1"/>
                     <field name="currency_id" invisible="1"/>
-                    <field name="currency_aliquota_id" invisible="1"/>
                     <field name="importado_xml" invisible="1"/>
                     <field name="operacao_subsequente_ids" invisible="1"/>
                     <div class="oe_button_box" name="button_box">
@@ -360,7 +359,6 @@
         <field name="arch" type="xml">
             <tree string="Emissão de NF-e" duplicate="false">
                 <field name="currency_id" invisible="1"/>
-                <field name="currency_aliquota_id" invisible="1"/>
                 <field name="emissao" invisible="1"/>
                 <field name="modelo" invisible="1"/>
                 <field name="situacao_fiscal" />

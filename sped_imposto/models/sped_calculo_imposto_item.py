@@ -184,7 +184,6 @@ class SpedCalculoImpostoItem(object):
     )
     vr_unitario = fields.Monetary(
         string='Valor unitário',
-        # currency_field='currency_unitario_id',
     )
     # Quantidade de tributação
     fator_conversao_unidade_tributacao = fields.Float(
@@ -795,7 +794,6 @@ class SpedCalculoImpostoItem(object):
     #
     vr_unitario_readonly = fields.Monetary(
         string='Valor unitário',
-        # currency_field='currency_unitario_id',
         compute='_compute_readonly',
     )
     unidade_readonly_id = fields.Many2one(

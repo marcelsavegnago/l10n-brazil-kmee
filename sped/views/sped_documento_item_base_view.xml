@@ -20,10 +20,6 @@
                 <field name="contribuinte" invisible="1"/>
                 <field name="consumidor_final" invisible="1"/>
                 <field name="currency_id" invisible="1"/>
-                <field name="currency_aliquota_id" invisible="1"/>
-                <field name="currency_unitario_id" invisible="1"/>
-                <field name="currency_peso_id" invisible="1"/>
-                <field name="currency_unidade_id" invisible="1"/>
                 <!--<field name="empresa_id" invisible="0"/>
                 <field name="partner_id" invisible="0"/>
                 <field name="operacao_id" invisible="0"/> -->
@@ -397,10 +393,6 @@
                 <field name="regime_tributario" invisible="1"/>
                 <field name="modelo" invisible="1"/>
                 <field name="currency_id" invisible="1"/>
-                <field name="currency_aliquota_id" invisible="1"/>
-                <field name="currency_unitario_id" invisible="1"/>
-                <field name="currency_peso_id" invisible="1"/>
-                <field name="currency_unidade_id" invisible="1"/>
                 <field name="unidade_id" invisible="1"/>
                 <field name="product_id"/>
                 <field name="cfop_id"/>

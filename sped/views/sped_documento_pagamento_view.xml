@@ -12,7 +12,6 @@
         <field name="arch" type="xml">
             <form string="Pagamento">
                 <field name="currency_id" invisible="1"/>
-                <field name="currency_aliquota_id" invisible="1"/>
                 <field name="forma_pagamento" invisible="1"/>
                 <field name="bandeira_cartao" invisible="1"/>
                 <field name="integracao_cartao" invisible="1"/>
@@ -46,7 +45,6 @@
         <field name="arch" type="xml">
             <tree string="Pagamentos">
                 <field name="currency_id" invisible="1"/>
-                <field name="currency_aliquota_id" invisible="1"/>
                 <field name="sequence" widget="handle"/>
                 <field name="condicao_pagamento_id" />
                 <field name="valor" sum="valor" />

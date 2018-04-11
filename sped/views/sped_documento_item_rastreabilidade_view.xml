@@ -11,9 +11,6 @@
         <field name="priority">1</field>
         <field name="arch" type="xml">
             <form string="Rastreabilidade">
-                <field name="currency_id" invisible="1"/>
-                <field name="currency_aliquota_id" invisible="1"/>
-                <field name="currency_unidade_id" invisible="1"/>
                 <group>
                     <group col="4" colspan="4">
                         <field name="numero" required="1"/>
@@ -33,9 +30,6 @@
         <field name="priority">1</field>
         <field name="arch" type="xml">
             <tree string="Rastreabilidade">
-                <field name="currency_id" invisible="1"/>
-                <field name="currency_aliquota_id" invisible="1"/>
-                <field name="currency_unidade_id" invisible="1"/>
                 <field name="numero" />
                 <field name="quantidade" />
                 <field name="data_fabricacao"  />

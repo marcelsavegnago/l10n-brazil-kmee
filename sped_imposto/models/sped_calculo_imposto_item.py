@@ -201,12 +201,6 @@ class SpedCalculoImpostoItem(object):
         string='Unidade para tributação',
         ondelete='restrict',
     )
-    currency_unidade_tributacao_id = fields.Many2one(
-        comodel_name='res.currency',
-        string='Unidade para tributação',
-        related='unidade_tributacao_id.currency_id',
-        readonly=True,
-    )
     vr_unitario_tributacao = fields.Float(
         string='Valor unitário para tributação',
         digits=(18, 10),
@@ -997,14 +991,6 @@ class SpedCalculoImpostoItem(object):
                     destinatario = self.partner_id
 
         return (estado_origem, estado_destino, destinatario)
-
-    @api.onchange('product_id')
-    def _onchange_product_id(self):
-        """
-        :return:
-        """
-        for record in self:
-            record.produto_id = record.product_id.sped_produto_id
 
     @api.onchange('product_id')
     def _onchange_produto_id(self):

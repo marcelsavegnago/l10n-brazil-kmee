@@ -50,6 +50,7 @@ from . import sped_operacao_item
 # Cadastro de produtos e serviços
 #
 from . import inherited_product_template
+from . import inherited_account_payment_term
 
 #
 # Cadastros básicos

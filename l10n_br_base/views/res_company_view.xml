@@ -43,7 +43,7 @@
                     <field name="city" invisible="1"/>
                 </field>
                 <xpath expr="//notebook/page" position="after">
-                    <page string="Inscricões e Registros">
+                    <page string="Inscricões e Registros" name="inscricoes_registros">
                         <group>
                             <group col="4" colspan="4">
                                 <field name="contribuinte" colspan="2" required="1"/>
@@ -67,7 +67,7 @@
                         </group>
                     </page>
                     <page name="fiscal" string="Fiscal">
-                        <group col="4">
+                        <group col="4" name="fiscal_geral_regime_tributario">
                             <field name="regime_tributario"/>
                             <newline/>
                             <field name="eh_consumidor_final"/>

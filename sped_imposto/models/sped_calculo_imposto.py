@@ -389,7 +389,7 @@ class SpedCalculoImposto(object):
     #     copy=True,
     # )
 
-    @api.depends('company_id', 'partner_id')
+    @api.depends('empresa_id', 'partner_id')
     def _compute_is_brazilian(self):
         for documento in self:
             documento.is_brazilian = True
@@ -642,7 +642,6 @@ class SpedCalculoImposto(object):
                 #
                 dados = {
                     'documento_id': documento.id,
-                    'produto_id': item.produto_id.id,
                     'product_id': item.product_id.id,
                     'quantidade': item.quantidade,
                     'vr_unitario': item.vr_unitario,

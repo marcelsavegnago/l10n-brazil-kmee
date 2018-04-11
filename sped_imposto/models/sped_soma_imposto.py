@@ -830,16 +830,6 @@ class SpedSomaImposto(models.Model):
         return (estado_origem, estado_destino, destinatario)
 
     @api.onchange('product_id')
-    def _onchange_product_id(self):
-        """
-        onchange para setar o spedproduto enquanto nao substituimos
-        completamente da localizacao
-        :return: 
-        """
-        for record in self:
-            record.produto_id = record.product_id.sped_produto_id
-
-    @api.onchange('product_id')
     def _onchange_produto_id(self):
         self.ensure_one()
 

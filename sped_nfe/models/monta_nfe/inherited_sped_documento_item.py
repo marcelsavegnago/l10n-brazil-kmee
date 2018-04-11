@@ -112,8 +112,7 @@ class SpedDocumentoItem(models.Model):
 
         det.nItem.valor = numero_item
         det.prod.cProd.valor = \
-            self.product_id.codigo_cliente or \
-            self.product_id.codigo or str(self.product_id.id)
+            self.product_id.default_code or str(self.product_id.id)
         det.prod.cEAN.valor = self.product_id.codigo_barras_tributacao or 'SEM GTIN'
 
         #
@@ -145,7 +144,7 @@ class SpedDocumentoItem(models.Model):
 
         det.prod.nFCI.valor = self.numero_fci or ''
         det.prod.CFOP.valor = self.cfop_id.codigo
-        det.prod.uCom.valor = self.unidade_id.codigo
+        det.prod.uCom.valor = self.unidade_id.name or ''
         det.prod.qCom.valor = str(D(self.quantidade).quantize(D('0.0001')))
         det.prod.vUnCom.valor = \
             str(D(self.vr_unitario).quantize(D(10 * 10 ** -10)))
@@ -157,7 +156,7 @@ class SpedDocumentoItem(models.Model):
         # de acordo com o NCM
         #
         if self.unidade_tributacao_id:
-            det.prod.uTrib.valor = self.unidade_tributacao_id.codigo
+            det.prod.uTrib.valor = self.unidade_tributacao_id.name
             det.prod.qTrib.valor = str(D(self.quantidade_tributacao).quantize(D('0.0001')))
             det.prod.vUnTrib.valor = str(D(self.vr_unitario_tributacao))
 

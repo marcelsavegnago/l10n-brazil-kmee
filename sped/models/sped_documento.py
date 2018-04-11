@@ -294,12 +294,12 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
         related='partner_id.legal_name',
         readonly=True,
     )
-    # participante_fantasia = fields.Char(
-    #     string='Fantasia',
-    #     size=60,
-    #     related='partner_id.fantasia',
-    #     readonly=True,
-    # )
+    participante_fantasia = fields.Char(
+        string='Fantasia',
+        size=60,
+        related='partner_id.fantasia',
+        readonly=True,
+    )
     participante_endereco = fields.Char(
         string='Endereço',
         size=60,

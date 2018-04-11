@@ -16,7 +16,6 @@
                     <field name="modelo" invisible="1" on_change="1" readonly="True"/>
                     <field name="id" invisible="1" readonly="True"/>
                     <field name="currency_id" invisible="1" can_create="true" can_write="true" readonly="True"/>
-                    <field name="currency_aliquota_id" invisible="1" can_create="true" can_write="true" readonly="True"/>
                     <field name="importado_xml" invisible="1" on_change="1" readonly="True"/>
                     <group>
                         <group col="4" colspan="4">
@@ -61,7 +60,6 @@
                                     <newline/>
                                     <field name="participante_fone" readonly="True"/>
                                     <field name="participante_celular" readonly="True"/>
-                                    <field name="participante_fone_comercial" readonly="True"/>
                                     <newline/>
                                     <field name="participante_email" colspan="6" readonly="True"/>
                                     <newline/>
@@ -340,10 +338,6 @@
                 <field name="contribuinte" invisible="1" readonly="True"/>
                 <field name="consumidor_final" invisible="1" readonly="True"/>
                 <field name="currency_id" invisible="1" readonly="True"/>
-                <field name="currency_aliquota_id" invisible="1" readonly="True"/>
-                <field name="currency_unitario_id" invisible="1" readonly="True"/>
-                <field name="currency_peso_id" invisible="1" readonly="True"/>
-                <field name="currency_unidade_id" invisible="1" readonly="True"/>
                 <field name="compoe_total" invisible="1" readonly="True"/>
                 <field name="movimentacao_fisica" invisible="1" readonly="True"/>
                 <field name="quantidade_tributacao" invisible="1" readonly="True"/>

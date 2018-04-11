@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2018 KMEE INFORMATIDA LTDA
+    License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
+-->
+<odoo>
+
+    <record model="ir.ui.view" id="res_partner_form" >
+        <field name="name">product.template.from in (sped_imposto)</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="l10n_br_product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='grupo_superior']" position="before">
+                <field name="cest_ids" readonly="1" invisible="1" />
+                <field name="exige_cest" invisible="1" />
+                <field name="exige_fator_conversao_unidade_tributacao_ncm" invisible="1" />
+            </xpath>
+            <xpath expr="//group[@name='grupo_superior_direito']" position="inside">
+                <field name="servico_id" attrs="{'required': [('tipo', '=', '09')], 'invisible': [('tipo', '!=', '09')]}" options="{'no_create': True, 'no_open': False}"/>
+                <field name="nbs_id" attrs="{'required': [('tipo', '=', '09')], 'invisible': [('tipo', '!=', '09')]}" options="{'no_create': True, 'no_open': False}"/>
+                <field name="ncm_id" attrs="{'required': [('tipo', '!=', '09')]}" options="{'no_create': True, 'no_open': False}"/>
+                <field name="cest_id" domain="[('ncm_ids', 'in', ncm_id)]"  attrs="{'invisible': [('exige_cest', '=', False)], 'required': [('exige_cest', '=', True)]}" options="{'no_create': True, 'no_open': False}"/>
+            </xpath>
+             <page name="general_information" position="after">
+                <page name="fiscal" string="Fiscal">
+                    <group>
+                        <field name="protocolo_id" options="{'no_create': True, 'no_open': False}" can_create="true" can_write="true" modifiers="{}"/>
+                        <newline/>
+                        <field name="al_ipi_id" options="{'no_create': True, 'no_open': False}" can_create="true" can_write="true" modifiers="{}"/>
+                        <newline/>
+                        <field name="al_pis_cofins_id" options="{'no_create': True, 'no_open': False}" can_create="true" can_write="true" modifiers="{}"/>
+                        <newline/>
+                        <field name="codigo_natureza_receita_pis_cofins" modifiers="{}"/>
+                        <newline/>
+                    </group>
+                    <group col="4" colspan="4" name="fiscal_produtos" attrs="{'invisible': [('tipo', '=', '09')]}">
+                        <separator string="Unidade e Código de barras para tributação - comercial" colspan="4"/>
+                        <field name="unidade_tributacao_id" string="Unidade" can_create="true" can_write="true" modifiers="{}"/>
+                        <field name="fator_conversao_unidade_tributacao" string="Fator de conversão" attrs="{'required': [('unidade_tributacao_id', '!=', False)]}" modifiers="{'required': [['unidade_tributacao_id', '!=', false]]}"/>
+                        <field name="codigo_barras_tributacao" string="Código de barras" on_change="1" modifiers="{}"/>
+                        <separator string="Unidade para tributação - NCM - exportação e importação" colspan="4"/>
+                        <field name="unidade_tributacao_ncm_id" readonly="1" string="Unidade" can_create="true" can_write="true" modifiers="{'readonly': true}"/>
+                        <field name="fator_conversao_unidade_tributacao_ncm" string="Fator de conversão" modifiers="{}"/>
+                    </group>
+                </page>
+             </page>
+        </field>
+    </record>
+
+</odoo>

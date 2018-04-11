@@ -286,6 +286,12 @@ class ResPartner(models.Model):
         default=REGIME_TRIBUTARIO_SIMPLES,
         index=True,
     )
+    estado = fields.Char(
+        string='Estado',
+        related='state_id.code',
+        store=True,
+        index=True,
+    )
 
     @api.onchange('l10n_br_city_id')
     def onchange_l10n_br_city_id(self):

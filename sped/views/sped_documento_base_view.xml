@@ -72,7 +72,6 @@
                                     <newline />
                                     <field name="participante_fone" />
                                     <field name="participante_celular" />
-                                    <field name="participante_fone_comercial" />
                                     <newline />
                                     <field name="participante_email" colspan="6" />
                                     <newline />

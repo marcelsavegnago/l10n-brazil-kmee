@@ -47,6 +47,10 @@ except (ImportError, IOError) as err:
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
+    cnae_id = fields.Many2one(
+        comodel_name='sped.cnae',
+        string='CNAE principal'
+    )
     protocolo_id = fields.Many2one(
         comodel_name='sped.protocolo.icms',
         string='Protocolo padrão',

@@ -64,10 +64,10 @@ class SpedAliquotaPISCOFINS(models.Model):
         required=True,
         default=ST_PIS_TRIB_NORMAL,
     )
-    #codigo_justificativa = fields.Char(
-        #string='Código da justificativa',
-        #size=10,
-    #)
+    # codigo_justificativa = fields.Char(
+    # string='Código da justificativa',
+    # size=10,
+    # )
     descricao = fields.Char(
         string='Alíquota do PIS-COFINS',
         compute='_compute_descricao',
@@ -104,11 +104,11 @@ class SpedAliquotaPISCOFINS(models.Model):
                     ' saída, ' + al_pis_cofins.cst_pis_cofins_entrada)
                 al_pis_cofins.descricao += ' entrada'
 
-                #if al_pis_cofins.codigo_justificativa:
-                    #al_pis_cofins.descricao += ' - justificativa '
-                    #al_pis_cofins.descricao += (
-                        #al_pis_cofins.codigo_justificativa
-                    #)
+                # if al_pis_cofins.codigo_justificativa:
+                #al_pis_cofins.descricao += ' - justificativa '
+                # al_pis_cofins.descricao += (
+                # al_pis_cofins.codigo_justificativa
+                #)
 
     @api.depends('al_pis', 'al_cofins', 'md_pis_cofins',
                  'cst_pis_cofins_entrada', 'cst_pis_cofins_saida')
@@ -122,8 +122,8 @@ class SpedAliquotaPISCOFINS(models.Model):
                  al_pis_cofins.cst_pis_cofins_entrada),
                 ('cst_pis_cofins_saida', '=',
                  al_pis_cofins.cst_pis_cofins_saida),
-                #('codigo_justificativa', '=',
-                 #al_pis_cofins.codigo_justificativa),
+                # ('codigo_justificativa', '=',
+                # al_pis_cofins.codigo_justificativa),
             ]
 
             if al_pis_cofins.id or al_pis_cofins._origin.id:

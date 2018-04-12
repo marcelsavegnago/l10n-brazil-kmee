@@ -38,8 +38,8 @@ class SpedSomaImposto(models.Model):
     operacao_id = fields.Many2one(
         comodel_name='sped.operacao',
         string='Operação Fiscal',
-        #related='documento_id.operacao_id',
-        #readonly=True,
+        # related='documento_id.operacao_id',
+        # readonly=True,
     )
     regime_tributario = fields.Selection(
         selection=REGIME_TRIBUTARIO,
@@ -56,8 +56,8 @@ class SpedSomaImposto(models.Model):
     empresa_id = fields.Many2one(
         comodel_name='res.company',
         string='Empresa',
-        #related='documento_id.empresa_id',
-        #readonly=True,
+        # related='documento_id.empresa_id',
+        # readonly=True,
     )
     currency_id = fields.Many2one(
         comodel_name='res.currency',
@@ -68,8 +68,8 @@ class SpedSomaImposto(models.Model):
     partner_id = fields.Many2one(
         comodel_name='res.partner',
         string='Destinatário/Remetente',
-        #related='documento_id.partner_id',
-        #readonly=True,
+        # related='documento_id.partner_id',
+        # readonly=True,
     )
     contribuinte = fields.Selection(
         selection=IE_DESTINATARIO,
@@ -85,8 +85,8 @@ class SpedSomaImposto(models.Model):
     )
     data_emissao = fields.Date(
         string='Data de emissão',
-        #related='documento_id.data_emissao',
-        #readonly=True,
+        # related='documento_id.data_emissao',
+        # readonly=True,
         default=fields.Date.today,
     )
     entrada_saida = fields.Selection(
@@ -155,10 +155,10 @@ class SpedSomaImposto(models.Model):
         string='Item da operação fiscal',
         ondelete='restrict',
     )
-    #quantidade = fields.Float(
-        #string='Quantidade',
-        #default=1,
-        #digits=dp.get_precision('SPED - Quantidade'),
+    # quantidade = fields.Float(
+    # string='Quantidade',
+    # default=1,
+    #digits=dp.get_precision('SPED - Quantidade'),
     #)
     unidade_id = fields.Many2one(
         comodel_name='product.uom',
@@ -2114,7 +2114,8 @@ class SpedSomaImposto(models.Model):
 
         valores = res['value']
         valores.pop('id', None)
-        self.update({campo: valor for campo, valor in valores.iteritems() if campo in self._fields})
+        self.update({campo: valor for campo,
+                     valor in valores.iteritems() if campo in self._fields})
 
     def calcula_impostos(self):
         self.ensure_one()

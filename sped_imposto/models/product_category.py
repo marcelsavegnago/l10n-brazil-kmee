@@ -2,7 +2,7 @@
 # Copyright 2018 KMEE
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models, _
+from odoo import fields, models
 
 
 class ProductCategory(models.Model):
@@ -17,4 +17,3 @@ class ProductCategory(models.Model):
         string='Protocolo/Convênio',
         groups='sped_imposto.GRUPO_FISCAL_LEITURA',
     )
-

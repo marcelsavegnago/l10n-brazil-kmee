@@ -56,5 +56,5 @@ from . import inherited_account_payment_term
 # Cadastros básicos
 #
 from . import inherited_res_partner
-from . import inherited_sped_empresa
+from . import inherited_res_company
 from . import product_category

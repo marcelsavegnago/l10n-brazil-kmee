@@ -447,8 +447,6 @@ class SpedProtocoloICMS(models.Model):
         protocolo_aliquota_ids = self.aliquota_ids.search(
             busca, limit=1, order='data_inicio desc')
 
-
-
         if len(protocolo_aliquota_ids) != 0:
             if protocolo_aliquota_ids.infadic:
                 mensagem = protocolo_aliquota_ids.infadic

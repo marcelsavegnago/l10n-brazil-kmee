@@ -11,7 +11,6 @@ import logging
 
 from dateutil.relativedelta import relativedelta
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
 from odoo.addons.l10n_br_base.constante_tributaria import (
     FORMA_PAGAMENTO,
     BANDEIRA_CARTAO,
@@ -161,14 +160,12 @@ class AccountPaymentTerm(models.Model):
     )
     al_entrada = fields.Float(
         string='Percentual de entrada',
-        currency_field='currency_aliquota_id',
     )
     com_juros = fields.Boolean(
         string='Com juros?',
     )
     al_juros = fields.Float(
         string='Percentual de juros',
-        currency_field='currency_aliquota_id',
     )
     #
     # Campos para NF-e e SPED
@@ -292,11 +289,11 @@ class AccountPaymentTerm(models.Model):
         meses = D(self.meses or 1)
         res = []
 
-        if self.env.context.get('currency_id'):
-            currency = self.env['res.currency'].browse(
-                self.env.context['currency_id'])
-        else:
-            currency = self.env.user.company_id.currency_id
+        # if self.env.context.get('currency_id'):
+        #     currency = self.env['res.currency'].browse(
+        #         self.env.context['currency_id'])
+        # else:
+        #     currency = self.env.user.company_id.currency_id
 
         #
         # Tratamento do valor de entrada
@@ -482,6 +479,7 @@ class AccountPaymentTerm(models.Model):
         recs = self.browse()
 
         if not recs:
-            recs = self.search([('display_name', operator, name)] + args, limit=limit)
+            recs = self.search(
+                [('display_name', operator, name)] + args, limit=limit)
 
         return recs.name_get()

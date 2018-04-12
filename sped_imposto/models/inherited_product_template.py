@@ -80,7 +80,7 @@ class ProductTemplate(models.Model):
                     exige_fator_conversao_unidade_tributacao_ncm = (
                         product_template_id.uom_id.id !=
                         product_template_id.unidade_tributacao_ncm_id.id
-                )
+                    )
             else:
                 product_template_id.\
                     exige_fator_conversao_unidade_tributacao_ncm = False
@@ -102,7 +102,8 @@ class ProductTemplate(models.Model):
             product_template_id.exige_cest = True
 
             if len(product_template_id.ncm_id.cest_ids) == 1:
-                product_template_id.cest_id = product_template_id.ncm_id.cest_ids[0].id
+                product_template_id.cest_id = \
+                    product_template_id.ncm_id.cest_ids[0].id
 
     @api.depends('ncm_id')
     def _compute_exige_cest(self):

@@ -129,7 +129,8 @@ class SpedNCM(models.Model):
                 '|',
                 ('codigo', '=ilike', codigo + '%'),
                 '|',
-                ('codigo_formatado', '=ilike', mascara(codigo, '  .  .  .  ') + '%'),
+                ('codigo_formatado', '=ilike', mascara(
+                    codigo, '  .  .  .  ') + '%'),
                 ('descricao', 'ilike', name),
             ] + args
 

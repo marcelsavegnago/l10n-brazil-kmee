@@ -96,7 +96,7 @@ class SpedIBPTax(models.Model):
                     [('codigo', '=', codigo), ('ex', '=', ex)])
 
                 if len(ncm_ids) == 0:
-                    #dados = {
+                    # dados = {
                         #'codigo': codigo,
                         #'ex': ex,
                         #'descricao': descricao,
@@ -120,7 +120,7 @@ class SpedIBPTax(models.Model):
                 nbs_ids = sped_nbs.search([('codigo', '=', codigo)])
 
                 if len(nbs_ids) == 0:
-                    #dados = {
+                    # dados = {
                         #'codigo': codigo,
                         #'descricao': descricao,
                     #}
@@ -140,7 +140,7 @@ class SpedIBPTax(models.Model):
                 servico_ids = sped_servico.search([('codigo', '=', codigo)])
 
                 if len(servico_ids) == 0:
-                    #dados = {
+                    # dados = {
                         #'codigo': codigo,
                         #'descricao': descricao,
                     #}

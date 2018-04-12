@@ -399,27 +399,27 @@ class SpedCalculoImposto(object):
         self._compute_soma_itens()
 
     @api.depends('item_ids.vr_produtos', 'item_ids.vr_produtos_tributacao',
-                'item_ids.vr_frete', 'item_ids.vr_seguro',
-                'item_ids.vr_desconto', 'item_ids.vr_outras',
-                'item_ids.vr_operacao', 'item_ids.vr_operacao_tributacao',
-                'item_ids.bc_icms_proprio', 'item_ids.vr_icms_proprio',
-                'item_ids.vr_icms_desonerado',
-                'item_ids.vr_difal', 'item_ids.vr_icms_estado_origem',
-                'item_ids.vr_icms_estado_destino',
-                'item_ids.vr_fcp',
-                'item_ids.vr_icms_sn', 'item_ids.vr_simples',
-                'item_ids.bc_icms_st', 'item_ids.vr_icms_st',
-                'item_ids.bc_icms_st_retido', 'item_ids.vr_icms_st_retido',
-                'item_ids.bc_ipi', 'item_ids.vr_ipi',
-                'item_ids.bc_ii', 'item_ids.vr_ii',
-                'item_ids.vr_despesas_aduaneiras', 'item_ids.vr_iof',
-                'item_ids.bc_pis_proprio', 'item_ids.vr_pis_proprio',
-                'item_ids.bc_cofins_proprio', 'item_ids.vr_cofins_proprio',
-                'item_ids.bc_iss', 'item_ids.vr_iss',
-                'item_ids.vr_nf', 'item_ids.vr_fatura',
-                'item_ids.vr_ibpt',
-                'item_ids.vr_custo_comercial',
-                'item_ids.peso_bruto', 'item_ids.peso_liquido')
+                 'item_ids.vr_frete', 'item_ids.vr_seguro',
+                 'item_ids.vr_desconto', 'item_ids.vr_outras',
+                 'item_ids.vr_operacao', 'item_ids.vr_operacao_tributacao',
+                 'item_ids.bc_icms_proprio', 'item_ids.vr_icms_proprio',
+                 'item_ids.vr_icms_desonerado',
+                 'item_ids.vr_difal', 'item_ids.vr_icms_estado_origem',
+                 'item_ids.vr_icms_estado_destino',
+                 'item_ids.vr_fcp',
+                 'item_ids.vr_icms_sn', 'item_ids.vr_simples',
+                 'item_ids.bc_icms_st', 'item_ids.vr_icms_st',
+                 'item_ids.bc_icms_st_retido', 'item_ids.vr_icms_st_retido',
+                 'item_ids.bc_ipi', 'item_ids.vr_ipi',
+                 'item_ids.bc_ii', 'item_ids.vr_ii',
+                 'item_ids.vr_despesas_aduaneiras', 'item_ids.vr_iof',
+                 'item_ids.bc_pis_proprio', 'item_ids.vr_pis_proprio',
+                 'item_ids.bc_cofins_proprio', 'item_ids.vr_cofins_proprio',
+                 'item_ids.bc_iss', 'item_ids.vr_iss',
+                 'item_ids.vr_nf', 'item_ids.vr_fatura',
+                 'item_ids.vr_ibpt',
+                 'item_ids.vr_custo_comercial',
+                 'item_ids.peso_bruto', 'item_ids.peso_liquido')
     def _compute_soma_itens(self):
         CAMPOS_SOMA_ITENS = [
             'vr_produtos', 'vr_produtos_tributacao',
@@ -519,22 +519,22 @@ class SpedCalculoImposto(object):
             item.write({campo: valor})
             item.calcula_impostos()
 
-    #def _inverse_rateio_campo_al_desconto(self, tipo_item=None):
-        #self.ensure_one()
+    # def _inverse_rateio_campo_al_desconto(self, tipo_item=None):
+        # self.ensure_one()
 
         #campo_rateio = 'al_desconto'
         #campo_desconto = 'vr_desconto'
         #campo_total = 'vr_produtos'
 
-        #if tipo_item == 'P':
+        # if tipo_item == 'P':
             #campo_rateio = 'produtos_' + campo_rateio
             #campo_total = 'produtos_' + campo_total
             #campo_desconto = 'produtos_' + campo_desconto
-        #elif tipo_item == 'S':
+        # elif tipo_item == 'S':
             #campo_rateio = 'servicos_' + campo_rateio
             #campo_total = 'servicos_' + campo_total
             #campo_desconto = 'servicos_' + campo_desconto
-        #elif tipo_item == 'M':
+        # elif tipo_item == 'M':
             #campo_rateio = 'mensalidades_' + campo_rateio
             #campo_total = 'mensalidades_' + campo_total
             #campo_desconto = 'mensalidades_' + campo_desconto
@@ -558,9 +558,9 @@ class SpedCalculoImposto(object):
         self.ensure_one()
         self._inverse_rateio_campo_total('vr_outras')
 
-    #def _inverse_rateio_al_desconto(self):
-        #self.ensure_one()
-        #self._inverse_rateio_campo_al_desconto()
+    # def _inverse_rateio_al_desconto(self):
+        # self.ensure_one()
+        # self._inverse_rateio_campo_al_desconto()
 
     def _inverse_rateio_vr_desconto(self):
         self.ensure_one()
@@ -600,10 +600,10 @@ class SpedCalculoImposto(object):
             'modelo': operacao.modelo,
             'emissao': operacao.emissao,
             'partner_id': self.partner_id.id,
-            'condicao_pagamento_id': self.condicao_pagamento_id.id if \
-                self.condicao_pagamento_id else False,
-            'transportadora_id': self.transportadora_id.id if \
-                self.transportadora_id else False,
+            'condicao_pagamento_id': self.condicao_pagamento_id.id if
+            self.condicao_pagamento_id else False,
+            'transportadora_id': self.transportadora_id.id if
+            self.transportadora_id else False,
             'modalidade_frete': self.modalidade_frete,
         }
         dados.update(self.prepara_dados_documento())
@@ -634,7 +634,7 @@ class SpedCalculoImposto(object):
         for item in itens:
             ctx = item.env.context.copy()
             if isinstance(item.id, models.NewId) or \
-                            item._name != 'sped.documento.item':
+                    item._name != 'sped.documento.item':
                 #
                 #   Caso o registro seja um novo ID, geralmente vindo
                 # de outro documento do sistema, com herança python.
@@ -670,7 +670,6 @@ class SpedCalculoImposto(object):
                 }
 
                 documento_item = item
-
 
             ctx['gera_documento'] = True
             documento_item.with_context(ctx).calcula_impostos()

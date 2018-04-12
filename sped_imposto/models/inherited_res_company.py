@@ -10,11 +10,8 @@
 from __future__ import division, print_function, unicode_literals
 
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
 from odoo.addons.l10n_br_base.constante_tributaria import (
     AMBIENTE_NFE,
-    AMBIENTE_CFE,
-    INDICADOR_IE_DESTINATARIO_CONTRIBUINTE,
     REGIME_TRIBUTARIO_LUCRO_PRESUMIDO,
     REGIME_TRIBUTARIO_LUCRO_REAL,
     REGIME_TRIBUTARIO_SIMPLES,
@@ -22,26 +19,11 @@ from odoo.addons.l10n_br_base.constante_tributaria import (
     TIPO_EMISSAO_NFE,
     TIPO_EMISSAO_CFE,
     INDICADOR_PRESENCA_COMPRADOR,
-    INDICADOR_PRESENCA_COMPRADOR_NAO_SE_APLICA,
 )
 
 import logging
 
 _logger = logging.getLogger(__name__)
-
-try:
-    from pybrasil.inscricao import (
-        formata_cnpj, formata_cpf, limpa_formatacao,
-        formata_inscricao_estadual, valida_cnpj, valida_cpf,
-        valida_inscricao_estadual
-    )
-    from pybrasil.telefone import (
-        formata_fone, valida_fone_fixo, valida_fone_celular,
-        valida_fone_internacional
-    )
-
-except (ImportError, IOError) as err:
-    _logger.debug(err)
 
 
 class ResCompany(models.Model):

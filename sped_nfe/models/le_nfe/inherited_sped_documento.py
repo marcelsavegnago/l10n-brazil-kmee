@@ -569,8 +569,8 @@ class SpedDocumento(models.Model):
         retirada.xBairro.valor = self.endereco_retirada_id.bairro or ''
         retirada.cMun.valor = \
             self.endereco_retirada_id.l10n_br_city_id.ibge_code[:7]
-        retirada.xMun.valor = self.endereco_retirada_id.municipio_id.nome
-        retirada.UF.valor = self.endereco_retirada_id.municipio_id.estado_id.uf
+        retirada.xMun.valor = self.endereco_retirada_id.city
+        retirada.UF.valor = self.endereco_retirada_id.estado
 
         if self.endereco_retirada_id.cpf:
             if len(self.endereco_retirada_id.cpf) == 18:
@@ -591,8 +591,8 @@ class SpedDocumento(models.Model):
         entrega.xBairro.valor = self.endereco_entrega_id.bairro or ''
         entrega.cMun.valor = \
             self.endereco_entrega_id.l10n_br_city_id.ibge_code[:7]
-        entrega.xMun.valor = self.endereco_entrega_id.municipio_id.nome
-        entrega.UF.valor = self.endereco_entrega_id.municipio_id.estado_id.uf
+        entrega.xMun.valor = self.endereco_entrega_id.city
+        entrega.UF.valor = self.endereco_entrega_id.estado
 
         if self.endereco_entrega_id.cnpj_cpf:
             if len(self.endereco_entrega_id.cnpj_cpf) == 18:

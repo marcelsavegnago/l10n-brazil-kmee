@@ -128,7 +128,7 @@ class SpedDocumentoItem(models.Model):
             if self.produto_nome:
                 descricao = self.produto_nome
             else:
-                descricao = self.product_id.nome
+                descricao = self.product_id.name
 
         descricao = descricao.replace('—', '-').replace('–', '-')
         descricao = descricao.replace('”', '"').replace('“', '"')

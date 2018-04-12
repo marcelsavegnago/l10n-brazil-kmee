@@ -949,10 +949,10 @@ class SpedDocumento(SpedCalculoImposto, models.Model):
                 txt += ' - Consumidor não identificado'
 
             elif documento.partner_id.legal_name:
-                txt += ' - ' + documento.partner_id.razao_social
+                txt += ' - ' + documento.partner_id.legal_name
                 txt += ' - ' + documento.partner_id.cnpj_cpf
             else:
-                txt += ' - ' + documento.partner_id.nome
+                txt += ' - ' + documento.partner_id.name
                 txt += ' - ' + documento.partner_id.cnpj_cpf
 
             documento.descricao = txt

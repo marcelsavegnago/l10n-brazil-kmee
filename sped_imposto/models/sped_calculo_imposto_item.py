@@ -873,7 +873,6 @@ class SpedCalculoImpostoItem(object):
         string='Permite alteração?',
         compute='_compute_permite_alteracao',
     )
-
     tipo_item = fields.Selection(
         string='Produto ou serviço',
         selection=[
@@ -1199,7 +1198,7 @@ class SpedCalculoImpostoItem(object):
                             .format(
                                 protocolo=protocolo.descricao,
                                 estado=estado_destino,
-                                produto=self.product_id.nome,
+                                produto=self.product_id.name,
                                 ncm=self.product_id.ncm_id.codigo_formatado
                             )
                     else:
@@ -1210,7 +1209,7 @@ class SpedCalculoImpostoItem(object):
                             '(produto “{produto}”)!'\
                             .format(protocolo=protocolo.descricao,
                                     estado=estado_destino,
-                                    produto=self.product_id.nome)
+                                    produto=self.product_id.name)
 
                     raise ValidationError(_(mensagem_erro))
 
@@ -1446,7 +1445,7 @@ class SpedCalculoImpostoItem(object):
                             .format(
                                 protocolo=protocolo.descricao,
                                 estado=estado_destino,
-                                produto=self.product_id.nome,
+                                produto=self.product_id.name,
                                 ncm=self.product_id.ncm_id.codigo_formatado
                             )
                     else:
@@ -1457,7 +1456,7 @@ class SpedCalculoImpostoItem(object):
                             '(produto “{produto}”)!'\
                             .format(protocolo=protocolo.descricao,
                                     estado=estado_destino,
-                                    produto=self.product_id.nome)
+                                    produto=self.product_id.name)
 
                     raise ValidationError(_(mensagem_erro))
 

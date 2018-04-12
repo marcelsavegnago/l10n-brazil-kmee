@@ -875,7 +875,7 @@ class SpedSomaImposto(models.Model):
         # Se já ocorreu o preenchimento da descrição, não sobrepõe
         #
         if not self.produto_nome:
-            valores['produto_nome'] = self.product_id.nome
+            valores['produto_nome'] = self.product_id.name
 
         valores['org_icms'] = (self.product_id.org_icms or
                                ORIGEM_MERCADORIA_NACIONAL)
@@ -970,7 +970,7 @@ class SpedSomaImposto(models.Model):
                             .format(
                                 protocolo=protocolo.descricao,
                                 estado=estado_destino,
-                                produto=self.product_id.nome,
+                                produto=self.product_id.name,
                                 ncm=self.product_id.ncm_id.codigo_formatado
                             )
                     else:
@@ -981,7 +981,7 @@ class SpedSomaImposto(models.Model):
                             '(produto “{produto}”)!'\
                             .format(protocolo=protocolo.descricao,
                                     estado=estado_destino,
-                                    produto=self.product_id.nome)
+                                    produto=self.product_id.name)
 
                     raise ValidationError(_(mensagem_erro))
 

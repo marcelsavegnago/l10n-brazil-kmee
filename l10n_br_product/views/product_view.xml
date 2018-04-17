@@ -63,11 +63,11 @@
         />
 
     <menuitem
-        id="menu_product_supplierinfo_type"
+        id="menu_product_normal_action"
         sequence="400"
         name="Variantes"
         parent="menu_product_service"
-        action="product.product_supplierinfo_type_action"
+        action="product.product_normal_action"
         />
 
     <menuitem

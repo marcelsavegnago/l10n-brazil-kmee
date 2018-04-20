@@ -18,7 +18,7 @@
     'application': False,
     'license': 'AGPL-3',
     'data': [
-        'report/cfe_report.xml',
+        'report/mdfe_report.xml',
         'wizard/sped_documento_pagamento.xml',
         'security/ir.model.access.csv',
         'views/pdv_config.xml',

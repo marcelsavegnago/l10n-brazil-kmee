@@ -2601,6 +2601,9 @@ class SpedCalculoImpostoItem(SpedBase):
         #
         if self.vr_ii > 0:
             vr_nf += self.vr_icms_proprio
+            vr_nf += self.vr_ipi_proprio
+            vr_nf += self.vr_pis_proprio
+            vr_nf += self.vr_cofins_proprio
 
         self.vr_nf = vr_nf
 

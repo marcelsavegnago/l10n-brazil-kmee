@@ -29,7 +29,8 @@ try:
     from pybrasil.data import (parse_datetime, UTC, data_hora_horario_brasilia,
                                agora)
     from email_validator import validate_email
-    from pybrasil.telefone import valida_fone_fixo, valida_fone_celular
+    from pybrasil.telefone import valida_fone_fixo, valida_fone_celular, \
+        valida_fone
     from pybrasil.valor import formata_valor
     from pybrasil.valor.decimal import Decimal as D
     from pybrasil.template import TemplateBrasil
@@ -500,7 +501,7 @@ class SpedDocumento(models.Model):
         })
 
         if dest.enderDest.fone.valor:
-            if valida_fone_fixo(str(dest.enderDest.fone.valor)):
+            if valida_fone(str(dest.enderDest.fone.valor)):
                 dados['fone'] = str(dest.enderDest.fone.valor)
             elif valida_fone_celular(str(dest.enderDest.fone.valor)):
                 dados['celular'] = str(dest.enderDest.fone.valor)

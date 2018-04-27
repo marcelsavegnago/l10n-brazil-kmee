@@ -3,7 +3,7 @@
     <data>
         <menuitem id="menu_cadastro"
                   name="Cadastro"
-                  sequence="10"
+                  sequence="3"
                   web_icon="l10n_br_base,static/description/cadastro.png"
         />
 

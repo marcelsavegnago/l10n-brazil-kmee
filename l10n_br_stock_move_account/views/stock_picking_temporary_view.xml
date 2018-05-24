@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 ABGF - Luiz Felipe do Divino <luiz.divino@abgf.gov.br>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<openerp>
+    <data>
+
+         <record id="view_picking_temporary_form" model="ir.ui.view">
+            <field name="name">stock.picking.temporary.form</field>
+            <field name="model">stock.picking.temporary</field>
+            <field eval="12" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Transfer">
+                    <header>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="account_move_id" />
+                            <field name="stock_picking_id" />
+                        </group>
+                        <field name="line_ids" />
+                    </sheet>
+                </form>
+            </field>
+         </record>
+
+        <record id="view_picking_temporary_tree" model="ir.ui.view">
+            <field name="name">stock.picking.temporary.tree</field>
+            <field name="model">stock.picking.temporary</field>
+            <field name="priority" eval="2"/>
+            <field name="arch" type="xml">
+                <tree string="Stock Picking Temporary">
+                    <field name="account_move_id"/>
+                    <field name="line_ids"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_picking_temporary_line_form" model="ir.ui.view">
+            <field name="name">stock.picking.temporary.line.form</field>
+            <field name="model">stock.picking.temporary.line</field>
+            <field eval="12" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Transfer">
+                    <header>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="stock_picking_temporary_id" />
+                            <field name="product_id" />
+                            <field name="quantidade" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+         </record>
+
+        <record id="view_picking_temporary_line_tree" model="ir.ui.view">
+            <field name="name">stock.picking.temporary.line.tree</field>
+            <field name="model">stock.picking.temporary.line</field>
+            <field name="priority" eval="2"/>
+            <field name="arch" type="xml">
+                <tree string="Stock Picking Temporary Line">
+                    <field name="product_id"/>
+                    <field name="quantidade"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</openerp>

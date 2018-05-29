@@ -954,6 +954,15 @@ function l10n_br_pos_screens(instance, module) {
                             self.validar_cpf_nota();
                     }
                 });
+                this.add_action_button({
+                    label: _t('Enviar MFE'),
+                    name: 'enviar_mfe',
+                    icon: '/point_of_sale/static/src/img/icons/png48/validate.png',
+                    click: function () {
+                        var currentOrder = self.pos.get('selectedOrder');
+                        self.pos.proxy.enviar_pagamento(currentOrder);
+                    }
+                });
                 this.update_payment_summary();
             }
         },

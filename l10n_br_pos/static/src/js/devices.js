@@ -31,8 +31,35 @@ function l10n_br_pos_devices(instance, module) {
                 'printer_params': config.printer_params,
                 'assinatura': config.assinatura_sat,
             };
-            self.message('init',{json: j},{ timeout: 5000 })
+            self.message('init',{},{ timeout: 5000 })
+
+            var j = {
+                'sat_path': config.path_integrador,
+                'codigo_ativacao': config.cod_ativacao,
+                'impressora': config.impressora,
+                'printer_params': config.printer_params,
+                'assinatura': config.assinatura_sat,
+            };
+            self.message('init_mfe',[config.path_integrador,config.cod_ativacao, '1'],{ timeout: 5000 })
         },
+
+
+
+
+
+        enviar_pagamento: function(currentOrder){
+         var dict_order = {
+            'loja': currentOrder.pos.pos_session.user_id[1],
+            'cnpjsh': currentOrder.pos.config.cnpj_software_house,
+            'payment_mode': currentOrder.selected_paymentline.cashregister.journal.sat_payment_mode,
+            'amount': currentOrder.selected_paymentline.amount,
+        }
+          this.message('enviar_pagamento',{json:dict_order},{ timeout: 5000 })
+                        .then(function(result) {
+                            alert('TESTE');
+                        });
+        },
+
         send_order_sat: function(currentOrder, receipt, json){
             var self = this;
             if(receipt){
@@ -162,7 +189,11 @@ function l10n_br_pos_devices(instance, module) {
                             if(self.get('status').driver_statusstatus !== 'connecting'){
                                 self.set_connection_status('disconnected');
                             }
-                        }).always(function(){
+                        }
+
+
+
+                        ).always(function(){
                             setTimeout(status,5000);
                         });
                 }

@@ -51,14 +51,9 @@ function l10n_br_pos_devices(instance, module) {
 
 
         enviar_pagamento: function(currentOrder){
-         var dict_order = {
-            'loja': currentOrder.pos.pos_session.user_id[1],
-            'cnpjsh': currentOrder.pos.config.cnpj_software_house,
-            'payment_mode': currentOrder.selected_paymentline.cashregister.journal.sat_payment_mode,
-            'amount': currentOrder.selected_paymentline.amount,
-         };
          var json = currentOrder.export_for_printing();
          this.receipt_queue.push(json);
+         json['configs_sat'] = this.pos.config;
          var j = this.receipt_queue.shift();
          this.message('enviar_pagamento',{json: j},{ timeout: 5000 })
                         .then(function(result) {

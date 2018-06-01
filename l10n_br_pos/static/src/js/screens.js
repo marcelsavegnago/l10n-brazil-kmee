@@ -955,8 +955,8 @@ function l10n_br_pos_screens(instance, module) {
                     }
                 });
                 this.add_action_button({
-                    label: _t('Enviar MFE'),
-                    name: 'enviar_mfe',
+                    label: _t('Venda MFE'),
+                    name: 'venda_mfe',
                     icon: '/point_of_sale/static/src/img/icons/png48/validate.png',
                     click: function () {
                         var currentOrder = self.pos.get('selectedOrder');

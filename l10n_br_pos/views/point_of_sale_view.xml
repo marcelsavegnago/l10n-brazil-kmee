@@ -130,6 +130,7 @@
         </field>
         <field name="iface_print_via_proxy" position="after">
             <field name="iface_sat_via_proxy"/>
+            <field name="tipo_equipamento" invisible=""/>
         </field>
         <field name="simplified_invoice_type" position="after">
             <field name="lim_data_alteracao"/>

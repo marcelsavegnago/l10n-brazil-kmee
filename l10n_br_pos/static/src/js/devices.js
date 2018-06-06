@@ -30,6 +30,7 @@ function l10n_br_pos_devices(instance, module) {
                 'impressora': config.impressora,
                 'printer_params': config.printer_params,
                 'assinatura': config.assinatura_sat,
+                'tipo_equipamento': config.tipo_equipamento,
             };
             self.message('init',{json: j},{ timeout: 5000 })
         },

@@ -889,7 +889,6 @@ function l10n_br_pos_screens(instance, module) {
                         var retorno_sat = {};
                         if(this.pos.config.iface_sat_via_proxy){
                             this.pos_widget.action_bar.set_button_disabled('validation',true);
-                            this.pos_widget.action_bar.set_button_disabled('validation',true);
                             var receipt = currentOrder.export_for_printing();
                             var json = currentOrder.export_for_printing();
                             self.pos.proxy.send_order_sat(

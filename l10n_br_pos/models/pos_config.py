@@ -144,6 +144,10 @@ class PosConfig(models.Model):
     enviar_pedido_cupom_fiscal = fields.Boolean(
         string='Enviar pedido no cupom fiscal'
     )
+    tipo_equipamento = fields.Selection(
+        selection=[('sat', 'SAT'),('mfe', 'MFE')],
+        string='Tipo de Equipamento'
+    )
 
     @api.multi
     def retornar_dados(self):

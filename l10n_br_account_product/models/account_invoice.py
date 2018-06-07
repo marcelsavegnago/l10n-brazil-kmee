@@ -225,14 +225,18 @@ class AccountInvoice(models.Model):
             inv.issqn_value_wh = sum(line.issqn_wh_value for line
                                      in inv.invoice_line) \
                 if inv.issqn_wh else 0.0
+            inv.inss_base_wh = sum(line.inss_base for line
+                                   in inv.invoice_line) \
+                if inv.inss_wh else 0.0
             inv.inss_value_wh = sum(line.inss_wh_value for line
                                      in inv.invoice_line) \
                 if inv.inss_wh else 0.0
             inv.csll_value_wh = sum(line.csll_wh_value for line
                                      in inv.invoice_line) \
                 if inv.csll_wh else 0.0
-            inv.irrf_base_wh = sum(line.ir_base for line in inv.invoice_line
-                              if line.product_type == 'service')
+            inv.irrf_base_wh = sum(line.ir_base for line
+                                   in inv.invoice_line) \
+                if inv.irrf_wh else 0.0
             inv.irrf_value_wh = sum(line.ir_wh_value for line
                                      in inv.invoice_line) \
                 if inv.irrf_wh else 0.0
@@ -1291,11 +1295,12 @@ class AccountInvoice(models.Model):
                 'move_name': move.name,
             }
             inv.with_context(ctx).write(vals)
+
             # Pass invoice in context in method post: used if you want to
             # get the same
             # account move reference when creating the same invoice after
             #  a cancelled one:
-            move.post()
+            # move.post()
 
         #
         # Chamamos o action_move_create para manter a chamadas de outros
@@ -1383,7 +1388,8 @@ class AccountInvoice(models.Model):
             # financial_create = self.filtered(
             #     lambda invoice: invoice.revenue_expense)
             # financial_create.action_financial_create(move_lines_new)
-            invoice.action_financial_create()
+            if invoice.payment_term:
+                invoice.action_financial_create()
 
             # invoice.financial_ids.write({
             #     'document_number': invoice.name or
@@ -1464,6 +1470,12 @@ class AccountInvoice(models.Model):
 
 class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'
+
+    fiscal_type = fields.Selection(
+        string='Tipo Fiscal',
+        selection=PRODUCT_FISCAL_TYPE,
+        related='invoice_id.fiscal_type',
+    )
 
     @api.one
     @api.depends('price_unit', 'discount', 'invoice_line_tax_id', 'quantity',
@@ -1992,12 +2004,14 @@ class AccountInvoiceLine(models.Model):
 
     def _amount_tax_retir(self, tax=None):
         result = {
+            'ir_base': tax.get('total_base', 0.0),
             'ir_wh_value': tax.get('amount', 0.0),
         }
         return result
 
     def _amount_tax_retinss(self, tax=None):
         result = {
+            'inss_base': tax.get('total_base', 0.0),
             'inss_wh_value': tax.get('amount', 0.0),
         }
         return result
@@ -2207,11 +2221,18 @@ class AccountInvoiceLine(models.Model):
             return result
         product_obj = self.env['product.product'].browse(product)
         result['value']['name'] = product_obj.display_name
+        # if 'account_id' in result['value']:
+        #     conta_result = result['value']['account_id'] if result['value']['account_id'] else False
+        # else:
+        #     conta_result = False
+
+        conta_result = result['value'].get('account_id')
+
         result = self.with_context(ctx)._fiscal_position_map(
             result, partner_id=partner_id, partner_invoice_id=partner_id,
             company_id=company_id, product_id=product,
             fiscal_category_id=fiscal_category_id,
-            account_id=result['value']['account_id'])
+            account_id=conta_result)
         return result
 
     @api.onchange('fiscal_category_id',

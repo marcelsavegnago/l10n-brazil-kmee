@@ -35,33 +35,6 @@ function l10n_br_pos_devices(instance, module) {
             self.message('init',{json: j},{ timeout: 5000 })
         },
 
-        init_mfesat: function(config){
-            var self = this;
-            var j = {
-                'sat_path': config.sat_path,
-                'codigo_ativacao': config.cod_ativacao,
-                'impressora': config.impressora,
-                'printer_params': config.printer_params,
-                'assinatura': config.assinatura_sat,
-            };
-            self.message('init_mfe',{json: j},{ timeout: 5000 })
-        },
-
-
-
-
-
-        enviar_pagamento: function(currentOrder){
-         var json = currentOrder.export_for_printing();
-         this.receipt_queue.push(json);
-         json['configs_sat'] = this.pos.config;
-         var j = this.receipt_queue.shift();
-         this.message('enviar_pagamento',{json: j},{ timeout: 5000 })
-                        .then(function(result) {
-                            alert('TESTE');
-                        });
-        },
-
         send_order_sat: function(currentOrder, receipt, json){
             var self = this;
             if(receipt){
@@ -73,6 +46,8 @@ function l10n_br_pos_devices(instance, module) {
                 if (self.receipt_queue.length > 0){
                    var r = self.receipt_queue.shift();
                    var j = self.receipt_queue.shift();
+
+                   j['configs_sat'] = self.pos.config;
 
                    self.message('enviar_cfe_sat',{json: j},{ timeout: 5000 })
                         .then(function(result){
@@ -182,9 +157,6 @@ function l10n_br_pos_devices(instance, module) {
                 function status(){
                     self.connection.rpc('/hw_proxy/status_json',{},{timeout:2500})
                         .then(function(driver_status){
-                            if(!driver_status.hasOwnProperty("mfesat")){
-                                self.pos.proxy.init_mfesat(self.pos.config);
-                            }
                             if(!driver_status.hasOwnProperty("satcfe")){
                                 self.pos.proxy.init_sat(self.pos.config);
                             } else {

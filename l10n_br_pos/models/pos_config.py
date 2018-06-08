@@ -4,6 +4,7 @@
 
 from openerp import models, fields, api
 from openerp.addons import decimal_precision as dp
+from ..constantes import BANDEIRA_CARTAO
 
 SIMPLIFIED_INVOICE_TYPE = [
     ('nfce', u'NFC-E'),
@@ -147,6 +148,17 @@ class PosConfig(models.Model):
     tipo_equipamento = fields.Selection(
         selection=[('sat', 'SAT'),('mfe', 'MFE')],
         string='Tipo de Equipamento'
+    )
+
+    multiplos_pagamentos = fields.Boolean(
+        string=u'Habilitar Múltiplos Pagamentos',
+    )
+    anti_fraude = fields.Boolean(
+        string=u'Habilitar Anti-Fraude',
+    )
+    bandeira_cartao = fields.Selection(
+        selection=BANDEIRA_CARTAO,
+        string=u'Bandeira do Cartão',
     )
 
     @api.multi

@@ -127,6 +127,8 @@
             <field name="save_identity_automatic"/>
             <field name="cpf_nota"/>
             <field name="enviar_pedido_cupom_fiscal" />
+            <field name="multiplos_pagamentos" />
+            <field name="anti_fraude" />
         </field>
         <field name="iface_print_via_proxy" position="after">
             <field name="iface_sat_via_proxy"/>

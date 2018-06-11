@@ -632,8 +632,17 @@
                                     <group string="Detalhes do COFINS">
                                         <group>
                                             <field name="cofins_manual" invisible="True"/>
+<<<<<<< HEAD
                                             <field name="cofins_cst_id" attrs="{'required': [('fiscal_type','=', 'product')]}"/>
                                             <!--attrs="{'required': [('product_type','in', ('product', 'service'))]}"-->
+=======
+<<<<<<< HEAD
+                                            <field name="cofins_cst_id" attrs="{'required': [('product_type','in', ('product', 'service'))]}"/>
+=======
+                                            <field name="cofins_cst_id" attrs="{'required': [('fiscal_type','=', 'product')]}"/>
+                                            <!--attrs="{'required': [('product_type','in', ('product', 'service'))]}"-->
+>>>>>>> 45f4016... [FIX] Ajustes na view de NFe para digitação de NFs de Entrada
+>>>>>>> de87817... [FIX] Ajustes na view de NFe para digitação de NFs de Entrada
                                             <field name="cofins_type"/>
                                             <field name="cofins_base"/>
                                             <field name="cofins_wh_value" invisible="0"/>

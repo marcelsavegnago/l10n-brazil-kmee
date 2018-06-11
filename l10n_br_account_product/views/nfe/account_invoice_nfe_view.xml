@@ -632,12 +632,8 @@
                                     <group string="Detalhes do COFINS">
                                         <group>
                                             <field name="cofins_manual" invisible="True"/>
-<<<<<<< HEAD
-                                            <field name="cofins_cst_id" attrs="{'required': [('product_type','in', ('product', 'service'))]}"/>
-=======
                                             <field name="cofins_cst_id" attrs="{'required': [('fiscal_type','=', 'product')]}"/>
                                             <!--attrs="{'required': [('product_type','in', ('product', 'service'))]}"-->
->>>>>>> 45f4016... [FIX] Ajustes na view de NFe para digitação de NFs de Entrada
                                             <field name="cofins_type"/>
                                             <field name="cofins_base"/>
                                             <field name="cofins_wh_value" invisible="1"/>
@@ -722,7 +718,12 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form,calendar,graph</field>
             <field eval="False" name="view_id"/>
+<<<<<<< HEAD
             <field name="domain">[('fiscal_document_code', '=', '55')]</field>
+=======
+            <!--<field name="domain">[('fiscal_document_code', '=', '55')]</field>-->
+            <field name="domain"></field>
+>>>>>>> fe4493d... [FIX] Mostrar todas as NFs no menu Fiscal/NFe (não mostrava NFs de entrada digitadas)
             <field name="context">{'default_type':'out_invoice', 'type':'out_invoice', 'journal_type': 'sale', 'fiscal_document_code': '55', 'fiscal_type': 'product'}</field>
             <field name="search_view_id" ref="l10n_br_account_product_nfe_search"/>
             <field name="help" type="html">

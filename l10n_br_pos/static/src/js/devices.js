@@ -26,6 +26,7 @@ function l10n_br_pos_devices(instance, module) {
             var self = this;
             var j = {
                 'sat_path': config.sat_path,
+                'integrador_path': config.integrador_path,
                 'codigo_ativacao': config.cod_ativacao,
                 'impressora': config.impressora,
                 'printer_params': config.printer_params,
@@ -37,6 +38,9 @@ function l10n_br_pos_devices(instance, module) {
 
         send_order_sat: function(currentOrder, receipt, json){
             var self = this;
+
+            payment_line = currentOrder.export_as_JSON()
+
             if(receipt){
                 this.receipt_queue.push(receipt);
                 this.receipt_queue.push(json);
@@ -48,8 +52,9 @@ function l10n_br_pos_devices(instance, module) {
                    var j = self.receipt_queue.shift();
 
                    j['configs_sat'] = self.pos.config;
-
-                   self.message('enviar_cfe_sat',{json: j},{ timeout: 5000 })
+                   if ($('.id_fila').length > 0)
+                        j['id_fila'] = $('.id_fila')[0].value;
+                   self.message('enviar_cfe_sat',{json: j},{ timeout: 10000 })
                         .then(function(result){
                             if (typeof result === "string"){
                                 self.pos.pos_widget.screen_selector.show_popup('error-traceback',{

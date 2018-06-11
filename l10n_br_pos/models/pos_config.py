@@ -156,9 +156,13 @@ class PosConfig(models.Model):
     anti_fraude = fields.Boolean(
         string=u'Habilitar Anti-Fraude',
     )
-    bandeira_cartao = fields.Selection(
-        selection=BANDEIRA_CARTAO,
-        string=u'Bandeira do Cartão',
+
+    integrador_path = fields.Char(
+        string=u'Integrador path',
+    )
+
+    chave_acesso_validador = fields.Char(
+        string=u'Chave Acesso Validador',
     )
 
     @api.multi

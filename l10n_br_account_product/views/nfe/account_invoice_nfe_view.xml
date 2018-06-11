@@ -91,8 +91,8 @@
                             <field name="nfe_purpose" required="1"/>
                             <field name="fiscal_document_id" required="1"/>
                             <field name="document_serie_id" domain="[('fiscal_type','=','product'),('fiscal_document_id','=',fiscal_document_id),('company_id','=',company_id)]" attrs="{'invisible': [('issuer', '=', '1')], 'required': [('issuer', '=', '0')]}" />
-                            <field name="serie_nfe" attrs="{'invisible': [('issuer', '=', '0')], 'required': [('issuer', '=', '1')]}" />
                             <field name="issuer" attrs="{'invisible': [('type', '=', 'out_invoice')]}" />
+                            <field name="serie_nfe" attrs="{'invisible': [('issuer', '=', '0')]}" />
                             <field name="partner_id"
                                 on_change="onchange_partner_id(type, partner_id, date_invoice, payment_term, partner_bank_id, company_id, context)"
                                 context="{'search_default_customer':1, 'show_address': 1, 'fiscal_category_id': fiscal_category_id}"
@@ -606,8 +606,7 @@
                                     <group string="Detalhes do PIS">
                                         <group>
                                             <field name="pis_manual" invisible="True"/>
-                                            <field name="pis_cst_id"/>
-                                            <!--attrs="{'required': [('product_type','in', ('product', 'service'))]}"-->
+                                            <field name="pis_cst_id" attrs="{'required': [('fiscal_type','=', 'product')]}"/>
                                             <field name="pis_type"/>
                                             <field name="pis_base"/>
                                         </group>
@@ -632,8 +631,7 @@
                                     <group string="Detalhes do COFINS">
                                         <group>
                                             <field name="cofins_manual" invisible="True"/>
-                                            <field name="cofins_cst_id"/>
-                                            <!--attrs="{'required': [('product_type','in', ('product', 'service'))]}"-->
+                                            <field name="cofins_cst_id" attrs="{'required': [('fiscal_type','=', 'product')]}"/>
                                             <field name="cofins_type"/>
                                             <field name="cofins_base"/>
                                             <field name="cofins_wh_value" invisible="0"/>

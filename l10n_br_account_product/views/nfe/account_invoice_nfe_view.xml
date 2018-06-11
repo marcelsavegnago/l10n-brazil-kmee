@@ -735,6 +735,7 @@
             <field name="view_mode">tree,form,calendar,graph</field>
             <field eval="False" name="view_id"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
             <!--<field name="domain">[('fiscal_document_code', '=', '55')]</field>-->
 =======
 <<<<<<< HEAD
@@ -744,6 +745,10 @@
             <field name="domain"></field>
 >>>>>>> fe4493d... [FIX] Mostrar todas as NFs no menu Fiscal/NFe (não mostrava NFs de entrada digitadas)
 >>>>>>> 22adac2... [FIX] Mostrar todas as NFs no menu Fiscal/NFe (não mostrava NFs de entrada digitadas)
+=======
+            <!--<field name="domain">[('fiscal_document_code', '=', '55')]</field>-->
+            <field name="domain" />
+>>>>>>> 1c3c155... [FIX] Força a limpar o campo domain do action da NF-e
             <field name="context">{'default_type':'out_invoice', 'type':'out_invoice', 'journal_type': 'sale', 'fiscal_document_code': '55', 'fiscal_type': 'product'}</field>
             <field name="search_view_id" ref="l10n_br_account_product_nfe_search"/>
             <field name="help" type="html">

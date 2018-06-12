@@ -2014,7 +2014,11 @@ class AccountInvoiceLine(models.Model):
 
     def _amount_tax_retinss(self, tax=None):
         result = {
+<<<<<<< HEAD
             'inss_base': tax.get('total_base', 0.0),
+=======
+            'inss_base_wh': tax.get('base', 0.0),
+>>>>>>> 30b9c24... [FIX] Adicionado base do inss retido
             'inss_wh_value': tax.get('amount', 0.0),
         }
         return result

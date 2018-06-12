@@ -1998,6 +1998,7 @@ class AccountInvoiceLine(models.Model):
 
     def _amount_tax_retinss(self, tax=None):
         result = {
+            'inss_base_wh': tax.get('base', 0.0),
             'inss_wh_value': tax.get('amount', 0.0),
         }
         return result

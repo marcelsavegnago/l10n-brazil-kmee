@@ -1152,7 +1152,9 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def action_move_create(self):
+        return True
 
+<<<<<<< HEAD
         account_invoice_tax = self.env['account.invoice.tax']
         account_move = self.env['account.move']
         sped_account_move_template = self.env['sped.account.move.template']
@@ -1301,6 +1303,159 @@ class AccountInvoice(models.Model):
             # account move reference when creating the same invoice after
             #  a cancelled one:
             # move.post()
+=======
+        # # Todo o resto foi comentado para evitar criar lançamento financeiros por enquanto
+        # # Wagner Pereira
+        # #
+        # account_invoice_tax = self.env['account.invoice.tax']
+        # account_move = self.env['account.move']
+        # sped_account_move_template = self.env['sped.account.move.template']
+        #
+        # for inv in self:
+        #     if not inv.journal_id.sequence_id:
+        #         raise ValidationError(_('Error!'), _(
+        #             'Please define sequence on the journal related to this invoice.'))
+        #     if not inv.invoice_line:
+        #         raise ValidationError(_('No Invoice Lines!'), _(
+        #             'Please create some invoice lines.'))
+        #     if inv.move_id:
+        #         continue
+        #
+        #     ctx = dict(self._context, lang=inv.partner_id.lang)
+        #
+        #     company_currency = inv.company_id.currency_id
+        #     if not inv.date_invoice:
+        #         # FORWARD-PORT UP TO SAAS-6
+        #         if inv.currency_id != company_currency and inv.tax_line:
+        #             raise ValidationError(
+        #                 _('Warning!'),
+        #                 _('No invoice date!'
+        #                     '\nThe invoice currency is not the same than the '
+        #                   'company currency.'
+        #                     ' An invoice date is required to determine '
+        #                   'the exchange rate to apply. Do not forget to update'
+        #                   ' the taxes!'
+        #                 )
+        #             )
+        #         inv.with_context(ctx).write(
+        #             {'date_invoice': fields.Date.context_today(self)})
+        #     date_invoice = inv.date_invoice
+        #
+        #     # create the analytical lines, one move line per invoice line
+        #     iml = inv._get_analytic_lines()
+        #     # check if taxes are all computed
+        #     compute_taxes = account_invoice_tax.compute(
+        #         inv.with_context(lang=inv.partner_id.lang))
+        #     inv.check_tax_lines(compute_taxes)
+        #
+        #     # I disabled the check_total feature
+        #     if self.env.user.has_group(
+        #             'account.group_supplier_inv_check_total'):
+        #         if (inv.type in ('in_invoice', 'in_refund') and
+        #                 abs(inv.check_total - inv.amount_total) >=
+        #                 (inv.currency_id.rounding / 2.0)):
+        #             raise ValidationError(_('Bad Total!'), _(
+        #                 'Please verify the price of the invoice!\nThe encoded'
+        #                 ' total does not match the computed total.'))
+        #
+        #     # Force recomputation of tax_amount, since the rate potentially changed between creation
+        #     # and validation of the invoice
+        #     inv._recompute_tax_amount()
+        #
+        #     if inv.type in ('in_invoice', 'in_refund'):
+        #         ref = inv.reference
+        #     else:
+        #         ref = inv.number
+        #
+        #     diff_currency = inv.currency_id != company_currency
+        #     # create one move line for the total and possibly adjust the other lines amount
+        #     total, total_currency, iml = inv.with_context(
+        #         ctx).compute_invoice_totals(company_currency, ref, iml)
+        #
+        #     name = inv.supplier_invoice_number or inv.name or '/'
+        #
+        #     date = date_invoice
+        #
+        #     part = self.env['res.partner']._find_accounting_partner(
+        #         inv.partner_id)
+        #
+        #     line_id = []
+        #
+        #     move_vals = {
+        #         'ref': inv.reference or inv.supplier_invoice_number or inv.name,
+        #         'line_id': line_id,
+        #         'journal_id': inv.journal_id.id,
+        #         'partner_id': inv.partner_id.id,
+        #         'date': inv.date_invoice,
+        #         # 'date': inv.date_in_out,
+        #         'company_id': inv.company_id.id,
+        #         'narration': inv.comment,
+        #         'company_id': inv.company_id.id,
+        #
+        #     }
+        #
+        #     template_nao_contabilizados = set()
+        #     #
+        #     # Contabiliza as linhas e retorna os templates não contabilizados
+        #     #
+        #     for invoice_line in inv.invoice_line:
+        #         move_template = invoice_line.account_move_template_id
+        #         invoice_line.gera_account_move_line(
+        #             line_id, template_nao_contabilizados, move_template)
+        #
+        #     #import ipdb; ipdb.set_trace();
+        #     #
+        #     # Contabiliza os campos do cabeçalho do documento
+        #     #
+        #     inv.gera_account_move_line(
+        #         line_id, template_nao_contabilizados
+        #     )
+        #
+        #     #
+        #     # Agrupa os laçamentos contábeis
+        #     #
+        #
+        #     # line = inv.group_lines(iml, line)
+        #
+        #     journal = inv.journal_id.with_context(ctx)
+        #     if journal.centralisation:
+        #         raise ValidationError(
+        #             _('User Error!'),
+        #             _('You cannot create an invoice on a centralized journal.'
+        #               ' Uncheck the centralized counterpart box in the related'
+        #               ' journal from the configuration menu.'))
+        #
+        #     # line = inv.finalize_invoice_move_lines(line_id)
+        #
+        #     ctx['company_id'] = inv.company_id.id
+        #     period = inv.period_id
+        #     # if not period:
+        #     #     period = period.with_context(ctx).find(date_invoice)[:1]
+        #     # if period:
+        #     #     move_vals['period_id'] = period.id
+        #     #     for i in line:
+        #     #         i[2]['period_id'] = period.id
+        #
+        #     ctx['invoice'] = inv
+        #     ctx_nolang = ctx.copy()
+        #     ctx_nolang.pop('lang', None)
+        #
+        #     move = account_move.with_context(ctx_nolang).create(move_vals)
+        #
+        #     # make the invoice point to that move
+        #     vals = {
+        #         'move_id': move.id,
+        #         'period_id': period.id,
+        #         'move_name': move.name,
+        #     }
+        #     inv.with_context(ctx).write(vals)
+        #
+        #     # Pass invoice in context in method post: used if you want to
+        #     # get the same
+        #     # account move reference when creating the same invoice after
+        #     #  a cancelled one:
+        #     # move.post()
+>>>>>>> cceb051... [FIX] Ajustes para permitir digitar a NF de entrada para o Reinf (somente não deixa rodar partes que dão problema, não as corrige)
 
         #
         # Chamamos o action_move_create para manter a chamadas de outros
@@ -1378,6 +1533,7 @@ class AccountInvoice(models.Model):
     #
     #     return move_lines_new
 
+<<<<<<< HEAD
     # Comentado por Wagner Pereira para não gerar Financeiro de NF de entrada com retenção (não balanceia o
     # total da NF pois falta o lançamento financeiro das retenções).
     #
@@ -1421,6 +1577,48 @@ class AccountInvoice(models.Model):
     #             financial_move = \
     #                 self.env['financial.move'].create(dados)
     #             financial_move.action_confirm()
+=======
+    @api.multi
+    def invoice_validate(self):
+        super(AccountInvoice, self).invoice_validate()
+        for invoice in self:
+            #
+            #  Geração dos lançamentos financeiros
+            #
+            # financial_create = self.filtered(
+            #     lambda invoice: invoice.revenue_expense)
+            # financial_create.action_financial_create(move_lines_new)
+            if invoice.payment_term:
+                invoice.action_financial_create()
+
+            # invoice.financial_ids.write({
+            #     'document_number': invoice.name or
+            #                        invoice.move_id.name or '/'})
+            # invoice.financial_ids.action_confirm()
+
+    def action_financial_create(self):
+        """ Cria o lançamento financeiro do documento fiscal
+        :return:
+        """
+        for documento in self:
+            if documento.state not in 'open':
+                continue
+
+            # if documento.emissao == TIPO_EMISSAO_PROPRIA and \
+            #     documento.entrada_saida == ENTRADA_SAIDA_ENTRADA:
+            #     continue
+
+            #
+            # Temporariamente, apagamos todos os lançamentos anteriores
+            #
+                documento.financial_ids.unlink()
+
+            for duplicata in documento.duplicata_ids:
+                dados = duplicata.prepara_financial_move()
+                financial_move = \
+                    self.env['financial.move'].create(dados)
+                financial_move.action_confirm()
+>>>>>>> cceb051... [FIX] Ajustes para permitir digitar a NF de entrada para o Reinf (somente não deixa rodar partes que dão problema, não as corrige)
 
     @api.onchange('payment_term', 'date_invoice', 'amount_net',
                   'amount_total', 'duplicata_ids')
@@ -2015,10 +2213,14 @@ class AccountInvoiceLine(models.Model):
     def _amount_tax_retinss(self, tax=None):
         result = {
 <<<<<<< HEAD
+<<<<<<< HEAD
             'inss_base': tax.get('total_base', 0.0),
 =======
             'inss_base_wh': tax.get('base', 0.0),
 >>>>>>> 30b9c24... [FIX] Adicionado base do inss retido
+=======
+            'inss_base': tax.get('total_base', 0.0),
+>>>>>>> cceb051... [FIX] Ajustes para permitir digitar a NF de entrada para o Reinf (somente não deixa rodar partes que dão problema, não as corrige)
             'inss_wh_value': tax.get('amount', 0.0),
         }
         return result
@@ -2228,6 +2430,7 @@ class AccountInvoiceLine(models.Model):
             return result
         product_obj = self.env['product.product'].browse(product)
         result['value']['name'] = product_obj.display_name
+<<<<<<< HEAD
         # if 'account_id' in result['value']:
         #     conta_result = result['value']['account_id'] if result['value']['account_id'] else False
         # else:
@@ -2235,6 +2438,10 @@ class AccountInvoiceLine(models.Model):
 
         conta_result = result['value'].get('account_id')
 
+=======
+
+        conta_result = result['value'].get('account_id')
+>>>>>>> cceb051... [FIX] Ajustes para permitir digitar a NF de entrada para o Reinf (somente não deixa rodar partes que dão problema, não as corrige)
         result = self.with_context(ctx)._fiscal_position_map(
             result, partner_id=partner_id, partner_invoice_id=partner_id,
             company_id=company_id, product_id=product,

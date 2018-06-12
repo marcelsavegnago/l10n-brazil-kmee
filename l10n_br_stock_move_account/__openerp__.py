@@ -14,6 +14,7 @@
     ],
     'data': [
         'security/ir.model.access.csv',
+        'views/res_company_view.xml',
         'views/stock_picking_view.xml',
     ],
     'demo': [],

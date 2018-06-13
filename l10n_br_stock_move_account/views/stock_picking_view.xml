@@ -10,7 +10,11 @@
                 <xpath expr="//page[@string='Additional Info']" position="after">
                     <page string="Contabilidade">
                         <separator string="Movimentações Contábeis" />
-                        <field name="account_move_ids" />
+                        <group>
+                            <field name="journal_id" />
+                            <field name="period_id" />
+                        </group>
+                        <field name="account_move_ids" options="{'no_create': True}"/>
                     </page>
                 </xpath>
             </field>

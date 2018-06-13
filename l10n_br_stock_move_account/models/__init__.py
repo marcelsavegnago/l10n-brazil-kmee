@@ -5,3 +5,4 @@
 from . import res_company
 from . import stock_picking
 from . import account_move
+from . import sped_account_move_template_item

@@ -1485,7 +1485,7 @@ class AccountInvoiceLine(models.Model):
     @api.depends('price_unit', 'discount', 'invoice_line_tax_id', 'quantity',
                  'product_id', 'invoice_id.partner_id', 'freight_value',
                  'insurance_value', 'other_costs_value',
-                 'invoice_id.currency_id')
+                 'invoice_id.currency_id', 'inss_base_wh_reducao')
     def _compute_price(self):
         price = self.price_unit * (1 - (self.discount or 0.0) / 100.0)
         taxes = self.invoice_line_tax_id.compute_all(
@@ -1808,6 +1808,8 @@ class AccountInvoiceLine(models.Model):
                                  digits_compute=dp.get_precision('Discount'))
     cofins_wh_value = fields.Float('Valor COFINS retido', default=0.0,
                                  digits_compute=dp.get_precision('Discount'))
+    inss_base_wh_reducao = fields.Float('Redução Base da Retenção do INSS',
+                                        digits_compute=dp.get_precision('Discount'))
     inss_wh_value = fields.Float('Valor INSS retido', default=0.0,
                                  digits_compute=dp.get_precision('Discount'))
     vr_custo_comercial = fields.Float(
@@ -2014,9 +2016,16 @@ class AccountInvoiceLine(models.Model):
         return result
 
     def _amount_tax_retinss(self, tax=None):
+        base = tax.get('total_base', 0.0)
+        valor = tax.get('amount', 0.0)
+        percentual = 0.0
+        if base:
+            percentual = valor / base
+        base -= self.inss_base_wh_reducao
+        valor = base * percentual
         result = {
-            'inss_base': tax.get('total_base', 0.0),
-            'inss_wh_value': tax.get('amount', 0.0),
+            'inss_base': base,
+            'inss_wh_value': valor,
         }
         return result
 
@@ -2124,7 +2133,8 @@ class AccountInvoiceLine(models.Model):
             fiscal_position=fiscal_position,
             insurance_value=insurance_value,
             freight_value=freight_value,
-            other_costs_value=other_costs_value)
+            other_costs_value=other_costs_value,
+        )
 
         result['total_taxes'] = taxes_calculed['total_taxes']
 
@@ -2242,7 +2252,9 @@ class AccountInvoiceLine(models.Model):
                   'discount',
                   'insurance_value',
                   'freight_value',
-                  'other_costs_value')
+                  'other_costs_value',
+                  'inss_base_wh_reducao',
+                  )
     def onchange_fiscal(self):
         ctx = dict(self.env.context)
         if self.invoice_id.type in ('out_invoice', 'out_refund'):

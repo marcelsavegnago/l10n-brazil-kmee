@@ -8,15 +8,12 @@ from openerp import api, models, fields
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
-    stock_move_journal_id = fields.Many2one(
-        string='Diário para Movimentações de Estoque',
-        comodel_name='account.journal',
+    active_stock_move_account = fields.Boolean(
+        string='Lançamentos Contábeis Movimentações Estoque',
+        default=False
     )
-    stock_move_account_income = fields.Many2one(
-        string='Conta de Receita',
-        comodel_name='account.account',
-    )
-    stock_move_account_outcome = fields.Many2one(
-        string='Conta de Despesa',
-        comodel_name='account.account',
+
+    account_move_template_id = fields.Many2one(
+        string='Modelo de partida dobrada',
+        comodel_name='sped.account.move.template'
     )

@@ -12,9 +12,8 @@
             <field name="arch" type="xml">
                 <xpath expr="//group[@string='Configurações de Estoque']" position="after">
                     <group string="Contabilidade Movimentações de Estoque">
-                        <field name="stock_move_journal_id" />
-                        <field name="stock_move_account_income" />
-                        <field name="stock_move_account_outcome" />
+                        <field name="active_stock_move_account" />
+                        <field name="account_move_template_id" attrs="{'required': [('active_stock_move_account', '=', True)]}"/>
                     </group>
                 </xpath>
             </field>

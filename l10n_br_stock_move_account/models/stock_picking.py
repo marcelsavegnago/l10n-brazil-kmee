@@ -21,10 +21,14 @@ class StockPicking(models.Model):
         comodel_name='account.period',
     )
 
-    account_move_ids = fields.One2many(
-        string='Movimentações Contábeis',
+    temporary_move_id = fields.Many2one(
+        string='Movimentações Contábeis Temporário',
         comodel_name='account.move',
-        inverse_name='picking_id',
+    )
+
+    definitive_move_id = fields.Many2one(
+        string='Movimentações Contábeis Definitivo',
+        comodel_name='account.move',
     )
 
     @api.multi
@@ -57,17 +61,24 @@ class StockPicking(models.Model):
                       (is_draft and not is_incoming)
 
     @api.multi
+    def _validar_tipo_picking(self):
+        if self.code != 'incoming':
+            return False
+
+        if self.company_id.active_stock_move_account:
+            self._validar_configuracoes_movimentacao_transitoria(
+                self.company_id.account_move_template_id
+            )
+        else:
+            return False
+
+        return True
+
+    @api.multi
     def gera_movimentacao_contabil_transitoria(self):
         for stock in self:
-            if stock.code != 'incoming':
-                return
-
-            if stock.company_id.active_stock_move_account:
-                move_template = stock.company_id.account_move_template_id
-                self._validar_configuracoes_movimentacao_transitoria(
-                    move_template, stock
-                )
-
+            if stock._validar_tipo_picking():
+                move_template = self.company_id.account_move_template_id
                 account_move_lines = []
 
                 self.gera_account_move_line(
@@ -75,20 +86,22 @@ class StockPicking(models.Model):
                 )
 
                 if account_move_lines:
-                    move_vals = self.get_account_move_stock_vals(
-                        account_move_lines, stock)
+                    move_vals = stock.get_account_move_stock_vals(
+                        account_move_lines
+                    )
 
-                    self.env['account.move'].create(move_vals)
+                    move = self.env['account.move'].create(move_vals)
 
-    def get_account_move_stock_vals(self, account_move_lines, stock):
+                    stock.temporary_move_id = move
+
+    def get_account_move_stock_vals(self, account_move_lines):
         move_vals = {
-            'ref': stock.name,
+            'ref': self.name,
             'line_id': account_move_lines,
-            'journal_id': stock.journal_id.id,
-            'partner_id': stock.partner_id.id,
-            'date': stock.date,
-            'company_id': stock.company_id.id,
-            'picking_id': stock.id,
+            'journal_id': self.journal_id.id,
+            'partner_id': self.partner_id.id,
+            'date': self.date,
+            'company_id': self.company_id.id,
         }
         return move_vals
 
@@ -114,12 +127,10 @@ class StockPicking(models.Model):
                 if account_debito is not None:
                     dados = {
                         'account_id': account_debito.id,
-                        # 'move_id': account_move.id,
-                        # 'sped_documento_item_id': self.id,
                         'name': line.product_id.name,
                         'narration': template_item.campo,
                         'debit': valor_total,
-                        # 'currency_id': self.invoice_id.currency_id.id,
+                        'partner_id': line.picking_id.partner_id.id,
                     }
                     account_move_lines.append((0, 0, dados))
 
@@ -135,29 +146,72 @@ class StockPicking(models.Model):
                 if account_credito is not None:
                     dados = {
                         'account_id': account_credito.id,
-                        # 'move_id': account_move.id,
-                        # 'sped_documento_item_id': self.id,
                         'name': line.product_id.name,
                         'narration': template_item.campo,
                         'credit': valor_total,
-                        # 'currency_id': self.invoice_id.currency_id.id,
+                        'partner_id': line.picking_id.partner_id.id,
                     }
                     account_move_lines.append((0, 0, dados))
 
     def _validar_configuracoes_movimentacao_transitoria(
-            self, move_template, stock):
+            self, move_template):
         if not move_template:
             raise Warning(
                 'É necessário escolher um modelo de partida dobrada '
                 'para gerar a movimentação temporária!'
             )
-        if not stock.journal_id:
+        if not self.journal_id:
             raise Warning(
                 'É necessário escolher um diário para gerar a '
                 'movimentação temporária!'
             )
-        if not stock.period_id:
+        if not self.period_id:
             raise Warning(
                 'É necessário escolher o periodo de vigencia para '
                 'gerar a movimentação temporária!'
             )
+
+    @api.multi
+    def gerar_lancamento_recebimento_definitivo(self):
+        for stock in self:
+            if stock._validar_tipo_picking():
+                if stock.temporary_move_id:
+                    account_move_lines = []
+                    for line in stock.temporary_move_id.line_id:
+                        if line.debit:
+                            dados = {
+                                'account_id': line.account_id.id,
+                                'name': line.name,
+                                'narration': 'teste',
+                                'credit': line.debit,
+                                'partner_id': line.partner_id.id,
+                            }
+                            account_move_lines.append((0, 0, dados))
+
+                        if line.credit:
+                            product_id = self.env['product.product'].search(
+                                [('name', '=', line.name)]
+                            )
+                            if not product_id.property_account_expense:
+                                raise Warning(
+                                    'É preciso configurar as contas de '
+                                    'despesa/receita do(s) produto(s)!'
+                                )
+                            dados = {
+                                'account_id':
+                                    product_id.property_account_expense.id,
+                                'name': line.name,
+                                'narration': 'teste',
+                                'debit': line.credit,
+                                'partner_id': line.partner_id.id,
+                            }
+                            account_move_lines.append((0, 0, dados))
+
+                    if account_move_lines:
+                        move_vals = stock.get_account_move_stock_vals(
+                            account_move_lines
+                        )
+
+                        move = self.env['account.move'].create(move_vals)
+
+                        stock.definitive_move_id = move

@@ -13,8 +13,9 @@
                         <group>
                             <field name="journal_id" />
                             <field name="period_id" />
+                            <field name="temporary_move_id" />
+                            <field name="definitive_move_id" />
                         </group>
-                        <field name="account_move_ids" options="{'no_create': True}"/>
                     </page>
                 </xpath>
             </field>

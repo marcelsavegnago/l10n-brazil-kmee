@@ -392,6 +392,17 @@ class AccountInvoice(models.Model):
         store=True,
         digits=dp.get_precision('Account'),
         compute='_compute_amount')
+    amount_change = fields.Float(
+        string='Total de Tributos',
+        store=True,
+        digits=dp.get_precision('Account'),
+        compute='_compute_amount')
+    account_payment_ids = fields.One2many(
+        string='Duplicatas/Pagamentos',
+        comodel_name='account.invoice.payment',
+        inverse_name='invoice_id',
+    )
+
     type_nf_payment = fields.Selection([
         ('01', u'01 - Dinheiro'),
         ('02', u'02 - Cheque'),

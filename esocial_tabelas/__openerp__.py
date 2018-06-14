@@ -3,22 +3,20 @@
 # Copyright 2017 KMEE - Átila Graciano <atilla.silva@kmee.com.br>
 # Copyright 2017 KMEE - Bianca Bartolomei <bianca.bartolomei@kmee.com.br>
 # Copyright 2017 KMEE - Wagner Pereira <wagner.pereira@kmee.com.br>
+# Copyright 2018 ABGF - Wagner Pereira <wagner.pereira@abgf.gov.br>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'eSocial - Brasil',
+    'name': 'Tabelas SPED Gerais',
     'summary': """
-        Implementa todos os ajustes necessários ao Odoo para suportar os
-        serviços do eSocial brasileiro.
+        Implementa as tabelas fixas do SPED (e-Social e EFD/REINF)
         """,
-    'version': '11.0.1.0.0',
+    'version': '8.0.0.1.0',
     'category': 'Hidden',
     'license': 'AGPL-3',
-    'author': 'KMEE,Odoo Community Association (OCA)',
-    'website': 'www.odoobrasil.org.br',
-    'depends': [
-        'l10n_br_base',
-    ],
+    'author': 'KMEE & ABGF',
+    'website': 'www.odoobrasil.org.br, www.abgf.gov.br',
+    'depends': [],
     'external_dependencies': {
         'python': [
             'pybrasil',
@@ -26,17 +24,15 @@
     },
     'data': [
         # Segurança
-        'security/esocial_security.xml',
+        'security/security.xml',
         'security/ir.model.access.csv',
 
         # Menu base
         'views/menus.xml',
 
-        # Cadastro de Empresas para e-Social
-        'views/inherit_sped_empresa.xml',
-        'views/lote.xml',
-
-        # Tabelas do e-Social
+        # Tabelas
+        'views/classificacao_servico.xml',
+        'views/classificacao_tributaria.xml',
         'views/codigo_aliquota_FPAS.xml',
         'views/categoria_trabalhador.xml',
         'views/financiamento_aposentadoria.xml',
@@ -50,7 +46,6 @@
         'views/tipo_dependente.xml',
         'views/tipo_lotacao_tributaria.xml',
         'views/motivo_afastamento.xml',
-        'views/tipo_arquivo_esocial.xml',
         'views/motivo_desligamento.xml',
         'views/tipo_logradouro.xml',
         'views/natureza_juridica.xml',
@@ -58,9 +53,11 @@
         'views/tipo_beneficio.xml',
         'views/codificacao_acidente_trabalho.xml',
         'views/fatores_meio_ambiente.xml',
+
+        # Data
+        'data/classificacao_servico.xml',
         'data/classificacao_tributaria.xml',
         'data/natureza_lesao.xml',
-        'data/tipo_arquivo_esocial.xml',
         'data/tipo_lotacao_tributaria.xml',
         'data/categoria_trabalhador.xml',
         'data/financiamento_aposentadoria.xml',

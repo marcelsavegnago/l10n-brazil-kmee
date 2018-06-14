@@ -11,6 +11,10 @@ from openerp.addons.l10n_br_account_product.constantes import \
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
+    @api.multi
+    def _get_period(self):
+        return self.env['account.move']._get_period()
+
     journal_id = fields.Many2one(
         string='Diário',
         comodel_name='account.journal',
@@ -19,6 +23,7 @@ class StockPicking(models.Model):
     period_id = fields.Many2one(
         string='Periodo',
         comodel_name='account.period',
+        default=_get_period
     )
 
     temporary_move_id = fields.Many2one(
@@ -34,6 +39,9 @@ class StockPicking(models.Model):
     @api.multi
     def action_confirm(self):
         stock_id = super(StockPicking, self).action_confirm()
+
+        if self.company_id.temporary_account_journal_id:
+            self.journal_id = self.company_id.temporary_account_journal_id.id
 
         self.gera_movimentacao_contabil_transitoria()
 

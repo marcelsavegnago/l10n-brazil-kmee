@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2017 KMEE
+    Copyright 2017 KMEE - Wagner Pereira <wagner.pereira@kmee.com.br>
+    License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
+-->
+<odoo>
+  <record id="tab09_S-1000" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1000</field>
+    <field name='descricao'>Informações do Empregador/Contribuinte/Órgão Público</field>
+  </record>
+    
+  <record id="tab09_S-1005" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1005</field>
+      <field name='descricao'>Tabela de Estabelecimentos, Obras de Construção Civil ou Unidades de Órgãos Públicos</field>
+  </record>
+    
+  <record id="tab09_S-1010" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1010</field>
+    <field name='descricao'>Tabela de Rubricas</field>
+  </record>
+    
+  <record id="tab09_S-1020" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1020</field>
+    <field name='descricao'>Tabela de Lotações Tributárias</field>
+  </record>
+    
+  <record id="tab09_S-1030" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1030</field>
+    <field name='descricao'>Tabela de Cargos/Empregos Públicos</field>
+  </record>
+    
+  <record id="tab09_S-1035" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1035</field>
+    <field name='descricao'>Tabela de Carreiras Públicas</field>
+    
+  </record>
+  <record id="tab09_S-1040" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1040</field>
+    <field name='descricao'>Tabela de Funções/Cargos em Comissão</field>
+    
+  </record>
+  <record id="tab09_S-1050" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1050</field>
+    <field name='descricao'>Tabela de Horários/Turnos de Trabalho</field>
+    
+  </record>
+  <record id="tab09_S-1060" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1060</field>
+    <field name='descricao'>Tabela de Ambientes de Trabalho</field>
+    
+  </record>
+  <record id="tab09_S-1070" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1070</field>
+    <field name='descricao'>Tabela de Processos Administrativos/Judiciais</field>
+    
+  </record>
+  <record id="tab09_S-1080" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1080</field>
+    <field name='descricao'>Tabela de Operadores Portuários</field>
+    
+  </record>
+  <record id="tab09_S-1200" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1200</field>
+    <field name='descricao'>Remuneração do Trabalhador vinculado ao Regime Geral de Previdência Social - RGPS</field>
+    
+  </record>
+  <record id="tab09_S-1202" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1202</field>
+    <field name='descricao'>Remuneração do Trabalhador vinculado a Regime Próprio de Previdência Social - RPPS</field>
+    
+  </record>
+  <record id="tab09_S-1207" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1207</field>
+    <field name='descricao'>Benefícios Previdenciários - RPPS</field>
+    
+  </record>
+  <record id="tab09_S-1210" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1210</field>
+    <field name='descricao'>Pagamentos de Rendimentos do Trabalho</field>
+    
+  </record>
+  <record id="tab09_S-1250" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1250</field>
+    <field name='descricao'>Aquisição de Produção Rural</field>
+    
+  </record>
+  <record id="tab09_S-1260" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1260</field>
+    <field name='descricao'>Comercialização da Produção Rural Pessoa Física</field>
+    
+  </record>
+  <record id="tab09_S-1270" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1270</field>
+    <field name='descricao'>Contratação de Trabalhadores Avulsos Não Portuários</field>
+    
+  </record>
+  <record id="tab09_S-1280" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1280</field>
+    <field name='descricao'>Informações Complementares aos Eventos Periódicos</field>
+    
+  </record>
+  <record id="tab09_S-1295" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1295</field>
+    <field name='descricao'>Solicitação de Totalização para Pagamento em Contingência</field>
+    
+  </record>
+  <record id="tab09_S-1298" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1298</field>
+    <field name='descricao'>Reabertura dos Eventos Periódicos</field>
+    
+  </record>
+  <record id="tab09_S-1299" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1299</field>
+    <field name='descricao'>Fechamento dos Eventos Periódicos</field>
+    
+  </record>
+  <record id="tab09_S-1300" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-1300</field>
+    <field name='descricao'>Contribuição Sindical Patronal</field>
+    
+  </record>
+  <record id="tab09_S-2190" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2190</field>
+    <field name='descricao'>Admissão de Trabalhador - Registro Preliminar</field>
+    
+  </record>
+  <record id="tab09_S-2200" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2200</field>
+    <field name='descricao'>Admissão / Ingresso de Trabalhador</field>
+    
+  </record>
+  <record id="tab09_S-2205" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2205</field>
+    <field name='descricao'>Alteração de Dados Cadastrais do Trabalhador</field>
+    
+  </record>
+  <record id="tab09_S-2206" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2206</field>
+    <field name='descricao'>Alteração de Contrato de Trabalho</field>
+    
+  </record>
+  <record id="tab09_S-2210" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2210</field>
+    <field name='descricao'>Comunicação de Acidente de Trabalho</field>
+    
+  </record>
+  <record id="tab09_S-2220" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2220</field>
+    <field name='descricao'>Monitoramento da saúde do trabalhador</field>
+    
+  </record>
+  <record id="tab09_S-2230" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2230</field>
+    <field name='descricao'>Afastamento Temporário</field>
+    
+  </record>
+  <record id="tab09_S-2240" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2240</field>
+    <field name='descricao'>Condições Ambientais do Trabalho - Fatores de Risco</field>
+    
+  </record>
+  <record id="tab09_S-2241" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2241</field>
+    <field name='descricao'>Insalubridade/Periculosidade/Aposentadoria Especial</field>
+    
+  </record>
+  <record id="tab09_S-2250" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2250</field>
+    <field name='descricao'>Aviso Prévio</field>
+    
+  </record>
+  <record id="tab09_S-2298" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2298</field>
+    <field name='descricao'>Reintegração</field>
+    
+  </record>
+  <record id="tab09_S-2299" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2299</field>
+    <field name='descricao'>Desligamento</field>
+    
+  </record>
+  <record id="tab09_S-2300" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2300</field>
+    <field name='descricao'>Trabalhador Sem Vínculo de Emprego/Estatutário - Início</field>
+    
+  </record>
+  <record id="tab09_S-2306" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2306</field>
+    <field name='descricao'>Trabalhador Sem Vínculo de Emprego/Estatutário - Alteração Contratual</field>
+    
+  </record>
+  <record id="tab09_S-2399" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2399</field>
+    <field name='descricao'>Trabalhador Sem Vínculo de Emprego/Estatutário - Término</field>
+    
+  </record>
+  <record id="tab09_S-2400" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-2400</field>
+    <field name='descricao'>Cadastro de Beneficios Previdenciários - RPPS</field>
+    
+  </record>
+  <record id="tab09_S-3000" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-3000</field>
+    <field name='descricao'>Exclusão de Eventos</field>
+    
+  </record>
+  <record id="tab09_S-5001" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-5001</field>
+    <field name='descricao'>Informações das contribuições sociais por Trabalhador</field>
+    
+  </record>
+  <record id="tab09_S-5002" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-5002</field>
+    <field name='descricao'>Imposto de Renda Retido na Fonte por Trabalhador</field>
+    
+  </record>
+  <record id="tab09_S-5011" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-5011</field>
+    <field name='descricao'>Informações das contribuições sociais consolidadas por contribuinte</field>
+    
+  </record>
+  <record id="tab09_S-5012" model="esocial.tipo_arquivo_esocial">
+    <field name='codigo'>S-5012</field>
+    <field name='descricao'>Informações do IRRF consolidadas por Contribuinte</field>
+    
+  </record>
+</odoo>

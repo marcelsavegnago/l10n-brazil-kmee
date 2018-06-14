@@ -14,6 +14,7 @@
                     <group string="Contabilidade Movimentações de Estoque">
                         <field name="active_stock_move_account" />
                         <field name="account_move_template_id" attrs="{'required': [('active_stock_move_account', '=', True)]}"/>
+                        <field name="temporary_account_journal_id" attrs="{'required': [('active_stock_move_account', '=', True)]}"/>
                     </group>
                 </xpath>
             </field>

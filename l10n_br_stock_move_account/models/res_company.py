@@ -17,3 +17,8 @@ class ResCompany(models.Model):
         string='Modelo de partida dobrada',
         comodel_name='sped.account.move.template'
     )
+    
+    temporary_account_journal_id = fields.Many2one(
+        string='Diário Padrão',
+        comodel_name='account.journal'
+    )

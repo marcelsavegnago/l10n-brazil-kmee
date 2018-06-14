@@ -2,10 +2,13 @@
 <!--
     Copyright 2017 KMEE
     Copyright 2017 KMEE - Wagner Pereira <wagner.pereira@kmee.com.br>
+    Copyright 2018 ABGF - Wagner Pereira <wagner.pereira@abgf.gov.br>
     License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
 -->
-<odoo>
-    <record id="tab11_1" model="esocial.lotacao_classificacao_tributaria">
+<openerp>
+    <data>
+
+    <record id="tab11_1" model="sped.lotacao_classificacao_tributaria">
         <field name="codigo">01</field>
         <field name="c1">S</field>
         <field name="c2">S</field>
@@ -27,7 +30,7 @@
         <field name="c85">S</field>
         <field name="c99">S</field>
     </record>
-    <record id="tab11_2" model="esocial.lotacao_classificacao_tributaria">
+    <record id="tab11_2" model="sped.lotacao_classificacao_tributaria">
         <field name="codigo">02</field>
         <field name="c1">S</field>
         <field name="c2">S</field>
@@ -49,7 +52,7 @@
         <field name="c85">S</field>
         <field name="c99">S</field>
     </record>
-    <record id="tab11_3" model="esocial.lotacao_classificacao_tributaria">
+    <record id="tab11_3" model="sped.lotacao_classificacao_tributaria">
         <field name="codigo">03</field>
         <field name="c1">S</field>
         <field name="c2">S</field>
@@ -71,7 +74,7 @@
         <field name="c85">N</field>
         <field name="c99">S</field>
     </record>
-    <record id="tab11_4" model="esocial.lotacao_classificacao_tributaria">
+    <record id="tab11_4" model="sped.lotacao_classificacao_tributaria">
         <field name="codigo">04</field>
         <field name="c1">S</field>
         <field name="c2">S</field>
@@ -93,7 +96,7 @@
         <field name="c85">N</field>
         <field name="c99">S</field>
     </record>
-    <record id="tab11_5" model="esocial.lotacao_classificacao_tributaria">
+    <record id="tab11_5" model="sped.lotacao_classificacao_tributaria">
         <field name="codigo">05</field>
         <field name="c1">S</field>
         <field name="c2">S</field>
@@ -115,7 +118,7 @@
         <field name="c85">S</field>
         <field name="c99">S</field>
     </record>
-    <record id="tab11_6" model="esocial.lotacao_classificacao_tributaria">
+    <record id="tab11_6" model="sped.lotacao_classificacao_tributaria">
         <field name="codigo">06</field>
         <field name="c1">N</field>
         <field name="c2">N</field>
@@ -137,7 +140,7 @@
         <field name="c85">N</field>
         <field name="c99">S</field>
     </record>
-    <record id="tab11_7" model="esocial.lotacao_classificacao_tributaria">
+    <record id="tab11_7" model="sped.lotacao_classificacao_tributaria">
         <field name="codigo">07</field>
         <field name="c1">N</field>
         <field name="c2">N</field>
@@ -159,7 +162,7 @@
         <field name="c85">N</field>
         <field name="c99">S</field>
     </record>
-    <record id="tab11_8" model="esocial.lotacao_classificacao_tributaria">
+    <record id="tab11_8" model="sped.lotacao_classificacao_tributaria">
         <field name="codigo">08</field>
         <field name="c1">N</field>
         <field name="c2">N</field>
@@ -181,7 +184,7 @@
         <field name="c85">N</field>
         <field name="c99">N</field>
     </record>
-    <record id="tab11_9" model="esocial.lotacao_classificacao_tributaria">
+    <record id="tab11_9" model="sped.lotacao_classificacao_tributaria">
         <field name="codigo">09</field>
         <field name="c1">N</field>
         <field name="c2">N</field>
@@ -203,7 +206,7 @@
         <field name="c85">N</field>
         <field name="c99">N</field>
     </record>
-    <record id="tab11_10" model="esocial.lotacao_classificacao_tributaria">
+    <record id="tab11_10" model="sped.lotacao_classificacao_tributaria">
         <field name="codigo">10</field>
         <field name="c1">S</field>
         <field name="c2">S</field>
@@ -225,7 +228,7 @@
         <field name="c85">S</field>
         <field name="c99">S</field>
     </record>
-    <record id="tab11_21" model="esocial.lotacao_classificacao_tributaria">
+    <record id="tab11_21" model="sped.lotacao_classificacao_tributaria">
         <field name="codigo">21</field>
         <field name="c1">N</field>
         <field name="c2">N</field>
@@ -247,7 +250,7 @@
         <field name="c85">N</field>
         <field name="c99">N</field>
     </record>
-    <record id="tab11_24" model="esocial.lotacao_classificacao_tributaria">
+    <record id="tab11_24" model="sped.lotacao_classificacao_tributaria">
         <field name="codigo">24</field>
         <field name="c1">N</field>
         <field name="c2">N</field>
@@ -269,7 +272,7 @@
         <field name="c85">N</field>
         <field name="c99">N</field>
     </record>
-    <record id="tab11_90" model="esocial.lotacao_classificacao_tributaria">
+    <record id="tab11_90" model="sped.lotacao_classificacao_tributaria">
         <field name="codigo">90</field>
         <field name="c1">S</field>
         <field name="c2">S</field>
@@ -291,7 +294,7 @@
         <field name="c85">S</field>
         <field name="c99">S</field>
     </record>
-    <record id="tab11_91" model="esocial.lotacao_classificacao_tributaria">
+    <record id="tab11_91" model="sped.lotacao_classificacao_tributaria">
         <field name="codigo">91</field>
         <field name="c1">S</field>
         <field name="c2">S</field>
@@ -313,4 +316,6 @@
         <field name="c85">S</field>
         <field name="c99">S</field>
     </record>
-</odoo>
+
+    </data>
+</openerp>

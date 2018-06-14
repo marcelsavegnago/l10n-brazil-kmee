@@ -2,11 +2,27 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-=========
-eSocial
-=========
+Tabelas do SPED
+===============
 
-eSocial
+Implementa as seguintes tabelas fixas do SPED (e-Social e EFD/REINF).
+
+EFD/REINF
+
+#. Tabela 01 – Códigos de Pagamentos.
+#. Tabela 02 - Regras para utilização dos códigos de pagamento a Pessoas Físicas.
+#. Tabela 03 – Rendimentos de Beneficiários no Exterior.
+#. Tabela 04 - Forma de Tributação para rendimentos de beneficiários no Exterior.
+#. Tabela 05 - Informações sobre os beneficiários de Rendimentos no Exterior.
+#. Tabela 06 – Classificação de Serviços Prestados mediante cessão de mão de obra/Empreitada.
+#. Tabela 07 – Países.
+#. Tabela 08 - Classificação Tributária.
+#. Tabela 09 – Código de Atividades, Produtos e Serviços Sujeitos à CPRB.
+#. Tabela 10 - Eventos da EFD-Reinf.
+
+E-SOCIAL
+
+#. TODO - Inserir a lista de tabelas do esocialaqui
 
 Installation
 ============

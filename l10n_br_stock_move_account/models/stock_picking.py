@@ -113,53 +113,61 @@ class StockPicking(models.Model):
         }
         return move_vals
 
+    @api.multi
     def gera_account_move_line(self, account_move_lines, move_template, stock):
         for line in stock.move_lines:
-            for template_item in move_template.item_ids:
-                if not getattr(line, template_item.campo, False):
-                    continue
+            self._gerar_linhas_transicao_temporaria(
+                account_move_lines, line, move_template
+            )
 
-                valor_produto = line.purchase_line_id.price_unit if \
-                    line.purchase_line_id else line.product_id.standard_price
-                quantidade_produto = line.product_uom_qty
-                valor_total = valor_produto * quantidade_produto
+    @api.multi
+    def _gerar_linhas_transicao_temporaria(self, account_move_lines, line,
+                                           move_template):
+        for template_item in move_template.item_ids:
+            if not getattr(line, template_item.campo, False):
+                continue
 
-                account_debito = None
-                if template_item.account_debito_id:
-                    account_debito = template_item.account_debito_id
-                elif template_item.account_automatico_debito == \
-                        ACCOUNT_AUTOMATICO_PRODUTO:
-                    product = line.product_id
-                    account_debito = product.property_account_income
+            valor_produto = line.purchase_line_id.price_unit if \
+                line.purchase_line_id else line.product_id.standard_price
+            quantidade_produto = line.product_uom_qty
+            valor_total = valor_produto * quantidade_produto
 
-                if account_debito is not None:
-                    dados = {
-                        'account_id': account_debito.id,
-                        'name': line.product_id.name,
-                        'narration': template_item.campo,
-                        'debit': valor_total,
-                        'partner_id': line.picking_id.partner_id.id,
-                    }
-                    account_move_lines.append((0, 0, dados))
+            account_debito = None
+            if template_item.account_debito_id:
+                account_debito = template_item.account_debito_id
+            elif template_item.account_automatico_debito == \
+                    ACCOUNT_AUTOMATICO_PRODUTO:
+                product = line.product_id
+                account_debito = product.property_account_income
 
-                account_credito = None
-                if template_item.account_credito_id:
-                    account_credito = template_item.account_credito_id
+            if account_debito is not None:
+                dados = {
+                    'account_id': account_debito.id,
+                    'name': line.product_id.name,
+                    'narration': template_item.campo,
+                    'debit': valor_total,
+                    'partner_id': line.picking_id.partner_id.id,
+                }
+                account_move_lines.append((0, 0, dados))
 
-                elif template_item.account_automatico_credito == \
-                        ACCOUNT_AUTOMATICO_PRODUTO:
-                    product = line.product_id
-                    account_credito = product.property_account_expense
+            account_credito = None
+            if template_item.account_credito_id:
+                account_credito = template_item.account_credito_id
 
-                if account_credito is not None:
-                    dados = {
-                        'account_id': account_credito.id,
-                        'name': line.product_id.name,
-                        'narration': template_item.campo,
-                        'credit': valor_total,
-                        'partner_id': line.picking_id.partner_id.id,
-                    }
-                    account_move_lines.append((0, 0, dados))
+            elif template_item.account_automatico_credito == \
+                    ACCOUNT_AUTOMATICO_PRODUTO:
+                product = line.product_id
+                account_credito = product.property_account_expense
+
+            if account_credito is not None:
+                dados = {
+                    'account_id': account_credito.id,
+                    'name': line.product_id.name,
+                    'narration': template_item.campo,
+                    'credit': valor_total,
+                    'partner_id': line.picking_id.partner_id.id,
+                }
+                account_move_lines.append((0, 0, dados))
 
     def _validar_configuracoes_movimentacao_transitoria(
             self, move_template):

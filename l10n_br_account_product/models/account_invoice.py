@@ -2264,6 +2264,9 @@ class AccountInvoiceLine(models.Model):
         else:
             ctx.update({'type_tax_use': 'purchase'})
 
+        if self.invoice_id.type in ('in_invoice', 'in_refund'):
+            ctx['type'] = self.invoice_id.type
+
         partner_id = self.invoice_id.partner_id.id or ctx.get('partner_id')
         company_id = self.invoice_id.company_id.id or ctx.get('company_id')
         if company_id and partner_id and self.fiscal_category_id:

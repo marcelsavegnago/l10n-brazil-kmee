@@ -2024,8 +2024,8 @@ class AccountInvoiceLine(models.Model):
         base -= self.inss_base_wh_reducao
         valor = base * percentual
         result = {
-            'inss_base': base,
-            'inss_wh_value': valor,
+            'inss_base': tax.get('total_base', 0.0),
+            'inss_wh_value': tax.get('amount', 0.0),
         }
         return result
 
@@ -2235,7 +2235,6 @@ class AccountInvoiceLine(models.Model):
             return result
         product_obj = self.env['product.product'].browse(product)
         result['value']['name'] = product_obj.display_name
-
         conta_result = result['value'].get('account_id')
         result = self.with_context(ctx)._fiscal_position_map(
             result, partner_id=partner_id, partner_invoice_id=partner_id,
@@ -2261,6 +2260,9 @@ class AccountInvoiceLine(models.Model):
             ctx.update({'type_tax_use': 'sale'})
         else:
             ctx.update({'type_tax_use': 'purchase'})
+
+        if self.invoice_id.type in ('in_invoice', 'in_refund'):
+            ctx['type'] = self.invoice_id.type
 
         partner_id = self.invoice_id.partner_id.id or ctx.get('partner_id')
         company_id = self.invoice_id.company_id.id or ctx.get('company_id')

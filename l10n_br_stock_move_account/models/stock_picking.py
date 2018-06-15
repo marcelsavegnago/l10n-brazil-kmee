@@ -15,8 +15,17 @@ class StockPicking(models.Model):
     def _get_period(self):
         return self.env['account.move']._get_period()
 
-    journal_id = fields.Many2one(
-        string='Diário',
+    state = fields.Selection(
+        selection_add=[('provisorio', 'Recebimento Provisório')]
+    )
+
+    temporary_journal_id = fields.Many2one(
+        string='Diário Recebimento Provisório',
+        comodel_name='account.journal',
+    )
+
+    definitive_journal_id = fields.Many2one(
+        string='Diário Recebimento Definitivo',
         comodel_name='account.journal',
     )
 

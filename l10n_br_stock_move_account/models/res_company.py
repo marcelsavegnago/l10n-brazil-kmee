@@ -14,11 +14,21 @@ class ResCompany(models.Model):
     )
 
     account_move_template_id = fields.Many2one(
-        string='Modelo de partida dobrada',
+        string='Modelo de partida dobrada Temporário',
         comodel_name='sped.account.move.template'
     )
     
     temporary_account_journal_id = fields.Many2one(
-        string='Diário Padrão',
+        string='Diário Padrão Temporário',
+        comodel_name='account.journal'
+    )
+
+    account_move_definitive_template_id = fields.Many2one(
+        string='Modelo de partida dobrada Definitivo',
+        comodel_name='sped.account.move.template'
+    )
+
+    definitive_account_journal_id = fields.Many2one(
+        string='Diário Padrão Definitivo',
         comodel_name='account.journal'
     )

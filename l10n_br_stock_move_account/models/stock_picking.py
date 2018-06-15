@@ -50,9 +50,7 @@ class StockPicking(models.Model):
         stock_id = super(StockPicking, self).action_confirm()
 
         if self.company_id.temporary_account_journal_id:
-            self.journal_id = self.company_id.temporary_account_journal_id.id
-
-        self.gera_movimentacao_contabil_transitoria()
+            self.gera_movimentacao_contabil_transitoria()
 
         return stock_id
 
@@ -78,13 +76,13 @@ class StockPicking(models.Model):
                       (is_draft and not is_incoming)
 
     @api.multi
-    def _validar_tipo_picking(self):
+    def _validar_tipo_picking(self, journal_id):
         if self.code != 'incoming':
             return False
 
         if self.company_id.active_stock_move_account:
             self._validar_configuracoes_movimentacao_transitoria(
-                self.company_id.account_move_template_id
+                self.company_id.account_move_template_id, journal_id
             )
         else:
             return False
@@ -94,7 +92,11 @@ class StockPicking(models.Model):
     @api.multi
     def gera_movimentacao_contabil_transitoria(self):
         for stock in self:
-            if stock._validar_tipo_picking():
+            if not self.temporary_journal_id:
+                self.temporary_journal_id = \
+                    self.company_id.temporary_account_journal_id.id
+
+            if stock._validar_tipo_picking(self.temporary_journal_id):
                 move_template = self.company_id.account_move_template_id
                 account_move_lines = []
 
@@ -104,18 +106,18 @@ class StockPicking(models.Model):
 
                 if account_move_lines:
                     move_vals = stock.get_account_move_stock_vals(
-                        account_move_lines
+                        account_move_lines, self.temporary_journal_id
                     )
 
                     move = self.env['account.move'].create(move_vals)
 
                     stock.temporary_move_id = move
 
-    def get_account_move_stock_vals(self, account_move_lines):
+    def get_account_move_stock_vals(self, account_move_lines, journal_id):
         move_vals = {
             'ref': self.name,
             'line_id': account_move_lines,
-            'journal_id': self.journal_id.id,
+            'journal_id': journal_id.id,
             'partner_id': self.partner_id.id,
             'date': self.date,
             'company_id': self.company_id.id,
@@ -179,15 +181,15 @@ class StockPicking(models.Model):
                 account_move_lines.append((0, 0, dados))
 
     def _validar_configuracoes_movimentacao_transitoria(
-            self, move_template):
+            self, move_template, journal_id):
         if not move_template:
             raise Warning(
                 'É necessário escolher um modelo de partida dobrada '
                 'para gerar a movimentação temporária!'
             )
-        if not self.journal_id:
+        if not journal_id:
             raise Warning(
-                'É necessário escolher um diário para gerar a '
+                'É necessário escolher os diários para gerar a '
                 'movimentação temporária!'
             )
         if not self.period_id:
@@ -199,42 +201,65 @@ class StockPicking(models.Model):
     @api.multi
     def gerar_lancamento_recebimento_definitivo(self):
         for stock in self:
-            if stock._validar_tipo_picking():
-                if stock.temporary_move_id:
-                    account_move_lines = []
-                    for line in stock.temporary_move_id.line_id:
-                        if line.debit:
-                            dados = {
-                                'account_id': line.account_id.id,
-                                'name': line.name,
-                                'narration': 'teste',
-                                'credit': line.debit,
-                                'partner_id': line.partner_id.id,
-                            }
-                            account_move_lines.append((0, 0, dados))
+            if not self.definitive_journal_id:
+                self.definitive_journal_id = \
+                    self.company_id.definitive_account_journal_id.id
 
-                        if line.credit:
-                            product_id = self.env['product.product'].search(
-                                [('name', '=', line.name)]
-                            )
-                            if not product_id.property_account_expense:
-                                raise Warning(
-                                    'É preciso configurar as contas de '
-                                    'despesa/receita do(s) produto(s)!'
-                                )
-                            dados = {
-                                'account_id':
-                                    product_id.property_account_expense.id,
-                                'name': line.name,
-                                'narration': 'teste',
-                                'debit': line.credit,
-                                'partner_id': line.partner_id.id,
-                            }
-                            account_move_lines.append((0, 0, dados))
+            if stock._validar_tipo_picking(self.definitive_journal_id):
+                if stock.temporary_move_id:
+                    template_id = \
+                        stock.company_id.account_move_definitive_template_id
+                    account_move_lines = []
+
+                    for line in stock.temporary_move_id.line_id:
+                        for template_item in template_id.item_ids:
+                            if not getattr(line, template_item.campo, False):
+                                continue
+                            account_debito = None
+                            if template_item.account_debito_id:
+                                account_debito = template_item.account_debito_id
+                            elif template_item.account_automatico_debito == \
+                                    ACCOUNT_AUTOMATICO_PRODUTO:
+                                product = line.product_id
+                                account_debito = product.property_account_income
+
+                            if account_debito is not None:
+                                dados = {
+                                    'account_id': account_debito.id,
+                                    'name': line.name,
+                                    'debit': line.credit,
+                                    'partner_id': line.partner_id.id,
+                                }
+                                account_move_lines.append((0, 0, dados))
+
+                            account_credito = None
+                            if template_item.account_credito_id:
+                                account_credito = \
+                                    template_item.account_credito_id
+
+                            elif template_item.account_automatico_credito == \
+                                    ACCOUNT_AUTOMATICO_PRODUTO:
+                                product = line.product_id
+                                if not product.property_account_expense:
+                                    raise Warning(
+                                        'É preciso configurar as contas de '
+                                        'despesa/receita do(s) produto(s)!'
+                                    )
+                                account_credito = \
+                                    product.property_account_expense
+
+                            if account_credito:
+                                dados = {
+                                    'account_id': account_credito.id,
+                                    'name': line.name,
+                                    'credit': line.debit,
+                                    'partner_id': line.partner_id.id,
+                                }
+                                account_move_lines.append((0, 0, dados))
 
                     if account_move_lines:
                         move_vals = stock.get_account_move_stock_vals(
-                            account_move_lines
+                            account_move_lines, stock.definitive_journal_id
                         )
 
                         move = self.env['account.move'].create(move_vals)

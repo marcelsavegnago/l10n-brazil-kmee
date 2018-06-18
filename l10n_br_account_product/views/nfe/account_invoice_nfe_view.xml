@@ -108,12 +108,12 @@
                                 context="{'search_default_customer':1, 'show_address': 1, 'fiscal_category_id': fiscal_category_id}"
                                 options="{'always_reload': True, 'no_quick_create': True, 'no_create_edit': True}" />
                         <field name="partner_shipping_id" domain="[('parent_id', '=', partner_id)]"
-                            context="{'default_type':'delivery', 'show_address': 1}"/>
+                            context="{'default_type':'delivery', 'show_address': 1}" options="{'always_reload': True, 'no_quick_create': True, 'no_create_edit': True}"/>
                     </group>
                     <separator string="Fiscal" />
                     <group>
-                        <field name="fiscal_category_id" domain="[('type','in',{'out_invoice': ['output'], 'out_refund': ['input'], 'in_refund': ['output'], 'in_invoice': ['input']}.get(type, [])),('fiscal_type','=','product')]" required="1"/>
-                        <field name="fiscal_position" required="1" domain="[('fiscal_category_id', '=', fiscal_category_id)]" groups="base.group_extended,base.group_user"/>
+                        <field name="fiscal_category_id" domain="[('type','in',{'out_invoice': ['output'], 'out_refund': ['input'], 'in_refund': ['output'], 'in_invoice': ['input']}.get(type, [])),('fiscal_type','=','product')]" required="1" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                        <field name="fiscal_position" required="1" domain="[('fiscal_category_id', '=', fiscal_category_id)]" groups="base.group_extended,base.group_user" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                         <field name="ind_final" string="Operação com Consumidor final" attrs="{'required': [('nfe_version', '>', '3.00')]}"/>
                         <field name="ind_pres" string="Tipo de operação" attrs="{'required': [('nfe_version', '>', '3.00')]}"/>
                         <field name="check_total" groups="account.group_supplier_inv_check_total" attrs="{'invisible': [('type', 'in', ('out_invoice', 'out_refund'))]}"/>
@@ -387,13 +387,13 @@
                                     <field name="period_id" domain="[('state', '=', 'draft'), ('company_id', '=', company_id)]"
                                         groups="account.group_account_manager"
                                         string="Accounting Period"
-                                        placeholder="force period"/>
+                                        placeholder="force period" options="{'no_quick_create': True, 'no_create_edit': True}" />
                                     <field name="move_id" groups="account.group_account_user"/>
                                 </group>
                                 <group>
                                     <field name="origin" groups="base.group_user"/>
                                     <field name="name"/>
-                                    <field name="user_id" groups="base.group_user" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'account.group_account_invoice']}"/>
+                                    <field name="user_id" groups="base.group_user" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'account.group_account_invoice']}" options="{'no_quick_create': True, 'no_create_edit': True}" />
                                 </group>
                             </group>
                             <field name="tax_line">

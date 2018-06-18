@@ -203,8 +203,6 @@ class StockPicking(models.Model):
 
                     for line in stock.temporary_move_id.line_id:
                         for template_item in template_id.item_ids:
-                            if not getattr(line, template_item.campo, False):
-                                continue
                             account_debito = None
                             if template_item.account_debito_id:
                                 account_debito = template_item.account_debito_id
@@ -213,7 +211,7 @@ class StockPicking(models.Model):
                                 product = line.product_id
                                 account_debito = product.property_account_income
 
-                            if account_debito is not None:
+                            if account_debito and line.credit:
                                 dados = {
                                     'account_id': account_debito.id,
                                     'name': line.name,
@@ -229,7 +227,8 @@ class StockPicking(models.Model):
 
                             elif template_item.account_automatico_credito == \
                                     ACCOUNT_AUTOMATICO_PRODUTO:
-                                product = line.product_id
+                                product = self.env['product.product'].search([('name', '=', line.name)])
+
                                 if not product.property_account_expense:
                                     raise Warning(
                                         'É preciso configurar as contas de '
@@ -238,7 +237,7 @@ class StockPicking(models.Model):
                                 account_credito = \
                                     product.property_account_expense
 
-                            if account_credito:
+                            if account_credito and line.debit:
                                 dados = {
                                     'account_id': account_credito.id,
                                     'name': line.name,

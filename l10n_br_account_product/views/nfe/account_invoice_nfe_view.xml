@@ -509,14 +509,14 @@
                         <page string="General">
                             <separator string="Produto" />
                             <group>
-                                <field name="product_id" domain="[('fiscal_type', 'in', ('product', 'service'))]" on_change="product_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, fiscal_position, price_unit, parent.currency_id, parent.company_id, context)" context_br="{'parent_fiscal_category_id': parent.fiscal_category_id, 'parent_fiscal_position': parent.fiscal_position}"/>
+                                <field name="product_id" domain="[('fiscal_type', 'in', ('product', 'service'))]" on_change="product_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, fiscal_position, price_unit, parent.currency_id, parent.company_id, context)" context_br="{'parent_fiscal_category_id': parent.fiscal_category_id, 'parent_fiscal_position': parent.fiscal_position}" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                             </group>
                             <separator string="Fiscal" />
                             <group>
-                                <field name="fiscal_category_id" required="1" domain="[('journal_type', '=', 'sale')]"/>
-                                <field name="fiscal_position" required="1" domain="[('fiscal_category_id', '=', fiscal_category_id)]"/>
-                                <field name="account_move_template_id" required="1"/>
-                                <field name="cfop_id"/>
+                                <field name="fiscal_category_id" required="1" domain="[('journal_type', '=', 'sale')]" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="fiscal_position" required="1" domain="[('fiscal_category_id', '=', fiscal_category_id)]" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="account_move_template_id" required="1" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="cfop_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                 <field name="account_id" required="0" invisible="1"/>
                             </group>
                             <group>
@@ -544,10 +544,10 @@
                                     <field name="product_type" attrs="{'readonly': [('product_id','!=', False)]}"/>
                                     <field name="code" required="True" attrs="{'readonly': [('product_id','!=', False)]}"/>
                                     <field name="fiscal_classification_id" required="True" attrs="{'readonly': [('product_id','!=', False)]}"/>
-                                    <field name="cest_id" attrs="{'readonly': [('product_id','!=', False)]}"/>
+                                    <field name="cest_id" attrs="{'readonly': [('product_id','!=', False)]}" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                     <field name="fci" attrs="{'readonly': [('product_id','!=', False)]}"/>
                                     <field name="inss_base_wh_reducao" />
-                                    <field name="invoice_line_tax_id" context="{'type':parent.type}" domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]" widget="many2many_tags"/>
+                                    <field name="invoice_line_tax_id" context="{'type':parent.type}" domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                     <field domain="[('type','&lt;&gt;','view'), ('company_id', '=', parent.company_id)]" name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
                                     <field name="company_id" groups="base.group_multi_company" readonly="1"/>
                                 </group>
@@ -564,14 +564,14 @@
                                     <group string="Detalhes do ICMS">
                                         <group>
                                             <field name="icms_manual" invisible="True"/>
-                                            <field name="icms_cst_id"/>
+                                            <field name="icms_cst_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                             <field name="icms_origin"/>
                                             <field name="icms_base_type"/>
                                             <field name="icms_base"/>
                                             <field name="icms_percent_reduction"/>
                                         </group>
                                         <group>
-                                            <field name="icms_relief_id"/>
+                                            <field name="icms_relief_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                             <field name="icms_base_other"/>
                                             <field name="icms_percent"/>
                                             <field name="icms_value"/>
@@ -596,7 +596,7 @@
                                         <field name="issqn_manual" invisible="True"/>
                                         <field name="issqn_base"/>
                                         <field name="issqn_percent"/>
-                                        <field name="service_type_id" attrs="{'required': [('product_type','=', 'service')]}" domain="[('internal_type','=','normal')]"/>
+                                        <field name="service_type_id" attrs="{'required': [('product_type','=', 'service')]}" domain="[('internal_type','=','normal')]" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                         <field name="issqn_exigibilidade"/>
                                         <field name="issqn_suspension_process"
                                                attrs="{'invisible': [('issqn_exigibilidade','not in', ['6','7'])]}"/>
@@ -609,12 +609,12 @@
                                     <group string="Detalhes do IPI">
                                         <group>
                                             <field name="ipi_manual" invisible="True"/>
-                                            <field name="ipi_cst_id"/>
+                                            <field name="ipi_cst_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                             <field name="ipi_type"/>
                                             <field name="ipi_base"/>
                                         </group>
                                         <group>
-                                            <field name="ipi_guideline_id"/>
+                                            <field name="ipi_guideline_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                             <field name="ipi_base_other"/>
                                             <field name="ipi_percent"/>
                                             <field name="ipi_value"/>
@@ -625,7 +625,7 @@
                                     <group string="Detalhes do PIS">
                                         <group>
                                             <field name="pis_manual" invisible="True"/>
-                                            <field name="pis_cst_id" attrs="{'required': [('fiscal_type','=', 'product')]}"/>
+                                            <field name="pis_cst_id" attrs="{'required': [('fiscal_type','=', 'product')]}" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                             <!--attrs="{'required': [('product_type','in', ('product', 'service'))]}"-->
                                             <field name="pis_type"/>
                                             <field name="pis_base"/>
@@ -651,7 +651,7 @@
                                     <group string="Detalhes do COFINS">
                                         <group>
                                             <field name="cofins_manual" invisible="True"/>
-                                            <field name="cofins_cst_id" attrs="{'required': [('fiscal_type','=', 'product')]}"/>
+                                            <field name="cofins_cst_id" attrs="{'required': [('fiscal_type','=', 'product')]}" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                             <!--attrs="{'required': [('product_type','in', ('product', 'service'))]}"-->
                                             <field name="cofins_type"/>
                                             <field name="cofins_base"/>

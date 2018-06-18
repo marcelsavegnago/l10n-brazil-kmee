@@ -15,10 +15,6 @@ class StockPicking(models.Model):
     def _get_period(self):
         return self.env['account.move']._get_period()
 
-    state = fields.Selection(
-        selection_add=[('provisorio', 'Recebimento Provisório')]
-    )
-
     temporary_journal_id = fields.Many2one(
         string='Diário Recebimento Provisório',
         comodel_name='account.journal',
@@ -53,12 +49,6 @@ class StockPicking(models.Model):
             self.gera_movimentacao_contabil_transitoria()
 
         return stock_id
-
-    @api.multi
-    def action_provisorio(self):
-        self.env.cr.execute("update stock_picking set state='provisorio'"
-                            "where id=%d" % self.id)
-        return True
 
     @api.depends('code', 'state')
     def get_status(self):

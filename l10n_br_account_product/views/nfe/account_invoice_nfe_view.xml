@@ -507,10 +507,21 @@
                 <form string="Produtos e Serviços">
                     <notebook>
                         <page string="General">
+                            <separator string="Produto" />
+                            <group>
+                                <field name="product_id" domain="[('fiscal_type', 'in', ('product', 'service'))]" on_change="product_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, fiscal_position, price_unit, parent.currency_id, parent.company_id, context)" context_br="{'parent_fiscal_category_id': parent.fiscal_category_id, 'parent_fiscal_position': parent.fiscal_position}"/>
+                            </group>
+                            <separator string="Fiscal" />
+                            <group>
+                                <field name="fiscal_category_id" required="1" domain="[('journal_type', '=', 'sale')]"/>
+                                <field name="fiscal_position" required="1" domain="[('fiscal_category_id', '=', fiscal_category_id)]"/>
+                                <field name="account_move_template_id" required="1"/>
+                                <field name="cfop_id"/>
+                                <field domain="[('journal_id', '=', parent.journal_id), ('type', '&lt;&gt;', 'view')]" name="account_id" on_change="onchange_account_id(product_id, parent.partner_id, parent.type, parent.fiscal_position, account_id)" groups="account.group_account_user"/>
+                            </group>
                             <group>
                                 <group>
                                     <field name="fiscal_type" invisible="1" />
-                                    <field name="product_id" domain="[('fiscal_type', 'in', ('product', 'service'))]" on_change="product_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, fiscal_position, price_unit, parent.currency_id, parent.company_id, context)" context_br="{'parent_fiscal_category_id': parent.fiscal_category_id, 'parent_fiscal_position': parent.fiscal_position}"/>
                                     <label for="quantity"/>
                                     <div>
                                         <field name="quantity" class="oe_inline"/>
@@ -535,11 +546,6 @@
                                     <field name="fiscal_classification_id" required="True" attrs="{'readonly': [('product_id','!=', False)]}"/>
                                     <field name="cest_id" attrs="{'readonly': [('product_id','!=', False)]}"/>
                                     <field name="fci" attrs="{'readonly': [('product_id','!=', False)]}"/>
-                                    <field name="fiscal_category_id" required="1" domain="[('journal_type', '=', 'sale')]"/>
-                                    <field name="fiscal_position" required="1" domain="[('fiscal_category_id', '=', fiscal_category_id)]"/>
-                                    <field name="account_move_template_id" required="1"/>
-                                    <field name="cfop_id"/>
-                                    <field domain="[('journal_id', '=', parent.journal_id), ('type', '&lt;&gt;', 'view')]" name="account_id" on_change="onchange_account_id(product_id, parent.partner_id, parent.type, parent.fiscal_position, account_id)" groups="account.group_account_user"/>
                                     <field name="inss_base_wh_reducao" />
                                     <field name="invoice_line_tax_id" context="{'type':parent.type}" domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]" widget="many2many_tags"/>
                                     <field domain="[('type','&lt;&gt;','view'), ('company_id', '=', parent.company_id)]" name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
@@ -547,7 +553,7 @@
                                 </group>
                             </group>
                             <label for="name"/>
-                                <field name="name"/>
+                            <field name="name"/>
                         </page>
                         <page position="inside" string="Impostos">
                             <group>

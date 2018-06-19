@@ -1387,49 +1387,47 @@ class AccountInvoice(models.Model):
     #
     #     return move_lines_new
 
-    # Comentado por Wagner Pereira para não gerar Financeiro de NF de entrada com retenção (não balanceia o
-    # total da NF pois falta o lançamento financeiro das retenções).
-    #
-    # @api.multi
-    # def invoice_validate(self):
-    #     super(AccountInvoice, self).invoice_validate()
-    #     for invoice in self:
-    #         #
-    #         #  Geração dos lançamentos financeiros
-    #         #
-    #         # financial_create = self.filtered(
-    #         #     lambda invoice: invoice.revenue_expense)
-    #         # financial_create.action_financial_create(move_lines_new)
-    #
-    #         invoice.action_financial_create()
-    #
-    #         # invoice.financial_ids.write({
-    #         #     'document_number': invoice.name or
-    #         #                        invoice.move_id.name or '/'})
-    #         # invoice.financial_ids.action_confirm()
-    #
-    # def action_financial_create(self):
-    #     """ Cria o lançamento financeiro do documento fiscal
-    #     :return:
-    #     """
-    #     for documento in self:
-    #         if documento.state not in 'open':
-    #             continue
-    #
-    #         # if documento.emissao == TIPO_EMISSAO_PROPRIA and \
-    #         #     documento.entrada_saida == ENTRADA_SAIDA_ENTRADA:
-    #         #     continue
-    #
-    #         #
-    #         # Temporariamente, apagamos todos os lançamentos anteriores
-    #         #
-    #             documento.financial_ids.unlink()
-    #
-    #         for duplicata in documento.duplicata_ids:
-    #             dados = duplicata.prepara_financial_move()
-    #             financial_move = \
-    #                 self.env['financial.move'].create(dados)
-    #             financial_move.action_confirm()
+    @api.multi
+    def invoice_validate(self):
+        super(AccountInvoice, self).invoice_validate()
+        for invoice in self:
+            #
+            #  Geração dos lançamentos financeiros
+            #
+            if invoice.payment_term:
+                # financial_create = self.filtered(
+                #     lambda invoice: invoice.revenue_expense)
+                # financial_create.action_financial_create(move_lines_new)
+
+                invoice.action_financial_create()
+
+                invoice.financial_ids.write({
+                    'document_number': invoice.name or
+                                       invoice.move_id.name or '/'})
+                invoice.financial_ids.action_confirm()
+
+    def action_financial_create(self):
+        """ Cria o lançamento financeiro do documento fiscal
+        :return:
+        """
+        for documento in self:
+            if documento.state not in 'open':
+                continue
+
+            # if documento.emissao == TIPO_EMISSAO_PROPRIA and \
+            #     documento.entrada_saida == ENTRADA_SAIDA_ENTRADA:
+            #     continue
+
+            #
+            # Temporariamente, apagamos todos os lançamentos anteriores
+            #
+                documento.financial_ids.unlink()
+
+            for duplicata in documento.duplicata_ids:
+                dados = duplicata.prepara_financial_move()
+                financial_move = \
+                    self.env['financial.move'].create(dados)
+                financial_move.action_confirm()
 
     @api.onchange('payment_term', 'date_invoice', 'amount_net',
                   'amount_total', 'duplicata_ids')
@@ -1446,7 +1444,7 @@ class AccountInvoice(models.Model):
         if not self.date_invoice:
             self.date_invoice = fields.Date.context_today(self)
 
-        valor = self.amount_net or 0
+        valor = self._get_amount_net_value()
 
         #
         # Para a compatibilidade com a chamada original (super), que usa
@@ -1468,6 +1466,10 @@ class AccountInvoice(models.Model):
             )
             payment_ids.append(payment)
         self.duplicata_ids = payment_ids
+
+    @api.multi
+    def _get_amount_net_value(self):
+        return self.amount_net or 0
 
     @api.one
     @api.depends('financial_ids.state')

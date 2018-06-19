@@ -263,7 +263,10 @@ class AccountInvoice(models.Model):
                              cofins_value_wh + inv.csll_value_wh + inv.
                              irrf_value_wh + inv.inss_value_wh)
 
-            inv.amount_net = inv.amount_company_currency - inv.amount_wh
+            inv.amount_net = inv._amount_net_value_calc()
+
+    def _amount_net_value_calc(self):
+        return self.amount_company_currency - self.amount_wh
 
     @api.one
     def _set_irrf_wh(self):

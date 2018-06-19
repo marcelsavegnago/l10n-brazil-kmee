@@ -41,7 +41,7 @@ class FinancialMove(models.Model):
                         record.journal_id = \
                             matrix_id.journal_id
                     else:
-                        record.journal_id = record.bank_id.journal_id
+                        record.journal_id = record.debt_id.journal_id
 
                     account_move_template_id = \
                         record.account_matrix_id.map_account_move_template_id(

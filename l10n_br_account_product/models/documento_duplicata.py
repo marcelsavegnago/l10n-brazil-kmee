@@ -8,6 +8,7 @@
 from __future__ import division, print_function, unicode_literals
 
 from openerp import api, fields, models
+from openerp.exceptions import Warning
 from openerp.addons.financial.constants import (
     FINANCIAL_DEBT_2PAY,
     FINANCIAL_DEBT_2RECEIVE
@@ -65,7 +66,7 @@ class SpedDocumentoDuplicata(models.Model):
     )
 
     def prepara_financial_move(self):
-
+        self._valida_dados_financeiros()
         moeda_empresa_id = self.invoice_id.company_id.currency_id
         moeda_documento_id = self.invoice_id.currency_id
 
@@ -100,6 +101,8 @@ class SpedDocumentoDuplicata(models.Model):
                     unicode(len(self.invoice_id.duplicata_ids))),
             'account_move_id': self.invoice_id.move_id.id,
             'journal_id': self.invoice_id.journal_id.id,
+            'account_move_template_id':
+                self.invoice_id.fiscal_category_id.account_move_template_id.id,
             'payment_term_id': self.invoice_id.payment_term.id,
             'sped_forma_pagamento_id':
                 self.invoice_id.payment_term.sped_forma_pagamento_id.id,
@@ -121,3 +124,10 @@ class SpedDocumentoDuplicata(models.Model):
         else:
             dados['type'] = FINANCIAL_DEBT_2PAY
         return dados
+
+    @api.multi
+    def _valida_dados_financeiros(self):
+        if not self.invoice_id.fiscal_category_id.financial_account_id:
+            raise Warning(
+                'Não foi definido nenhuma conta financeira na categoria fiscal!'
+            )

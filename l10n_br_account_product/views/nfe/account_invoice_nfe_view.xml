@@ -784,9 +784,8 @@
             </field>
         </record>
 
-        <menuitem id="l10n_br_account_product_nfe_output_menu" action="l10n_br_account_product_nfe_output_action" parent="l10n_br_account.menu_fiscal_document" sequence="10"/>
         <menuitem id="l10n_br_account_product_nfe_input_menu" action="l10n_br_account_product_nfe_input_action" parent="l10n_br_account.menu_fiscal_document" sequence="10"/>
+        <menuitem id="l10n_br_account_product_nfe_output_menu" action="l10n_br_account_product_nfe_output_action" parent="l10n_br_account.menu_fiscal_document" sequence="11"/>
 
     </data>
-
 </openerp>

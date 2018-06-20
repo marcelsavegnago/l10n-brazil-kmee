@@ -1588,6 +1588,11 @@ class AccountInvoiceLine(models.Model):
 
     code = fields.Char(
         u'Código do Produto', size=60)
+    code_view = fields.Char(
+        related='code',
+        readonly=True,
+        string='Código do Produto',
+    )
     date_invoice = fields.Datetime(
         'Invoice Date', readonly=True, states={'draft': [('readonly', False)]},
         select=True, help="Keep empty to use the current date")
@@ -1596,12 +1601,42 @@ class AccountInvoiceLine(models.Model):
     fiscal_position = fields.Many2one(
         'account.fiscal.position', u'Posição Fiscal',
     )
+    fiscal_category_view = fields.Many2one(
+        comodel_name='l10n_br_account.fiscal.category',
+        related='fiscal_category_id',
+        readonly=True,
+        string='Categoria Fiscal',
+    )
+    fiscal_position_view = fields.Many2one(
+        comodel_name='account.fiscal.position',
+        related='fiscal_position',
+        readonly=True,
+        string='Posição Fiscal',
+    )
     cfop_id = fields.Many2one('l10n_br_account_product.cfop', 'CFOP')
+    cfop_view = fields.Many2one(
+        comodel_name='l10n_br_account_product.cfop',
+        related='cfop_id',
+        readonly=True,
+        string='CFOP',
+    )
     fiscal_classification_id = fields.Many2one(
         'account.product.fiscal.classification', u'Classificação Fiscal')
+    fiscal_classification_view = fields.Many2one(
+        comodel_name='account.product.fiscal.classification',
+        related='fiscal_classification_id',
+        readonly=True,
+        string='Classificação Fiscal',
+    )
     cest_id = fields.Many2one(
         comodel_name='l10n_br_account_product.cest',
         string=u'CEST'
+    )
+    cest_view = fields.Many2one(
+        comodel_name='l10n_br_account_product.cest',
+        related='cest_id',
+        readonly=True,
+        string='CEST',
     )
     fci = fields.Char('FCI do Produto', size=36)
     import_declaration_ids = fields.One2many(
@@ -1610,6 +1645,12 @@ class AccountInvoiceLine(models.Model):
     product_type = fields.Selection(
         [('product', 'Produto'), ('service', u'Serviço')],
         'Tipo do Produto', required=True, default='product')
+    product_type_view = fields.Selection(
+        selection=[('product', 'Produto'), ('service', 'Serviço')],
+        related='product_type',
+        readonly=True,
+        string='Tipo do Produto',
+    )
     discount_value = fields.Float(
         string='Vlr. desconto', store=True, compute='_compute_price',
         digits=dp.get_precision('Account'))

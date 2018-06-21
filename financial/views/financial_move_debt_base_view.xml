@@ -110,7 +110,19 @@
                     </group>
                     <notebook>
                         <page string="Payments" name="payments">
-                            <field name="payment_ids" context="{'default_account_id': account_id, 'form_view_ref': 'financial.financial_move_payment_base_one2many_form', 'tree_view_ref': 'financial.financial_move_payment_base_one2many_tree', 'search_view_id': 'financial.financial_move_payment_base_one2many_search'}" />
+                            <field name="payment_ids">
+                                <tree create="false" delete="false">
+                                    <field name="date_payment" />
+                                    <field name="document_type_id" />
+                                    <field name="document_number" />
+                                    <field name="amount_document" />
+                                    <field name="amount_interest" />
+                                    <field name="amount_discount" />
+                                    <field name="amount_total" />
+                                    <field name="bank_id" />
+                                    <field name="date_payment" />
+                                </tree>
+                            </field>
                         </page>
                     </notebook>
                     <div>

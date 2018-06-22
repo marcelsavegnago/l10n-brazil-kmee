@@ -9,3 +9,17 @@ from openerp import models
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
     _order = 'date_maturity, date desc, id desc'
+
+    _sql_constraints = [
+        (
+            'credit_debit1', 'Check(1=1)',
+            'Wrong credit or debit value in accounting entry !'
+        ),
+        (
+            'credit_debit2', 'Check(1=1)',
+            'Wrong credit or debit value in accounting entry !'
+        ),
+    ]
+
+
+AccountMoveLine()

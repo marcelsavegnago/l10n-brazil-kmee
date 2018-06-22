@@ -1117,13 +1117,12 @@ class AccountInvoice(models.Model):
 
             if account_debito is not None:
                 dados = {
-                    # 'move_id': account_move.id,
-                    # 'sped_documento_item_id': self.id,
                     'account_id': account_debito.id,
                     'name': ref or '/',
                     'narration': template_item.campo,
                     'debit': valor,
-                    # 'currency_id': self.currency_id.id,
+                    'credit': 0,
+                    'partner_id': self.partner_id.id,
                 }
                 line_ids.append((0, 0, dados))
 
@@ -1141,12 +1140,11 @@ class AccountInvoice(models.Model):
             if account_credito is not None:
                 dados = {
                     'account_id': account_credito.id,
-                    # 'move_id': account_move.id,
-                    # 'sped_documento_item_id': self.id,
                     'name': ref or '/',
                     'narration': template_item.campo,
                     'credit': valor,
-                    # 'currency_id': self.currency_id.id,
+                    'debit': 0,
+                    'partner_id': self.partner_id.id,
                 }
                 line_ids.append((0, 0, dados))
 
@@ -1249,6 +1247,7 @@ class AccountInvoice(models.Model):
                 'date': inv.date_invoice,
                 'narration': inv.comment,
                 'company_id': inv.company_id.id,
+                'name': inv.internal_number,
             }
 
             template_nao_contabilizados = set()
@@ -1293,26 +1292,26 @@ class AccountInvoice(models.Model):
             #     for i in line:
             #         i[2]['period_id'] = period.id
 
-            if not inv.fiscal_category_id.account_move_template_id:
-                ctx['invoice'] = inv
-                ctx_nolang = ctx.copy()
-                ctx_nolang.pop('lang', None)
+            # if not inv.fiscal_category_id.account_move_template_id:
+            ctx['invoice'] = inv
+            ctx_nolang = ctx.copy()
+            ctx_nolang.pop('lang', None)
 
-                move = account_move.with_context(ctx_nolang).create(move_vals)
+            move = account_move.with_context(ctx_nolang).create(move_vals)
 
-                # make the invoice point to that move
-                vals = {
-                    'move_id': move.id,
-                    'period_id': period.id,
-                    'move_name': move.name,
-                }
-                inv.with_context(ctx).write(vals)
+            # make the invoice point to that move
+            vals = {
+                'move_id': move.id,
+                'period_id': period.id,
+                'move_name': move.name,
+            }
+            inv.with_context(ctx).write(vals)
 
             # Pass invoice in context in method post: used if you want to
             # get the same
             # account move reference when creating the same invoice after
             #  a cancelled one:
-            # move.post()
+            move.post()
 
         #
         # Chamamos o action_move_create para manter a chamadas de outros
@@ -2637,12 +2636,11 @@ class AccountInvoiceLine(models.Model):
             if account_debito is not None:
                 dados = {
                     'account_id': account_debito.id,
-                    # 'move_id': account_move.id,
-                    # 'sped_documento_item_id': self.id,
                     'name': self.product_id.name,
                     'narration': template_item.campo,
                     'debit': valor,
-                    # 'currency_id': self.invoice_id.currency_id.id,
+                    'credit': 0,
+                    'partner_id': self.invoice_id.partner_id.id,
                 }
                 line_ids.append((0, 0, dados))
 
@@ -2669,12 +2667,11 @@ class AccountInvoiceLine(models.Model):
             if account_credito is not None:
                 dados = {
                     'account_id': account_credito.id,
-                    # 'move_id': account_move.id,
-                    # 'sped_documento_item_id': self.id,
                     'name': self.product_id.name,
                     'narration': template_item.campo,
                     'credit': valor,
-                    # 'currency_id': self.invoice_id.currency_id.id,
+                    'debit': 0,
+                    'partner_id': self.invoice_id.partner_id.id,
                 }
                 line_ids.append((0, 0, dados))
 

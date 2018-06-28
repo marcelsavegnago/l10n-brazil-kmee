@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_l10n_br_pos_find_order_form" model="ir.ui.view">
+            <field name="name">Devolução de Venda</field>
+            <field name="model">pos.order.find</field>
+            <field name="arch" type="xml">
+                <form string="Retorno">
+                    <group string="Digite o númerodo cupom de venda">
+                        <field name="name"/>
+                    </group>
+                    <footer>
+                        <button name="search_order" string="Procurar" type="object" class="oe_highlight"/>
+                            or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="act_l10n_br_pos_find_order" model="ir.actions.act_window">
+            <field name="name">Devolução de Venda</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pos.order.find</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_l10n_br_pos_find_order"
+            name="Devolução"
+            action="act_l10n_br_pos_find_order"
+            parent="point_of_sale.menu_point_of_sale"/>
+
+    </data>
+</openerp>

@@ -765,11 +765,22 @@ function l10n_br_pos_screens(instance, module) {
                 message: _t('Deseja inserir o cpf no cupom fiscal?')
             });
         },
+
+        remove_ordens_vazias: function(){
+            var currentOrder = this.pos.get('selectedOrder');
+            for(var i=0; i < currentOrder.changed.orderLines.models.length; i++) {
+                if(currentOrder.changed.orderLines.models[i].quantity == 0)
+                    currentOrder.changed.orderLines.models.splice(i,1);
+            }
+            return currentOrder;
+        },
+
         validate_order: function(options) {
             this._super();
             var self = this;
             options = options || {};
-            var currentOrder = this.pos.get('selectedOrder');
+            var currentOrder = this.remove_ordens_vazias();
+
 
             if (this.pos.config.iface_sat_via_proxy){
                 var status = this.pos.proxy.get('status');

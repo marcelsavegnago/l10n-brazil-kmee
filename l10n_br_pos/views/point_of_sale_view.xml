@@ -27,11 +27,12 @@
         </xpath>
         <field name="partner_id" position="after">
             <field name="cfe_return" />
+            <field name="company_return"/>
             <field name="chave_cfe" />
             <field name="num_sessao_sat" />
             <field name="canceled_order" />
             <field name="pos_order_associated" />
-            <field name="cfe_cancelamento_return" />
+            <!--<field name="cfe_cancelamento_return" />-->
             <field name="chave_cfe_cancelamento" />
             <field name="num_sessao_sat_cancelamento" />
         </field>

@@ -43,6 +43,13 @@ class PosOrder(models.Model):
         readonly=True
     )
 
+    company_return = fields.Many2one(
+        string='Devolvido para',
+        comodel_name='res.partner'
+    )
+
+    return_flag = fields.Boolean()
+
     cfe_return = fields.Binary('Retorno Cfe')
 
     chave_cfe = fields.Char('Chave da Cfe')
@@ -282,3 +289,4 @@ class PosOrderLine(models.Model):
         string="Quantidade devolvida",
         compute=_buscar_produtos_devolvidos
     )
+

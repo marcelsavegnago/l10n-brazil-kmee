@@ -767,20 +767,24 @@ function l10n_br_pos_screens(instance, module) {
         },
 
         remove_ordens_vazias: function(){
-            var currentOrder = this.pos.get('selectedOrder');
-            for(var i=0; i < currentOrder.changed.orderLines.models.length; i++) {
-                if(currentOrder.changed.orderLines.models[i].quantity == 0)
-                    currentOrder.changed.orderLines.models.splice(i,1);
+            var list_order = [];
+            var currentOrder = this.pos.get('selectedOrder').get('orderLines').models;
+            for(var i=0; i < currentOrder.length; i++) {
+                if(currentOrder[i].quantity == 0){
+                    list_order.push(currentOrder[i]);
+                }
             }
-            return currentOrder;
+            for(var i=0; i < list_order.length; i++) {
+                this.pos.get('selectedOrder').get('orderLines').remove(list_order[i]);
+            }
         },
 
         validate_order: function(options) {
             this._super();
             var self = this;
             options = options || {};
-            var currentOrder = this.remove_ordens_vazias();
-
+            this.remove_ordens_vazias();
+            var currentOrder = this.pos.get('selectedOrder');
 
             if (this.pos.config.iface_sat_via_proxy){
                 var status = this.pos.proxy.get('status');

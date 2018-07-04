@@ -68,11 +68,23 @@ function l10n_br_pos_widgets(instance, module){
     var PaypadButtonWidget = module.PosBaseWidget;
 
     module.PaypadButtonWidget = module.PaypadButtonWidget.extend({
+        remove_ordens_vazias: function(){
+            var list_order = [];
+            var currentOrder = this.pos.get('selectedOrder').get('orderLines').models;
+            for(var i=0; i < currentOrder.length; i++) {
+                if(currentOrder[i].quantity == 0){
+                    list_order.push(currentOrder[i]);
+                }
+            }
+            for(var i=0; i < list_order.length; i++) {
+                this.pos.get('selectedOrder').get('orderLines').remove(list_order[i]);
+            }
+        },
         renderElement: function() {
             var self = this;
             PaypadButtonWidget.prototype.renderElement.apply(this);
-
             this.$el.click(function() {
+                self.remove_ordens_vazias();
                 if (self.pos.get('selectedOrder').get('orderLines').length == 0){
                     self.pos.pos_widget.screen_selector.show_popup('error',{
                         message: 'Nenhum produto selecionado!',

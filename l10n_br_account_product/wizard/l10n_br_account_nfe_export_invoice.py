@@ -136,7 +136,24 @@ class L10nBrAccountNfeExportInvoice(models.TransientModel):
                             self._context)
 
                 for nfe in nfes:
-                    nfe_file = nfe['nfe'].encode('utf8')
+
+                    company = inv.company_id
+                    from openerp.addons.nfe.sped.nfe.processing.certificado import Certificado
+                    from openerp.addons.nfe.sped.nfe.processing.processor import ProcessadorNFe
+
+                    p = ProcessadorNFe(company)
+                    p.ambiente = int(company.nfe_environment)
+                    p.estado = company.partner_id.l10n_br_city_id.state_id.code
+                    p.certificado = Certificado(company)
+                    p.salvar_arquivos = True
+                    p.contingencia_SCAN = False
+
+                    nfe_obj = inv._get_nfe_factory(inv.nfe_version)
+                    nfe = nfe_obj.set_xml(nfe['nfe'])
+
+                    p.certificado.assina_xmlnfe(nfe)
+
+                    nfe_file = nfe.xml.encode('utf8')
 
                 data.write({
                     'file': base64.b64encode(nfe_file),

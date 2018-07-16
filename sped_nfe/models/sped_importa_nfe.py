@@ -89,6 +89,7 @@ class ImportaNFe(models.Model):
                     if autocommit:
                         self.env.cr.commit()
                 except Exception as e:
+                    _logger.error(e)
                     if 'Nenhum documento encontrado' in (e.message or e.name):
                         arquivos_eventos.append(filename)
                     _logger.error(u"Exception: " + filename)

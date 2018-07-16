@@ -2599,9 +2599,8 @@ class SpedCalculoImpostoItem(SpedBase):
         #
         # Nas importações o ICMS é somado no total da nota
         #
-        if self.vr_ii > 0:
+        if self.cfop_posicao == POSICAO_CFOP_ESTRANGEIRO:
             vr_nf += self.vr_icms_proprio
-            vr_nf += self.vr_ipi_proprio
             vr_nf += self.vr_pis_proprio
             vr_nf += self.vr_cofins_proprio
 

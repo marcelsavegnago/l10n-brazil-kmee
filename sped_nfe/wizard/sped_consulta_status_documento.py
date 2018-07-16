@@ -18,7 +18,7 @@ import base64
 
 class SpedConsultaStatusDocumento(models.TransientModel):
     """Consulta status de documento fiscal"""
-    _name = b'sped_purchase.consulta_status_documento'
+    _name = b'sped.consulta_status_documento'
     _description = 'Consulta Status Documento'
 
     empresa_id = fields.Many2one(

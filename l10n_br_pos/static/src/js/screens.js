@@ -179,7 +179,7 @@ function l10n_br_pos_screens(instance, module) {
                         this.active_client(self, documento, partner);
                 } else {
                     documento_pontuacao = pos_db.add_pontuation_document(documento);
-                    return new instance.web.Model("res.partner").get_func("search_read")([['cnpj_cpf', '=', documento_pontuacao]], ['name', 'cnpj_cpf', 'country_id']).then(function(res) {
+                    return new instance.web.Model("res.partner").get_func("search_read")([['cnpj_cpf', '=', documento_pontuacao]], ['name', 'cnpj_cpf', 'country_id', 'create_date']).then(function(res) {
                         if (res){
                             pos_db.add_partners(res);
                         }
@@ -403,6 +403,16 @@ function l10n_br_pos_screens(instance, module) {
                     });
                 }
             }
+        },
+
+        show: function(){
+            this._super();
+            self = this;
+            this.$('.new-customer').unbind("click").bind("click", function(){
+                self.display_client_details('edit',{
+                    'country_id': self.pos.company.country_id, 'name':'Anônimo',
+                });
+            });
         },
 
         // what happens when we've just pushed modifications for a partner of id partner_id

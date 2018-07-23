@@ -16,3 +16,5 @@ from . import sped_account_move_template_item
 from . import sped_account_move_template
 from . import account_payment
 from . import account_invoice_term
+from . import account_invoice_payment
+from . import account_invoice_payment_line

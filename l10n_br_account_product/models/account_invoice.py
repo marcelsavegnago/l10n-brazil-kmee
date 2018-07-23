@@ -742,6 +742,16 @@ class AccountInvoice(models.Model):
     payment_term_required = fields.Boolean(
         related='fiscal_category_id.payment_term_required'
     )
+    account_payment_ids = fields.One2many(
+        string='Dados de Pagamento',
+        comodel_name='account.invoice.payment',
+        inverse_name='invoice_id',
+    )
+    account_payment_line_ids = fields.One2many(
+        string='Dados da cobrança',
+        comodel_name='account.invoice.payment.line',
+        inverse_name='invoice_id',
+    )
     payment_mode_id = fields.Many2one(
         comodel_name='payment.mode', string="Payment Mode")
 
@@ -879,6 +889,15 @@ class AccountInvoice(models.Model):
                      'date_in_out': date_in_out
                      }
                 )
+
+                if not invoice.account_payment_ids and invoice.nfe_version == '4.00':
+                    raise UserError(
+                        _(u'A nota fiscal deve conter dados de pagamento')
+                    )
+
+                for item, payment in enumerate(invoice.account_payment_line_ids):
+                    payment.number = str(item + 1).zfill(3)
+
         return True
 
     @api.onchange('type')

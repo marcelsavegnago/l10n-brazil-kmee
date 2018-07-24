@@ -16,7 +16,7 @@
     'license': 'AGPL-3',
     'author': 'KMEE & ABGF',
     'website': 'www.odoobrasil.org.br, www.abgf.gov.br',
-    'depends': [],
+    'depends': ['l10n_br_hr'],
     'external_dependencies': {
         'python': [
             'pybrasil',
@@ -38,6 +38,7 @@
         'views/financiamento_aposentadoria.xml',
         'views/natureza_rubrica.xml',
         'views/parte_corpo.xml',
+        'views/pais.xml',
         'views/tipo_inscricao.xml',
         'views/agente_causador.xml',
         'views/situacao_geradora_doenca.xml',
@@ -64,6 +65,7 @@
         'data/natureza_rubrica.xml',
         'data/tipo_dependente.xml',
         'data/parte_corpo.xml',
+        'data/pais.xml',
         'data/tipo_inscricao.xml',
         'data/agente_causador.xml',
         'data/situacao_geradora_doenca.xml',

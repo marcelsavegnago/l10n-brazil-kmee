@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="sped_hr_job_form">
+            <field name="name">Adiciona e-Social nas Funcoes</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="l10n_br_hr.view_l10n_br_hr_job_form" />
+            <field name="arch" type="xml">
+                <field name="cbo_id" position="attributes">
+                    <attribute name="options">{'no_create': True, 'no_open': True}</attribute>
+                    <attribute name="required">1</attribute>
+                </field>
+                <group name="employee_data" position="after">
+                    <notebook>
+                        <page name="esocial" string="e-Social">
+                            <form>
+                                <header>
+                                    <button name="atualizar_cargo" type="object" colspan="2"
+                                         string="Ativar Cargo no e-Social" class="oe_highlight"
+                                         attrs="{'invisible': ['|', ('sped_cargo_id', '!=', False), ('ini_valid', '=', False)]}"
+                                    />
+                                    <button name="atualizar_cargo" type="object" colspan="2"
+                                         string="Atualizar Cargo no e-Social" class="oe_highlight"
+                                         attrs="{'invisible': [('situacao_esocial', '!=', '2')]}"
+                                    />
+                                    <button name="transmitir" colspan="4" type="object"
+                                         string="Transmitir para o e-Social" class="oe_highlight"
+                                         attrs="{'invisible': [('situacao_esocial', 'not in', ['3', '5'])]}"
+                                    />
+                                    <button name="consultar" colspan="4" type="object"
+                                         string="Consultar Processamento no e-Social" class="oe_highlight"
+                                         attrs="{'invisible': [('situacao_esocial', 'not in', ['4'])]}"
+                                    />
+                                    <field name="situacao_esocial" widget="statusbar" select="1"
+                                         nolabel="1" statusbar_visible="0" readonly="1"
+                                    />
+                                </header>
+                                <group colspan="4" col="4">
+                                    <group colspan="2" col="2" string="Identificação">
+                                        <field name="codigo"
+                                               attrs="{'required': [('ini_valid', '!=', False)], 'readonly': [('sped_cargo_id', '!=', False)]}"
+                                        />
+                                        <field name="cargo_publico" />
+                                        <field name="sped_cargo_id" string="Registro Intermediário"
+                                               attrs="{'invisible': [('sped_cargo_id', '=', False)], 'readonly': [('sped_cargo_id', '!=', False)]}"
+                                               groups="sped_tabelas.group_user"
+                                        />
+                                        <field name="precisa_atualizar" invisible="1" />
+                                    </group>
+                                    <group colspan="2" col="2" string="Validade">
+                                        <field name="ini_valid"
+                                               options="{'no_create': True, 'no_open': True}"
+                                               attrs="{'required': [('sped_cargo_id', '!=', False)], 'readonly': [('sped_cargo_id', '!=', False)]}"
+                                        />
+                                        <field name="alt_valid"
+                                               options="{'no_create': True, 'no_open': True}"
+                                               attrs="{'required': [('sped_cargo_id', '!=', False)], 'invisible': [('sped_cargo_id', '=', False)]}"
+                                        />
+                                        <field name="fim_valid"
+                                               options="{'no_create': True, 'no_open': True}"
+                                               attrs="{'invisible': [('sped_cargo_id', '=', False)]}"
+                                        />
+                                    </group>
+                                    <group colspan="4" col="4">
+                                        <separator string="Detalhes para Cargo Público" colspan="4"
+                                                   attrs="{'invisible': [('cargo_publico', '=', False)]}"
+                                        />
+                                        <field name="acum_cargo" colspan="4"
+                                               attrs="{'required': [('cargo_publico', '=', True), ('ini_valid', '!=', False)], 'invisible': [('cargo_publico', '=', False)]}" />
+                                        <field name="contagem_esp" colspan="4"
+                                               attrs="{'required': [('cargo_publico', '=', True), ('ini_valid', '!=', False)], 'invisible': [('cargo_publico', '=', False)]}" />
+                                        <field name="dedic_excl" colspan="4"
+                                               attrs="{'required': [('cargo_publico', '=', True), ('ini_valid', '!=', False)], 'invisible': [('cargo_publico', '=', False)]}" />
+                                        <field name="nr_lei" colspan="4"
+                                               attrs="{'required': [('cargo_publico', '=', True), ('ini_valid', '!=', False)], 'invisible': [('cargo_publico', '=', False)]}" />
+                                        <field name="dt_lei" colspan="4"
+                                               attrs="{'required': [('cargo_publico', '=', True), ('ini_valid', '!=', False)], 'invisible': [('cargo_publico', '=', False)]}" />
+                                        <field name="sit_cargo" colspan="4"
+                                               attrs="{'required': [('cargo_publico', '=', True), ('ini_valid', '!=', False)], 'invisible': [('cargo_publico', '=', False)]}" />
+                                    </group>
+                                </group>
+                            </form>
+                        </page>
+                    </notebook>
+                </group>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="sped_hr_job_tree">
+            <field name="name">Adiciona e-Social nas Funcoes</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr.view_hr_job_tree" />
+            <field name="arch" type="xml">
+                <field name="state" position="after">
+                    <field name="situacao_esocial" string="e-Social" />
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

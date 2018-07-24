@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+        <record id="sped_lote_form" model="ir.ui.view">
+            <field name="name">SPED Lotes</field>
+            <field name="model">sped.lote</field>
+            <field name="arch" type="xml">
+                <form string="Lotes SPED" edit="false" create="false" duplicate="false">
+                    <field name="ocorrencias" invisible="1" />
+                    <header>
+                        <button name="transmitir" type="object" string="Transmitir" class="oe_highlight"
+                                attrs="{'invisible': [('situacao', 'not in', ['1', '3'])]}"
+                        />
+                        <button name="consultar" type="object" string="Consultar" class="oe_highlight"
+                                attrs="{'invisible': [('situacao', '!=', '2')]}"
+                        />
+                        <field name="situacao" widget="statusbar" select="1"
+                               nolabel="1"
+                               readonly="1"
+                               statusbar_colors='{"3":"red"}'
+                               statusbar_visible="1,2,4"
+                        />
+                    </header>
+                    <sheet string="Lote de Transmissão">
+                        <div class="oe_title">
+                            <label for="tipo" class="oe_edit_only" string="Tipo"/>
+                            <h1>
+                                 <field name="tipo" string="Tipo" widget="radio"/>
+                            </h1>
+                            <label for="codigo" class="oe_edit_only" string="Código"/>
+                            <h1>
+                                 <field name="codigo" string="Registro"/>
+                            </h1>
+                        </div>
+                        <notebook>
+                            <page name="registros" string="Registros">
+                                <group colspan="4" col="4">
+                                    <group colspan="4" col="4">
+                                        <field name="company_id" />
+                                        <field name="quantidade" />
+                                    </group>
+                                    <group colspan="2" col="2">
+                                        <!--<field name="data_hora_transmissao" />-->
+                                        <field name="data_hora_retorno" />
+                                    </group>
+                                    <group colspan="2" col="2">
+                                        <field name="cd_resposta" attrs="{'invisible': [('cd_resposta', '=', False)]}"/>
+                                        <field name="desc_resposta" attrs="{'invisible': [('desc_resposta', '=', False)]}"/>
+                                        <field name="tempo_estimado" attrs="{'invisible': [('tempo_estimado', '=', False)]}"/>
+                                    </group>
+                                    <group colspan="4" col="2">
+                                        <field name="dh_recepcao" attrs="{'invisible': [('dh_recepcao', '=', False)]}" />
+                                        <field name="versao_aplicativo_recepcao" attrs="{'invisible': [('versao_aplicativo_recepcao', '=', False)]}" />
+                                        <field name="versao_aplicativo_processamento" attrs="{'invisible': [('versao_aplicativo_processamento', '=', False)]}" />
+                                        <field name="protocolo" attrs="{'invisible': [('protocolo', '=', False)]}" />
+                                    </group>
+                                </group>
+                                <group colspan="4" col="1">
+                                    <!--<separator colspan="1" string="Registros deste Lote" />-->
+                                    <field name="transmissao_ids" colspan="1" nolabel="1" count="situacao"/>
+                                </group>
+                            </page>
+                            <page name="envio_xml" string="XML Envio" attrs="{'invisible': [('envio_xml_id', '=', False)]}">
+                                <group colspan="4" col="2" string="XML">
+                                    <field name="envio_xml_id" />
+                                    <field name="envio_xml" widget="ace" />
+                                </group>
+                            </page>
+                            <page name="retorno_xml" string="XML Retorno" attrs="{'invisible': [('retorno_xml_id', '=', False)]}">
+                                <group colspan="4" col="2">
+                                    <field name="retorno_xml_id" />
+                                    <field name="retorno_xml" widget="ace" />
+                                </group>
+                            </page>
+                            <page name="consulta_xml" string="XML Consulta" attrs="{'invisible': [('consulta_xml_id', '=', False)]}">
+                                <group colspan="4" col="2">
+                                    <field name="consulta_xml_id" />
+                                    <field name="consulta_xml" widget="ace" />
+                                </group>
+                            </page>
+                            <page name="ocorrencias" string="Ocorrências" attrs="{'invisible': [('ocorrencias', '=', False)]}">
+                                <group colspan="4" col="1">
+                                    <field name="ocorrencia_ids" nolabel="1" readonly="1">
+                                        <tree editable="bottom">
+                                            <field name="tipo" />
+                                            <field name="local" />
+                                            <field name="codigo" />
+                                            <field name="descricao" />
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="sped_lote_tree">
+            <field name="name">SPED Lotes</field>
+            <field name="model">sped.lote</field>
+            <field name="arch" type="xml">
+                <tree string="Lotes de Transmissão" edit="false" create="false" duplicate="false"
+                      colors="blue:situacao in ('2','4');black:situacao == '1';read:situacao in ('3', '5')"
+                >
+                    <field name="tipo"/>
+                    <field name="codigo"/>
+                    <field name="company_id"/>
+                    <field name="quantidade" />
+                    <field name="situacao"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="sped_lote_search" model="ir.ui.view">
+            <field name="name">SPED Lotes</field>
+            <field name="model">sped.lote</field>
+            <field name="arch" type="xml">
+                <search string="Transmissões">
+                    <filter name="com_erros" icon="terp-document-new" string="Com Erro(s)" domain="[('situacao', '=', '3')]" help="Registros com Erros"/>
+                    <filter name="pendentes" icon="terp-document-new" string="Pendente Transmissão" domain="[('situacao', '=', '1')]" />
+                    <filter name="transmitidas" icon="terp-document-new" string="Transmitidas" domain="[('situacao', '=', '2')]" />
+                    <filter name="sucessos" icon="terp-document-new" string="Com Sucesso" domain="[('situacao', '=', '4')]" />
+                    <field name="codigo" />
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_tipo" string="Tipo" context="{'group_by': 'tipo'}" />
+                        <filter name="group_by_situacao" string="Situação" context="{'group_by': 'situacao'}" />
+                        <filter name="group_by_transmissao" string="Data/Hora de Transmissão" context="{'group_by': 'data_hora_transmissao'}" />
+                        <filter name="group_by_retorno" string="Data/Hora de Retorno" context="{'group_by': 'data_hora_retorno'}" />
+                    </group>
+		        </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="sped_lote_action">
+            <field name="name">Lotes de Transmissão</field>
+            <field name="domain">[]</field>
+            <field name="context">{'search_default_com_erros': 1, 'search_default_pendentes': 1, 'search_default_transmitidas': 1}</field>
+            <field name="res_model">sped.lote</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="sped_lote_form_acao">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="sped_lote_form"/>
+            <field name="act_window_id" ref="sped_lote_action"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="sped_lote_tree_acao">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="sped_lote_tree"/>
+            <field name="act_window_id" ref="sped_lote_action"/>
+        </record>
+
+        <menuitem id="menu_sped_lote"
+                  name="Lotes"
+                  sequence="20"
+                  parent="menu_sped_base"
+                  action="sped_lote_action"
+        />
+
+        <record model="ir.sequence.type" id="sped_lote_sequence_type">
+            <field name="name">Lotes de Registro SPED</field>
+            <field name="code">sped.lote</field>
+        </record>
+
+        <record model="ir.sequence" id="sped_lote_sequence">
+            <field name="name">Lotes de Registro SPED</field>
+            <field name="code">sped.lote</field>
+            <field name="padding">4</field>
+            <field name="prefix">SPED-LOTE-</field>
+        </record>
+
+    </data>
+</openerp>

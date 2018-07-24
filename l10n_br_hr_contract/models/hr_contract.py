@@ -62,6 +62,7 @@ class HrContractLaborRegime(models.Model):
 
     name = fields.Char(string='Labor regime')
     short_name = fields.Char(string='Short name')
+    code = fields.Char(string='Code', size=1)
 
     @api.multi
     def name_get(self):
@@ -84,10 +85,10 @@ class HrContractSalaryUnit(models.Model):
     def name_get(self):
         result = []
         for record in self:
-            name = record['name']
-            if record['code']:
-                name = record['code'] + ' - ' + name
-            result.append((record['id'], name))
+            # name = record['name']
+            # if record['code']:
+            #     name = record.code + '-' + record.name
+            result.append((record['id'], record.code + '-' + record.name))
         return result
 
 
@@ -124,15 +125,19 @@ class HrContract(models.Model):
     labor_bond_type_id = fields.Many2one(
         string='Labor bond type',
         comodel_name='hr.contract.labor.bond.type')
+
     labor_regime_id = fields.Many2one(
-        string='Labor regime', comodel_name='hr.contract.labor.regime')
-    welfare_policy = fields.Selection(
-        string='Welfare policy',
-        selection=[
-            ('rgps', u'Regime Geral da Previdência Social'),
-            ('rpps', u'Regime Próprio da Previdência Social')])
-    salary_unit = fields.Many2one(string='Salary Unity',
-                                  comodel_name='hr.contract.salary.unit')
+        string='Labor regime',
+        comodel_name='hr.contract.labor.regime',
+        help = 'e-Social: S2300 - tpRegPrev',
+    )
+
+    salary_unit = fields.Many2one(
+        string='Salary Unity',
+        comodel_name='hr.contract.salary.unit',
+        help='e-Social: S2300 - tpRegPrev',
+    )
+
     weekly_hours = fields.Float(string='Weekly hours')
     monthly_hours = fields.Float(string='Monthly hours')
 

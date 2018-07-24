@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <menuitem id="menu_sped_esocial"
+                  name="e-Social"
+                  sequence="90"
+                  parent="sped_tabelas.menu_sped"
+        />
+
+        <menuitem id="menu_sped_esocial_intermediarios"
+                  name="Intermediários"
+                  sequence="100"
+                  parent="sped_esocial.menu_sped_esocial"
+        />
+
+    </data>
+</openerp>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+
+        <record id="sped_transmissao_lote_wizard" model="ir.ui.view">
+            <field name="name">sped_criacao_wizard</field>
+            <field name="model">sped.criacao.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Criação de Lotes de Transmissão">
+                    <group colspan="4" col="1">
+                        <field name="lote_ids" nolabel="1" readonly="1">
+                            <tree>
+                                <field name="tipo" />
+                                <field name="grupo" />
+                                <field name="ambiente" />
+                                <field name="quantidade" />
+                            </tree>
+                            <!--<form>-->
+                                <!--<group colspan="4" col="4">-->
+                                    <!--<group colspan="4" col="2">-->
+                                        <!--<field name="tipo" />-->
+                                        <!--<field name="grupo" />-->
+                                        <!--<field name="ambiente" />-->
+                                        <!--<field name="quantidade" />-->
+                                    <!--</group>-->
+                                    <!--<group colspan="4" col="1">-->
+                                        <!--<label string="Registros deste Lote" />-->
+                                        <!--<field name="registro_ids" readonly="1" />-->
+                                    <!--</group>-->
+                                <!--</group>-->
+                            <!--</form>-->
+                        </field>
+                    </group>
+                    <footer>
+                        <button type="object" name="criar_lotes" string="Criar" class="oe_highlight" />
+                        <button special="cancel" string="Cancelar" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window
+            id="sped_transmissao.criar_lote"
+            name="Criar Lote(s)"
+            src_model="sped.registro"
+            res_model="sped.criacao.wizard"
+            view_id="sped_transmissao.sped_transmissao_lote_wizard"
+            target="new"
+            multi="True"
+        />
+
+    </data>
+</openerp>

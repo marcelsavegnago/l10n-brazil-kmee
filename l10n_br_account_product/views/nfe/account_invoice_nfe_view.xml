@@ -332,13 +332,6 @@
                                         <!--<field name="reconcile_ref"/>-->
                                     <!--</tree>-->
                                 <!--</field>-->
-                                <field name="duplicata_ids" colspan="4" nolabel="1" >
-                                    <tree string="Duplicatas" editable="bottom">
-                                        <field name="numero" />
-                                        <field name="data_vencimento" />
-                                        <field name="valor" sum="valor" />
-                                    </tree>
-                                </field>
                             </group>
                             <page string="Financeiro" name="financial_page">
                             <group cols="4">

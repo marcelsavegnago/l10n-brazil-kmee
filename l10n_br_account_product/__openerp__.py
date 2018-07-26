@@ -13,7 +13,6 @@
     'depends': [
         'l10n_br_data_account',
         'account_product_fiscal_classification',
-        'financial_account',
     ],
     'data': [
         'l10n_br_account_product_sequence.xml',
@@ -27,7 +26,6 @@
         'views/l10n_br_account_product_view.xml',
         'views/l10n_br_account_view.xml',
         'views/sped_account_move_template_view.xml',
-        'views/sped_forma_pagamento_view.xml',
         'views/l10n_br_account_product_view.xml',
         'views/account_view.xml',
         'views/account_invoice_view.xml',
@@ -46,7 +44,6 @@
         'security/ir.model.access.csv',
         'report/account_invoice_report_view.xml',
         'views/l10n_br_base_view.xml',
-        'views/financial_move.xml',
     ],
     'demo': [
         'demo/account_tax_code_demo.xml',

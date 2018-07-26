@@ -330,3 +330,8 @@ class SpedHrRescisaoAutonomo(models.Model, SpedRegistroIntermediario):
                                 if categoria.indSimples:
                                     vals['ind_simples'] = categoria.indSimples.valor
                                 self.env['sped.contribuicao.inss.ideestablot'].create(vals)
+
+    @api.multi
+    def retorna_trabalhador(self):
+        self.ensure_one()
+        return self.sped_hr_rescisao_id.contract_id.employee_id

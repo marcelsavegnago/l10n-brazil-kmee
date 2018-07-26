@@ -333,27 +333,6 @@
                                     <!--</tree>-->
                                 <!--</field>-->
                             </group>
-                            <page string="Financeiro" name="financial_page">
-                            <group cols="4">
-                            <field name="financial_ids" colspan="4" nolabel="1">
-                                <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancelled'">
-                                    <field name="date_business_maturity" string="Maturity"/>
-                                    <field name="date_document"/>
-                                    <field name="display_name"/>
-                                    <!--<field name="partner_id"/>-->
-                                    <!--<field name="document_type_id"/>-->
-                                    <!--<field name="document_number"/>-->
-                                    <field name="currency_id" groups="base.group_multi_currency"/>
-                                    <field name="amount_document" sum="Document"/>
-                                    <field name="amount_total" sum="Total"/>
-                                    <field name="date_payment"/>
-                                    <field name="amount_paid_document" sum="Paid"/>
-                                    <field name="amount_residual" sum="Residual"/>
-                                    <field name="state"/>
-                                </tree>
-                            </field>
-                            </group>
-                        </page>
                         </page>
                         <page string="Contábil">
                             <group col="4">

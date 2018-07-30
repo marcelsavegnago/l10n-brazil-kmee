@@ -694,9 +694,8 @@ class AccountInvoice(models.Model):
 
     company_currency_id = fields.Many2one(
         comodel_name='res.currency',
-        related='company_id.currency_id',
         string=u'Moeda da empresa',
-        default=lambda self: self.env.user.company_id.currency_id.id,
+        default=lambda self: self.env.user.company_id.currency_id,
         readony=True,
     )
     amount_company_currency = fields.Float(

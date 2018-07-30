@@ -918,11 +918,11 @@ class NFe400(NFe310):
         self.detPag.vPag.valor = str(invoice.amount_total)
 
     def _invoice_data(self, invoice):
-        self.nfe.infNFe.cobr.fat.vLiq.valor = str(invoice.amount_total)
+        self.nfe.infNFe.cobr.fat.vLiq.valor = str("%.2f" % invoice.amount_net)
         self.nfe.infNFe.cobr.fat.nFat.valor = str(invoice.internal_number or '')
         self.nfe.infNFe.cobr.fat.vOrig.valor = str(invoice.amount_total)
         # TODO - mapear/implementar vDesc
-        self.nfe.infNFe.cobr.fat.vDesc.valor = str('0.00')
+        self.nfe.infNFe.cobr.fat.vDesc.valor = str('%.2f' % invoice.amount_wh)
 
     def get_NFe(self):
         try:

@@ -763,6 +763,26 @@ class AccountInvoice(models.Model):
     payment_term_required = fields.Boolean(
         related='fiscal_category_id.payment_term_required'
     )
+    type_nf_payment = fields.Selection([
+        ('01', u'01 - Dinheiro'),
+        ('02', u'02 - Cheque'),
+        ('03', u'03 - Cartão de Crédito'),
+        ('04', u'04 - Cartão de Débito'),
+        ('06', u'05 - Crédito Loja'),
+        ('10', u'10 - Vale Alimentação'),
+        ('11', u'11 - Vale Refeição'),
+        ('12', u'12 - Vale Presente'),
+        ('13', u'13 - Vale Combustível'),
+        ('14', u'14 - Duplicata Mercantil'),
+        ('15', u'15 - Boleto Bancário'),
+        ('90', u'90 - Sem pagamento'),
+        ('99', u'99 - Outros')
+    ], string='Tipo de Pagamento da NF', required=True,
+        help=u'Obrigatório o preenchimento do Grupo Informações de Pagamento'
+             u' para NF-e e NFC-e. Para as notas com finalidade de Ajuste'
+             u' ou Devolução o campo Forma de Pagamento deve ser preenchido'
+             u' com 90 - Sem Pagamento.'
+    )
 
     @api.one
     @api.constrains('number')
@@ -1473,6 +1493,13 @@ class AccountInvoice(models.Model):
         if not line_ids:
             return False
         return all(line.state == 'paid' for line in line_ids)
+
+    @api.onchange('payment_mode_id')
+    def onchange_payment_mode(self):
+        for record in self:
+            if record.payment_mode_id:
+                record.type_nf_payment = \
+                    record.payment_mode_id.type_nf_payment
 
 
 class AccountInvoiceLine(models.Model):

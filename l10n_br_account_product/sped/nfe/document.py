@@ -3,6 +3,7 @@
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
 from datetime import datetime
+from unicodedata import normalize
 
 from openerp import pooler
 from openerp.exceptions import Warning as UserError
@@ -354,12 +355,12 @@ class NFe200(FiscalDocument):
 
         if invoice_line.product_id:
             self.det.prod.cProd.valor = invoice_line.product_id.code or ''
-            self.det.prod.cEAN.valor = invoice_line.product_id.ean13 or ''
-            self.det.prod.cEANTrib.valor = invoice_line.product_id.ean13 or ''
-            self.det.prod.xProd.valor = (normalize(
-            'NFKD', unicode(
-                    invoice_line.product_id.name[:120] or '')
-            ).encode('ASCII', 'ignore'))
+            # TODO - implementar GTIN
+            self.det.prod.cEAN.valor = 'SEM GTIN'
+            self.det.prod.cEANTrib.valor = 'SEM GTIN'
+            self.det.prod.xProd.valor = (normalize('NFKD', unicode(
+                invoice_line.product_id.name[:120] or ''
+            )).encode('ASCII', 'ignore'))
         else:
             self.det.prod.cProd.valor = invoice_line.code or ''
             self.det.prod.xProd.valor = (normalize(
@@ -906,13 +907,15 @@ class NFe400(NFe310):
         super(NFe400, self).__init__()
 
     def _details_pag(self, invoice):
-        # TODO
+        # TODO - implementar campo
         self.pag.vTroco.valor = ''
 
     def _details_pag_data(self, invoice):
-        # TODO
-        self.detPag.tPag.valor = '14'
-        self.detPag.vPag.valor = '0'
+        # TODO - existe a possibilidade de pagar uma parte
+        # em uma forma de pagto e outra parte em outra
+        # ex.: metade em dinheiro e metade boleto
+        self.detPag.tPag.valor = invoice.type_nf_payment
+        self.detPag.vPag.valor = str(invoice.amount_total)
 
     def _invoice_data(self, invoice):
         self.nfe.infNFe.cobr.fat.vLiq.valor = str(invoice.amount_total)

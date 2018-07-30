@@ -17,3 +17,4 @@ from . import sped_account_move_template
 from . import documento_duplicata
 from . import financial_move
 from . import sped_forma_pagamento
+from . import account_payment

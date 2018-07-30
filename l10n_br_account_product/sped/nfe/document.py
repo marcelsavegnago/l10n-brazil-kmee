@@ -572,7 +572,7 @@ class NFe200(FiscalDocument):
 
     def _encashment_data(self, invoice, dup):
         """Dados de Cobrança"""
-        self.dup.nDup.valor = dup.numero
+        self.dup.nDup.valor = str(dup.numero).zfill(3)
         self.dup.dVenc.valor = (dup.data_vencimento or
                                 invoice.date_due or
                                 invoice.date_invoice)

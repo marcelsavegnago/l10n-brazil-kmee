@@ -15,6 +15,8 @@
         'financial_account',
     ],
     'data': [
+        'security/ir.model.access.csv',
+
         # 'views/l10n_br_account_fiscal_category.xml',
         # 'views/account_invoice_nfe_view.xml',
         # 'views/financial_move.xml',

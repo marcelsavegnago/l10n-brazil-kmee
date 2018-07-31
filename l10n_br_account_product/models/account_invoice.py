@@ -1181,7 +1181,8 @@ class AccountInvoice(models.Model):
                     'Please create some invoice lines.'))
             if inv.move_id:
                 continue
-
+            if not inv.account_move_template_id:
+                continue
             ctx = dict(self._context, lang=inv.partner_id.lang)
 
             company_currency = inv.company_id.currency_id

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+
+        <!-- Contrato de Funcionarios -->
+        <record model="ir.ui.view" id="sped_hr_contract_change">
+            <field name="name">Adiciona e-Social na Alteração Contratual</field>
+            <field name="model">l10n_br_hr.contract.change</field>
+            <field name="inherit_id" ref="l10n_br_hr_payroll.l10n_br_hr_contract_change_base_form" />
+            <field name="arch" type="xml">
+                <button name="apply_contract_changes" position="replace">
+                    <button name="atualizar_contrato_s2206" type="object" colspan="2"
+                         string="Registrar Alteração Contratual no e-Social" class="oe_highlight"
+                         attrs="{'invisible': [('situacao_esocial', '!=', '0')]}"
+                    />
+                    <button name="retificar_contrato_s2206" type="object" colspan="2"
+                         string="Retificar Alteração Contratual no e-Social" class="oe_highlight"
+                         attrs="{'invisible': [('situacao_esocial', '!=', '2')]}"
+                    />
+                    <button name="transmitir" colspan="4" type="object"
+                            string="Transmitir para o e-Social" class="oe_highlight"
+                            attrs="{'invisible': [('situacao_esocial', 'not in', ['3', '5'])]}"
+                    />
+                    <button name="consultar" colspan="4" type="object"
+                            string="Consultar Processamento no e-Social" class="oe_highlight"
+                            attrs="{'invisible': [('situacao_esocial', 'not in', ['4'])]}"
+                    />
+                </button>
+                <button name="action_back_to_draft" position="replace" />
+                <field name="state" position="replace">
+                    <field name="situacao_esocial" widget="statusbar" statusbar_visible="0" />
+                </field>
+                <field name="contract_id" position="before">
+                    <field name="state" invisible="1"/>
+                    <field name="precisa_atualizar" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="sped_esocial_hr_contract_change_tree_view">
+            <field name="name">sped.esocial.hr.contract.tree (in sped_esocial)</field>
+            <field name="model">l10n_br_hr.contract.change</field>
+            <field name="inherit_id" ref="l10n_br_hr_payroll.l10n_br_hr_contract_change_base_tree"/>
+            <field name="arch" type="xml">
+                <field name="state" position="after">
+                    <field name="situacao_esocial" />
+                </field>
+                <field name="state" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

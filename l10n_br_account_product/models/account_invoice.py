@@ -740,6 +740,12 @@ class AccountInvoice(models.Model):
         related='fiscal_category_id.payment_term_required'
     )
 
+    _sql_constraints = [
+        ('number_uniq', 'unique(number, company_id, journal_id,\
+             type, partner_id, document_serie_id, issuer)',
+         'Invoice Number must be unique per Company!'),
+    ]
+
     @api.one
     @api.constrains('number')
     def _check_invoice_number(self):

@@ -992,6 +992,76 @@ class AccountInvoice(models.Model):
         return result
 
     @api.multi
+    def finalize_invoice_move_lines(self, move_lines):
+        move_lines = super(AccountInvoice, self).finalize_invoice_move_lines(
+            move_lines)
+
+        # What we do here? IMPORTANT
+        # We make a copy of the retention tax and calculate the new total
+        # in the payment lines
+        value_to_debit = 0.0
+        move_lines_new = []
+        move_lines_tax = [move for move in move_lines
+                          if not move[2]['product_id'] and
+                          not move[2]['date_maturity']]
+        move_lines_payment = [move for move in move_lines
+                              if not move[2]['product_id'] and
+                              move[2]['date_maturity']]
+        move_lines_products = [move for move in move_lines
+                               if move[2]['product_id'] and
+                               not move[2]['date_maturity']]
+
+        def invert_credit_debit(move, value_to_debit):
+            credit = move[2]['credit']
+            debit = move[2]['debit']
+            value_to_debit += move[2]['credit'] or move[2]['debit']
+            move[2]['credit'] = debit
+            move[2]['debit'] = credit
+            return value_to_debit
+
+        for move in move_lines_tax:
+            move_lines_new.append(move)
+
+            tax_code = self.env['account.tax.code'].browse(
+                move[2]['tax_code_id'])
+
+            if tax_code.domain == 'retissqn' and self.issqn_wh:
+                value_to_debit = invert_credit_debit(move, value_to_debit)
+
+            if tax_code.domain == 'retpis' and self.pis_wh:
+                value_to_debit = invert_credit_debit(move, value_to_debit)
+
+            if tax_code.domain == 'retcofins' and self.cofins_wh:
+                value_to_debit = invert_credit_debit(move, value_to_debit)
+
+            if tax_code.domain == 'retinss' and self.inss_wh:
+                value_to_debit = invert_credit_debit(move, value_to_debit)
+
+            if tax_code.domain == 'retcsll' and self.csll_wh:
+                value_to_debit = invert_credit_debit(move, value_to_debit)
+
+            if tax_code.domain == 'retir' and self.irrf_wh:
+                value_to_debit = invert_credit_debit(move, value_to_debit)
+
+        move_lines_new.extend(move_lines_payment)
+        move_lines_new.extend(move_lines_products)
+
+        if value_to_debit > 0.0:
+            value_item = value_to_debit / float(len(move_lines_payment))
+            for move in move_lines_payment:
+                if move[2]['debit']:
+                    move[2]['debit'] -= value_item
+                elif move[2]['credit']:
+                    move[2]['credit'] -= value_item
+            for move in move_lines_products:
+                if move[2]['debit']:
+                    move[2]['debit'] += value_item
+                elif move[2]['credit']:
+                    move[2]['credit'] += value_item
+
+        return move_lines_new
+
+    @api.multi
     def _prepare_move_item(self, item):
         return {
             'document_number': '/',
@@ -1252,75 +1322,7 @@ class AccountInvoice(models.Model):
         #
         super(AccountInvoice, self).action_move_create()
 
-    # @api.multi
-    # def finalize_invoice_move_lines(self, move_lines):
-    #     move_lines = super(AccountInvoice, self).finalize_invoice_move_lines(
-    #         move_lines)
-    #
-    #     # What we do here? IMPORTANT
-    #     # We make a copy of the retention tax and calculate the new total
-    #     # in the payment lines
-    #     value_to_debit = 0.0
-    #     move_lines_new = []
-    #     move_lines_tax = [move for move in move_lines
-    #                       if not move[2]['product_id'] and
-    #                       not move[2]['date_maturity']]
-    #     move_lines_payment = [move for move in move_lines
-    #                           if not move[2]['product_id'] and
-    #                           move[2]['date_maturity']]
-    #     move_lines_products = [move for move in move_lines
-    #                            if move[2]['product_id'] and
-    #                            not move[2]['date_maturity']]
-    #
-    #     def invert_credit_debit(move, value_to_debit):
-    #         credit = move[2]['credit']
-    #         debit = move[2]['debit']
-    #         value_to_debit += move[2]['credit'] or move[2]['debit']
-    #         move[2]['credit'] = debit
-    #         move[2]['debit'] = credit
-    #         return value_to_debit
-    #
-    #     for move in move_lines_tax:
-    #         move_lines_new.append(move)
-    #
-    #         tax_code = self.env['account.tax.code'].browse(
-    #             move[2]['tax_code_id'])
-    #
-    #         if tax_code.domain == 'retissqn' and self.issqn_wh:
-    #             value_to_debit = invert_credit_debit(move, value_to_debit)
-    #
-    #         if tax_code.domain == 'retpis' and self.pis_wh:
-    #             value_to_debit = invert_credit_debit(move, value_to_debit)
-    #
-    #         if tax_code.domain == 'retcofins' and self.cofins_wh:
-    #             value_to_debit = invert_credit_debit(move, value_to_debit)
-    #
-    #         if tax_code.domain == 'retinss' and self.inss_wh:
-    #             value_to_debit = invert_credit_debit(move, value_to_debit)
-    #
-    #         if tax_code.domain == 'retcsll' and self.csll_wh:
-    #             value_to_debit = invert_credit_debit(move, value_to_debit)
-    #
-    #         if tax_code.domain == 'retir' and self.irrf_wh:
-    #             value_to_debit = invert_credit_debit(move, value_to_debit)
-    #
-    #     move_lines_new.extend(move_lines_payment)
-    #     move_lines_new.extend(move_lines_products)
-    #
-    #     if value_to_debit > 0.0:
-    #         value_item = value_to_debit / float(len(move_lines_payment))
-    #         for move in move_lines_payment:
-    #             if move[2]['debit']:
-    #                 move[2]['debit'] -= value_item
-    #             elif move[2]['credit']:
-    #                 move[2]['credit'] -= value_item
-    #         for move in move_lines_products:
-    #             if move[2]['debit']:
-    #                 move[2]['debit'] += value_item
-    #             elif move[2]['credit']:
-    #                 move[2]['credit'] += value_item
-    #
-    #     return move_lines_new
+
 
 
 class AccountInvoiceLine(models.Model):

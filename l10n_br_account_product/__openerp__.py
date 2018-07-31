@@ -14,6 +14,7 @@
         'l10n_br_data_account',
         'account_product_fiscal_classification',
         'financial_account',
+        'account_payment',
     ],
     'data': [
         'l10n_br_account_product_sequence.xml',
@@ -38,6 +39,7 @@
         'views/account_product_fiscal_classification_view.xml',
         'views/product_view.xml',
         'views/res_country_view.xml',
+        'views/account_payment_view.xml',
         'wizard/l10n_br_account_nfe_export_invoice_view.xml',
         'wizard/l10n_br_account_nfe_export_view.xml',
         'wizard/l10n_br_account_document_status_sefaz_view.xml',

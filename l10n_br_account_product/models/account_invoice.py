@@ -1449,7 +1449,9 @@ class AccountInvoice(models.Model):
     @api.onchange('payment_term', 'date_invoice', 'amount_net',
                   'amount_total', 'duplicata_ids')
     def onchange_duplicatas(self):
-        res = {}
+        res = self.onchange_payment_term_date_invoice(
+            self.payment_term.id, self.date_invoice
+        )
         valores = {}
         res['value'] = valores
 

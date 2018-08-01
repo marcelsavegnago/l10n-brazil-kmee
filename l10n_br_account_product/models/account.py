@@ -44,15 +44,14 @@ class AccountPaymentTerm(models.Model):
             forma_pagamento = \
                 payment_term.sped_forma_pagamento_id.forma_pagamento
             if forma_pagamento in FORMA_PAGAMENTO_CARTOES:
-                if forma_pagamento == \
-                    FORMA_PAGAMENTO_CARTAO_CREDITO:
+                if forma_pagamento == FORMA_PAGAMENTO_CARTAO_CREDITO:
                     nome_comercial += '[Crédito '
-                elif forma_pagamento == \
-                    FORMA_PAGAMENTO_CARTAO_DEBITO:
+                elif forma_pagamento == FORMA_PAGAMENTO_CARTAO_DEBITO:
                     nome_comercial += '[Débito '
 
                 nome_comercial += \
-                    BANDEIRA_CARTAO_DICT[payment_term.bandeira_cartao]
+                    BANDEIRA_CARTAO_DICT[
+                        payment_term.sped_forma_pagamento_id.bandeira_cartao]
                 nome_comercial += '] '
             elif forma_pagamento == FORMA_PAGAMENTO_OUTROS:
                 nome_comercial += '['

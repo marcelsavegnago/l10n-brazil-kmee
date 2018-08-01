@@ -444,7 +444,8 @@ class SpedDocumento(models.Model):
                 self._monta_nfe_cobranca(nfe.infNFe.cobr)
             nfe.infNFe.pag.detPag.append(pagamento.monta_nfe())
 
-        nfe.infNFe.pag.vTroco.valor = str(D(self.vr_troco))
+        if not self.ind_forma_pagamento == IND_FORMA_PAGAMENTO_SEM_PAGAMENTO:
+            nfe.infNFe.pag.vTroco.valor = str(D(self.vr_troco))
 
     def _monta_nfe_total(self, nfe):
         nfe.infNFe.total.ICMSTot.vBC.valor = str(D(self.bc_icms_proprio))

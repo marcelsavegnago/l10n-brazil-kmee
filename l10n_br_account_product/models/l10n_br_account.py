@@ -35,6 +35,10 @@ class L10nBrAccountFiscalCategory(models.Model):
     payment_term_required = fields.Boolean(
         string=u'Condição de pagamento obrigatória'
     )
+    account_payment_term_id = fields.Many2one(
+        comodel_name='account.payment.term',
+        string=u'Condição de pagamento'
+    )
 
 
 class L10nBrAccountDocumentSerie(models.Model):

@@ -69,13 +69,14 @@ class NFe200(FiscalDocument):
 
                 self.nfe.infNFe.det.append(self.det)
 
-            if invoice.journal_id.revenue_expense:
-                for dup in invoice.duplicata_ids:
-                    self.dup = self._get_Dup()
-                    self._encashment_data(invoice, dup)
-                    self.nfe.infNFe.cobr.dup.append(self.dup)
-                self.Fat = self._get_Fat()
-                self._invoice_data(invoice)
+            # if invoice.journal_id.revenue_expense:
+            #     if invoice.duplicata_ids:
+            #         for dup in invoice.duplicata_ids:
+            #             self.dup = self._get_Dup()
+            #             self._encashment_data(invoice, dup)
+            #             self.nfe.infNFe.cobr.dup.append(self.dup)
+            #         self.Fat = self._get_Fat()
+            #         self._invoice_data(invoice)
 
             try:
                 self._carrier_data(invoice)
@@ -919,11 +920,13 @@ class NFe400(NFe310):
             invoice.type_nf_payment != '90' else '0.00'
 
     def _invoice_data(self, invoice):
-        self.nfe.infNFe.cobr.fat.vLiq.valor = str("%.2f" % invoice.amount_net)
+        self.nfe.infNFe.cobr.fat.vLiq.valor = str(
+            "%.2f" % invoice.amount_net)
         self.nfe.infNFe.cobr.fat.nFat.valor = str(invoice.internal_number or '')
         self.nfe.infNFe.cobr.fat.vOrig.valor = str(invoice.amount_total)
         # TODO - mapear/implementar vDesc
-        self.nfe.infNFe.cobr.fat.vDesc.valor = str('%.2f' % invoice.amount_wh)
+        self.nfe.infNFe.cobr.fat.vDesc.valor = str(
+            '%.2f' % invoice.amount_discount)
 
     def get_NFe(self):
         try:

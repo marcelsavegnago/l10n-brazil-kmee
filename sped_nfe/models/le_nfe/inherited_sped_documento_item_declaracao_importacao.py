@@ -52,7 +52,7 @@ class SpedDocumentoItemDeclaracaoImportacao(models.Model):
             di.CNPJ.valor = limpa_formatacao(self.participante_id.cnpj_cpf)
             if not 'EX' in self.participante_id.municipio_id.estado_id.uf:
                 di.UFTerceiro.valor = \
-                    self.participante_id.municio_id.estado_id.uf
+                    self.participante_id.municipio_id.estado_id.uf
             di.cExportador.valor = \
                 limpa_formatacao(self.participante_id.cnpj_cpf)
 

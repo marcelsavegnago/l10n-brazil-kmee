@@ -13,7 +13,7 @@ class StockPicking(models.Model):
 
     @api.multi
     def _get_period(self):
-        return self.env['account.move']._get_period()
+        return self.env['account.period'].find()
 
     temporary_journal_id = fields.Many2one(
         string='Diário Recebimento Provisório',

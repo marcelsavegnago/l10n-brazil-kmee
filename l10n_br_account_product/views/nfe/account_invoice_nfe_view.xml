@@ -513,25 +513,36 @@
                             </group>
                             <separator string="Fiscal" />
                             <group>
+                                <field name="product_type" attrs="{'readonly': [('product_id','!=', False)]}"/>
+                                <field name="code" required="True" attrs="{'readonly': [('product_id','!=', False)]}"/>
+                                <field name="fiscal_classification_id" required="True" attrs="{'readonly': [('product_id','!=', False)]}"/>
                                 <field name="fiscal_category_id" required="1" domain="[('journal_type', '=', 'sale')]" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                 <field name="fiscal_position" required="1" domain="[('fiscal_category_id', '=', fiscal_category_id)]" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                 <field name="account_move_template_id" required="1" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                 <field name="cfop_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                 <field name="account_id" required="0" invisible="1"/>
+                                <field name="cest_id" attrs="{'readonly': [('product_id','!=', False)]}" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="fci" attrs="{'readonly': [('product_id','!=', False)]}"/>
+                                <field name="inss_base_wh_reducao" />
+                                <field name="invoice_line_tax_id" context="{'type':parent.type}" domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field domain="[('type','&lt;&gt;','view'), ('company_id', '=', parent.company_id)]" name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
+                                <field name="company_id" groups="base.group_multi_company" readonly="1"/>
                             </group>
                             <group>
                                 <group>
-                                    <field name="fiscal_type" invisible="1" />
-                                    <label for="quantity"/>
-                                    <div>
-                                        <field name="quantity" class="oe_inline"/>
-                                        <field name="uos_id" class="oe_inline" groups="product.group_uom" on_change="uos_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, parent.fiscal_position, price_unit, parent.currency_id, parent.company_id, context)"/>
-                                    </div>
-                                    <field name="price_unit"/>
-                                    <field name="discount"/>
-                                    <field name="freight_value"/>
-                                    <field name="insurance_value"/>
-                                    <field name="other_costs_value"/>
+                                    <group string="Quantidade e Preço">
+                                        <field name="fiscal_type" invisible="1" />
+                                        <label for="quantity"/>
+                                        <div>
+                                            <field name="quantity" class="oe_inline"/>
+                                            <field name="uos_id" class="oe_inline" groups="product.group_uom" on_change="uos_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, parent.fiscal_position, price_unit, parent.currency_id, parent.company_id, context)"/>
+                                        </div>
+                                        <field name="price_unit"/>
+                                        <field name="discount"/>
+                                        <field name="freight_value"/>
+                                        <field name="insurance_value"/>
+                                        <field name="other_costs_value"/>
+                                    </group>
                                     <group string="Custos e Totais">
                                         <field name="vr_custo_comercial"/>
                                         <field name="vr_custo_estoque"/>
@@ -540,18 +551,8 @@
                                         <field name="price_total"/>
                                     </group>
                                 </group>
-                                <group>
-                                    <field name="product_type" attrs="{'readonly': [('product_id','!=', False)]}"/>
-                                    <field name="code" required="True" attrs="{'readonly': [('product_id','!=', False)]}"/>
-                                    <field name="fiscal_classification_id" required="True" attrs="{'readonly': [('product_id','!=', False)]}"/>
-                                    <field name="cest_id" attrs="{'readonly': [('product_id','!=', False)]}" options="{'no_quick_create': True, 'no_create_edit': True}"/>
-                                    <field name="fci" attrs="{'readonly': [('product_id','!=', False)]}"/>
-                                    <field name="inss_base_wh_reducao" />
-                                    <field name="invoice_line_tax_id" context="{'type':parent.type}" domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit': True}"/>
-                                    <field domain="[('type','&lt;&gt;','view'), ('company_id', '=', parent.company_id)]" name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
-                                    <field name="company_id" groups="base.group_multi_company" readonly="1"/>
-                                </group>
                             </group>
+
                             <label for="name"/>
                             <field name="name"/>
                         </page>

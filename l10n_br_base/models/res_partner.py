@@ -53,6 +53,10 @@ class ResPartner(models.Model):
             return address_format % args
 
     cnpj_cpf = fields.Char('CNPJ/CPF', size=18)
+     
+    whatsapp = fields.Boolean('Whatsapp')
+
+    gender = fields.Char('Sexo', size=1)
 
     inscr_est = fields.Char('Inscr. Estadual/RG', size=16)
 
@@ -71,6 +75,8 @@ class ResPartner(models.Model):
     district = fields.Char('Bairro', size=32)
 
     number = fields.Char(u'Número', size=10)
+
+    union_entity_code = fields.Char(string='Union entity code')
 
     @api.multi
     @api.constrains('cnpj_cpf', 'inscr_est')

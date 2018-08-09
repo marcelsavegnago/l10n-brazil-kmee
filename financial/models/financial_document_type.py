@@ -22,3 +22,8 @@ class FinancialDocumentType(models.Model):
         string='Account',
         ondelete='restrict',
     )
+
+    adiantar_dia_pagamento_util = fields.Boolean(
+        string=u'Adiantar dia de pagamento útil?',
+        default=False
+    )

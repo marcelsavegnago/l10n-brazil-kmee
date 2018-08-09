@@ -28,6 +28,8 @@
                                     <field name="campo" />
                                     <field name="account_debito_id" />
                                     <field name="account_credito_id" />
+                                    <field name="account_automatico_debito" />
+                                    <field name="account_automatico_credito" />
                                 </tree>
                             </field>
                             <separator string="Categorias Fiscais Relacionadas" colspan="4" />

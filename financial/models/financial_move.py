@@ -4,7 +4,7 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from openerp import api, fields, models, _
 from openerp.exceptions import ValidationError
@@ -78,6 +78,7 @@ class FinancialMove(models.Model):
         comodel_name='res.currency',
         default=lambda self: self.env.user.company_id.currency_id,
         track_visibility='_track_visibility_onchange',
+        required=True,
     )
     partner_id = fields.Many2one(
         comodel_name='res.partner',
@@ -396,7 +397,10 @@ class FinancialMove(models.Model):
         string='Document amount in original currency',
         digits=(18, 2),
     )
-
+    currency_rate = fields.Float(
+        string='Taxa de conversão',
+        digits=(18, 8),
+    )
     #
     #
     # Payment term and Payment mode
@@ -512,9 +516,28 @@ class FinancialMove(models.Model):
         # # TODO: refactory for global OCA use avoiding l10n_br_resource
         for record in self:
             if record.date_maturity:
-                record.date_business_maturity = self.env[
-                    'resource.calendar'].proximo_dia_util_bancario(
-                    fields.Date.from_string(record.date_maturity))
+                if record.document_type_id.adiantar_dia_pagamento_util or \
+                        record.company_id.adiantar_dia_pagamento_util:
+                    record.date_business_maturity = self.\
+                        dia_util_bancario_anterior(fields.Date.from_string(
+                            record.date_maturity))
+                else:
+                    record.date_business_maturity = self.env[
+                        'resource.calendar'].proximo_dia_util_bancario(
+                        fields.Date.from_string(record.date_maturity))
+
+    @api.multi
+    def dia_util_bancario_anterior(self, data_referencia=datetime.now()):
+        """Retornar o próximo dia util.
+        :param datetime data_referencia: Se nenhuma data referencia for passada
+                                   verifique se amanha é dia útil.
+        :return datetime Proximo dia util apartir da data referencia
+        """
+        if self.env['resource.calendar'].data_eh_dia_util_bancario(
+                data_referencia):
+            return data_referencia
+        data_referencia += timedelta(days=-1)
+        return self.dia_util_bancario_anterior(data_referencia)
 
     @api.depends('date_business_maturity', 'amount_total', 'amount_document',
                  'amount_residual', 'amount_paid_document', 'date_cancel')
@@ -579,6 +602,21 @@ class FinancialMove(models.Model):
     def _track_visibility_onchange(self):
         return 'onchange'
 
+    @api.depends('company_id.today_date')
+    def _compute_arrears_days(self):
+        def date_value(date_str):
+            return fields.Date.from_string(date_str)
+        for record in self:
+            date_diference = False
+            if record.debt_status == 'paid':
+                date_diference = date_value(record.date_payment) - \
+                                 date_value(record.date_business_maturity)
+            elif record.debt_status == 'overdue':
+                date_diference = date_value(record.company_id.today_date) - \
+                                 date_value(record.date_business_maturity)
+            arrears = date_diference and date_diference.days or 0
+            record.arrears_days = arrears
+
     ref = fields.Char(
         required=True,
         copy=False,
@@ -606,6 +644,11 @@ class FinancialMove(models.Model):
         comodel_name="financial.move.motivo.cancelamento",
         string="Motivo do Cancelamento",
     )
+    arrears_days = fields.Integer(
+        string='Arrears Days',
+        compute='_compute_arrears_days',
+        store=True
+    )
 
     @api.multi
     @api.constrains('amount_document')
@@ -622,7 +665,7 @@ class FinancialMove(models.Model):
         allowed = [
             ('draft', 'open'),
             ('open', 'paid'),
-            ('open', 'cancel'),
+            ('open', 'cancelled'),
             ('paid', 'open'),
         ]
         return (old_state, new_state) in allowed
@@ -719,7 +762,7 @@ class FinancialMove(models.Model):
     @api.multi
     def action_cancel(self, motivo_id, obs):
         for record in self:
-            record.change_state('cancel')
+            record.change_state('cancelled')
             if record.note:
                 new_note = record.note + '\n' + obs
             else:
@@ -727,7 +770,8 @@ class FinancialMove(models.Model):
             record.write({
                 'motivo_cancelamento_id': motivo_id,
                 'amount_cancel': record.amount_document,
-                'note': new_note
+                'note': new_note,
+                'date_cancel': fields.Date.today(),
             })
             record.with_context(no_email=True).message_post(body=new_note)
 
@@ -868,6 +912,48 @@ class FinancialMove(models.Model):
             financial = self.create(values)
             financial_move_ids |= financial
         return financial_move_ids
+
+    @api.onchange('original_currency_amount', 'original_currency_id', 'currency_id')
+    def onchange_original_currency_amount(self):
+
+        if not self.original_currency_id or not self.currency_id:
+            return
+
+        diff_currency = self.original_currency_id != self.currency_id
+
+        if diff_currency:
+
+            self.currency_rate = self.original_currency_id._get_conversion_rate(
+                self.original_currency_id,
+                self.currency_id
+            )
+
+            if self.original_currency_amount:
+
+                self.amount_document = self.currency_id.compute(
+                    self.original_currency_amount, self.original_currency_id
+                )
+
+    #
+    # Método com problemas de arredondamento
+    #
+    # @api.onchange('original_currency_id', 'currency_id', 'amount_document')
+    # def onchange_amount_document(self):
+    #
+    #     diff_currency = self.original_currency_id != self.currency_id
+    #
+    #     if diff_currency:
+    #
+    #         self.currency_rate = self.original_currency_id._get_conversion_rate(
+    #             self.original_currency_id,
+    #             self.currency_id
+    #         )
+    #
+    #         if self.amount_document:
+    #
+    #             self.original_currency_amount = self.original_currency_id.compute(
+    #                 self.amount_document, self.currency_id
+    #             )
 
 
 class FinancialMoveMotivoCancelamento(models.Model):

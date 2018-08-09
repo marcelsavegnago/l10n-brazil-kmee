@@ -1303,6 +1303,12 @@ msgid "Financial Moves To Pay by Maturity"
 msgstr "Movimentações Financeiras a pagar por vencimento"
 
 #. module: financial
+#: code:addons/financial/reports/report_xlsx_financial_moves_cancelled.py:24
+#, python-format
+msgid "Report Moves Cancelled"
+msgstr "Relatório de Lançamentos Baixados"
+
+#. module: financial
 #: code:addons/financial/reports/report_xlsx_financial_moves_states.py:29
 #, python-format
 msgid "Financial Moves To Pay by Partner"
@@ -1324,3 +1330,8 @@ msgstr "Movimentações Financeiras a receber por parceiros"
 #: model:ir.ui.menu,name:financial.report_xlsx_financial_moves_states_wizard_menu
 msgid "Moves State"
 msgstr "Movimentações Financeiras"
+
+#. module: financial
+#: model:ir.ui.menu,name:financial.report_xlsx_financial_moves_cancelled_wizard_menu
+msgid "Moves Cancelled"
+msgstr "Lançamentos Baixados"

@@ -31,7 +31,14 @@
         'account',
         'report_py3o',
     ],
+    'external_dependencies': {
+        'python': ['html2text'],
+    },
     'data': [
+        'security/financial_move_ir_rule.xml',
+        'security/res_groups_data.xml',
+        'security/ir.model.access.csv',
+
         'views/financial_menu.xml',
 
         'data/financial_document_type_data.xml',
@@ -43,8 +50,13 @@
         # 'wizards/financial_pay_receive.xml',
         'wizards/report_xlsx_financial_cashflow_wizard_view.xml',
         'wizards/report_xlsx_financial_moves_states_wizard.xml',
+        'wizards/report_xlsx_financial_partner_statement_wizard.xml',
+        'wizards/report_xlsx_financial_defaults_wizard.xml',
+        'wizards/report_xlsx_financial_moves_cancelled_wizard.xml',
         'wizards/report_financial_aging_wizard.xml',
+
         'views/financial_move_payment_one2many_base_view.xml',
+        'views/res_company.xml',
         'views/financial_move_debt_base_view.xml',
         'views/financial_move_debt_2receive_view.xml',
         'views/financial_move_debt_2pay_view.xml',
@@ -66,6 +78,9 @@
         # 'report/report_financial.xml',
         'reports/report_xlsx_financial_cashflow_data.xml',
         'reports/report_xlsx_financial_moves_states_data.xml',
+        'reports/report_xlsx_financial_partner_statement_data.xml',
+        'reports/report_xlsx_financial_defaults_data.xml',
+        'reports/report_xlsx_financial_moves_cancelled_data.xml',
         'reports/report_financial_aging.xml',
         # 'security/inherited_res_partner_bank_security.xml',
         'security/ir.model.access.csv',

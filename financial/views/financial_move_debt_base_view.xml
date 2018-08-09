@@ -79,14 +79,20 @@
                                 <!--<field name="payment_term_id"/> # Removido da visão, verificar comentário no arquivo python-->
                             </group>
                             <group name="document_amounts">
+                                <separator string="Valor Moeda"/>
+                                <group name="original_amounts" colspan="2" class="oe_subtotal_footer oe_center">
+                                    <field name="original_currency_id" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="original_currency_amount" required="1" widget="monetary" options="{'currency_field': 'original_currency_id'}"/>
+                                </group>
                                 <separator string="Values" />
                                 <group name="amounts" colspan="2" class="oe_subtotal_footer oe_center">
                                     <field name="currency_id" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_currency"/>
-                                    <field name="amount_document" string="Amount" required="1" />
-                                    <field name="amount_paid_document" string="(-) Paid" readonly="1" />
+                                    <field name="currency_rate" readonly="1"/>
+                                    <field name="amount_document" string="Amount" required="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="amount_paid_document" string="(-) Paid" readonly="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                     <!--<field name="amount_refund" string="(-) Refund" readonly="1"/>-->
                                     <!--<field name="amount_cancel" string="(-) Cancel" readonly="1"/>-->
-                                    <field name="amount_residual" string="(=) Residual" class="oe_subtotal_footer_separator" readonly="1" />
+                                    <field name="amount_residual" string="(=) Residual" class="oe_subtotal_footer_separator" readonly="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                 </group>
                                 <newline />
                                 <separator string="Paid Values" />

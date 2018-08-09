@@ -3,6 +3,7 @@
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
 from datetime import datetime
+from unicodedata import normalize
 
 from openerp import pooler
 from openerp.exceptions import Warning as UserError
@@ -10,6 +11,11 @@ from openerp.tools.translate import _
 
 from openerp.addons.l10n_br_account.sped.document import FiscalDocument
 from openerp.addons.l10n_br_base.tools.misc import punctuation_rm
+
+from ...models.account_invoice_term import (
+    FORMA_PAGAMENTO_CARTOES,
+    FORMA_PAGAMENTO_SEM_PAGAMENTO,
+)
 
 
 class NFe200(FiscalDocument):
@@ -68,16 +74,14 @@ class NFe200(FiscalDocument):
 
                 self.nfe.infNFe.det.append(self.det)
 
-            if invoice.journal_id.revenue_expense:
-                for dup in invoice.duplicata_ids:
-                    self.dup = self._get_Dup()
-                    self._encashment_data(invoice, dup)
-                    self.nfe.infNFe.cobr.dup.append(self.dup)
+            self._encashment_data(invoice, self.nfe.infNFe.cobr)
 
             try:
                 self._carrier_data(invoice)
             except AttributeError:
                 pass
+
+            self._details_pag(invoice, self.nfe.infNFe.pag)
 
             self.vol = self._get_Vol()
             self._weight_data(invoice)
@@ -120,7 +124,7 @@ class NFe200(FiscalDocument):
         self.nfe.infNFe.ide.verProc.valor = 'Odoo Brasil v8'
         self.nfe.infNFe.compra.xPed.valor = invoice.name or ''
 
-        if invoice.cfop_ids[0].type in ("input"):
+        if invoice.cfop_ids[0].type in "input":
             self.nfe.infNFe.ide.tpNF.valor = 0
         else:
             self.nfe.infNFe.ide.tpNF.valor = 1
@@ -225,18 +229,24 @@ class NFe200(FiscalDocument):
 
         self.nfe.infNFe.emit.CNPJ.valor = punctuation_rm(
             invoice.company_id.partner_id.cnpj_cpf)
-        self.nfe.infNFe.emit.xNome.valor = (
-            invoice.company_id.partner_id.legal_name[:60])
+        self.nfe.infNFe.emit.xNome.valor = (normalize(
+            'NFKD', unicode(
+                invoice.company_id.partner_id.legal_name[:60])
+        ).encode('ASCII', 'ignore'))
         self.nfe.infNFe.emit.xFant.valor = invoice.company_id.partner_id.name
-        self.nfe.infNFe.emit.enderEmit.xLgr.valor = company.street or ''
+        self.nfe.infNFe.emit.enderEmit.xLgr.valor = (normalize(
+            'NFKD', unicode(company.street or '')).encode('ASCII', 'ignore'))
         self.nfe.infNFe.emit.enderEmit.nro.valor = company.number or ''
-        self.nfe.infNFe.emit.enderEmit.xCpl.valor = company.street2 or ''
-        self.nfe.infNFe.emit.enderEmit.xBairro.valor = (
-            company.district or 'Sem Bairro')
+        self.nfe.infNFe.emit.enderEmit.xCpl.valor = (normalize(
+            'NFKD', unicode(company.street2 or '')).encode('ASCII', 'ignore'))
+        self.nfe.infNFe.emit.enderEmit.xBairro.valor = (normalize(
+            'NFKD', unicode(
+                company.district or 'Sem Bairro')).encode('ASCII', 'ignore'))
         self.nfe.infNFe.emit.enderEmit.cMun.valor = '%s%s' % (
             company.state_id.ibge_code, company.l10n_br_city_id.ibge_code)
-        self.nfe.infNFe.emit.enderEmit.xMun.valor = (
-            company.l10n_br_city_id.name or '')
+        self.nfe.infNFe.emit.enderEmit.xMun.valor = (normalize(
+            'NFKD', unicode(
+                company.l10n_br_city_id.name or '')).encode('ASCII', 'ignore'))
         self.nfe.infNFe.emit.enderEmit.UF.valor = company.state_id.code or ''
         self.nfe.infNFe.emit.enderEmit.CEP.valor = punctuation_rm(
             company.zip or '')
@@ -274,8 +284,10 @@ class NFe200(FiscalDocument):
             address_invoice_city_code = '9999999'
         else:
             address_invoice_state_code = invoice.partner_id.state_id.code
-            address_invoice_city = (
-                invoice.partner_id.l10n_br_city_id.name or '')
+            address_invoice_city = (normalize(
+                'NFKD', unicode(
+                    invoice.partner_id.l10n_br_city_id.name or '')
+            ).encode('ASCII', 'ignore'))
             address_invoice_city_code = ('%s%s') % (
                 invoice.partner_id.state_id.ibge_code,
                 invoice.partner_id.l10n_br_city_id.ibge_code)
@@ -287,12 +299,13 @@ class NFe200(FiscalDocument):
             self.nfe.infNFe.dest.xNome.valor = (
                 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL')
         else:
-            self.nfe.infNFe.dest.xNome.valor = (
-                invoice.partner_id.legal_name[:60] or '')
+            self.nfe.infNFe.dest.xNome.valor = (normalize('NFKD', unicode(
+                invoice.partner_id.legal_name[:60] or ''
+            )).encode('ASCII', 'ignore'))
 
             if invoice.partner_id.is_company:
-                self.nfe.infNFe.dest.IE.valor = punctuation_rm(
-                    invoice.partner_id.inscr_est)
+                self.nfe.infNFe.dest.IE.valor = \
+                    punctuation_rm(invoice.partner_id.inscr_est)
 
             if invoice.partner_id.country_id.id == \
                     invoice.company_id.country_id.id:
@@ -306,14 +319,18 @@ class NFe200(FiscalDocument):
         self.nfe.infNFe.dest.indIEDest.valor = \
             invoice.partner_id.partner_fiscal_type_id.ind_ie_dest
 
-        self.nfe.infNFe.dest.enderDest.xLgr.valor = (
-            invoice.partner_id.street or '')
+        self.nfe.infNFe.dest.enderDest.xLgr.valor = (normalize(
+            'NFKD', unicode(
+                invoice.partner_id.street or '')).encode('ASCII', 'ignore'))
         self.nfe.infNFe.dest.enderDest.nro.valor = (
             invoice.partner_id.number or '')
-        self.nfe.infNFe.dest.enderDest.xCpl.valor = (
-            invoice.partner_id.street2 or '')
-        self.nfe.infNFe.dest.enderDest.xBairro.valor = (
-            invoice.partner_id.district or 'Sem Bairro')
+        self.nfe.infNFe.dest.enderDest.xCpl.valor = (normalize(
+            'NFKD', unicode(
+                invoice.partner_id.street2 or '')).encode('ASCII', 'ignore'))
+        self.nfe.infNFe.dest.enderDest.xBairro.valor = (normalize(
+            'NFKD', unicode(
+                invoice.partner_id.district or 'Sem Bairro')
+        ).encode('ASCII', 'ignore'))
         self.nfe.infNFe.dest.enderDest.cMun.valor = address_invoice_city_code
         self.nfe.infNFe.dest.enderDest.xMun.valor = address_invoice_city
         self.nfe.infNFe.dest.enderDest.UF.valor = address_invoice_state_code
@@ -332,13 +349,15 @@ class NFe200(FiscalDocument):
 
         if invoice_line.product_id:
             self.det.prod.cProd.valor = invoice_line.product_id.code or ''
-            self.det.prod.cEAN.valor = invoice_line.product_id.ean13 or ''
+            self.det.prod.cEAN.valor = invoice_line.product_id.ean13 or 'SEM GTIN'
             self.det.prod.cEANTrib.valor = invoice_line.product_id.ean13 or ''
-            self.det.prod.xProd.valor = (
-                invoice_line.product_id.name[:120] or '')
+            self.det.prod.xProd.valor = (normalize('NFKD', unicode(
+                invoice_line.product_id.name[:120] or ''
+            )).encode('ASCII', 'ignore'))
         else:
             self.det.prod.cProd.valor = invoice_line.code or ''
-            self.det.prod.xProd.valor = invoice_line.name[:120] or ''
+            self.det.prod.xProd.valor = (normalize('NFKD', unicode(
+                invoice_line.name[:120] or '')).encode('ASCII', 'ignore'))
 
         self.det.prod.NCM.valor = punctuation_rm(
             invoice_line.fiscal_classification_id.code or '')[:8]
@@ -542,13 +561,36 @@ class NFe200(FiscalDocument):
         self.di_line.vDescDI.valor = str(
             "%.2f" % invoice_line_di.amount_discount)
 
-    def _encashment_data(self, invoice, dup):
+    def _encashment_data(self, invoice, cobr):
         """Dados de Cobrança"""
-        self.dup.nDup.valor = dup.numero
-        self.dup.dVenc.valor = (dup.data_vencimento or
+
+        if invoice.journal_id.revenue_expense:
+            for move_line in invoice.move_line_receivable_id:
+        
+                if invoice.type in ('out_invoice', 'in_refund'):
+                    value = move_line.debit
+                else:
+                    value = move_line.credit
+
+                dup = self._get_Dup()
+
+                dup.nDup.valor = move_line.name
+                dup.dVenc.valor = (move_line.date_maturity or
+                                   invoice.date_due or
+                                   invoice.date_invoice)
+                dup.vDup.valor = str("%.2f" % value)
+                cobr.dup.append(dup)
+
+        if invoice.type in ('out_invoice', 'in_refund'):
+            value = move_line.debit
+        else:
+            value = move_line.credit
+
+        self.dup.nDup.valor = move_line.name
+        self.dup.dVenc.valor = (move_line.date_maturity or
                                 invoice.date_due or
                                 invoice.date_invoice)
-        self.dup.vDup.valor = str("%.2f" % dup.valor)
+        self.dup.vDup.valor = str("%.2f" % value)
 
     def _carrier_data(self, invoice):
         """Dados da Transportadora e veiculo"""
@@ -573,7 +615,9 @@ class NFe200(FiscalDocument):
             self.nfe.infNFe.transp.transporta.IE.valor = punctuation_rm(
                 invoice.carrier_id.partner_id.inscr_est)
             self.nfe.infNFe.transp.transporta.xEnder.valor = (
-                invoice.carrier_id.partner_id.street or '')
+                (invoice.carrier_id.partner_id.street or '') + ', ' +
+                (invoice.carrier_id.partner_id.number or '') + ', ' +
+                (invoice.carrier_id.partner_id.district or ''))[:60]
             self.nfe.infNFe.transp.transporta.xMun.valor = (
                 invoice.carrier_id.partner_id.l10n_br_city_id.name or '')
             self.nfe.infNFe.transp.transporta.UF.valor = (
@@ -600,8 +644,12 @@ class NFe200(FiscalDocument):
     def _additional_information(self, invoice):
         """Informações adicionais"""
 
-        self.nfe.infNFe.infAdic.infAdFisco.valor = invoice.fiscal_comment or ''
-        self.nfe.infNFe.infAdic.infCpl.valor = invoice.comment or ''
+        self.nfe.infNFe.infAdic.infAdFisco.valor = normalize(
+            'NFKD', unicode(
+                invoice.fiscal_comment or '')).encode('ASCII', 'ignore')
+        self.nfe.infNFe.infAdic.infCpl.valor = normalize(
+            'NFKD', unicode(
+                invoice.comment or '')).encode('ASCII', 'ignore')
 
     def _total(self, invoice):
         """Totais"""
@@ -872,3 +920,117 @@ class NFe310(NFe200):
             raise UserError(
                 _(u'Erro!'), _(u"Biblioteca PySPED não instalada!"))
         return AutXML_310()
+
+
+class NFe400(NFe310):
+    def __init__(self):
+        super(NFe400, self).__init__()
+
+    def _details_pag(self, invoice, pag):
+
+        for pagamento in invoice.account_payment_ids:
+            pag.detPag.append(self._payment_date(pagamento))
+
+        pag.vTroco.valor = str("%.2f" % invoice.amount_change)
+
+    def _payment_date(self, pagamento):
+
+        pag = self._get_DetPag()
+
+        # Somente no/ PL_009_V4_2016_002_v160b
+        # pag.indPag.valor = pagamento.payment_term_id.ind_forma_pagamento or ''
+
+        pag.tPag.valor = pagamento.forma_pagamento
+        pag.vPag.valor = str(pagamento.amount)
+
+        if pagamento.forma_pagamento in FORMA_PAGAMENTO_CARTOES:
+            pag.card.tpIntegra.valor = pagamento.card_integration
+            pag.card.CNPJ.valor = punctuation_rm(pagamento.cnpj_cpf or '')
+            pag.card.tBand.valor = pagamento.card_brand
+            pag.card.cAut.valor = pagamento.autorizacao
+
+        return pag
+
+    def _encashment_data(self, invoice, cobr):
+        """Dados de Cobrança"""
+
+        if FORMA_PAGAMENTO_SEM_PAGAMENTO in invoice.account_payment_ids.mapped('forma_pagamento'):
+            return
+
+        cobr.fat.nFat.valor = invoice.number
+        cobr.fat.vOrig.valor = str("%.2f" % invoice.amount_payment_original)
+        cobr.fat.vDesc.valor = str("%.2f" % invoice.amount_payment_discount)
+        cobr.fat.vLiq.valor = str("%.2f" % invoice.amount_payment_net)
+
+        for payment_line in invoice.account_payment_line_ids:
+            dup = self._get_Dup()
+            dup.nDup.valor = payment_line.number
+            dup.dVenc.valor = payment_line.date_due
+            dup.vDup.valor = str("%.2f" % payment_line.amount_net)
+            cobr.dup.append(dup)
+
+    def get_NFe(self):
+        try:
+            from pysped.nfe.leiaute import NFe_400
+        except ImportError:
+            raise UserError(
+                _(u'Erro!'), _(u"Biblioteca PySPED não instalada!"))
+
+        return NFe_400()
+
+    def _get_NFRef(self):
+        try:
+            from pysped.nfe.leiaute import NFRef_400
+        except ImportError:
+            raise UserError(
+                _(u'Erro!'), _(u"Biblioteca PySPED não instalada!"))
+
+        return NFRef_400()
+
+    def _get_Det(self):
+        try:
+            from pysped.nfe.leiaute import Det_400
+        except ImportError:
+            raise UserError(
+                _(u'Erro!'), _(u"Biblioteca PySPED não instalada!"))
+        return Det_400()
+
+    def _get_Dup(self):
+        try:
+            from pysped.nfe.leiaute import Dup_400
+        except ImportError:
+            raise UserError(
+                _(u'Erro!'), _(u"Biblioteca PySPED não instalada!"))
+        return Dup_400()
+
+    def _get_DI(self):
+        try:
+            from pysped.nfe.leiaute import DI_400
+        except ImportError:
+            raise UserError(
+                _(u'Erro!'), _(u"Biblioteca PySPED não instalada!"))
+        return DI_400()
+
+    def _get_Pag(self):
+        try:
+            from pysped.nfe.leiaute import Pag_400
+        except ImportError:
+            raise UserError(
+                _(u'Erro!'), _(u"Biblioteca PySPED não instalada!"))
+        return Pag_400()
+
+    def _get_DetPag(self):
+        try:
+            from pysped.nfe.leiaute import DetPag_400
+        except ImportError:
+            raise UserError(
+                _(u'Erro!'), _(u"Biblioteca PySPED não instalada!"))
+        return DetPag_400()
+
+    def _get_AutXML(self):
+        try:
+            from pysped.nfe.leiaute import AutXML_400
+        except ImportError:
+            raise UserError(
+                _(u'Erro!'), _(u"Biblioteca PySPED não instalada!"))
+        return AutXML_400()

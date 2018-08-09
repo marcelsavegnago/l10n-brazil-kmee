@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2017 KMEE
+    Copyright 2017 KMEE - Luiz Felipe do Divino <luiz.divino@kmee.com.br>
+    License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
+-->
+<openerp>
+    <data>
+
+        <report
+                id="report_financial_aging_py3o_report"
+                string="Aging"
+                model="financial.move"
+                report_type="py3o"
+                name="financial.report_financial_aging"
+        />
+
+        <record id="py3o_template_analytic" model="py3o.template">
+            <field name="name">financial-aging-report</field>
+            <field name="filetype">odt</field>
+            <field name="py3o_template_data" type="base64"
+                   file="financial/data/financial_aging.odt"></field>
+        </record>
+
+        <record id="report_financial_aging_py3o_report" model="ir.actions.report.xml">
+            <field name="module">financial</field>
+            <field name="py3o_fusion_filetype"
+                   ref="report_py3o.py3o_fusion_filetype_pdf"/>
+            <field name="py3o_template_fallback">data/financial_aging.odt</field>
+            <field name="py3o_template_id" ref="py3o_template_analytic"/>
+        </record>
+
+    </data>
+</openerp>

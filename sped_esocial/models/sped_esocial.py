@@ -1451,6 +1451,26 @@ class SpedEsocial(models.Model):
             esocial.necessita_s2300 = necessita_s2300
             esocial.msg_admissao_sem_vinculo = msg_admissao_sem_vinculo
 
+    # Calcula se é necessário criar algum registro S-2205
+    @api.depends('alteracao_trabalhador_ids')
+    def compute_necessita_s2205(self):
+        for esocial in self:
+            necessita_s2205 = False
+            msg_alteracao_trabalhador = False
+            for alteracao in esocial.alteracao_trabalhador_ids:
+                if alteracao.situacao_esocial not in ['4']:
+                    necessita_s2205 = True
+            if not msg_alteracao_trabalhador:
+                msg_alteracao_trabalhador = 'Nenhuma'
+            if esocial.alteracao_trabalhador_ids:
+                txt = 'Alteração de Trabalhador não enviada!'
+                if len(esocial.alteracao_trabalhador_ids) > 1:
+                    txt = 'Alterações de Trabalhador não enviadas!'
+                msg_alteracao_trabalhador = '{} {} - '.format(len(esocial.alteracao_trabalhador_ids), txt) + \
+                    msg_alteracao_trabalhador
+            esocial.necessita_s2205 = necessita_s2205
+            esocial.msg_alteracao_trabalhador = msg_alteracao_trabalhador
+
     @api.multi
     def importar_admissao_sem_vinculo(self):
         self.ensure_one()
@@ -2122,4 +2142,3 @@ class SpedEsocial(models.Model):
         ]
 
         return domain
-

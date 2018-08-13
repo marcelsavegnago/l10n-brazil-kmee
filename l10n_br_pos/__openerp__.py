@@ -34,6 +34,7 @@
         "views/res_partner.xml",
         "views/res_company.xml",
         "views/account_journal_view.xml",
+        "views/pos_find_order.xml",
         "wizard/sat_xml_periodic_export.xml",
         "wizard/l10n_br_pos_find_order.xml",
         "views/account_invoice_view.xml"

@@ -15,11 +15,14 @@
                     <page string="Contabilidade">
                         <separator string="Movimentações Contábeis" />
                         <group>
+                            <field name="gerar_contabilizacao" invisible="1"/>
                             <field name="temporary_journal_id" />
                             <field name="definitive_journal_id" />
                             <field name="period_id" />
                             <field name="temporary_move_id" />
                             <field name="definitive_move_id" />
+                            <field name="historic_temporary_move" attrs="{'required': [('gerar_contabilizacao', '=', True)]}"/>
+                            <field name="historic_definitive_move" attrs="{'required': [('gerar_contabilizacao', '=', True),('state', '=', 'provisorio')]}"/>
                         </group>
                     </page>
                 </xpath>

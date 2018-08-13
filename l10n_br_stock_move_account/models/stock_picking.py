@@ -107,14 +107,16 @@ class StockPicking(models.Model):
 
                 if account_move_lines:
                     move_vals = stock.get_account_move_stock_vals(
-                        account_move_lines, stock.temporary_journal_id
+                        account_move_lines, stock.temporary_journal_id,
+                        stock.historic_temporary_move
                     )
 
                     move = self.env['account.move'].create(move_vals)
 
                     stock.temporary_move_id = move
 
-    def get_account_move_stock_vals(self, account_move_lines, journal_id):
+    def get_account_move_stock_vals(
+            self, account_move_lines, journal_id, historico_lancamento):
         move_vals = {
             'ref': self.name,
             'line_id': account_move_lines,
@@ -122,6 +124,7 @@ class StockPicking(models.Model):
             'partner_id': self.partner_id.id,
             'date': self.date,
             'company_id': self.company_id.id,
+            'narration': historico_lancamento,
         }
         return move_vals
 
@@ -263,7 +266,8 @@ class StockPicking(models.Model):
 
                 if account_move_lines:
                     move_vals = stock.get_account_move_stock_vals(
-                        account_move_lines, stock.definitive_journal_id
+                        account_move_lines, stock.definitive_journal_id,
+                        stock.historic_definitive_move
                     )
 
                     move = self.env['account.move'].create(move_vals)

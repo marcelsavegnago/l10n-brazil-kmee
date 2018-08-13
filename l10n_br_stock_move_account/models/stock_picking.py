@@ -15,6 +15,12 @@ class StockPicking(models.Model):
     def _get_period(self):
         return self.env['account.period'].find()
 
+    state = fields.Selection(
+        selection_add=[
+            ('provisorio', 'Recebimento Provisório'),
+        ]
+    )
+
     temporary_journal_id = fields.Many2one(
         string='Diário Recebimento Provisório',
         comodel_name='account.journal',
@@ -41,29 +47,34 @@ class StockPicking(models.Model):
         comodel_name='account.move',
     )
 
-    @api.multi
-    def action_confirm(self):
-        stock_id = super(StockPicking, self).action_confirm()
+    historic_temporary_move = fields.Text(
+        string='Histórico Lançamento Temporário',
+    )
 
+    historic_definitive_move = fields.Text(
+        string='Histórico Lançamento Definitivo',
+    )
+
+    gerar_contabilizacao = fields.Boolean(
+        string='Gerar Contabilização',
+        compute='_compute_verificar_contabilizacao',
+    )
+
+    @api.multi
+    @api.depends('period_id')
+    def _compute_verificar_contabilizacao(self):
+        for record in self:
+            record.gerar_contabilizacao = \
+                self.company_id.active_stock_move_account
+
+    @api.multi
+    def action_provisorio(self):
         if self.company_id.temporary_account_journal_id:
             self.gera_movimentacao_contabil_transitoria()
 
-        return stock_id
-
-    @api.depends('code', 'state')
-    def get_status(self):
-        is_draft = False
-        is_incoming = False
-        is_done = False
-
-        if self.state == 'draft':
-            is_draft = True
-        elif self.state == 'provisorio':
-            is_done = True
-        if self.code == 'incoming':
-            is_incoming = True
-        self.status = (is_incoming and not is_done) or \
-                      (is_draft and not is_incoming)
+        self.env.cr.execute(
+            "update stock_picking set state='provisorio' where id=%d" % self.id
+        )
 
     @api.multi
     def _validar_tipo_picking(self, journal_id):

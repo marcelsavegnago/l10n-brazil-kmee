@@ -78,7 +78,7 @@ class StockPicking(models.Model):
 
     @api.multi
     def _validar_tipo_picking(self, journal_id):
-        if self.code != 'incoming':
+        if self.picking_type_code != 'incoming':
             return False
 
         if self.company_id.active_stock_move_account:

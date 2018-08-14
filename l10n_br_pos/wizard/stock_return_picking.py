@@ -12,7 +12,7 @@ class StockReturnPicking(models.TransientModel):
     @api.multi
     def create_returns(self):
         result = super(StockReturnPicking, self).create_returns()
-        if self.mapped('product_return_moves.move_id.picking_id.pos_order_ids'):
+        if self.sudo().mapped('product_return_moves.move_id.picking_id.pos_order_ids'):
             # Create the return process if the product came from
             # a pos.order.
 
@@ -24,10 +24,14 @@ class StockReturnPicking(models.TransientModel):
 
             # Create the wizard that relate the source fiscal documents with
             # the generated picking
-            wizard_invoice = self.env['stock.invoice.onshipping'].with_context(
+            current_session_ids = self.env['pos.session'].\
+                search([('state', '!=', 'closed'), ('user_id', '=', self._uid)])
+            wizard_invoice = self.sudo().env['stock.invoice.onshipping'].\
+                with_context(
                 active_ids=picking_devolucao.ids,
                 active_model='stock.picking',
-                company_id=picking_devolucao.company_id.id
+                company_id=current_session_ids[0].config_id.company_id.id
+                # company_id=picking_devolucao.company_id.id
             ).create({})
 
             # Generate the returning invoice
@@ -55,6 +59,6 @@ class StockReturnPicking(models.TransientModel):
         result_domain = safe_eval(result['domain'])
         picking_ids = result_domain and result_domain[0] and \
                       result_domain[0][2]
-        picking_devolucao = self.env['stock.picking'].browse(picking_ids)
+        picking_devolucao = self.sudo().env['stock.picking'].browse(picking_ids)
         picking_devolucao.action_assign()
         return picking_devolucao

@@ -136,12 +136,17 @@ class PosOrder(models.Model):
         fiscal_category = self.session_id.config_id.fiscal_category_id
         self.picking_id.fiscal_category_id = \
             fiscal_category.id
+        current_session_ids = self.env['pos.session']. \
+            search([('state', '!=', 'closed'), ('user_id', '=', self._uid)])
+
         obj_fp_rule = self.env['account.fiscal.position.rule']
         kwargs = {
-            'partner_id': self.picking_id.company_id.partner_id.id,
-            'partner_shipping_id': self.picking_id.company_id.partner_id.id,
+            'partner_id':
+                current_session_ids[0].config_id.company_id.partner_id.id,
+            'partner_shipping_id':
+                current_session_ids[0].config_id.company_id.partner_id.id,
             'fiscal_category_id': fiscal_category.id,
-            'company_id': self.picking_id.company_id.id,
+            'company_id': current_session_ids[0].config_id.company_id.id,
         }
         self.picking_id.fiscal_position = obj_fp_rule.apply_fiscal_mapping(
             {'value': {}}, **kwargs
@@ -262,6 +267,48 @@ class PosOrder(models.Model):
         }
 
         return dados_reimpressao
+
+    @api.multi
+    def devolucao(self):
+        self.ensure_one()
+        vals = {
+            'name': self.name,
+            'order_id': self.id,
+            'date_order': self.date_order,
+            'session_id': self.session_id.id,
+            'partner_id': self.partner_id.id,
+            'chave_cfe': self.chave_cfe,
+            'amount_total': self.amount_total,
+            'canceled_order': self.canceled_order,
+            'state': self.state,
+        }
+        order_find = self.env['pos.find.order']
+        ord = order_find.create(vals)
+        for line in self.lines:
+            vals_l = {
+                'product_id': line.product_id.id,
+                'qty': line.qty,
+                'qtd_produtos_devolvidos': line.qtd_produtos_devolvidos,
+                'price_unit': line.price_unit,
+                'discount': line.discount,
+                'price_subtotal': line.price_subtotal,
+                'price_subtotal_incl': line.price_subtotal_incl,
+                'order_id': ord.id
+            }
+            self.env['pos.find.order.line'].create(vals_l)
+        self._cr.commit()
+        return {
+            'view_type': 'form',
+            'view_id': [
+                (self.env.ref(
+                    'l10n_br_pos.view_l10n_br_pos_return_form').id)],
+            'view_mode': 'form',
+            'res_model': 'pos.order.return',
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'context': {'order_id': ord.id,
+                        'partner_id': ord.partner_id.id},
+        }
 
 
 class PosOrderLine(models.Model):

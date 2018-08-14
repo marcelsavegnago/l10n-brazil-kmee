@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import models, fields, api, _
+from openerp.exceptions import Warning as UserError
 
 
 class FindPosOrder(models.TransientModel):
@@ -25,6 +26,7 @@ class FindPosOrder(models.TransientModel):
         orders = self.env['pos.order'].sudo().search(
             [('name', 'like', self.name)]
         )
+
         action = \
             self.env.ref('l10n_br_pos.action_pos_find_order').read()[0]
 
@@ -67,19 +69,28 @@ class FindPosOrder(models.TransientModel):
 
         if len(orders_found) > 1:
             action['domain'] = [('id', 'in', orders_found)]
-            action['view_type'] = 'tree'
-            action['view_mode'] = 'tree'
+            action['view_type'] = 'form'
+            action['view_mode'] = 'tree,form'
             action['view_id'] = \
                 (self.env.ref(
                     'l10n_br_pos.view_pos_find_order_tree').id, 'tree')
+            action['views'] = [(self.env.ref(
+                    'l10n_br_pos.view_pos_find_order_tree').id, 'tree'),
+                                  (self.env.ref(
+                    'l10n_br_pos.view_find_order_form').id, 'form')]
 
         elif len(orders_found) == 1:
+            action['domain'] = [('id', 'in', orders_found)]
             action['view_type'] = 'form'
-            action['view_mode'] = 'form'
-            action['view_id'] = [
-                (self.env.ref(
-                    'l10n_br_pos.view_find_order_form').id, 'form')]
+            action['view_mode'] = 'form,tree'
             action['res_id'] = orders_found[0]
+            action['view_id'] = \
+                (self.env.ref(
+                    'l10n_br_pos.view_find_order_form').id, 'form')
+            action['views'] = [(self.env.ref(
+                    'l10n_br_pos.view_find_order_form').id, 'form'),(self.env.ref(
+                    'l10n_br_pos.view_pos_find_order_tree').id, 'tree')]
+
         else:
-            raise Warning(_('Nenhum pedido encontrado!'))
+            raise UserError(_('Nenhum pedido encontrado!'))
         return action

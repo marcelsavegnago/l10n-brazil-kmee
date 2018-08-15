@@ -53,12 +53,12 @@ class StockTransferDetails(models.TransientModel):
 
         return True
 
-
     @api.multi
     def do_detailed_transfer(self):
-        self.do_detailed_transfer_core()
+        for record in self:
+            record.do_detailed_transfer_core()
 
-        if self.picking_id.company_id.active_stock_move_account:
-            self.picking_id.gerar_lancamento_recebimento_definitivo()
+            if record.picking_id.company_id.active_stock_move_account:
+                record.picking_id.gerar_lancamento_recebimento_definitivo()
 
         return True

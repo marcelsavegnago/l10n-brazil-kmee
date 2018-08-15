@@ -81,12 +81,12 @@ class StockPicking(models.Model):
         if self.picking_type_code != 'incoming':
             return False
 
-        if self.company_id.active_stock_move_account:
-            self._validar_configuracoes_movimentacao_transitoria(
-                self.company_id.account_move_template_id, journal_id
-            )
-        else:
+        if not self.company_id.active_stock_move_account:
             return False
+
+        self._validar_configuracoes_movimentacao_transitoria(
+            self.company_id.account_move_template_id, journal_id
+        )
 
         return True
 

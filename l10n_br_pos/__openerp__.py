@@ -15,7 +15,7 @@
         'l10n_br_stock_account',
         'point_of_sale',
         'pos_pricelist',
-        'pos_payment_term',
+        'account',
         'nfe_attach',
         'l10n_br_zip_correios',
         'pos_order_picking_link',

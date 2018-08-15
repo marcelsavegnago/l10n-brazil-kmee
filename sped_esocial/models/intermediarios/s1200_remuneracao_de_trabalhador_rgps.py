@@ -122,7 +122,7 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
             self.sped_registro = sped_registro
 
     @api.multi
-    def popula_xml(self, ambiente='2', operacao='I'):
+    def popula_xml(self, ambiente='2', operacao='na'):
         self.ensure_one()
 
         # Cria o registro
@@ -131,8 +131,11 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
         S1200.nrInsc = limpa_formatacao(self.company_id.cnpj_cpf)[0:8]
 
         # Popula ideEvento
-        S1200.evento.ideEvento.indRetif.valor = '1'  # TODO Criar meio de enviar um registro retificador
-        # S1200.evento.ideEvento.nrRecibo.valor = '' # Recibo só quando for retificação
+        indRetif = '1'
+        if operacao == 'R':
+            indRetif = '2'
+            S1200.evento.ideEvento.nrRecibo.valor = self.sped_registro.retificado_id.recibo
+        S1200.evento.ideEvento.indRetif.valor = indRetif
         S1200.evento.ideEvento.indApuracao.valor = '1'  # TODO Lidar com os holerites de 13º salário
                                                         # '1' - Mensal
                                                         # '2' - Anual (13º salário)
@@ -208,7 +211,7 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
             remun_per_apur = pysped.esocial.leiaute.S1200_RemunPerApur_2()
 
             # Só preencher matricula de EMPREGADO com vinculo
-            if payslip.contract_id.tipo != 'autonomo':
+            if payslip.contract_id.evento_esocial == 's2200':
                 remun_per_apur.matricula.valor = payslip.contract_id.matricula
 
             # Somente para quando a empresa for do Simples
@@ -257,7 +260,7 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
             # Preencher com o código que representa o grau de exposição a
             # agentes nocivos, conforme tabela 2. Preencher apenas para
             # trabalhadores com vinculo S2200
-            if payslip.contract_id.tipo != 'autonomo':
+            if payslip.contract_id.evento_esocial == 's2200':
                 info_ag_nocivo = pysped.esocial.leiaute.S1200_InfoAgNocivo_2()
                 # Inserir um campo em algum lugar (no contrato talvez)
                 info_ag_nocivo.grauExp.valor = 1

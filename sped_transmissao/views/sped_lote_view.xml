@@ -37,6 +37,8 @@
                                 <group colspan="4" col="4">
                                     <group colspan="4" col="4">
                                         <field name="company_id" />
+                                        <field name="tipo" />
+                                        <field name="grupo" />
                                         <field name="quantidade" />
                                     </group>
                                     <group colspan="2" col="2">
@@ -103,9 +105,10 @@
                 <tree string="Lotes de Transmissão" edit="false" create="false" duplicate="false"
                       colors="blue:situacao in ('2','4');black:situacao == '1';read:situacao in ('3', '5')"
                 >
-                    <field name="tipo"/>
                     <field name="codigo"/>
                     <field name="company_id"/>
+                    <field name="tipo"/>
+                    <field name="grupo"/>
                     <field name="quantidade" />
                     <field name="situacao"/>
                 </tree>
@@ -124,6 +127,7 @@
                     <field name="codigo" />
                     <group expand="0" string="Group By">
                         <filter name="group_by_tipo" string="Tipo" context="{'group_by': 'tipo'}" />
+                        <filter name="group_by_grupo" string="Grupo" context="{'group_by': 'grupo'}" />
                         <filter name="group_by_situacao" string="Situação" context="{'group_by': 'situacao'}" />
                         <filter name="group_by_transmissao" string="Data/Hora de Transmissão" context="{'group_by': 'data_hora_transmissao'}" />
                         <filter name="group_by_retorno" string="Data/Hora de Retorno" context="{'group_by': 'data_hora_retorno'}" />
@@ -172,6 +176,32 @@
             <field name="code">sped.lote</field>
             <field name="padding">4</field>
             <field name="prefix">SPED-LOTE-</field>
+        </record>
+
+        <!-- Cron para transmitir lotes -->
+        <record model="ir.cron" id="sped_lote_transmite_cron">
+            <field name="name">Transmitir Lotes SPED</field>
+            <field name="active" eval="True" />
+            <field name="user_id" ref="base.user_root" />
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="model" eval="'sped.lote'" />
+            <field name="function" eval="'transmitir_lotes_preparados'" />
+            <field name="args" eval="" />
+        </record>
+
+        <!-- Cron para consulta dos lotes transmitidos -->
+        <record model="ir.cron" id="sped_lote_consulta_cron">
+            <field name="name">Consultar Lotes SPED Transmitidos</field>
+            <field name="active" eval="True" />
+            <field name="user_id" ref="base.user_root" />
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="model" eval="'sped.lote'" />
+            <field name="function" eval="'consultar_lotes_transmitidos'" />
+            <field name="args" eval="" />
         </record>
 
     </data>

@@ -6,7 +6,7 @@ import pysped
 from openerp import api, models, fields
 from pybrasil.inscricao.cnpj_cpf import limpa_formatacao
 from pybrasil.valor import formata_valor
-
+from openerp.exceptions import Warning, ValidationError
 from openerp.addons.sped_transmissao.models.intermediarios.sped_registro_intermediario import SpedRegistroIntermediario
 
 
@@ -45,6 +45,7 @@ class SpedEsocialHrContrato(models.Model, SpedRegistroIntermediario):
         ],
         compute="compute_situacao_esocial",
         readonly=True,
+        # store=True,
     )
     ultima_atualizacao = fields.Datetime(
         string='Data da última atualização',
@@ -209,11 +210,13 @@ class SpedEsocialHrContrato(models.Model, SpedRegistroIntermediario):
             self.hr_contract_id.employee_id.birthday
 
         if self.hr_contract_id.employee_id.naturalidade:
-            S2300.evento.trabalhador.nascimento.codMunic.valor = \
-                self.hr_contract_id.employee_id.naturalidade.state_id.ibge_code + \
-                self.hr_contract_id.employee_id.naturalidade.ibge_code
-            S2300.evento.trabalhador.nascimento.uf.valor = \
-                self.hr_contract_id.employee_id.naturalidade.state_id.code
+            # Só preenche o município/estado se a naturalidade for Brasil
+            if self.hr_contract_id.employee_id.pais_nascto_id == self.env.ref('sped_tabelas.tab06_105'):
+                S2300.evento.trabalhador.nascimento.codMunic.valor = \
+                    self.hr_contract_id.employee_id.naturalidade.state_id.ibge_code + \
+                    self.hr_contract_id.employee_id.naturalidade.ibge_code
+                S2300.evento.trabalhador.nascimento.uf.valor = \
+                    self.hr_contract_id.employee_id.naturalidade.state_id.code
         S2300.evento.trabalhador.nascimento.paisNascto.valor = \
             self.hr_contract_id.employee_id.pais_nascto_id.codigo
         S2300.evento.trabalhador.nascimento.paisNac.valor = \
@@ -311,8 +314,11 @@ class SpedEsocialHrContrato(models.Model, SpedRegistroIntermediario):
             self.hr_contract_id.employee_id.address_home_id.street2 or ''
         Brasil.bairro.valor = \
             self.hr_contract_id.employee_id.address_home_id.district or ''
+        if not self.hr_contract_id.employee_id.address_home_id.zip:
+            raise Warning('Por favor preencha corretamente o CEP do '
+                          'funcionário {}'.format(self.hr_contract_id.employee_id.name))
         Brasil.cep.valor = limpa_formatacao(
-            self.hr_contract_id.employee_id.address_home_id.zip) or ''
+            self.hr_contract_id.employee_id.address_home_id.zip or '')
         Brasil.codMunic.valor = \
             self.hr_contract_id.employee_id.\
                 address_home_id.l10n_br_city_id.state_id.ibge_code + \
@@ -331,13 +337,28 @@ class SpedEsocialHrContrato(models.Model, SpedRegistroIntermediario):
                 Dependente.tpDep.valor = \
                     dependente.dependent_type_id.code.zfill(2)
                 Dependente.nmDep.valor = dependente.dependent_name
-                Dependente.cpfDep.valor = dependente.dependent_cpf
+                if dependente.precisa_cpf:
+                    if not dependente.dependent_cpf:
+                        raise ValidationError(
+                            "O trabalhador {} está faltando o CPF de um dependente !".format(
+                                self.hr_contract_id.employee_id.name))
+                    Dependente.cpfDep.valor = limpa_formatacao(dependente.dependent_cpf)
                 Dependente.dtNascto.valor = dependente.dependent_dob
                 Dependente.depIRRF.valor = \
                     'S' if dependente.dependent_verification else 'N'
                 Dependente.depSF.valor = 'S' if dependente.dep_sf else 'N'
                 Dependente.incTrab.valor = 'S' if dependente.inc_trab else 'N'
                 S2300.evento.trabalhador.dependente.append(Dependente)
+
+        # Popula trabEstrangeiro se pais_nascto_id diferente de Brasil
+        if self.hr_contract_id.employee_id.pais_nascto_id != self.env.ref('sped_tabelas.tab06_105'):
+            TrabEstrangeiro = pysped.esocial.leiaute.S2300_TrabEstrangeiro_2()
+            TrabEstrangeiro.classTrabEstrang.valor = self.hr_contract_id.employee_id.class_trab_estrang
+            if self.hr_contract_id.employee_id.dt_chegada:
+                TrabEstrangeiro.dtChegada.valor = self.hr_contract_id.employee_id.dt_chegada
+            TrabEstrangeiro.casadoBr.valor = self.hr_contract_id.employee_id.casado_br
+            TrabEstrangeiro.filhosBr.valor = self.hr_contract_id.employee_id.filhos_br
+            S2300.evento.trabalhador.trabEstrangeiro.append(TrabEstrangeiro)
 
         #
         # Popula Trabalhador.Contato
@@ -357,11 +378,12 @@ class SpedEsocialHrContrato(models.Model, SpedRegistroIntermediario):
         # Popula InfoTSVInicio
         #
 
-        S2300.evento.infoTSVInicio.cadIni.valor = 'N'
+        S2300.evento.infoTSVInicio.cadIni.valor = self.hr_contract_id.cad_ini or 'N'
 
         S2300.evento.infoTSVInicio.codCateg.valor = self.hr_contract_id.categoria
         S2300.evento.infoTSVInicio.dtInicio.valor = self.hr_contract_id.date_start
-        S2300.evento.infoTSVInicio.natAtividade.valor = 1
+        if self.hr_contract_id.categoria not in ['721', '722']:
+            S2300.evento.infoTSVInicio.natAtividade.valor = self.hr_contract_id.nat_atividade
 
         # InfoTSVInicio.InfoComplementares
         InfoComplementares = pysped.esocial.leiaute.S2300_InfoComplementares_2()
@@ -473,11 +495,11 @@ class SpedEsocialHrContrato(models.Model, SpedRegistroIntermediario):
         # Afastamento.codMotAfast = ''
         # S2300.evento.infoTSVInicio.afastamento.append(Afastamento)
 
-        # InfoTSVInicio.Termino
-        if self.hr_contract_id.date_end:
-            Termino = pysped.esocial.leiaute.S2300_Termino_2()
-            Termino.dtTerm.valor = self.hr_contract_id.date_end
-            S2300.evento.infoTSVInicio.termino.append(Termino)
+        # # InfoTSVInicio.Termino
+        # if self.hr_contract_id.date_end:
+        #     Termino = pysped.esocial.leiaute.S2300_Termino_2()
+        #     Termino.dtTerm.valor = self.hr_contract_id.date_end
+        #     S2300.evento.infoTSVInicio.termino.append(Termino)
 
         S2300.evento.infoTSVInicio.infoComplementares.append(InfoComplementares)
         return S2300
@@ -490,3 +512,40 @@ class SpedEsocialHrContrato(models.Model, SpedRegistroIntermediario):
     def retorna_trabalhador(self):
         self.ensure_one()
         return self.hr_contract_id.employee_id
+
+    @api.multi
+    def transmitir(self):
+        self.ensure_one()
+
+        if self.situacao_esocial in ['1', '3']:
+            # Identifica qual registro precisa transmitir
+            registro = False
+            if self.registro_inclusao.situacao in ['1', '3']:
+                registro = self.registro_inclusao
+            else:
+                for r in self.registro_retificacao:
+                    if r.situacao in ['1', '3']:
+                        registro = r
+
+            # Com o registro identificado, é só rodar o método
+            # transmitir_lote() do registro
+            if registro:
+                registro.transmitir_lote()
+
+    @api.multi
+    def consultar(self):
+        self.ensure_one()
+
+        if self.situacao_esocial in ['2']:
+            # Identifica qual registro precisa consultar
+            registro = False
+            if self.registro_inclusao.situacao == '2':
+                registro = self.registro_inclusao
+            else:
+                for r in self.registro_retificacao:
+                    if r.situacao == '2':
+                        registro = r
+
+            # Com o registro identificado, é só rodar o método consulta_lote() do registro
+            if registro:
+                registro.consulta_lote()

@@ -327,6 +327,68 @@ class HrContract(models.Model):
     def atualizar_contrato_s2306(self):  # TODO
         self.ensure_one()
 
+        # Valida se pode ser atualizado
+        if not self.sped_s2300_id:
+            raise ValidationError("Este registro não pode ser atualizado pois ainda não foi transmitido inicialmente!")
+
+        if not self.precisa_atualizar:
+            raise ValidationError("Este registro não precisa ser atualizado !")
+
+        # Identifica se já tem um registro S-2306 em aberto
+        s2306 = False
+        for registro in self.sped_s2306_ids:
+            if registro.situacao_esocial != '4':
+                s2306 = registro
+
+        # Se o registro intermediário do S-2306 não existe, criá-lo
+        if not s2306:
+            if self.env.user.company_id.eh_empresa_base:
+                matriz = self.env.user.company_id.id
+            else:
+                matriz = self.env.user.company_id.matriz.id
+
+            vals = {
+                'company_id': matriz,
+                'hr_contract_id': self.id,
+            }
+            if not s2306:
+                s2306 = self.env['sped.esocial.alteracao.contrato.autonomo'].create(vals)
+                self.sped_s2306_ids = [(4, s2306.id)]
+
+        # Cria o registro de retificação
+        s2306.gerar_registro()
+
+        # Valida se pode ser atualizado
+        if not self.sped_s2300_id:
+            raise ValidationError("Este registro não pode ser atualizado pois ainda não foi transmitido inicialmente!")
+
+        if not self.precisa_atualizar:
+            raise ValidationError("Este registro não precisa ser atualizado !")
+
+        # Identifica se já tem um registro S-2306 em aberto
+        s2306 = False
+        for registro in self.sped_s2306_ids:
+            if registro.situacao != '4':
+                s2306 = registro
+
+        # Se o registro intermediário do S-2306 não existe, criá-lo
+        if not s2306:
+            if self.env.user.company_id.eh_empresa_base:
+                matriz = self.env.user.company_id.id
+            else:
+                matriz = self.env.user.company_id.matriz.id
+
+            vals = {
+                'company_id': matriz,
+                'hr_contract_id': self.id,
+            }
+            if not s2306:
+                s2306 = self.env['sped.esocial.contrato.autonomo'].create(vals)
+                self.sped_s2306_ids = [(4, s2306.id)]
+
+        # Cria o registro de retificação
+        s2306.gerar_registro()
+
     @api.multi
     def transmitir(self):  # TODO
         self.ensure_one()
@@ -540,6 +602,7 @@ class HrContract(models.Model):
         string='Evento no esocial',
         help='Definição do Evento do esocial de acordo com a categoria.',
         compute='_compute_evento_esocial',
+        store=True,
     )
     salary_unit_code = fields.Char(
         string='Cod. unidade de salario',
@@ -554,8 +617,10 @@ class HrContract(models.Model):
         sera criado e enviado ao esocial.
         Futuramente será atributo da tabela de categorias.
         """
-        categoria_do_s2300 = ['201', '202', '401', '410', '721', '722', '723',
-                              '731', '734', '738', '761', '771', '901', '902']
+        categoria_do_s2300 = ['201', '202', '305', '308', '401', '410', '701',
+                              '711', '712', '721', '722', '723', '731', '734',
+                              '738', '741', '751', '761', '771', '781', '901',
+                              '902', '903', '904', '905']
         for record in self:
             if record.categoria in categoria_do_s2300:
                 record.evento_esocial = 's2300'

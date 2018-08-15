@@ -54,6 +54,11 @@ class SpedEmpregador(models.Model, SpedRegistroIntermediario):
         ],
         string='Situação no e-Social',
         compute='compute_situacao_esocial',
+        store=True,
+    )
+    ultima_atualizacao = fields.Datetime(
+        string='Data da última atualização',
+        compute='compute_situacao_esocial',
     )
 
     @api.depends('hr_employee_id')
@@ -65,13 +70,16 @@ class SpedEmpregador(models.Model, SpedRegistroIntermediario):
     def compute_situacao_esocial(self):
         for s2205 in self:
             situacao_esocial = '1'
+            ultima_atualizacao = False
 
             # Usa o status do registro de inclusão
             if s2205.sped_alteracao:
                 situacao_esocial = s2205.sped_alteracao.situacao
+                ultima_atualizacao = s2205.sped_alteracao.data_hora_origem
 
             # Popula na tabela
             s2205.situacao_esocial = situacao_esocial
+            s2205.ultima_atualizacao = ultima_atualizacao
 
     # Roda a atualização do e-Social (não transmite ainda)
     @api.multi
@@ -94,7 +102,7 @@ class SpedEmpregador(models.Model, SpedRegistroIntermediario):
             self.sped_alteracao = sped_alteracao
 
     @api.multi
-    def popula_xml(self, ambiente='2', operacao='I'):
+    def popula_xml(self, ambiente='2', operacao='na'):
         """
         Função para popular o xml com os dados referente a alteração de
         dados cadastrais do funcionário
@@ -109,6 +117,9 @@ class SpedEmpregador(models.Model, SpedRegistroIntermediario):
             empregado_id.company_id.cnpj_cpf
         )[0:8]
         S2205.evento.ideEvento.indRetif.valor = '1'
+        if operacao == 'R':  # Retificação
+            S2205.evento.ideEvento.indRetif.valor = '2'
+            S2205.evento.ideEvento.nrRecibo.valor = self.sped_alteracao.recibo
         S2205.evento.ideEvento.tpAmb.valor = int(ambiente)
         S2205.evento.ideEvento.procEmi.valor = '1'
         S2205.evento.ideEvento.verProc.valor = '8.0'
@@ -216,6 +227,16 @@ class SpedEmpregador(models.Model, SpedRegistroIntermediario):
             dependente_xml.incTrab.valor = 'N'
 
             dados_trabalhador.dependente.append(dependente_xml)
+
+        # Popula trabEstrangeiro se pais_nascto_id diferente de Brasil
+        if empregado_id.pais_nascto_id != self.env.ref('sped_tabelas.tab06_105'):
+            TrabEstrangeiro = pysped.esocial.leiaute.S2205_TrabEstrangeiro_2()
+            TrabEstrangeiro.classTrabEstrang.valor = empregado_id.class_trab_estrang
+            if empregado_id.dt_chegada:
+                TrabEstrangeiro.dtChegada.valor = empregado_id.dt_chegada
+            TrabEstrangeiro.casadoBr.valor = empregado_id.casado_br
+            TrabEstrangeiro.filhosBr.valor = empregado_id.filhos_br
+            dados_trabalhador.trabEstrangeiro.append(TrabEstrangeiro)
 
         return S2205
 

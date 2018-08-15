@@ -61,6 +61,14 @@ function l10n_br_pos_models(instance, module) {
                 }
             });
             this.models.push({
+                model:  'account.payment.term',
+                fields: ['name', 'note'],
+                loaded: function(self,payment_terms){
+                    self.payment_terms = payment_terms;
+                }
+            });
+
+            this.models.push({
                 model: 'pos.config',
                 fields: [],
                 domain: function (self) {

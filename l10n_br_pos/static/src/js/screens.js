@@ -825,6 +825,52 @@ function l10n_br_pos_screens(instance, module) {
                 }
             };
         },
+        get_line_payment_terms: function(line){
+            var payment_term_input = line.node.firstElementChild.nextElementSibling;
+            for (var i = 0; i < payment_term_input.childNodes.length; i++){
+                payment_options = payment_term_input.childNodes;
+                if (payment_options[i].hasChildNodes("value")){
+                    if (line.cashregister.journal.payment_term_ids.indexOf(parseInt(payment_options[i].value)) == -1 || payment_options[i].value == "") {
+                        payment_options[i-1].remove();
+                        payment_options[i-1].remove();
+                        i = 0;
+                    }
+                }
+            }
+            return line.node;
+        },
+        check_payment_terms_lines: function () {
+            var paymentLines = this.pos.get('selectedOrder').get('paymentLines');
+            if (paymentLines.length == 1) {
+                var line = this.pos.get('selectedOrder').selected_paymentline;
+                if (line) {
+                   var payment_term = line.node.querySelector('select');
+                    if (payment_term.value == "") {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        },
+        focus_selected_line: function() {
+            if (this.check_payment_terms_lines()){
+                this._super();
+            }
+        },
+        render_paymentline: function(line) {
+            this._super(line);
+            var self = this;
+            line.node = self.get_line_payment_terms(line);
+
+            return line.node;
+        },
+        rerender_paymentline: function(line) {
+            if (this.check_payment_terms_lines()){
+                this._super(line);
+            }
+            var input = line.node.querySelector('input');
+            input.focus();
+        },
         validar_cpf_nota: function() {
             var self = this;
             self.pos_widget.screen_selector.show_popup('cpf_nota_sat_popup',{

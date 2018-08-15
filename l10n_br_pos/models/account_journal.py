@@ -66,6 +66,9 @@ class AccountJournal(models.Model):
     sat_card_accrediting = fields.Selection(
         CREDENCIADORAS_CARTAO, 'Credenciadora do Cartão'
     )
+    payment_term_ids = fields.Many2many(
+        'account.payment.term'
+    )
     pagamento_funcionarios = fields.Boolean(
         string=u"Somente para funcionários",
         default=False

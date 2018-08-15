@@ -65,7 +65,7 @@ class StockPicking(models.Model):
     def _compute_verificar_contabilizacao(self):
         for record in self:
             record.gerar_contabilizacao = \
-                self.company_id.active_stock_move_account
+                record.company_id.active_stock_move_account
 
     @api.multi
     def action_provisorio(self):

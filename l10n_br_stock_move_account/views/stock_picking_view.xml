@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+
+        <record id="l10n_br_stock_move_account_form" model="ir.ui.view">
+            <field name="name">l10n.br.stock.move.account.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="l10n_br_stock_account.l10n_br_view_picking_form1" />
+            <field name="arch" type="xml">
+                <field name="state" position="attributes">
+                    <attribute name="statusbar_visible">draft,waiting,confirmed,partially_available,provisorio,done</attribute>
+                    <attribute name="statusbar_colors">{"shipping_except":"red","invoice_except":"red","waiting_date":"blue"}</attribute>
+                </field>
+                <xpath expr="//page[@string='Additional Info']" position="after">
+                    <page string="Contabilidade">
+                        <separator string="Movimentações Contábeis" />
+                        <group>
+                            <field name="gerar_contabilizacao" invisible="1"/>
+                            <field name="temporary_journal_id" />
+                            <field name="definitive_journal_id" />
+                            <field name="period_id" />
+                            <field name="temporary_move_id" />
+                            <field name="definitive_move_id" />
+                            <field name="historic_temporary_move" attrs="{'required': [('gerar_contabilizacao', '=', True)]}"/>
+                            <field name="historic_definitive_move" attrs="{'required': [('gerar_contabilizacao', '=', True),('state', '=', 'provisorio')]}"/>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//header/button[@name='do_unreserve']" position="after">
+                      <button name="action_provisorio"
+                              string="Recebimento Provisório" type="object"
+                              class="oe_highlight"
+                              attrs="{'invisible': ['|', ('picking_type_code','!=', 'incoming'), ('state', 'not in', ('assigned', 'partially_available'))]}"/>
+                </xpath>
+                <button name="do_enter_transfer_details" position="attributes">
+                    <attribute name="states">provisorio</attribute>
+                    <attribute name="string">Recebimento Definitivo</attribute>
+                </button>
+            </field>
+        </record>
+
+    </data>
+</openerp>

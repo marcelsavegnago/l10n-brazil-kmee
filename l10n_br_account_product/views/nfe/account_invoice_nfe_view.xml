@@ -319,7 +319,7 @@
                                 <group>
                                     <field name="payment_term" class="oe_inline" attrs="{'readonly': [('state', 'in', ['open', 'paid', 'cancel', 'sefaz_cancelled'])]}"/>
                                     <field name="payment_mode_id" domain="[]"/>
-                                    <field name="type_nf_payment"/>
+                                    <field name="type_nf_payment" attrs="{'required': [('type', '!=', 'in_invoice')]}"/>
                                     <field domain="[('partner_id.ref_companies', 'in', [company_id])]" name="partner_bank_id"/>
                                 </group>
                                 <group>
@@ -626,7 +626,7 @@
                                     <group string="Detalhes do PIS">
                                         <group>
                                             <field name="pis_manual" invisible="True"/>
-                                            <field name="pis_cst_id" attrs="{'required': [('fiscal_type','=', 'product')]}" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                            <field name="pis_cst_id" attrs="{'required': [('fiscal_type','=', 'product'), ('type', '=', 'out_invoice')]}"/>
                                             <!--attrs="{'required': [('product_type','in', ('product', 'service'))]}"-->
                                             <field name="pis_type"/>
                                             <field name="pis_base"/>
@@ -652,7 +652,7 @@
                                     <group string="Detalhes do COFINS">
                                         <group>
                                             <field name="cofins_manual" invisible="True"/>
-                                            <field name="cofins_cst_id" attrs="{'required': [('fiscal_type','=', 'product')]}" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                            <field name="cofins_cst_id" attrs="{'required': [('fiscal_type','=', 'product'), ('type', '=', 'out_invoice')]}"/>
                                             <!--attrs="{'required': [('product_type','in', ('product', 'service'))]}"-->
                                             <field name="cofins_type"/>
                                             <field name="cofins_base"/>

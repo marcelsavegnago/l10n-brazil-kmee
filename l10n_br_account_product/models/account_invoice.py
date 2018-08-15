@@ -777,7 +777,7 @@ class AccountInvoice(models.Model):
         ('15', u'15 - Boleto Bancário'),
         ('90', u'90 - Sem pagamento'),
         ('99', u'99 - Outros')
-    ], string='Tipo de Pagamento da NF', required=True,
+    ], string='Tipo de Pagamento da NF',
         help=u'Obrigatório o preenchimento do Grupo Informações de Pagamento'
              u' para NF-e e NFC-e. Para as notas com finalidade de Ajuste'
              u' ou Devolução o campo Forma de Pagamento deve ser preenchido'
@@ -1511,6 +1511,24 @@ class AccountInvoiceLine(models.Model):
         string='Tipo Fiscal',
         selection=PRODUCT_FISCAL_TYPE,
         related='invoice_id.fiscal_type',
+    )
+    type = fields.Selection(
+        [
+            ('out_invoice', 'Customer Invoice'),
+            ('in_invoice', 'Supplier Invoice'),
+            ('out_refund', 'Customer Refund'),
+            ('in_refund', 'Supplier Refund'),
+        ],
+        string='Type',
+        related='invoice_id.type',
+    )
+    nfe_purpose = fields.Selection(
+        [('1', 'Normal'),
+         ('2', 'Complementar'),
+         ('3', 'Ajuste'),
+         ('4', u'Devolução de Mercadoria')],
+        u'Finalidade da Emissão',
+        related='invoice_id.nfe_purpose',
     )
 
     @api.one

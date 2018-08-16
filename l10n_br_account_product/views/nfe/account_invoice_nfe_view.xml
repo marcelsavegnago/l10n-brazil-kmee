@@ -510,6 +510,8 @@
                             <separator string="Produto" />
                             <group>
                                 <field name="product_id" domain="[('fiscal_type', 'in', ('product', 'service'))]" on_change="product_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, fiscal_position, price_unit, parent.currency_id, parent.company_id, context)" context_br="{'parent_fiscal_category_id': parent.fiscal_category_id, 'parent_fiscal_position': parent.fiscal_position}" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="type" invisible="1"/>
+                                <field name="nfe_purpose" invisible="1"/>
                             </group>
                             <separator string="Fiscal" />
                             <group>

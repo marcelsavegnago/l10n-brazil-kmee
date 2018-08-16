@@ -1513,23 +1513,35 @@ class AccountInvoiceLine(models.Model):
         related='invoice_id.fiscal_type',
     )
     type = fields.Selection(
-        [
+        selection=[
             ('out_invoice', 'Customer Invoice'),
             ('in_invoice', 'Supplier Invoice'),
             ('out_refund', 'Customer Refund'),
             ('in_refund', 'Supplier Refund'),
         ],
         string='Type',
-        related='invoice_id.type',
+        compute='_compute_invoice_type',
     )
     nfe_purpose = fields.Selection(
-        [('1', 'Normal'),
+        selection=[('1', 'Normal'),
          ('2', 'Complementar'),
          ('3', 'Ajuste'),
          ('4', u'Devolução de Mercadoria')],
-        u'Finalidade da Emissão',
-        related='invoice_id.nfe_purpose',
+        string=u'Finalidade da Emissão',
+        compute='_compute_invoice_nfe_purpose',
     )
+
+    @api.multi
+    @api.depends('product_id')
+    def _compute_invoice_type(self):
+        for record in self:
+            record.type = record.invoice_id.type
+
+    @api.multi
+    @api.depends('product_id')
+    def _compute_invoice_nfe_purpose(self):
+        for record in self:
+            record.nfe_purpose = record.invoice_id.nfe_purpose
 
     @api.one
     @api.depends('price_unit', 'discount', 'invoice_line_tax_id', 'quantity',

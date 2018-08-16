@@ -80,9 +80,7 @@ class SpedDocumentoDuplicata(models.Model):
 
         dados = {
             'date_document': self.invoice_id.date_invoice,
-            # 'participante_id': self.invoice_id.participante_id,
             'partner_id': self.invoice_id.partner_id.id,
-            # 'empresa_id': self.invoice_id.empresa_id.id,
             'company_id': self.invoice_id.company_id.id,
             'doc_source_id': 'account.invoice,' + str(self.invoice_id.id),
             'sped_invoice_id': self.invoice_id.id,
@@ -96,13 +94,12 @@ class SpedDocumentoDuplicata(models.Model):
             'amount_document': valor_documento,
             'currency_id': moeda_finaceiro_id.id,
             'document_number':
-                '{0.serie_nfe}-{0.number}-{1.numero}/{2}'.format(
+                '{0.partner_id.name}-{0.internal_number}-{1.numero}/{2}'.format(
                     self.invoice_id, self,
                     unicode(len(self.invoice_id.duplicata_ids))),
             'account_move_id': self.invoice_id.move_id.id,
-            'journal_id': self.invoice_id.journal_id.id,
-            'account_move_template_id':
-                self.invoice_id.fiscal_category_id.account_move_template_id.id,
+            'journal_id':
+                self.invoice_id.fiscal_category_id.property_journal.id,
             'payment_term_id': self.invoice_id.payment_term.id,
             'sped_forma_pagamento_id':
                 self.invoice_id.payment_term.sped_forma_pagamento_id.id,

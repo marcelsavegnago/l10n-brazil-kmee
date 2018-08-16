@@ -29,8 +29,17 @@
                     <field name="account_move_id" readonly="1" />
                     <field name="account_move_template_id" />
                     <newline />
-                    <separator string="Partidas do lançamento contábil" colspan="4" />
-                    <field name="account_move_line_id" nolabel="1" colspan="4" />
+                    <separator string="Partidas do lançamento contábil"/>
+                    <field name="account_move_line_id" nolabel="1">
+                        <tree>
+                            <field name="name"/>
+                            <field name="date"/>
+                            <field name="account_id"/>
+                            <field name="move_id"/>
+                            <field name="debit"/>
+                            <field name="credit"/>
+                        </tree>
+                    </field>
                 </group>
             </xpath>
         </field>

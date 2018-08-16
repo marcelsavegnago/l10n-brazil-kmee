@@ -93,31 +93,42 @@
                             <field name="document_serie_id" domain="[('fiscal_type','=','product'),('fiscal_document_id','=',fiscal_document_id),('company_id','=',company_id)]" attrs="{'invisible': [('issuer', '=', '1')], 'required': [('issuer', '=', '0')]}" />
                             <field name="issuer" attrs="{'invisible': [('type', '=', 'out_invoice')]}" />
                             <field name="serie_nfe" attrs="{'invisible': [('issuer', '=', '0')]}" />
-                            <field name="partner_id"
-                                on_change="onchange_partner_id(type, partner_id, date_invoice, payment_term, partner_bank_id, company_id, context)"
-                                context="{'search_default_customer':1, 'show_address': 1, 'fiscal_category_id': fiscal_category_id}"
-                                options='{"always_reload": True}'/>
-                            <field name="partner_shipping_id" domain="[('parent_id', '=', partner_id)]"
-                                context="{'default_type':'delivery', 'show_address': 1}"/>
                         </group>
                         <group>
                             <field name="internal_number" attrs="{'readonly': [('issuer', '=', '0')], 'required': [('issuer', '=', '1')]}" />
                             <field name="date_invoice" invisible="1" on_change="onchange_payment_term_date_invoice(payment_term, date_invoice)"/>
                             <field name="date_hour_invoice" string="Data Emissão"/>
                             <field name="date_in_out" string="Data de Entrada/Saida"/>
-                            <field name="fiscal_category_id" domain="[('type','in',{'out_invoice': ['output'], 'out_refund': ['input'], 'in_refund': ['output'], 'in_invoice': ['input']}.get(type, [])),('fiscal_type','=','product')]" required="1"/>
-                            <field name="fiscal_position" required="1" domain="[('fiscal_category_id', '=', fiscal_category_id)]" groups="base.group_extended,base.group_user"/>
-                            <field name="ind_final" string="Operação com Consumidor final" attrs="{'required': [('nfe_version', '>', '3.00')]}"/>
-                            <field name="ind_pres" string="Tipo de operação" attrs="{'required': [('nfe_version', '>', '3.00')]}"/>
-                            <field name="check_total" groups="account.group_supplier_inv_check_total" attrs="{'invisible': [('type', 'in', ('out_invoice', 'out_refund'))]}"/>
-                        </group>
+                            </group>
                     </group>
-                    <group col="6">
-                        <field name="nfe_access_key" attrs="{'readonly': [('issuer', '=', '0')]}" style="width:95%" colspan="4"/>
-                        <field name="nfe_version" attrs="{'readonly': [('issuer', '=', '0')]}" style="width:5%"/>
-                        <field name="nfe_status"/>
-                        <field name="nfe_date" />
-                        <field name="nfe_protocol_number" attrs="{'readonly': [('issuer', '=', '0')]}"/>
+                    <separator string="Parceiro" />
+                    <group>
+                        <field name="partner_id"
+                                on_change="onchange_partner_id(type, partner_id, date_invoice, payment_term, partner_bank_id, company_id, context)"
+                                context="{'search_default_customer':1, 'show_address': 1, 'fiscal_category_id': fiscal_category_id}"
+                                options="{'always_reload': True, 'no_quick_create': True, 'no_create_edit': True}" />
+                        <field name="partner_shipping_id" domain="[('parent_id', '=', partner_id)]"
+                            context="{'default_type':'delivery', 'show_address': 1}" options="{'always_reload': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                    </group>
+                    <separator string="Fiscal" />
+                    <group>
+                        <field name="fiscal_category_id" domain="[('type','in',{'out_invoice': ['output'], 'out_refund': ['input'], 'in_refund': ['output'], 'in_invoice': ['input']}.get(type, [])),('fiscal_type','=','product')]" required="1" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                        <field name="fiscal_position" required="1" domain="[('fiscal_category_id', '=', fiscal_category_id)]" groups="base.group_extended,base.group_user" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                        <field name="ind_final" string="Operação com Consumidor final" attrs="{'required': [('nfe_version', '>', '3.00')]}"/>
+                        <field name="ind_pres" string="Tipo de operação" attrs="{'required': [('nfe_version', '>', '3.00')]}"/>
+                        <field name="check_total" groups="account.group_supplier_inv_check_total" attrs="{'invisible': [('type', 'in', ('out_invoice', 'out_refund'))]}"/>
+                    </group>
+                    <separator string="Sefaz" />
+                    <group>
+                        <group>
+                            <field name="nfe_access_key" attrs="{'readonly': [('issuer', '=', '0')]}" />
+                            <field name="nfe_status"/>
+                        </group>
+                        <group>
+                            <field name="nfe_version" attrs="{'readonly': [('issuer', '=', '0')]}" />
+                            <field name="nfe_date" />
+                            <field name="nfe_protocol_number" attrs="{'readonly': [('issuer', '=', '0')]}"/>
+                        </group>
                     </group>
                     <notebook colspan="4">
                         <page string="Produtos e Serviços">
@@ -308,7 +319,7 @@
                                 <group>
                                     <field name="payment_term" class="oe_inline" attrs="{'readonly': [('state', 'in', ['open', 'paid', 'cancel', 'sefaz_cancelled'])]}"/>
                                     <field name="payment_mode_id" domain="[]"/>
-                                    <field name="type_nf_payment"/>
+                                    <field name="type_nf_payment" attrs="{'required': [('type', '!=', 'in_invoice')]}"/>
                                     <field domain="[('partner_id.ref_companies', 'in', [company_id])]" name="partner_bank_id"/>
                                 </group>
                                 <group>
@@ -372,17 +383,17 @@
                                         attrs="{'readonly':[('internal_number','!=',False)]}" domain="[('type', 'in', {'out_invoice': ['sale'], 'out_refund': ['sale_refund'], 'in_refund': ['purchase_refund'], 'in_invoice': ['purchase']}.get(type, [])), ('company_id', '=', company_id)]"/>
                                     <field domain="[('company_id', '=', company_id), ('type','in',{'out_invoice': ['receivable'], 'out_refund': ['receivable'], 'in_refund': ['payable'], 'in_invoice': ['payable']}.get(type, []))]"
                                         name="account_id" groups="account.group_account_user"
-                                        context="{'periods_special': False, 'all_fiscalyear': True}"/>
+                                        context="{'periods_special': False, 'all_fiscalyear': True}" required="0" invisible="1"/>
                                     <field name="period_id" domain="[('state', '=', 'draft'), ('company_id', '=', company_id)]"
                                         groups="account.group_account_manager"
                                         string="Accounting Period"
-                                        placeholder="force period"/>
+                                        placeholder="force period" options="{'no_quick_create': True, 'no_create_edit': True}" />
                                     <field name="move_id" groups="account.group_account_user"/>
                                 </group>
                                 <group>
                                     <field name="origin" groups="base.group_user"/>
                                     <field name="name"/>
-                                    <field name="user_id" groups="base.group_user" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'account.group_account_invoice']}"/>
+                                    <field name="user_id" groups="base.group_user" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'account.group_account_invoice']}" options="{'no_quick_create': True, 'no_create_edit': True}" />
                                 </group>
                             </group>
                             <field name="tax_line">
@@ -496,20 +507,42 @@
                 <form string="Produtos e Serviços">
                     <notebook>
                         <page string="General">
+                            <separator string="Produto" />
+                            <group>
+                                <field name="product_id" domain="[('fiscal_type', 'in', ('product', 'service'))]" on_change="product_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, fiscal_position, price_unit, parent.currency_id, parent.company_id, context)" context_br="{'parent_fiscal_category_id': parent.fiscal_category_id, 'parent_fiscal_position': parent.fiscal_position}" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                            </group>
+                            <separator string="Fiscal" />
+                            <group>
+                                <field name="product_type" attrs="{'readonly': [('product_id','!=', False)]}"/>
+                                <field name="code" required="True" attrs="{'readonly': [('product_id','!=', False)]}"/>
+                                <field name="fiscal_classification_id" required="True" attrs="{'readonly': [('product_id','!=', False)]}"/>
+                                <field name="fiscal_category_id" required="1" domain="[('journal_type', '=', 'sale')]" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="fiscal_position" required="1" domain="[('fiscal_category_id', '=', fiscal_category_id)]" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="account_move_template_id" required="1" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="cfop_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="account_id" required="0" invisible="1"/>
+                                <field name="cest_id" attrs="{'readonly': [('product_id','!=', False)]}" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="fci" attrs="{'readonly': [('product_id','!=', False)]}"/>
+                                <field name="inss_base_wh_reducao" />
+                                <field name="invoice_line_tax_id" context="{'type':parent.type}" domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field domain="[('type','&lt;&gt;','view'), ('company_id', '=', parent.company_id)]" name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
+                                <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                            </group>
                             <group>
                                 <group>
-                                    <field name="fiscal_type" invisible="1" />
-                                    <field name="product_id" domain="[('fiscal_type', 'in', ('product', 'service'))]" on_change="product_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, fiscal_position, price_unit, parent.currency_id, parent.company_id, context)" context_br="{'parent_fiscal_category_id': parent.fiscal_category_id, 'parent_fiscal_position': parent.fiscal_position}"/>
-                                    <label for="quantity"/>
-                                    <div>
-                                        <field name="quantity" class="oe_inline"/>
-                                        <field name="uos_id" class="oe_inline" groups="product.group_uom" on_change="uos_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, parent.fiscal_position, price_unit, parent.currency_id, parent.company_id, context)"/>
-                                    </div>
-                                    <field name="price_unit"/>
-                                    <field name="discount"/>
-                                    <field name="freight_value"/>
-                                    <field name="insurance_value"/>
-                                    <field name="other_costs_value"/>
+                                    <group string="Quantidade e Preço">
+                                        <field name="fiscal_type" invisible="1" />
+                                        <label for="quantity"/>
+                                        <div>
+                                            <field name="quantity" class="oe_inline"/>
+                                            <field name="uos_id" class="oe_inline" groups="product.group_uom" on_change="uos_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, parent.fiscal_position, price_unit, parent.currency_id, parent.company_id, context)"/>
+                                        </div>
+                                        <field name="price_unit"/>
+                                        <field name="discount"/>
+                                        <field name="freight_value"/>
+                                        <field name="insurance_value"/>
+                                        <field name="other_costs_value"/>
+                                    </group>
                                     <group string="Custos e Totais">
                                         <field name="vr_custo_comercial"/>
                                         <field name="vr_custo_estoque"/>
@@ -518,25 +551,10 @@
                                         <field name="price_total"/>
                                     </group>
                                 </group>
-                                <group>
-                                    <field name="product_type" attrs="{'readonly': [('product_id','!=', False)]}"/>
-                                    <field name="code" required="True" attrs="{'readonly': [('product_id','!=', False)]}"/>
-                                    <field name="fiscal_classification_id" required="True" attrs="{'readonly': [('product_id','!=', False)]}"/>
-                                    <field name="cest_id" attrs="{'readonly': [('product_id','!=', False)]}"/>
-                                    <field name="fci" attrs="{'readonly': [('product_id','!=', False)]}"/>
-                                    <field name="fiscal_category_id" required="1" domain="[('journal_type', '=', 'sale')]"/>
-                                    <field name="fiscal_position" required="1" domain="[('fiscal_category_id', '=', fiscal_category_id)]"/>
-                                    <field name="account_move_template_id" required="1"/>
-                                    <field name="cfop_id"/>
-                                    <field domain="[('journal_id', '=', parent.journal_id), ('type', '&lt;&gt;', 'view')]" name="account_id" on_change="onchange_account_id(product_id, parent.partner_id, parent.type, parent.fiscal_position, account_id)" groups="account.group_account_user"/>
-                                    <field name="inss_base_wh_reducao" />
-                                    <field name="invoice_line_tax_id" context="{'type':parent.type}" domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]" widget="many2many_tags"/>
-                                    <field domain="[('type','&lt;&gt;','view'), ('company_id', '=', parent.company_id)]" name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
-                                    <field name="company_id" groups="base.group_multi_company" readonly="1"/>
-                                </group>
                             </group>
+
                             <label for="name"/>
-                                <field name="name"/>
+                            <field name="name"/>
                         </page>
                         <page position="inside" string="Impostos">
                             <group>
@@ -547,14 +565,14 @@
                                     <group string="Detalhes do ICMS">
                                         <group>
                                             <field name="icms_manual" invisible="True"/>
-                                            <field name="icms_cst_id"/>
+                                            <field name="icms_cst_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                             <field name="icms_origin"/>
                                             <field name="icms_base_type"/>
                                             <field name="icms_base"/>
                                             <field name="icms_percent_reduction"/>
                                         </group>
                                         <group>
-                                            <field name="icms_relief_id"/>
+                                            <field name="icms_relief_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                             <field name="icms_base_other"/>
                                             <field name="icms_percent"/>
                                             <field name="icms_value"/>
@@ -579,7 +597,7 @@
                                         <field name="issqn_manual" invisible="True"/>
                                         <field name="issqn_base"/>
                                         <field name="issqn_percent"/>
-                                        <field name="service_type_id" attrs="{'required': [('product_type','=', 'service')]}" domain="[('internal_type','=','normal')]"/>
+                                        <field name="service_type_id" attrs="{'required': [('product_type','=', 'service')]}" domain="[('internal_type','=','normal')]" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                         <field name="issqn_exigibilidade"/>
                                         <field name="issqn_suspension_process"
                                                attrs="{'invisible': [('issqn_exigibilidade','not in', ['6','7'])]}"/>
@@ -592,12 +610,12 @@
                                     <group string="Detalhes do IPI">
                                         <group>
                                             <field name="ipi_manual" invisible="True"/>
-                                            <field name="ipi_cst_id"/>
+                                            <field name="ipi_cst_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                             <field name="ipi_type"/>
                                             <field name="ipi_base"/>
                                         </group>
                                         <group>
-                                            <field name="ipi_guideline_id"/>
+                                            <field name="ipi_guideline_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                             <field name="ipi_base_other"/>
                                             <field name="ipi_percent"/>
                                             <field name="ipi_value"/>
@@ -608,7 +626,7 @@
                                     <group string="Detalhes do PIS">
                                         <group>
                                             <field name="pis_manual" invisible="True"/>
-                                            <field name="pis_cst_id" attrs="{'required': [('fiscal_type','=', 'product')]}"/>
+                                            <field name="pis_cst_id" attrs="{'required': [('fiscal_type','=', 'product'), ('type', '=', 'out_invoice')]}"/>
                                             <!--attrs="{'required': [('product_type','in', ('product', 'service'))]}"-->
                                             <field name="pis_type"/>
                                             <field name="pis_base"/>
@@ -634,7 +652,7 @@
                                     <group string="Detalhes do COFINS">
                                         <group>
                                             <field name="cofins_manual" invisible="True"/>
-                                            <field name="cofins_cst_id" attrs="{'required': [('fiscal_type','=', 'product')]}"/>
+                                            <field name="cofins_cst_id" attrs="{'required': [('fiscal_type','=', 'product'), ('type', '=', 'out_invoice')]}"/>
                                             <!--attrs="{'required': [('product_type','in', ('product', 'service'))]}"-->
                                             <field name="cofins_type"/>
                                             <field name="cofins_base"/>
@@ -716,13 +734,13 @@
             </field>
         </record>
 
-        <record id="l10n_br_account_product_nfe_action" model="ir.actions.act_window">
-            <field name="name">NF-e</field>
+        <record id="l10n_br_account_product_nfe_output_action" model="ir.actions.act_window">
+            <field name="name">NF-e Saída</field>
             <field name="res_model">account.invoice</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form,calendar,graph</field>
             <field eval="False" name="view_id"/>
-            <field name="domain"></field>
+            <field name="domain">[('type','=','out_invoice')]</field>
             <field name="context">{'default_type':'out_invoice', 'type':'out_invoice', 'journal_type': 'sale', 'fiscal_document_code': '55', 'fiscal_type': 'product'}</field>
             <field name="search_view_id" ref="l10n_br_account_product_nfe_search"/>
             <field name="help" type="html">
@@ -740,21 +758,32 @@
             </field>
         </record>
 
-        <record id="action_invoice_tree1_view1" model="ir.actions.act_window.view">
-            <field eval="1" name="sequence"/>
-            <field name="view_mode">tree</field>
-            <field name="view_id" ref="l10n_br_account_product_nfe_tree"/>
-            <field name="act_window_id" ref="l10n_br_account_product_nfe_action"/>
+        <record id="l10n_br_account_product_nfe_input_action" model="ir.actions.act_window">
+            <field name="name">NF-e Entrada</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_invoice')]</field>
+            <field name="context">{'default_type':'in_invoice', 'default_issuer': '1', 'issuer': '1', 'type':'in_invoice', 'journal_type': 'purchase', 'fiscal_document_code': '55'}</field>
+            <field name="search_view_id" ref="l10n_br_account_product_nfe_search"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click para criar uma nova Nota Fiscal Eletrônica.
+              </p><p>
+                Odoo's electronic invoicing allows to ease and fasten the
+                collection of customer payments. Your customer receives the
+                invoice by email and he can pay online and/or import it
+                in his own system.
+              </p><p>
+                The discussions with your customer are automatically displayed at
+                the bottom of each invoice.
+              </p>
+            </field>
         </record>
 
-        <record id="action_invoice_tree1_view2" model="ir.actions.act_window.view">
-            <field eval="2" name="sequence"/>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="l10n_br_account_product_nfe_form"/>
-            <field name="act_window_id" ref="l10n_br_account_product_nfe_action"/>
-        </record>
-
-        <menuitem id="l10n_br_account_product_nfe_menu" action="l10n_br_account_product_nfe_action" parent="l10n_br_account.menu_fiscal_document" sequence="10"/>
+        <menuitem id="l10n_br_account_product_nfe_output_menu" action="l10n_br_account_product_nfe_output_action" parent="l10n_br_account.menu_fiscal_document" sequence="10"/>
+        <menuitem id="l10n_br_account_product_nfe_input_menu" action="l10n_br_account_product_nfe_input_action" parent="l10n_br_account.menu_fiscal_document" sequence="10"/>
 
     </data>
 

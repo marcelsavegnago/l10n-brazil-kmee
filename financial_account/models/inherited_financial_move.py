@@ -37,9 +37,7 @@ class FinancialMove(models.Model):
                 )
                 if matrix_id and record.type:
                     if record.type in DEBT_2RECEIVE_2PAY:
-
-                        record.journal_id = \
-                            matrix_id.journal_id
+                        record.journal_id = matrix_id.account_id.journal_id
                     else:
                         record.journal_id = record.debt_id.journal_id
 

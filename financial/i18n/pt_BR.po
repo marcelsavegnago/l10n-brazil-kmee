@@ -143,6 +143,46 @@ msgid "Cancel date"
 msgstr "Data de baixa"
 
 #. module: financial
+#: field:financial.pay_receive.move,date_document:0
+msgid "Document date"
+msgstr "Data do Documento"
+
+#. module: financial
+#: field:financial.pay_receive.move,date_payment:0
+msgid "Payment date"
+msgstr "Data do Pagamento"
+
+#. module: financial
+#: field:financial.pay_receive.move,document_number:0
+msgid "Document number"
+msgstr "Número do Documento"
+
+#. module: financial
+#: field:financial.pay_receive.move,bank_id:0
+msgid "Bank Account"
+msgstr "Conta Bancária"
+
+#. module: financial
+#: field:financial.pay_receive.move,date_credit_debit:0
+msgid "Credit/debit date"
+msgstr "Data do Crédito/Débito"
+
+#. module: financial
+#: field:financial.pay_receive.move,amount_document:0
+msgid "Document Amount"
+msgstr "Valor"
+
+#. module: financial
+#: field:financial.pay_receive.move,amount_discount:0
+msgid "Discount"
+msgstr "Desconto"
+
+#. module: financial
+#: field:financial.pay_receive.move,amount_interest:0
+msgid "Interest"
+msgstr "Juros"
+
+#. module: financial
 #: field:financial.cancel,reason:0
 msgid "Cancel reason"
 msgstr "Motivo da baixa"

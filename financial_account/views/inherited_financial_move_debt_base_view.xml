@@ -25,7 +25,7 @@
         <field name="type">form</field>
         <field name="arch" type="xml">
             <page name="payments" position="after">
-                <page string="Account Moves" name="accounting">
+                <page string="Lançamentos Contábeis" name="accounting">
                     <group>
                         <group>
                             <field name="journal_id"/>

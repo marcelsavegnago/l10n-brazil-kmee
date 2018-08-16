@@ -57,20 +57,20 @@ class FinancialMove(models.Model):
     journal_id = fields.Many2one(
         compute='_compute_account_move_template_id',
         comodel_name='account.journal',
-        string='Journal',
+        string='Diário',
         ondelete='restrict',
         store=True,
     )
     account_move_template_id = fields.Many2one(
         compute='_compute_account_move_template_id',
         comodel_name='financial.account.move.template',
-        string='Account move template',
+        string='Template de Lançamento Contábil',
         ondelete='restrict',
         store=True,
     )
     account_move_id = fields.Many2one(
         comodel_name='account.move',
-        string='Account move',
+        string='Lançamento Contábil',
         ondelete='restrict',
         copy=False,
         readonly=True,

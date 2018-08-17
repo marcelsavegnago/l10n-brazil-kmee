@@ -16,38 +16,39 @@ class FinancialPayreceive(models.TransientModel):
     _name = 'financial.pay_receive'
 
     date_payment = fields.Date(
+        string='Data do Pagamento',
         required=True,
-        default=fields.Date.context_today
+        default=fields.Date.context_today,
     )
     document_type_id = fields.Many2one(
         comodel_name='financial.document.type',
-        string='Document type',
+        string='Tipo do Documento',
         ondelete='restrict',
         index=True,
         required=True,
     )
     document_number = fields.Char(
-        string='Document number',
+        string='Número do Documento',
         index=True,
         required=True,
     )
     bank_id = fields.Many2one(
         'res.partner.bank',
-        string=u'Bank Account',
+        string=u'Conta Bancária',
         required=True,
     )
     date_credit_debit = fields.Date(
-        string='Credit/debit date',
+        string='Data Credito/debito',
     )
     amount_document = fields.Float(
-        string=u'Amount',
+        string=u'Valor',
         required=True
     )
     amount_discount = fields.Float(
-        string=u'Discount',
+        string=u'Desconto',
     )
     amount_interest = fields.Float(
-        string=u'Interest',
+        string=u'Juros',
     )
     amount_total = fields.Float(
         string='Total',

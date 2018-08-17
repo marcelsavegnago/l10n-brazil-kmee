@@ -521,7 +521,8 @@
                                 <field name="fiscal_category_id" required="1" domain="[('journal_type', '=', 'sale')]" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                 <field name="fiscal_position" required="1" domain="[('fiscal_category_id', '=', fiscal_category_id)]" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                 <field name="account_move_template_id" required="1" options="{'no_quick_create': True, 'no_create_edit': True}"/>
-                                <field name="cfop_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                <field name="cfop_id" options="{'no_quick_create': True, 'no_create_edit': True}" invisible="1"/>
+                                <field name="cfop_view" />
                                 <field name="account_id" required="0" invisible="1"/>
                                 <field name="cest_id" attrs="{'readonly': [('product_id','!=', False)]}" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                 <field name="fci" attrs="{'readonly': [('product_id','!=', False)]}"/>
@@ -530,6 +531,7 @@
                                 <field domain="[('type','&lt;&gt;','view'), ('company_id', '=', parent.company_id)]" name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
                                 <field name="company_id" groups="base.group_multi_company" readonly="1"/>
                             </group>
+                            <separator string="Detalhes" />
                             <group>
                                 <group>
                                     <group string="Quantidade e Preço">
@@ -784,9 +786,8 @@
             </field>
         </record>
 
-        <menuitem id="l10n_br_account_product_nfe_output_menu" action="l10n_br_account_product_nfe_output_action" parent="l10n_br_account.menu_fiscal_document" sequence="10"/>
         <menuitem id="l10n_br_account_product_nfe_input_menu" action="l10n_br_account_product_nfe_input_action" parent="l10n_br_account.menu_fiscal_document" sequence="10"/>
+        <menuitem id="l10n_br_account_product_nfe_output_menu" action="l10n_br_account_product_nfe_output_action" parent="l10n_br_account.menu_fiscal_document" sequence="11"/>
 
     </data>
-
 </openerp>

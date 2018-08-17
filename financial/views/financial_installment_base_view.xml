@@ -11,7 +11,7 @@
         <field name="priority">9999</field>
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <tree decoration-info="state == 'draft'">
+            <tree>
                 <field name="date_document" />
                 <field name="company_id" groups="base.group_multi_company" />
                 <field name="partner_id"/>

@@ -12,7 +12,7 @@
         <field name="priority">9999</field>
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancelled'" create="false" edit="false">
+            <tree create="false" edit="false">
                 <field name="type" invisible="1"/>
                 <field name="state" invisible="1"/>
                 <field name="account_id" invisible="1"/>

@@ -890,6 +890,54 @@ class AccountInvoice(models.Model):
             result = txt.validate(cr, uid, ids, context)
             return result
 
+    def action_payment(self):
+        """ Processa informações dos pagamentos"""
+        for invoice in self:
+            if invoice.nfe_version == '4.00':
+                if invoice.issuer == '0':
+                    # Preenche a forma de pagamento padrão caso ainda não
+                    # Tenha sido preenchida pelo usuário, mesma funcionalidade
+                    # da venda e compras, mas lá é aplicado através de um
+                    # onchange
+                    #
+                    # Não da pra fazer com onchange na invoice pois a ST e
+                    # outros impostos são calculados somente quando salvamos.
+                    #
+                    if (invoice.payment_term and invoice.amount_total and
+                            not invoice.account_payment_ids):
+                        date_invoice = invoice.date_invoice
+
+                        if not date_invoice:
+                            date_invoice = fields.Date.context_today(invoice)
+
+                        payment_id = invoice.account_payment_ids.new()
+                        payment_id.payment_term_id = invoice.payment_term
+                        payment_id.amount = invoice.amount_total
+                        payment_id.date = date_invoice
+                        payment_id.onchange_payment_term_id()
+                        invoice.account_payment_ids |= payment_id
+
+                if not invoice.account_payment_ids:
+                    raise UserError(
+                        _(u'A nota fiscal deve conter dados de pagamento')
+                    )
+                elif invoice.amount_change < 0:
+                    #
+                    # TODO: Implementar lançamento contábil com troco
+                    #
+                    raise UserError(
+                        _(u'O total de pagamentos deve ser maior ou igual '
+                          u'ao total da nota.\n'),
+                        _(u'Resta realizar o pagamento de %0.2f'
+                          % invoice.amount_change)
+                    )
+                else:
+                    for item, payment in enumerate(
+                            invoice.account_payment_line_ids):
+                        if payment.number:
+                            continue
+                        payment.number = str(item + 1).zfill(3)
+
     @api.multi
     def fill_payment_number(self, payment_lines):
         for item, payment in enumerate(payment_lines):
@@ -932,57 +980,15 @@ class AccountInvoice(models.Model):
                      'date_in_out': date_in_out
                      }
                 )
-
-                if invoice.nfe_version == '4.00':
-                    if not invoice.account_payment_ids:
-                        if (invoice.fiscal_category_id and
-                                invoice.fiscal_category_id.account_payment_term_id):
-
-                            account_payments = self.env['account.invoice.payment']
-
-                            amount = 0.00
-                            if not (invoice.fiscal_category_id.account_payment_term_id.forma_pagamento ==
-                                        FORMA_PAGAMENTO_SEM_PAGAMENTO):
-                                amount = invoice.amount_total
-
-                            values = {
-                                'payment_term_id':
-                                    invoice.fiscal_category_id.account_payment_term_id.id,
-                                'amount': amount,
-                            }
-                            specs = account_payments._onchange_spec()
-                            updates = account_payments.onchange(values, [], specs)
-                            value = updates.get('value', {})
-                            for name, val in value.iteritems():
-                                if isinstance(val, tuple):
-                                    value[name] = val[0]
-                            values.update(value)
-
-                            invoice.account_payment_ids = [(0, 0, values)]
-
-                        if not invoice.account_payment_ids:
-                            raise UserError(
-                                _(u'A nota fiscal deve conter dados de pagamento')
-                            )
-                        elif invoice.amount_change < 0:
-                            raise UserError(
-                                _(u'O total de pagamentos deve ser maior ou igual ao total da nota.\n'),
-                                _(u'Resta realizar o pagamento de %0.2f' % invoice.amount_change)
-                            )
-                    else:
-                        self.fill_payment_number(invoice.account_payment_line_ids)
-            else:
-                self.fill_payment_number(invoice.account_payment_line_ids)
-
+        self.action_payment()
         return True
 
     @api.onchange('type')
     def onchange_type(self):
         ctx = dict(self.env.context)
         ctx.update({'type': self.type})
-        self.fiscal_category_id = (
-            self.with_context(ctx)._default_fiscal_category()
-        )
+        self.fiscal_category_id = (self.with_context(ctx).
+                                   _default_fiscal_category())
 
     @api.onchange('fiscal_document_id')
     def onchange_fiscal_document_id(self):
@@ -1016,24 +1022,6 @@ class AccountInvoice(models.Model):
                 'context': self.env.context
             }
             result = self._fiscal_position_map(result, **kwargs)
-
-        if (self.fiscal_category_id and
-                self.fiscal_category_id.account_payment_term_id) and \
-                not self.account_payment_ids:
-            account_payments = self.env['account.invoice.payment']
-            values = {
-                'payment_term_id':
-                    self.fiscal_category_id.account_payment_term_id.id,
-                'amount': self.amount_total,
-            }
-            specs = account_payments._onchange_spec()
-            updates = account_payments.onchange(values, [], specs)
-            value = updates.get('value', {})
-            for name, val in value.iteritems():
-                if isinstance(val, tuple):
-                    value[name] = val[0]
-            values.update(value)
-            result['value']['account_payment_ids'] = [(0, 0, values)]
         self.update(result['value'])
 
     @api.multi
@@ -1067,6 +1055,49 @@ class AccountInvoice(models.Model):
                     res['value'].update({'date_in_out': date_time_now})
                 inv.write(res['value'])
         return True
+
+    @api.multi
+    def button_reset_taxes(self):
+        result = super(AccountInvoice, self).button_reset_taxes()
+        ait = self.env['account.invoice.tax']
+        for invoice in self:
+            invoice.read()
+            costs = []
+            company = invoice.company_id
+            if invoice.amount_insurance:
+                costs.append((company.insurance_tax_id,
+                              invoice.amount_insurance))
+            if invoice.amount_freight:
+                costs.append((company.freight_tax_id,
+                              invoice.amount_freight))
+            if invoice.amount_costs:
+                costs.append((company.other_costs_tax_id,
+                              invoice.amount_costs))
+            for tax, cost in costs:
+                ait_id = ait.search([
+                    ('invoice_id', '=', invoice.id),
+                    ('tax_code_id', '=', tax.tax_code_id.id),
+                ])
+                vals = {
+                    'tax_amount': cost,
+                    'name': tax.name,
+                    'sequence': 1,
+                    'invoice_id': invoice.id,
+                    'manual': True,
+                    'base_amount': cost,
+                    'base_code_id': tax.base_code_id.id,
+                    'tax_code_id': tax.tax_code_id.id,
+                    'amount': cost,
+                    'base': cost,
+                    'account_analytic_id':
+                        tax.account_analytic_collected_id.id or False,
+                    'account_id': tax.account_paid_id.id,
+                }
+                if ait_id:
+                    ait_id.write(vals)
+                else:
+                    ait.create(vals)
+        return result
 
     @api.multi
     def open_fiscal_document(self):
@@ -1624,6 +1655,37 @@ class AccountInvoice(models.Model):
         self._log_event()
         return True
 
+    @api.multi
+    def onchange_partner_id(self, type, partner_id, date_invoice=False,
+            payment_term=False, partner_bank_id=False, company_id=False):
+        result = super(AccountInvoice, self).onchange_partner_id(
+            type, partner_id, date_invoice, payment_term,
+            partner_bank_id, company_id
+        )
+        # Sobrescreve o compartamento padrão do core de aplicar a forma de pagamento
+        # verificar metodo: onchange_fiscal_payment_term
+        if result.get('value'):
+            result['value'].pop('payment_term', None)
+        return result
+
+    @api.onchange('fiscal_category_id', 'fiscal_position_id')
+    def onchange_fiscal_payment_term(self):
+        """ Quando a posição fiscal for preenchida temos os dados da categoria e do partner
+        e então podemos tomar decidir qual o payment_term adequado
+        :return:
+        """
+        partner_id = self.partner_id
+
+        payment_term = self.env['account.payment.term']
+        # Busca do partner
+        if partner_id and partner_id.property_payment_term:
+            payment_term = partner_id.property_payment_term
+        # Sobrecreve a opção do parceiro caso a categoria fiscal tenha uma opção definida
+
+        if self.fiscal_category_id and self.fiscal_category_id.account_payment_term_id:
+            payment_term = self.fiscal_category_id.account_payment_term_id
+        self.payment_term = payment_term
+
 
 class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'
@@ -1770,6 +1832,10 @@ class AccountInvoiceLine(models.Model):
         'l10n_br_account_product.icms_relief',
         string=u'Desoneração ICMS')
     issqn_manual = fields.Boolean('ISSQN Manual?', default=False)
+    issqn_type = fields.Selection(
+        [('N', 'Normal'), ('R', 'Retida'),
+         ('S', 'Substituta'), ('I', 'Isenta')], 'Tipo do ISSQN',
+        required=True, default='N')
     service_type_id = fields.Many2one(
         'l10n_br_account.service.type', u'Tipo de Serviço')
     issqn_base = fields.Float(
@@ -2114,7 +2180,13 @@ class AccountInvoiceLine(models.Model):
         return result
 
     def _amount_tax_issqn(self, tax=None):
+        # TODO deixar dinamico a definição do tipo do ISSQN
+        # assim como todos os impostos
+        issqn_type = 'N'
+        if not tax.get('amount'):
+            issqn_type = 'I'
         result = {
+            'issqn_type': issqn_type,
             'issqn_base': tax.get('total_base', 0.0),
             'issqn_percent': tax.get('percent', 0.0) * 100,
             'issqn_value': tax.get('amount', 0.0),

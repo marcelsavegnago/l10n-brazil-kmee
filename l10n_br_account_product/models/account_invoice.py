@@ -1461,12 +1461,13 @@ class AccountInvoice(models.Model):
 
         payment_ids = []
         for idx, item in enumerate(computations):
-            payment = dict(
-                numero=str(idx + 1),
-                data_vencimento=item[0],
-                valor=item[1],
-            )
-            payment_ids.append(payment)
+            if item[1] >= 0.01:
+                payment = dict(
+                    numero=str(idx + 1),
+                    data_vencimento=item[0],
+                    valor=item[1],
+                )
+                payment_ids.append(payment)
         self.duplicata_ids = payment_ids
 
     @api.multi

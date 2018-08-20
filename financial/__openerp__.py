@@ -46,7 +46,7 @@
 
         'wizards/financial_cancel.xml',
         # 'wizards/financial_edit.xml',
-        # 'wizards/financial_pay_receive.xml',
+        'wizards/financial_pay_receive.xml',
         'wizards/report_xlsx_financial_cashflow_wizard_view.xml',
         'wizards/report_xlsx_financial_moves_states_wizard.xml',
         'wizards/report_xlsx_financial_partner_statement_wizard.xml',

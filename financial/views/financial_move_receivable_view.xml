@@ -10,7 +10,7 @@
         <field name="name">financial.move.base.tree</field>
         <field name="model">financial.move</field>
         <field name="arch" type="xml">
-            <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'">
+            <tree>
                 <field name="date_business_maturity" string="Maturity"/>
                 <field name="date" string="Issue"/>
                 <field name="display_name"/>

@@ -37,11 +37,9 @@ class FinancialMove(models.Model):
                 )
                 if matrix_id and record.type:
                     if record.type in DEBT_2RECEIVE_2PAY:
-
-                        record.journal_id = \
-                            matrix_id.journal_id
+                        record.journal_id = matrix_id.account_id.journal_id
                     else:
-                        record.journal_id = record.bank_id.journal_id
+                        record.journal_id = record.debt_id.journal_id
 
                     account_move_template_id = \
                         record.account_matrix_id.map_account_move_template_id(
@@ -59,20 +57,20 @@ class FinancialMove(models.Model):
     journal_id = fields.Many2one(
         compute='_compute_account_move_template_id',
         comodel_name='account.journal',
-        string='Journal',
+        string='Diário',
         ondelete='restrict',
         store=True,
     )
     account_move_template_id = fields.Many2one(
         compute='_compute_account_move_template_id',
         comodel_name='financial.account.move.template',
-        string='Account move template',
+        string='Template de Lançamento Contábil',
         ondelete='restrict',
         store=True,
     )
     account_move_id = fields.Many2one(
         comodel_name='account.move',
-        string='Account move',
+        string='Lançamento Contábil',
         ondelete='restrict',
         copy=False,
         readonly=True,

@@ -263,7 +263,10 @@ class AccountInvoice(models.Model):
                              cofins_value_wh + inv.csll_value_wh + inv.
                              irrf_value_wh + inv.inss_value_wh)
 
-            inv.amount_net = inv.amount_company_currency - inv.amount_wh
+            inv.amount_net = inv._amount_net_value_calc()
+
+    def _amount_net_value_calc(self):
+        return self.amount_company_currency - self.amount_wh
 
     @api.one
     def _set_irrf_wh(self):
@@ -1096,27 +1099,6 @@ class AccountInvoice(models.Model):
                 #
                 continue
 
-            #
-            # Nas notas de entrada por compra ou devolução de venda, se
-            # não se vai aproveitar o crédito do imposto, ele não é
-            # contabilizado à parte
-            #
-            if self.type in ('in_invoice', 'out_refund'):
-                if (template_item.campo in
-                        ('icms_value', 'vr_icms_sn') and
-                        not self.credita_icms):
-                    continue
-                elif template_item.campo == 'icms_st_value' and \
-                        not self.credita_icms_st:
-                    continue
-                elif template_item.campo == 'ipi_value' and \
-                        not self.credita_ipi:
-                    continue
-                elif template_item.campo in (
-                        'pis_value', 'cofins_value') and \
-                        not self.credita_pis_cofins:
-                    continue
-
             valor = getattr(self, template_item.campo, 0)
 
             if not valor:
@@ -1135,13 +1117,12 @@ class AccountInvoice(models.Model):
 
             if account_debito is not None:
                 dados = {
-                    # 'move_id': account_move.id,
-                    # 'sped_documento_item_id': self.id,
                     'account_id': account_debito.id,
                     'name': ref or '/',
                     'narration': template_item.campo,
                     'debit': valor,
-                    # 'currency_id': self.currency_id.id,
+                    'credit': 0,
+                    'partner_id': self.partner_id.id,
                 }
                 line_ids.append((0, 0, dados))
 
@@ -1159,12 +1140,11 @@ class AccountInvoice(models.Model):
             if account_credito is not None:
                 dados = {
                     'account_id': account_credito.id,
-                    # 'move_id': account_move.id,
-                    # 'sped_documento_item_id': self.id,
                     'name': ref or '/',
                     'narration': template_item.campo,
                     'credit': valor,
-                    # 'currency_id': self.currency_id.id,
+                    'debit': 0,
+                    'partner_id': self.partner_id.id,
                 }
                 line_ids.append((0, 0, dados))
 
@@ -1172,159 +1152,166 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def action_move_create(self):
-        return True
 
-        # # Todo o resto foi comentado para evitar criar lançamento financeiros por enquanto
-        # # Wagner Pereira
-        # #
-        # account_invoice_tax = self.env['account.invoice.tax']
-        # account_move = self.env['account.move']
-        # sped_account_move_template = self.env['sped.account.move.template']
-        #
-        # for inv in self:
-        #     if not inv.journal_id.sequence_id:
-        #         raise ValidationError(_('Error!'), _(
-        #             'Please define sequence on the journal related to this invoice.'))
-        #     if not inv.invoice_line:
-        #         raise ValidationError(_('No Invoice Lines!'), _(
-        #             'Please create some invoice lines.'))
-        #     if inv.move_id:
-        #         continue
-        #
-        #     ctx = dict(self._context, lang=inv.partner_id.lang)
-        #
-        #     company_currency = inv.company_id.currency_id
-        #     if not inv.date_invoice:
-        #         # FORWARD-PORT UP TO SAAS-6
-        #         if inv.currency_id != company_currency and inv.tax_line:
-        #             raise ValidationError(
-        #                 _('Warning!'),
-        #                 _('No invoice date!'
-        #                     '\nThe invoice currency is not the same than the '
-        #                   'company currency.'
-        #                     ' An invoice date is required to determine '
-        #                   'the exchange rate to apply. Do not forget to update'
-        #                   ' the taxes!'
-        #                 )
-        #             )
-        #         inv.with_context(ctx).write(
-        #             {'date_invoice': fields.Date.context_today(self)})
-        #     date_invoice = inv.date_invoice
-        #
-        #     # create the analytical lines, one move line per invoice line
-        #     iml = inv._get_analytic_lines()
-        #     # check if taxes are all computed
-        #     compute_taxes = account_invoice_tax.compute(
-        #         inv.with_context(lang=inv.partner_id.lang))
-        #     inv.check_tax_lines(compute_taxes)
-        #
-        #     # I disabled the check_total feature
-        #     if self.env.user.has_group(
-        #             'account.group_supplier_inv_check_total'):
-        #         if (inv.type in ('in_invoice', 'in_refund') and
-        #                 abs(inv.check_total - inv.amount_total) >=
-        #                 (inv.currency_id.rounding / 2.0)):
-        #             raise ValidationError(_('Bad Total!'), _(
-        #                 'Please verify the price of the invoice!\nThe encoded'
-        #                 ' total does not match the computed total.'))
-        #
-        #     # Force recomputation of tax_amount, since the rate potentially changed between creation
-        #     # and validation of the invoice
-        #     inv._recompute_tax_amount()
-        #
-        #     if inv.type in ('in_invoice', 'in_refund'):
-        #         ref = inv.reference
-        #     else:
-        #         ref = inv.number
-        #
-        #     diff_currency = inv.currency_id != company_currency
-        #     # create one move line for the total and possibly adjust the other lines amount
-        #     total, total_currency, iml = inv.with_context(
-        #         ctx).compute_invoice_totals(company_currency, ref, iml)
-        #
-        #     name = inv.supplier_invoice_number or inv.name or '/'
-        #
-        #     date = date_invoice
-        #
-        #     part = self.env['res.partner']._find_accounting_partner(
-        #         inv.partner_id)
-        #
-        #     line_id = []
-        #
-        #     move_vals = {
-        #         'ref': inv.reference or inv.supplier_invoice_number or inv.name,
-        #         'line_id': line_id,
-        #         'journal_id': inv.journal_id.id,
-        #         'partner_id': inv.partner_id.id,
-        #         'date': inv.date_invoice,
-        #         # 'date': inv.date_in_out,
-        #         'company_id': inv.company_id.id,
-        #         'narration': inv.comment,
-        #         'company_id': inv.company_id.id,
-        #
-        #     }
-        #
-        #     template_nao_contabilizados = set()
-        #     #
-        #     # Contabiliza as linhas e retorna os templates não contabilizados
-        #     #
-        #     for invoice_line in inv.invoice_line:
-        #         move_template = invoice_line.account_move_template_id
-        #         invoice_line.gera_account_move_line(
-        #             line_id, template_nao_contabilizados, move_template)
-        #
-        #     #import ipdb; ipdb.set_trace();
-        #     #
-        #     # Contabiliza os campos do cabeçalho do documento
-        #     #
-        #     inv.gera_account_move_line(
-        #         line_id, template_nao_contabilizados
-        #     )
-        #
-        #     #
-        #     # Agrupa os laçamentos contábeis
-        #     #
-        #
-        #     # line = inv.group_lines(iml, line)
-        #
-        #     journal = inv.journal_id.with_context(ctx)
-        #     if journal.centralisation:
-        #         raise ValidationError(
-        #             _('User Error!'),
-        #             _('You cannot create an invoice on a centralized journal.'
-        #               ' Uncheck the centralized counterpart box in the related'
-        #               ' journal from the configuration menu.'))
-        #
-        #     # line = inv.finalize_invoice_move_lines(line_id)
-        #
-        #     ctx['company_id'] = inv.company_id.id
-        #     period = inv.period_id
-        #     # if not period:
-        #     #     period = period.with_context(ctx).find(date_invoice)[:1]
-        #     # if period:
-        #     #     move_vals['period_id'] = period.id
-        #     #     for i in line:
-        #     #         i[2]['period_id'] = period.id
-        #
-        #     ctx['invoice'] = inv
-        #     ctx_nolang = ctx.copy()
-        #     ctx_nolang.pop('lang', None)
-        #
-        #     move = account_move.with_context(ctx_nolang).create(move_vals)
-        #
-        #     # make the invoice point to that move
-        #     vals = {
-        #         'move_id': move.id,
-        #         'period_id': period.id,
-        #         'move_name': move.name,
-        #     }
-        #     inv.with_context(ctx).write(vals)
-        #
-        #     # Pass invoice in context in method post: used if you want to
-        #     # get the same
-        #     # account move reference when creating the same invoice after
-        #     #  a cancelled one:
-        #     # move.post()
+        account_invoice_tax = self.env['account.invoice.tax']
+        account_move = self.env['account.move']
+
+        for inv in self:
+            if not inv.fiscal_category_id.account_move_template_id:
+                raise ValidationError(
+                    _('Error!'),
+                    _(
+                        'Please define a Modelo Partida Dobrada'
+                        ' in the fiscal category.'
+                    )
+                )
+            if not inv.journal_id.sequence_id:
+                raise ValidationError(
+                    _('Error!'),
+                    _(
+                        'Please define sequence on the journal '
+                        'related to this invoice.'
+                    )
+                )
+            if not inv.invoice_line:
+                raise ValidationError(_('No Invoice Lines!'), _(
+                    'Please create some invoice lines.'))
+            if inv.move_id:
+                continue
+
+            ctx = dict(self._context, lang=inv.partner_id.lang)
+
+            company_currency = inv.company_id.currency_id
+            if not inv.date_invoice:
+                # FORWARD-PORT UP TO SAAS-6
+                if inv.currency_id != company_currency and inv.tax_line:
+                    raise ValidationError(
+                        _('Warning!'),
+                        _('No invoice date!'
+                            '\nThe invoice currency is not the same than the '
+                          'company currency.'
+                            ' An invoice date is required to determine '
+                          'the exchange rate to apply. Do not forget to update'
+                          ' the taxes!'
+                        )
+                    )
+                inv.with_context(ctx).write(
+                    {'date_invoice': fields.Date.context_today(self)})
+            date_invoice = inv.date_invoice
+
+            # create the analytical lines, one move line per invoice line
+            iml = inv._get_analytic_lines()
+            # check if taxes are all computed
+            compute_taxes = account_invoice_tax.compute(
+                inv.with_context(lang=inv.partner_id.lang))
+            inv.check_tax_lines(compute_taxes)
+
+            # I disabled the check_total feature
+            if self.env.user.has_group(
+                    'account.group_supplier_inv_check_total'):
+                if (inv.type in ('in_invoice', 'in_refund') and
+                        abs(inv.check_total - inv.amount_total) >=
+                        (inv.currency_id.rounding / 2.0)):
+                    raise ValidationError(_('Bad Total!'), _(
+                        'Please verify the price of the invoice!\nThe encoded'
+                        ' total does not match the computed total.'))
+
+            # Force recomputation of tax_amount, since the rate potentially changed between creation
+            # and validation of the invoice
+            inv._recompute_tax_amount()
+
+            if inv.type in ('in_invoice', 'in_refund'):
+                ref = inv.reference
+            else:
+                ref = inv.number
+
+            diff_currency = inv.currency_id != company_currency
+            # create one move line for the total and possibly adjust the other lines amount
+            total, total_currency, iml = inv.with_context(
+                ctx).compute_invoice_totals(company_currency, ref, iml)
+
+            name = inv.supplier_invoice_number or inv.name or '/'
+
+            date = date_invoice
+
+            part = self.env['res.partner']._find_accounting_partner(
+                inv.partner_id)
+
+            line_id = []
+
+            move_vals = {
+                'ref': inv.reference or inv.supplier_invoice_number or inv.name,
+                'line_id': line_id,
+                'journal_id': inv.journal_id.id,
+                'partner_id': inv.partner_id.id,
+                'date': inv.date_invoice,
+                'narration': inv.comment,
+                'company_id': inv.company_id.id,
+                'name': inv.internal_number,
+            }
+
+            template_nao_contabilizados = set()
+            #
+            # Contabiliza as linhas e retorna os templates não contabilizados
+            #
+            for invoice_line in inv.invoice_line:
+                move_template = invoice_line.account_move_template_id
+                invoice_line.gera_account_move_line(
+                    line_id, template_nao_contabilizados, move_template)
+
+            #import ipdb; ipdb.set_trace();
+            #
+            # Contabiliza os campos do cabeçalho do documento
+            #
+            inv.gera_account_move_line(
+                line_id, template_nao_contabilizados
+            )
+
+            #
+            # Agrupa os laçamentos contábeis
+            #
+
+            # line = inv.group_lines(iml, line)
+
+            journal = inv.journal_id.with_context(ctx)
+            if journal.centralisation:
+                raise ValidationError(
+                    _('User Error!'),
+                    _('You cannot create an invoice on a centralized journal.'
+                      ' Uncheck the centralized counterpart box in the related'
+                      ' journal from the configuration menu.'))
+
+            # line = inv.finalize_invoice_move_lines(line_id)
+
+            ctx['company_id'] = inv.company_id.id
+            period = inv.period_id
+            # if not period:
+            #     period = period.with_context(ctx).find(date_invoice)[:1]
+            # if period:
+            #     move_vals['period_id'] = period.id
+            #     for i in line:
+            #         i[2]['period_id'] = period.id
+
+            # if not inv.fiscal_category_id.account_move_template_id:
+            ctx['invoice'] = inv
+            ctx_nolang = ctx.copy()
+            ctx_nolang.pop('lang', None)
+
+            move = account_move.with_context(ctx_nolang).create(move_vals)
+
+            # make the invoice point to that move
+            vals = {
+                'move_id': move.id,
+                'period_id': period.id,
+                'move_name': move.name,
+            }
+            inv.with_context(ctx).write(vals)
+
+            # Pass invoice in context in method post: used if you want to
+            # get the same
+            # account move reference when creating the same invoice after
+            #  a cancelled one:
+            move.post()
 
         #
         # Chamamos o action_move_create para manter a chamadas de outros
@@ -1402,49 +1389,47 @@ class AccountInvoice(models.Model):
     #
     #     return move_lines_new
 
-    # Comentado por Wagner Pereira para não gerar Financeiro de NF de entrada com retenção (não balanceia o
-    # total da NF pois falta o lançamento financeiro das retenções).
-    #
-    # @api.multi
-    # def invoice_validate(self):
-    #     super(AccountInvoice, self).invoice_validate()
-    #     for invoice in self:
-    #         #
-    #         #  Geração dos lançamentos financeiros
-    #         #
-    #         # financial_create = self.filtered(
-    #         #     lambda invoice: invoice.revenue_expense)
-    #         # financial_create.action_financial_create(move_lines_new)
-    #
-    #         invoice.action_financial_create()
-    #
-    #         # invoice.financial_ids.write({
-    #         #     'document_number': invoice.name or
-    #         #                        invoice.move_id.name or '/'})
-    #         # invoice.financial_ids.action_confirm()
-    #
-    # def action_financial_create(self):
-    #     """ Cria o lançamento financeiro do documento fiscal
-    #     :return:
-    #     """
-    #     for documento in self:
-    #         if documento.state not in 'open':
-    #             continue
-    #
-    #         # if documento.emissao == TIPO_EMISSAO_PROPRIA and \
-    #         #     documento.entrada_saida == ENTRADA_SAIDA_ENTRADA:
-    #         #     continue
-    #
-    #         #
-    #         # Temporariamente, apagamos todos os lançamentos anteriores
-    #         #
-    #             documento.financial_ids.unlink()
-    #
-    #         for duplicata in documento.duplicata_ids:
-    #             dados = duplicata.prepara_financial_move()
-    #             financial_move = \
-    #                 self.env['financial.move'].create(dados)
-    #             financial_move.action_confirm()
+    @api.multi
+    def invoice_validate(self):
+        super(AccountInvoice, self).invoice_validate()
+        for invoice in self:
+            #
+            #  Geração dos lançamentos financeiros
+            #
+            if invoice.payment_term:
+                # financial_create = self.filtered(
+                #     lambda invoice: invoice.revenue_expense)
+                # financial_create.action_financial_create(move_lines_new)
+
+                invoice.action_financial_create()
+
+                invoice.financial_ids.write({
+                    'document_number': invoice.name or
+                                       invoice.move_id.name or '/'})
+                invoice.financial_ids.action_confirm()
+
+    def action_financial_create(self):
+        """ Cria o lançamento financeiro do documento fiscal
+        :return:
+        """
+        for documento in self:
+            if documento.state not in 'open':
+                continue
+
+            # if documento.emissao == TIPO_EMISSAO_PROPRIA and \
+            #     documento.entrada_saida == ENTRADA_SAIDA_ENTRADA:
+            #     continue
+
+            #
+            # Temporariamente, apagamos todos os lançamentos anteriores
+            #
+                documento.financial_ids.unlink()
+
+            for duplicata in documento.duplicata_ids:
+                dados = duplicata.prepara_financial_move()
+                financial_move = \
+                    self.env['financial.move'].create(dados)
+                financial_move.action_confirm()
 
     @api.onchange('payment_term', 'date_invoice', 'amount_net',
                   'amount_total', 'duplicata_ids')
@@ -1461,7 +1446,7 @@ class AccountInvoice(models.Model):
         if not self.date_invoice:
             self.date_invoice = fields.Date.context_today(self)
 
-        valor = self.amount_net or 0
+        valor = self._get_amount_net_value()
 
         #
         # Para a compatibilidade com a chamada original (super), que usa
@@ -1476,13 +1461,18 @@ class AccountInvoice(models.Model):
 
         payment_ids = []
         for idx, item in enumerate(computations):
-            payment = dict(
-                numero=str(idx + 1),
-                data_vencimento=item[0],
-                valor=item[1],
-            )
-            payment_ids.append(payment)
+            if item[1] >= 0.01:
+                payment = dict(
+                    numero=str(idx + 1),
+                    data_vencimento=item[0],
+                    valor=item[1],
+                )
+                payment_ids.append(payment)
         self.duplicata_ids = payment_ids
+
+    @api.multi
+    def _get_amount_net_value(self):
+        return self.amount_net or 0
 
     @api.one
     @api.depends('financial_ids.state')
@@ -1598,6 +1588,11 @@ class AccountInvoiceLine(models.Model):
 
     code = fields.Char(
         u'Código do Produto', size=60)
+    code_view = fields.Char(
+        related='code',
+        readonly=True,
+        string='Código do Produto',
+    )
     date_invoice = fields.Datetime(
         'Invoice Date', readonly=True, states={'draft': [('readonly', False)]},
         select=True, help="Keep empty to use the current date")
@@ -1606,12 +1601,42 @@ class AccountInvoiceLine(models.Model):
     fiscal_position = fields.Many2one(
         'account.fiscal.position', u'Posição Fiscal',
     )
+    fiscal_category_view = fields.Many2one(
+        comodel_name='l10n_br_account.fiscal.category',
+        related='fiscal_category_id',
+        readonly=True,
+        string='Categoria Fiscal',
+    )
+    fiscal_position_view = fields.Many2one(
+        comodel_name='account.fiscal.position',
+        related='fiscal_position',
+        readonly=True,
+        string='Posição Fiscal',
+    )
     cfop_id = fields.Many2one('l10n_br_account_product.cfop', 'CFOP')
+    cfop_view = fields.Many2one(
+        comodel_name='l10n_br_account_product.cfop',
+        related='cfop_id',
+        readonly=True,
+        string='CFOP',
+    )
     fiscal_classification_id = fields.Many2one(
         'account.product.fiscal.classification', u'Classificação Fiscal')
+    fiscal_classification_view = fields.Many2one(
+        comodel_name='account.product.fiscal.classification',
+        related='fiscal_classification_id',
+        readonly=True,
+        string='Classificação Fiscal',
+    )
     cest_id = fields.Many2one(
         comodel_name='l10n_br_account_product.cest',
         string=u'CEST'
+    )
+    cest_view = fields.Many2one(
+        comodel_name='l10n_br_account_product.cest',
+        related='cest_id',
+        readonly=True,
+        string='CEST',
     )
     fci = fields.Char('FCI do Produto', size=36)
     import_declaration_ids = fields.One2many(
@@ -1620,6 +1645,12 @@ class AccountInvoiceLine(models.Model):
     product_type = fields.Selection(
         [('product', 'Produto'), ('service', u'Serviço')],
         'Tipo do Produto', required=True, default='product')
+    product_type_view = fields.Selection(
+        selection=[('product', 'Produto'), ('service', 'Serviço')],
+        related='product_type',
+        readonly=True,
+        string='Tipo do Produto',
+    )
     discount_value = fields.Float(
         string='Vlr. desconto', store=True, compute='_compute_price',
         digits=dp.get_precision('Account'))
@@ -2578,28 +2609,6 @@ class AccountInvoiceLine(models.Model):
             if template_item.campo in campos_jah_contabilizados:
                 continue
 
-            #
-            # Nas notas de entrada por compra ou devolução de venda, se
-            # não se vai aproveitar o crédito do imposto, ele não é
-            # contabilizado à parte
-            #
-            if self.invoice_id.type in ('in_invoice', 'out_refund'):
-                if template_item.campo in ('icms_value', 'vr_icms_sn') and \
-                        self.product_type == 'product' and not \
-                        self.credita_icms:
-                    continue
-                elif template_item.campo == 'icms_st_value' and \
-                        self.product_type == 'product' and not \
-                        self.credita_icms_st:
-                    continue
-                elif template_item.campo == 'ipi_value' and \
-                        self.product_type == 'product' and not self.credita_ipi:
-                    continue
-                elif template_item.campo in ('pis_value', 'cofins_value') and \
-                        self.product_type == 'product' and not \
-                        self.credita_pis_cofins:
-                    continue
-
             valor = getattr(self, template_item.campo, 0)
 
             if not valor:
@@ -2628,12 +2637,11 @@ class AccountInvoiceLine(models.Model):
             if account_debito is not None:
                 dados = {
                     'account_id': account_debito.id,
-                    # 'move_id': account_move.id,
-                    # 'sped_documento_item_id': self.id,
                     'name': self.product_id.name,
                     'narration': template_item.campo,
                     'debit': valor,
-                    # 'currency_id': self.invoice_id.currency_id.id,
+                    'credit': 0,
+                    'partner_id': self.invoice_id.partner_id.id,
                 }
                 line_ids.append((0, 0, dados))
 
@@ -2660,12 +2668,11 @@ class AccountInvoiceLine(models.Model):
             if account_credito is not None:
                 dados = {
                     'account_id': account_credito.id,
-                    # 'move_id': account_move.id,
-                    # 'sped_documento_item_id': self.id,
                     'name': self.product_id.name,
                     'narration': template_item.campo,
                     'credit': valor,
-                    # 'currency_id': self.invoice_id.currency_id.id,
+                    'debit': 0,
+                    'partner_id': self.invoice_id.partner_id.id,
                 }
                 line_ids.append((0, 0, dados))
 

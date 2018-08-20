@@ -315,6 +315,7 @@ class FinancialMove(models.Model):
     payment_ids = fields.One2many(
         comodel_name='financial.move',
         inverse_name='debt_id',
+        ondelete='restrict',
     )
     debt_ids = fields.One2many(
         comodel_name='financial.move',

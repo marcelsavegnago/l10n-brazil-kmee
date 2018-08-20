@@ -16,9 +16,9 @@
             <xpath expr="//form[1]" position="attributes">
                 <attribute name="string">Payable</attribute>
             </xpath>
-            <field name="payment_ids" position="attributes">
-                <attribute name="context">{'default_type': 'payment_item', 'default_amount_document': amount_residual, 'default_partner_id': partner_id, 'default_account_id': account_id, 'default_currency_id': currency_id, 'default_document_type_id': document_type_id, 'tree_view_ref': 'financial.financial_move_payment_one2many_base_tree', 'form_view_ref': 'financial.financial_move_payment_one2many_base_form'}</attribute>
-            </field>
+            <xpath expr="//header/button[@string='Cancel']" position="after">
+                <button name="%(financial.financial_pay_receive_act_window)d" type="action" string="Pagamento" states="open" class="oe_highlight" />
+            </xpath>
         </field>
     </record>
 

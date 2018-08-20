@@ -3,7 +3,7 @@
 #   Luiz Felipe do Divino <luiz.divino@kmee.com.br>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import models, fields, api
+from openerp import models, api
 
 
 class StockMove(models.Model):
@@ -17,10 +17,9 @@ class StockMove(models.Model):
         ).mapped(
             lambda order_line: (order_line.product_id, order_line.price_unit -
                                 (
-                                        order_line.price_unit * (
-                                            order_line.discount/100)
-                                )
-                                )
+                                    order_line.price_unit * (
+                                        order_line.discount/100)
+                                ))
         ))
         return (
             pos_order_line_product_price_map.get(move_line.product_id)

@@ -11,7 +11,7 @@ from openerp.addons import decimal_precision as dp
 from openerp.tools.float_utils import float_compare
 from openerp.addons.l10n_br_pos.models.pos_config import \
     SIMPLIFIED_INVOICE_TYPE
-from openerp.tools.translate import _
+# from openerp.tools.translate import _
 
 
 class PosOrder(models.Model):
@@ -96,8 +96,7 @@ class PosOrder(models.Model):
                 order.write(
                     {'simplified': simplified,
                      'fiscal_document_type':
-                         order.session_id.config_id.simplified_invoice_type
-                     })
+                         order.session_id.config_id.simplified_invoice_type})
 
     @api.multi
     def write(self, vals):
@@ -124,9 +123,10 @@ class PosOrder(models.Model):
         order_id = super(PosOrder, self)._process_order(order)
         order_id = self.browse(order_id)
         for statement in order_id.statement_ids:
-            if statement.journal_id.sat_payment_mode == '05' and statement.journal_id.pagamento_funcionarios:
+            if statement.journal_id.sat_payment_mode == '05' and \
+                    statement.journal_id.pagamento_funcionarios:
                 order_id.partner_id.credit_funcionario -= statement.amount
-            elif statement.journal_id.sat_payment_mode == "05" :
+            elif statement.journal_id.sat_payment_mode == "05":
                 order_id.partner_id.credit_limit -= statement.amount
         return order_id.id
 
@@ -192,8 +192,7 @@ class PosOrder(models.Model):
 
             current_session_ids = self.env['pos.session'].search([
                 ('state', '!=', 'closed'),
-                ('user_id', '=', self.env.uid)]
-            )
+                ('user_id', '=', self.env.uid)])
 
             # if not current_session_ids:
             #     raise osv.except_osv(_('Error!'), _('To return product(s),
@@ -233,9 +232,9 @@ class PosOrder(models.Model):
                     'journal_id': statement.journal_id.id,
                     'amount': statement.amount * -1,
                     'date': statement.date,
+                    'account_id': statement.account_id.id,
                     'partner_id': statement.partner_id.id
-                    if statement.partner_id else False,
-                    'account_id': statement.account_id.id
+                                  if statement.partner_id else False
                 }
 
                 statements.create(vals)
@@ -259,11 +258,11 @@ class PosOrder(models.Model):
         dados_reimpressao = {
             'order_id': order_id,
             'chaveConsulta': order.chave_cfe,
-            'doc_destinatario': order.partner_id.cnpj_cpf if order.partner_id
-            else False,
             'xml_cfe_cacelada': order.cfe_cancelamento_return,
             'xml_cfe_venda': order.cfe_return,
             'canceled_order': order.canceled_order,
+            'doc_destinatario': order.partner_id.cnpj_cpf if order.partner_id
+                                else False,
         }
 
         return dados_reimpressao
@@ -320,10 +319,7 @@ class PosOrderLine(models.Model):
             if record.order_id.chave_cfe:
                 rel_documentos = self.env[
                     'l10n_br_account_product.document.related'].search(
-                    [
-                        ('access_key', '=', record.order_id.chave_cfe[3:])
-                    ]
-                )
+                        [('access_key', '=', record.order_id.chave_cfe[3:])])
                 qtd_devolvidas = 0
                 for documento in rel_documentos:
                     if documento.invoice_id.state in ('open', 'sefaz_export'):
@@ -336,4 +332,3 @@ class PosOrderLine(models.Model):
         string="Quantidade devolvida",
         compute=_buscar_produtos_devolvidos
     )
-

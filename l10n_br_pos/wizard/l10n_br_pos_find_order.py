@@ -37,7 +37,6 @@ class FindPosOrder(models.TransientModel):
         orders_found = []
         for order in orders:
             order.sudo()
-            lines_ids = []
             vals = {
                 'name': order.name,
                 'order_id': order.id,
@@ -75,9 +74,10 @@ class FindPosOrder(models.TransientModel):
                 (self.env.ref(
                     'l10n_br_pos.view_pos_find_order_tree').id, 'tree')
             action['views'] = [(self.env.ref(
-                    'l10n_br_pos.view_pos_find_order_tree').id, 'tree'),
-                                  (self.env.ref(
-                    'l10n_br_pos.view_find_order_form').id, 'form')]
+                'l10n_br_pos.view_pos_find_order_tree').id, 'tree'),
+                               (self.env.ref(
+                                   'l10n_br_pos.view_find_order_form').id,
+                                'form')]
 
         elif len(orders_found) == 1:
             action['domain'] = [('id', 'in', orders_found)]
@@ -88,7 +88,7 @@ class FindPosOrder(models.TransientModel):
                 (self.env.ref(
                     'l10n_br_pos.view_find_order_form').id, 'form')
             action['views'] = [(self.env.ref(
-                    'l10n_br_pos.view_find_order_form').id, 'form'),(self.env.ref(
+                'l10n_br_pos.view_find_order_form').id, 'form'), (self.env.ref(
                     'l10n_br_pos.view_pos_find_order_tree').id, 'tree')]
 
         else:

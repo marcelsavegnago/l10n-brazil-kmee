@@ -23,7 +23,7 @@ class StockPickingReturn(models.TransientModel):
         for line in pos_order.lines:
             precos_produtos_pos_order.update({
                 line.product_id.id: line.price_unit - (
-                        line.price_unit * (line.discount/100)
+                    line.price_unit * (line.discount/100)
                 )
             })
         valor_total_devolucao = 0.00
@@ -42,20 +42,24 @@ class StockPickingReturn(models.TransientModel):
             for product_line in self.product_return_moves:
                 for line in pos_order.lines:
                     if line.product_id == product_line.product_id:
-                        if line.qtd_produtos_devolvidos + product_line.quantity > line.qty:
+                        if line.qtd_produtos_devolvidos + \
+                                product_line.quantity > line.qty:
                             raise Warning(
                                 _('Esta quantidade do produto %s não pode '
-                                'ser devolvida') % (line.product_id.display_name))
+                                  'ser devolvida') %
+                                (line.product_id.display_name))
 
             res = super(StockPickingReturn, self.sudo()).create_returns()
             result_domain = safe_eval(res['domain'])
             picking_ids = result_domain and result_domain[0] and \
                           result_domain[0][2]
-            picking_devolucao = self.sudo().env['stock.picking'].browse(picking_ids)
+            picking_devolucao = self.sudo().env['stock.picking'].browse(
+                picking_ids)
             cat_fiscal_devolucao = picking_devolucao.fiscal_category_id
             obj_fp_rule = self.sudo().env['account.fiscal.position.rule']
             current_session_ids = self.env['pos.session']. \
-                search([('state', '!=', 'closed'), ('user_id', '=', self._uid)])
+                search([('state', '!=', 'closed'),
+                        ('user_id', '=', self._uid)])
             kwargs = {
                 'partner_id':
                     current_session_ids[0].config_id.company_id.partner_id.id,
@@ -64,11 +68,12 @@ class StockPickingReturn(models.TransientModel):
                 'fiscal_category_id': cat_fiscal_devolucao.id,
                 'company_id': current_session_ids[0].config_id.company_id.id,
             }
-            picking_devolucao.fiscal_position = obj_fp_rule.apply_fiscal_mapping(
-                {'value': {}}, **kwargs
-            )['value']['fiscal_position']
+            picking_devolucao.fiscal_position = \
+                obj_fp_rule.apply_fiscal_mapping({'value': {}}, **kwargs
+                                                )['value']['fiscal_position']
 
-            picking_devolucao.company_id = current_session_ids[0].config_id.company_id.id
+            picking_devolucao.company_id = \
+                current_session_ids[0].config_id.company_id.id
 
             valor_total_devolucao = self._buscar_valor_total_devolucao(
                 pos_order
@@ -100,19 +105,19 @@ class PorOrderReturn(models.TransientModel):
     )
 
     @staticmethod
-    def _check_picking_parameters(order):
+    def _check_picking_parameters(order, uid):
         current_session_ids = order.env['pos.session']. \
-            search([('state', '!=', 'closed'), ('user_id', '=', order._uid)])
-
+            search([('state', '!=', 'closed'), ('user_id', '=', uid)])
+        config_id = current_session_ids[0].config_id
         if not order.picking_id.fiscal_category_id:
             # Picking id not set
             order.picking_id.fiscal_category_id = (
-                current_session_ids[0].config_id.out_pos_fiscal_category_id or
-                order.company_id.out_pos_fiscal_category_id)
+                config_id.out_pos_fiscal_category_id or
+                config_id.company_id.out_pos_fiscal_category_id)
         if not order.picking_id.fiscal_category_id.refund_fiscal_category_id:
             order.picking_id.fiscal_category_id.refund_fiscal_category_id = (
-                current_session_ids[0].config_id.refund_pos_fiscal_category_id or
-                order.company_id.refund_pos_fiscal_category_id)
+                config_id.refund_pos_fiscal_category_id or
+                config_id.company_id.refund_pos_fiscal_category_id)
         order.picking_id.partner_id = order.partner_id
         return True
 
@@ -120,14 +125,15 @@ class PorOrderReturn(models.TransientModel):
     def create_returns(self):
         self.ensure_one()
         if self.env.context.get("order_id", None):
-            order_id = self.env['pos.find.order'].browse(self._context['order_id'])
+            order_id = \
+                self.env['pos.find.order'].browse(self._context['order_id'])
         else:
             order_id = self.env.context.get("active_ids")
         order_find = self.env['pos.find.order'].browse(order_id)
 
         order = order_find.order_id
         order.sudo().partner_id = self.partner_id
-        self._check_picking_parameters(order.sudo())
+        self._check_picking_parameters(order.sudo(), self._uid)
 
         ctx = dict(self._context)
         ctx['pos_order_id'] = order_id

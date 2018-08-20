@@ -63,5 +63,3 @@ class PosFindOrderLine(models.TransientModel):
     order_id = fields.Many2one(
         comodel_name='pos.find.order',
     )
-
-

@@ -12,4 +12,3 @@ from . import res_partner
 from . import stock_move
 from . import ir_sequence
 from . import pos_find_order
-

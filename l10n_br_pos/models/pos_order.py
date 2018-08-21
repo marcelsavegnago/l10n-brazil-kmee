@@ -66,6 +66,48 @@ class PosOrder(models.Model):
         related='partner_id.cnpj_cpf',
     )
 
+    @api.cr_uid_ids_context
+    def _payment_fields(self, cr, uid, ui_paymentline, context=None):
+
+        result = super(PosOrder, self)._payment_fields(
+            cr, uid, ui_paymentline, context
+        )
+        result['payment_term'] = ui_paymentline.get('payment_term', False)
+        return result
+
+    @api.cr_uid_ids_context
+    def add_payment(self, cr, uid, order_id, data, context=None):
+
+        if data.get('payment_term'):
+            payment_terms = self.pool.get('account.payment.term')
+            date_payment = data['payment_date'].split(" ")
+            compute = payment_terms.compute(
+                cr,
+                uid,
+                int(data['payment_term']),
+                data['amount'],
+                date_payment[0],
+                context=context
+            )
+            result = []
+            for item in compute:
+                data['amount'] = item[1]
+                data['payment_date'] = item[0]
+                result.append(
+                    super(PosOrder, self).add_payment(
+                        cr,
+                        uid,
+                        order_id,
+                        data,
+                        context=None
+                    )
+                )
+            return result
+
+        return super(PosOrder, self).add_payment(
+            cr, uid, order_id, data, context=None
+        )
+
     @api.one
     def action_invoice(self):
         self.simplified = False

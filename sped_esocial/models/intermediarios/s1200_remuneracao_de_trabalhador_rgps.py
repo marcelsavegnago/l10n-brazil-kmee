@@ -98,6 +98,7 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
             ('5', 'Precisa Retificar'),
         ],
         related='sped_registro.situacao',
+        store=True,
     )
 
     # Roda a atualização do e-Social (não transmite ainda)
@@ -124,6 +125,9 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
     @api.multi
     def popula_xml(self, ambiente='2', operacao='na'):
         self.ensure_one()
+
+        # Validação
+        validacao = ""
 
         # Cria o registro
         S1200 = pysped.esocial.leiaute.S1200_2()
@@ -296,7 +300,7 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
             dm_dev.infoPerApur.append(info_per_apur)
             S1200.evento.dmDev.append(dm_dev)
 
-        return S1200
+        return S1200, validacao
 
     @api.multi
     def retorno_sucesso(self, evento):
@@ -411,6 +415,13 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
                                 if categoria.indSimples:
                                     vals['ind_simples'] = categoria.indSimples.valor
                                 self.env['sped.contribuicao.inss.ideestablot'].create(vals)
+
+                    # Adiciona o S-5001 ao Período do e-Social que gerou o S-1200 relacionado
+                    periodo = self.env['sped.esocial'].search([
+                        ('company_id', '=', self.company_id.id),
+                        ('periodo_id', '=', self.periodo_id.id),
+                    ])
+                    periodo.inss_trabalhador_ids = [(4, sped_intermediario.id)]
 
     @api.multi
     def retorna_trabalhador(self):

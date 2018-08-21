@@ -47,6 +47,7 @@ class SpedEsocialExclusao(models.Model, SpedRegistroIntermediario):
         ],
         string='Situação no e-Social',
         compute='compute_situacao_esocial',
+        store=True,
     )
 
     @api.depends('company_id')
@@ -59,7 +60,7 @@ class SpedEsocialExclusao(models.Model, SpedRegistroIntermediario):
                 nome += ')'
             registro.nome = nome
 
-    @api.depends('sped_transmissao_id')
+    @api.depends('sped_transmissao_id.situacao')
     def compute_situacao_esocial(self):
         for exclusao in self:
             situacao_esocial = '0'  # Inativa
@@ -89,6 +90,9 @@ class SpedEsocialExclusao(models.Model, SpedRegistroIntermediario):
     @api.multi
     def popula_xml(self, ambiente='2', operacao='I'):
         self.ensure_one()
+
+        # Validação
+        validacao = ""
 
         # Cria o registro
         S3000 = pysped.esocial.leiaute.S3000_2()
@@ -129,7 +133,7 @@ class SpedEsocialExclusao(models.Model, SpedRegistroIntermediario):
                 self.sped_registro_id.origem_intermediario.periodo_id.code[0:2]
             S3000.evento.infoExclusao.ideFolhaPagto.append(ide_folhapagto)
 
-        return S3000
+        return S3000, validacao
 
     @api.multi
     def retorno_sucesso(self, evento):

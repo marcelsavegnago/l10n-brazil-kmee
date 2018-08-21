@@ -51,6 +51,7 @@ class SpedEmpregador(models.Model, SpedRegistroIntermediario):
         ],
         string='Situação no e-Social',
         compute='compute_situacao_esocial',
+        store=True,
     )
     precisa_incluir = fields.Boolean(
         string='Precisa incluir dados?',
@@ -84,7 +85,7 @@ class SpedEmpregador(models.Model, SpedRegistroIntermediario):
                 nome += ')'
             registro.nome = nome
 
-    @api.depends('sped_inclusao', 'sped_exclusao')
+    @api.depends('sped_inclusao.situacao', 'sped_alteracao.situacao', 'sped_exclusao.situacao')
     def compute_situacao_esocial(self):
         for empregador in self:
             situacao_esocial = '0'  # Inativa
@@ -132,9 +133,7 @@ class SpedEmpregador(models.Model, SpedRegistroIntermediario):
             # Popula na tabela
             empregador.situacao_esocial = situacao_esocial
 
-    @api.depends('sped_inclusao',
-                 'sped_alteracao', 'sped_alteracao.situacao',
-                 'sped_exclusao',
+    @api.depends('sped_inclusao.situacao', 'sped_alteracao.situacao', 'sped_exclusao.situacao',
                  'company_id.esocial_periodo_inicial_id', 'company_id.esocial_periodo_final_id')
     def compute_precisa_enviar(self):
 
@@ -173,9 +172,7 @@ class SpedEmpregador(models.Model, SpedRegistroIntermediario):
             # empregador.precisa_atualizar = precisa_atualizar
             empregador.precisa_excluir = precisa_excluir
 
-    @api.depends('sped_inclusao',
-                 'sped_alteracao', 'sped_alteracao.situacao',
-                 'sped_exclusao')
+    @api.depends('sped_inclusao.situacao', 'sped_alteracao.situacao', 'sped_exclusao.situacao')
     def compute_ultima_atualizacao(self):
 
         # Roda todos os registros da lista
@@ -264,6 +261,9 @@ class SpedEmpregador(models.Model, SpedRegistroIntermediario):
     def popula_xml(self, ambiente='2', operacao='I'):
         self.ensure_one()
 
+        # Validação
+        validacao = ""
+
         # Cria o registro
         S1000 = pysped.esocial.leiaute.S1000_2()
 
@@ -291,24 +291,24 @@ class SpedEmpregador(models.Model, SpedRegistroIntermediario):
 
             # Se o campo periodo_atualizacao_id não estiver preenchido, retorne erro de dados para o usuário
             if not self.company_id.esocial_periodo_atualizacao_id:
-                raise ValidationError("O campo 'Período da Última Atualização' na Empresa não está preenchido !")
-
-            # Popula infoEmpregador.novaValidade
-            S1000.evento.infoEmpregador.novaValidade.iniValid.valor = \
-                self.company_id.esocial_periodo_atualizacao_id.code[3:7] + '-' + \
-                self.company_id.esocial_periodo_atualizacao_id.code[0:2]
+                validacao += "O campo 'Período da Última Atualização' na Empresa não está preenchido !\n"
+            else:
+                # Popula infoEmpregador.novaValidade
+                S1000.evento.infoEmpregador.novaValidade.iniValid.valor = \
+                    self.company_id.esocial_periodo_atualizacao_id.code[3:7] + '-' + \
+                    self.company_id.esocial_periodo_atualizacao_id.code[0:2]
 
         # Se for operacao=='E' (Exclusão) Popula idePeriodo usando
         if operacao == 'E':
 
             # Se o campo periodo_exclusao_id não estiver preenchido, retorne erro de dados para o usuário
             if not self.company_id.esocial_periodo_final_id:
-                raise ValidationError("O campo 'Período Final' na Empresa não está preenchido !")
-
-            # Popula infoEmpregador.idePeriodo.fimValid
-            S1000.evento.infoEmpregador.idePeriodo.fimValid.valor = \
-                self.company_id.esocial_periodo_final_id.code[3:7] + '-' + \
-                self.company_id.esocial_periodo_final_id.code[0:2]
+                validacao += "O campo 'Período Final' na Empresa não está preenchido !\n"
+            else:
+                # Popula infoEmpregador.idePeriodo.fimValid
+                S1000.evento.infoEmpregador.idePeriodo.fimValid.valor = \
+                    self.company_id.esocial_periodo_final_id.code[3:7] + '-' + \
+                    self.company_id.esocial_periodo_final_id.code[0:2]
 
         # Popula infoEmpregador.InfoCadastro
         S1000.evento.infoEmpregador.infoCadastro.nmRazao.valor = self.company_id.legal_name
@@ -341,7 +341,7 @@ class SpedEmpregador(models.Model, SpedRegistroIntermediario):
         # Popula infoEmpregador.infoCadastro.infoComplementares.situacaoPJ
         S1000.evento.infoEmpregador.infoCadastro.indSitPJ.valor = self.company_id.ind_sitpj
 
-        return S1000
+        return S1000, validacao
 
     @api.multi
     def retorno_sucesso(self, evento):

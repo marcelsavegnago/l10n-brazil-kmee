@@ -57,6 +57,7 @@ class SpedEsocialRubrica(models.Model, SpedRegistroIntermediario):
         ],
         string='Situação no e-Social',
         compute='compute_situacao_esocial',
+        store=True,
     )
     precisa_incluir = fields.Boolean(
         string='Precisa incluir dados?',
@@ -86,7 +87,7 @@ class SpedEsocialRubrica(models.Model, SpedRegistroIntermediario):
 
             rubrica.nome = nome
 
-    @api.depends('sped_inclusao', 'sped_alteracao', 'sped_exclusao')
+    @api.depends('sped_inclusao.situacao', 'sped_alteracao.situacao', 'sped_exclusao.situacao')
     def compute_situacao_esocial(self):
         for rubrica in self:
             situacao_esocial = '0'  # Inativa
@@ -139,9 +140,7 @@ class SpedEsocialRubrica(models.Model, SpedRegistroIntermediario):
             # Popula na tabela
             rubrica.situacao_esocial = situacao_esocial
 
-    @api.depends('sped_inclusao',
-                 'sped_alteracao', 'sped_alteracao.situacao',
-                 'sped_exclusao')
+    @api.depends('sped_inclusao.situacao', 'sped_alteracao.situacao', 'sped_exclusao.situacao')
     def compute_precisa_enviar(self):
 
         # Roda todos os registros da lista
@@ -173,9 +172,7 @@ class SpedEsocialRubrica(models.Model, SpedRegistroIntermediario):
             rubrica.precisa_incluir = precisa_incluir
             rubrica.precisa_excluir = precisa_excluir
 
-    @api.depends('sped_inclusao',
-                 'sped_alteracao', 'sped_alteracao.situacao',
-                 'sped_exclusao')
+    @api.depends('sped_inclusao.situacao', 'sped_alteracao.situacao', 'sped_exclusao.situacao')
     def compute_ultima_atualizacao(self):
 
         # Roda todos os registros da lista
@@ -239,6 +236,10 @@ class SpedEsocialRubrica(models.Model, SpedRegistroIntermediario):
 
     @api.multi
     def popula_xml(self, ambiente='2', operacao='I'):
+
+        # Validação
+        validacao = ""
+
         # Cria o registro
         S1010 = pysped.esocial.leiaute.S1010_2()
 
@@ -273,12 +274,12 @@ class SpedEsocialRubrica(models.Model, SpedRegistroIntermediario):
         if operacao == 'A':
 
             if not self.rubrica_id.alt_valid:
-                raise ValidationError("O período de Alteração não está definido na Rubrica !")
-
-            # Alteração da Validade neste evento
-            S1010.evento.infoRubrica.novaValidade.iniValid.valor = \
-                self.rubrica_id.alt_valid.code[3:7] + '-' + \
-                self.rubrica_id.alt_valid.code[0:2]
+                validacao += "O período de Alteração não está definido na Rubrica !\n"
+            else:
+                # Alteração da Validade neste evento
+                S1010.evento.infoRubrica.novaValidade.iniValid.valor = \
+                    self.rubrica_id.alt_valid.code[3:7] + '-' + \
+                    self.rubrica_id.alt_valid.code[0:2]
 
         # Exclusão popula a tag fimValid
         if operacao == 'E':
@@ -334,7 +335,7 @@ class SpedEsocialRubrica(models.Model, SpedRegistroIntermediario):
             S1010.evento.infoRubrica.dadosRubrica.observacao.valor = \
                 self.rubrica_id.note
 
-        return S1010
+        return S1010, validacao
 
     @api.multi
     def retorno_sucesso(self, evento):

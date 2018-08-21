@@ -50,7 +50,7 @@ class SpedHrRescisao(models.Model, SpedRegistroIntermediario):
             ('5', 'Precisa Retificar'),
         ],
         compute="compute_situacao_esocial",
-        readonly=True,
+        store=True,
     )
     ultima_atualizacao = fields.Datetime(
         string='Data da última atualização',
@@ -79,8 +79,8 @@ class SpedHrRescisao(models.Model, SpedRegistroIntermediario):
         help='e-Social: S2299 - vrAlim'
     )
 
-    @api.depends('sped_s2299_registro_inclusao',
-                 'sped_s2299_registro_retificacao')
+    @api.depends('sped_s2299_registro_inclusao.situacao',
+                 'sped_s2299_registro_retificacao.situacao')
     def compute_ultima_atualizacao(self):
 
         # Roda todos os registros da lista
@@ -104,8 +104,8 @@ class SpedHrRescisao(models.Model, SpedRegistroIntermediario):
             # Popula o campo na tabela
             desligamento.ultima_atualizacao = ultima_atualizacao
 
-    @api.depends('sped_s2299_registro_inclusao',
-                 'sped_s2299_registro_retificacao')
+    @api.depends('sped_s2299_registro_inclusao.situacao',
+                 'sped_s2299_registro_retificacao.situacao')
     def compute_situacao_esocial(self):
         for desligamento in self:
             situacao_esocial = '1'
@@ -118,7 +118,7 @@ class SpedHrRescisao(models.Model, SpedRegistroIntermediario):
                 situacao_esocial = retificao.situacao
 
             # Popula na tabela
-            desligamento.situacao_esocial = situacao_esocial
+            desligamento.situacao_s2299 = situacao_esocial
 
     @api.multi
     def gerar_registro(self):
@@ -157,6 +157,10 @@ class SpedHrRescisao(models.Model, SpedRegistroIntermediario):
         um contrato de trabalho
         :return:
         """
+
+        # Validação
+        validacao = ""
+
         # Cria o registro
         S2299 = pysped.esocial.leiaute.S2299_2()
 
@@ -239,7 +243,7 @@ class SpedHrRescisao(models.Model, SpedRegistroIntermediario):
                 #
                 if rubrica_line.salary_rule_id.cod_inc_irrf_calculado not in \
                         ['31', '32', '33', '34', '35', '51', '52', '53', '54', '55', '81', '82', '83']:
-                    if rubrica_line.total != 0:
+                    if rubrica_line.total > 0:
                         det_verbas = pysped.esocial.leiaute.S2299_DetVerbas_2()
                         det_verbas.codRubr.valor = \
                             rubrica_line.salary_rule_id.codigo
@@ -265,7 +269,7 @@ class SpedHrRescisao(models.Model, SpedRegistroIntermediario):
         verba_rescisoria.dmDev.append(ide_dm_dev)
 
         infoDeslig.verbaResc.append(verba_rescisoria)
-        return S2299
+        return S2299, validacao
 
     @api.multi
     def retorno_sucesso(self, evento):

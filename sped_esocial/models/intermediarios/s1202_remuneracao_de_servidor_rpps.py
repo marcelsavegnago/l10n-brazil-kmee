@@ -87,6 +87,7 @@ class SpedEsocialRemuneracaoRPPS(models.Model, SpedRegistroIntermediario):
             ('5', 'Precisa Retificar'),
         ],
         related='sped_registro.situacao',
+        store=True,
     )
 
     # Roda a atualização do e-Social (não transmite ainda)
@@ -113,6 +114,9 @@ class SpedEsocialRemuneracaoRPPS(models.Model, SpedRegistroIntermediario):
     @api.multi
     def popula_xml(self, ambiente='2', operacao='na'):
         self.ensure_one()
+
+        # Validação
+        validacao = ""
 
         # Cria o registro
         S1202 = pysped.esocial.leiaute.S1202_2()
@@ -234,8 +238,7 @@ class SpedEsocialRemuneracaoRPPS(models.Model, SpedRegistroIntermediario):
             dm_dev.infoPerApur.append(info_per_apur)
             S1202.evento.dmDev.append(dm_dev)
 
-            print(S1202.xml)
-        return S1202
+        return S1202, validacao
 
     @api.multi
     def retorno_sucesso(self, evento):

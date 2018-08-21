@@ -47,7 +47,7 @@ class SpedHrRescisaoAutonomo(models.Model, SpedRegistroIntermediario):
             ('5', 'Precisa Retificar'),
         ],
         compute="compute_situacao_esocial",
-        readonly=True,
+        store=True,
     )
     ultima_atualizacao = fields.Datetime(
         string='Data da última atualização',
@@ -80,8 +80,8 @@ class SpedHrRescisaoAutonomo(models.Model, SpedRegistroIntermediario):
         comodel_name='sped.contribuicao.inss',
     )
 
-    @api.depends('sped_s2399_registro_inclusao',
-                 'sped_s2399_registro_retificacao')
+    @api.depends('sped_s2399_registro_inclusao.situacao',
+                 'sped_s2399_registro_retificacao.situacao')
     def compute_ultima_atualizacao(self):
 
         # Roda todos os registros da lista
@@ -105,8 +105,8 @@ class SpedHrRescisaoAutonomo(models.Model, SpedRegistroIntermediario):
             # Popula o campo na tabela
             desligamento.ultima_atualizacao = ultima_atualizacao
 
-    @api.depends('sped_s2399_registro_inclusao',
-                 'sped_s2399_registro_retificacao')
+    @api.depends('sped_s2399_registro_inclusao.situacao',
+                 'sped_s2399_registro_retificacao.situacao')
     def compute_situacao_esocial(self):
         for desligamento in self:
             situacao_esocial = '1'
@@ -174,6 +174,10 @@ class SpedHrRescisaoAutonomo(models.Model, SpedRegistroIntermediario):
         Função para popular o xml com os dados referente ao desligamento de
         um contrato de trabalho sem vinculo
         """
+
+        # Validação
+        validacao = ""
+
         # Cria o registro
         S2399 = pysped.esocial.leiaute.S2399_2()
 
@@ -254,7 +258,7 @@ class SpedHrRescisaoAutonomo(models.Model, SpedRegistroIntermediario):
         verba_rescisoria.dmDev.append(dm_dev)
         S2399.evento.infoTSVTermino.verbasResc.append(verba_rescisoria)
 
-        return S2399
+        return S2399, validacao
 
     @api.multi
     def retorno_sucesso(self, evento):
@@ -286,7 +290,7 @@ class SpedHrRescisaoAutonomo(models.Model, SpedRegistroIntermediario):
                         'company_id': sped_registro.company_id.id,
                         'id_evento': tot.eSocial.evento.Id.valor,
                         'periodo_id': sped_registro.origem_intermediario.periodo_id.id,
-                        'trabalhador_id': sped_registro.origem_intermediario.trabalhador_id.id,
+                        'trabalhador_id': self.sped_hr_rescisao_id.employee_id.id,
                         'sped_registro_s2399': sped_registro.id,
                     }
 

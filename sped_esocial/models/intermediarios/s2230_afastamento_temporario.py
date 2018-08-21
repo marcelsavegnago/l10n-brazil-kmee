@@ -41,6 +41,7 @@ class SpedAfastamentoTemporario(models.Model, SpedRegistroIntermediario):
         ],
         string='Situação no e-Social',
         compute='_compute_situacao_esocial',
+        store=True,
     )
     sped_afastamento_encerrado = fields.Many2one(
         string='Registro Encerramento Afastamento',
@@ -56,6 +57,7 @@ class SpedAfastamentoTemporario(models.Model, SpedRegistroIntermediario):
         ],
         string='Situação no e-Social',
         compute='_compute_situacao_esocial_encerramento',
+        store=True,
     )
 
     @api.depends('hr_holiday_id')
@@ -64,7 +66,7 @@ class SpedAfastamentoTemporario(models.Model, SpedRegistroIntermediario):
             record.name = 'S-2230 - Afastamento Temporário {}'.format(
                 record.hr_holiday_id.display_name or '')
 
-    @api.depends('sped_afastamento')
+    @api.depends('sped_afastamento.situacao')
     def _compute_situacao_esocial(self):
         for afastamento in self:
             situacao_esocial = '1'
@@ -75,7 +77,7 @@ class SpedAfastamentoTemporario(models.Model, SpedRegistroIntermediario):
             # Popula na tabela
             afastamento.situacao_esocial_afastamento = situacao_esocial
 
-    @api.depends('sped_afastamento_encerrado')
+    @api.depends('sped_afastamento_encerrado.situacao')
     def _compute_situacao_esocial_encerramento(self):
         for afastamento in self:
             situacao_esocial = '1'
@@ -123,6 +125,10 @@ class SpedAfastamentoTemporario(models.Model, SpedRegistroIntermediario):
         temporário de um trabalhador
         """
         pass
+
+        # Validação
+        validacao = ""
+
         # Cria o registro
         S2230 = pysped.esocial.leiaute.S2230_2()
         holiday_id = self.hr_holiday_id
@@ -182,7 +188,7 @@ class SpedAfastamentoTemporario(models.Model, SpedRegistroIntermediario):
         if bloco_inicio and bloco_fim:
             self.sped_afastamento_encerrado = self.sped_afastamento
 
-        return S2230
+        return S2230, validacao
 
     @api.multi
     def retorno_sucesso(self, evento):

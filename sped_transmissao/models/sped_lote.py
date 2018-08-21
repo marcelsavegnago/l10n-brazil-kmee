@@ -3,13 +3,15 @@
 # Copyright 2017 KMEE INFORMATICA LTDA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import os
 import base64
 import tempfile
 from datetime import datetime
 import logging
 import pysped
+from openerp.tools import config
 from openerp import api, fields, models
-from openerp.exceptions import ValidationError
+from openerp.exceptions import ValidationError, RedirectWarning
 from pybrasil.inscricao.cnpj_cpf import limpa_formatacao
 
 _logger = logging.getLogger(__name__)
@@ -157,6 +159,10 @@ class SpedLote(models.Model, ):
         for lote in self:
             if lote.situacao not in ['1', '3']:
                 raise ValidationError("Não pode excluir um Lote transmitido!")
+            if lote.situacao in ['3']:
+                # Mudar o status dos registros deste lote para 'Pendente'
+                for registro in lote.registro_ids:
+                    registro.situacao = '1'
             super(SpedLote, lote).unlink()
 
     @api.depends('transmissao_ids')
@@ -200,10 +206,11 @@ class SpedLote(models.Model, ):
         # Cria o processador, dependendo do tipo do arquivo
         if self.tipo == 'efdreinf':
             processador = pysped.ProcessadorEFDReinf()
+            processador.caminho = self.mount_path()
 
         elif self.tipo == 'esocial':
             processador = pysped.ProcessadorESocial()
-
+            processador.caminho = self.mount_path()
 
         else:
             raise Exception("Não é um tipo que possa ser consultado !")
@@ -371,8 +378,14 @@ class SpedLote(models.Model, ):
         sequencia = 1
         for registro in self.transmissao_ids:
             if registro.registro not in ['S-5001', 'S-5002', 'S-5011', 'S-5012']:
-                eventos.append(registro.calcula_xml(sequencia=sequencia))
-                sequencia += 1
+                evento, validacao = registro.calcula_xml(sequencia=sequencia)
+                if not validacao:
+                    eventos.append(evento)
+                    sequencia += 1
+
+        # Se não gerou nenhum XML, não precisa transmitir
+        if not eventos:
+            return False
 
         # Popula a data/hora da transmissão do lote
         data_hora_transmissao = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -381,8 +394,11 @@ class SpedLote(models.Model, ):
         # Popula o processador
         if self.tipo == 'efdreinf':
             processador = pysped.ProcessadorEFDReinf()
+            # processador.caminho = self.mount_path()
         else:
             processador = pysped.ProcessadorESocial()
+            # processador.caminho = self.mount_path()
+        processador.salvar_arquivos = False
         processador.certificado.arquivo = arquivo.name
         processador.certificado.senha = self.company_id.nfe_a1_password
         processador.ambiente = int(self.ambiente)
@@ -533,6 +549,8 @@ class SpedLote(models.Model, ):
                                         # Se teve erro no lote, ele não foi transmitido portanto os registros
                                         # continuam pendentes transmissão
 
+        return True
+
     @api.multi
     def _grava_anexo(self, nome_arquivo='', conteudo='', model=None, res_id=None):
         self.ensure_one()
@@ -585,7 +603,7 @@ class SpedLote(models.Model, ):
         ], limit=1, order='create_date')
 
         # Se não tem um lote do grupo NA então busca um dos grupos numéricos
-        for x in range(1, 4):
+        for x in range(1, 5):
             if not lote_para_transmitir:
                 lote_para_transmitir = self.env['sped.lote'].search([
                     ('grupo', '=', str(x)),
@@ -616,3 +634,21 @@ class SpedLote(models.Model, ):
             _logger.info(msg)
 
         return True
+
+    @api.multi
+    def mount_path(self):
+        db_name = self.company_id._cr.dbname
+        cnpj = limpa_formatacao(self.company_id.cnpj_cpf)
+
+        filestore = config.filestore(db_name)
+        protocolo_path = '/'.join([filestore, 'PySPED', self.tipo, cnpj, self.protocolo])
+        sped_path = '/'.join([filestore, 'PySPED', self.tipo, cnpj])
+        if not os.path.exists(protocolo_path):
+            try:
+                os.makedirs(protocolo_path)
+            except OSError:
+                raise RedirectWarning(
+                    _(u'Erro!'),
+                    _(u"""Verifique as permissões de escrita
+                        e o caminho da pasta"""))
+        return sped_path

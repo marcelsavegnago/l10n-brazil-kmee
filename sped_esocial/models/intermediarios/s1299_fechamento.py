@@ -111,6 +111,7 @@ class SpedEsocialFechamento(models.Model, SpedRegistroIntermediario):
             ('5', 'Precisa Retificar'),
         ],
         related='sped_registro.situacao',
+        store=True,
     )
 
     # Roda a atualização do e-Social (não transmite ainda)
@@ -137,6 +138,9 @@ class SpedEsocialFechamento(models.Model, SpedRegistroIntermediario):
     @api.multi
     def popula_xml(self, ambiente='2', operacao='I'):
         self.ensure_one()
+
+        # Validação
+        validacao = ""
 
         # Cria o registro
         S1299 = pysped.esocial.leiaute.S1299_2()
@@ -177,13 +181,22 @@ class SpedEsocialFechamento(models.Model, SpedRegistroIntermediario):
                 self.comp_sem_movto.code[3:7] + '-' + \
                 self.comp_sem_movto.code[0:2]
 
-        return S1299
+        return S1299, validacao
 
     @api.multi
     def retorno_sucesso(self, evento):
         self.ensure_one()
 
         if evento:
+
+            # Fecha o periodo relacionado
+            periodo = self.env['sped.esocial'].search([
+                ('company_id', '=', self.company_id.id),
+                ('periodo_id', '=', self.periodo_id.id),
+            ])
+            periodo.situacao = '3'
+
+            # Cria os registros totalizadores
             for tot in evento.tot:
 
                 if tot.tipo.valor == 'S5011':
@@ -277,11 +290,15 @@ class SpedEsocialFechamento(models.Model, SpedRegistroIntermediario):
 
                                 if lotacao_id:
 
+                                    fpas = self.env['sped.codigo_aliquota'].search([
+                                        ('codigo', '=', lotacao.fpas.valor),
+                                    ])
+
                                     vals = {
                                         'parent_id': sped_intermediario.id,
                                         'estabelecimento_id': estabelecimento_id.id,
                                         'lotacao_id': lotacao_id.id,
-                                        'fpas': lotacao.fpas.valor,
+                                        'fpas_id': fpas.id,
                                         'cod_tercs': lotacao.codTercs.valor,
                                     }
 
@@ -323,6 +340,13 @@ class SpedEsocialFechamento(models.Model, SpedRegistroIntermediario):
                                             }
 
                                             self.env['sped.inss.consolidado.basesremun'].create(vals)
+
+                    # Adiciona o S-5011 ao Período do e-Social que gerou o S-1299 relacionado
+                    periodo = self.env['sped.esocial'].search([
+                        ('company_id', '=', self.company_id.id),
+                        ('periodo_id', '=', self.periodo_id.id),
+                    ])
+                    periodo.inss_consolidado_ids = [(4, sped_intermediario.id)]
 
                 if tot.tipo.valor == 'S5012':
 
@@ -408,3 +432,10 @@ class SpedEsocialFechamento(models.Model, SpedRegistroIntermediario):
                         }
 
                         self.env['sped.irrf.consolidado.infocrcontrib'].create(vals)
+
+                    # Adiciona o S-5012 ao Período do e-Social que gerou o S-1299 relacionado
+                    periodo = self.env['sped.esocial'].search([
+                        ('company_id', '=', self.company_id.id),
+                        ('periodo_id', '=', self.periodo_id.id),
+                    ])
+                    periodo.irrf_consolidado_ids = [(4, sped_intermediario.id)]

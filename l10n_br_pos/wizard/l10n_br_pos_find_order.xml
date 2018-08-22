@@ -6,7 +6,7 @@
             <field name="model">pos.order.find</field>
             <field name="arch" type="xml">
                 <form string="Retorno">
-                    <group string="Digite o númerodo cupom de venda">
+                    <group string="Digite o número do cupom de venda">
                         <field name="name"/>
                     </group>
                     <footer>

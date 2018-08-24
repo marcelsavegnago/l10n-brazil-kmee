@@ -252,7 +252,7 @@ class HrContract(models.Model):
         return super(HrContract, self).write(vals)
 
     def _gerar_matricula(self):
-        if not self.matricula:
+        if not self.matricula_contrato:
             sped_contrato_ids = self.env['sped.esocial.contrato'].search([])
 
             sped_contrato_ativo_ids = sped_contrato_ids.filtered(
@@ -263,15 +263,20 @@ class HrContract(models.Model):
                 ultima_matricula = max(
                     list(
                         map(
-                            lambda x: int(x.hr_contract_id.matricula),
+                            lambda x: int(x.hr_contract_id.matricula_contrato),
                             sped_contrato_ativo_ids)
                     ))
-            self.matricula = "{:06}".format(ultima_matricula + 1)
+            self.matricula_contrato = "{:06}".format(ultima_matricula + 1)
+
+    def _formar_matricula_completa(self):
+        self.matricula = "{}-{}".format(
+            self.prefixo_empresa_matricula, self.matricula_contrato)
 
     @api.multi
     def ativar_contrato_s2200(self):  # TODO
         self.ensure_one()
         self._gerar_matricula()
+        self._formar_matricula_completa()
 
         # Se o registro intermediário do S-2200 não existe, criá-lo
         if not self.sped_s2200_id:
@@ -292,7 +297,9 @@ class HrContract(models.Model):
     @api.multi
     def ativar_contrato_s2300(self):  # TODO
         self.ensure_one()
-        self._gerar_matricula()
+        if self.tipo != 'autonomo':
+            self._gerar_matricula()
+            self._formar_matricula_completa()
 
         # Se o registro intermediário do S-2200 não existe, criá-lo
         if not self.sped_s2300_id:
@@ -628,9 +635,27 @@ class HrContract(models.Model):
         related='salary_unit.code',
     )
 
+    prefixo_empresa_matricula = fields.Char(
+        string='Prefixo Matricula por Empresa',
+        compute="_compute_prefixo_matricula",
+    )
+
+    matricula_contrato = fields.Char(
+        string='Matricula',
+    )
+
     matricula = fields.Char(
         default=False,
     )
+
+    @api.multi
+    @api.depends('company_id')
+    def _compute_prefixo_matricula(self):
+        for record in self:
+            cnpj_empresa = record.company_id.cnpj_cpf
+            identificacao_empresa = cnpj_empresa.split('/')[1].split('-')[0]
+
+            record.prefixo_empresa_matricula = identificacao_empresa
 
     @api.multi
     @api.depends('categoria')
@@ -663,3 +688,11 @@ class HrContract(models.Model):
 
         # Executa o método Consultar do registro intermediário
         self.sped_contrato_id.consultar()
+
+    @api.depends('employee_id', 'matricula_contrato')
+    def _compute_nome_contrato(self):
+        for contrato in self:
+            if contrato.employee_id and contrato.matricula_contrato:
+                nome = contrato.employee_id.name
+                nome_contrato = '[%s] %s' % (contrato.matricula_contrato, nome)
+                contrato.nome_contrato = nome_contrato if nome else ''

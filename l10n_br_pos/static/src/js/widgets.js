@@ -17,16 +17,17 @@
 *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
 ******************************************************************************/
-function l10n_br_pos_widgets(instance, module){
-    var QWeb = instance.web.qweb;
-	var _t = instance.web._t;
+odoo.define("l10n_br_pos.widgets",function (instance, module) {
+    'use strict';
+    var QWeb = instance("web.qweb");
+	var _t = instance("web._t");
 
     module.ProxyStatusWidget = module.ProxyStatusWidget.extend({
         template: 'ProxyStatusWidget',
     	set_smart_status: function(status){
             if(status.status === 'connected'){
                 var warning = false;
-                var msg = ''
+                var msg = '';
                 if(this.pos.config.iface_scan_via_proxy){
                     var scanner = status.drivers.scanner ? status.drivers.scanner.status : false;
                     if( scanner != 'connected' && scanner != 'connecting'){
@@ -113,7 +114,7 @@ function l10n_br_pos_widgets(instance, module){
     module.ProductCategoriesWidget = module.ProductCategoriesWidget.extend({
         buscar_produto_backend: function(ean13_produto){
             var self = this;
-            produtc_fields = ['categ_id', 'default_code', 'description', 'description_sale', 'display_name', 'ean13', 'estd_national_taxes_perct', 'fiscal_classification_id', 'id', 'list_price', 'mes_type', 'name', 'origin', 'pos_categ_id', 'price', 'price_extra', 'price_with_taxes', 'product_tmpl_id', 'seller_ids', 'standard_price', 'taxes_id', 'to_weight', 'uom_id', 'uos_coeff', 'uos_id'];
+            var produtc_fields = ['categ_id', 'default_code', 'description', 'description_sale', 'display_name', 'ean13', 'estd_national_taxes_perct', 'fiscal_classification_id', 'id', 'list_price', 'mes_type', 'name', 'origin', 'pos_categ_id', 'price', 'price_extra', 'price_with_taxes', 'product_tmpl_id', 'seller_ids', 'standard_price', 'taxes_id', 'to_weight', 'uom_id', 'uos_coeff', 'uos_id'];
             return new instance.web.Model("product.product").get_func("search_read")([['ean13', '=', ean13_produto]], produtc_fields).then(function(res) {
                 if (res.length > 0){
                     self.pos.db.add_products(res);
@@ -141,4 +142,4 @@ function l10n_br_pos_widgets(instance, module){
             });
         }
     });
-}
+});

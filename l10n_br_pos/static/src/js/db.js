@@ -16,8 +16,8 @@
 *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
 ******************************************************************************/
-
-function l10n_br_pos_db(instance, module) {
+odoo.define("l10n_br_pos.db",function (instance, module) {
+    'use strict';
 
     module.PosDB = module.PosDB.extend({
         init: function (options) {
@@ -145,7 +145,7 @@ function l10n_br_pos_db(instance, module) {
             return results;
         }
     })
-}
+});
 
 
 

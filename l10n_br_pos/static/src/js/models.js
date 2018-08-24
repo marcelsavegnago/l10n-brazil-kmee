@@ -16,9 +16,10 @@
  *
  ******************************************************************************/
 
-function l10n_br_pos_models(instance, module) {
-    var QWeb = instance.web.qweb;
-    var _t = instance.web._t;
+odoo.define("l10n_br_pos.models", function (instance, module) {
+    'use strict';
+    var QWeb = instance("web.qweb");
+    var _t = instance("web._t");
     /**
      * Extend the POS model
      */
@@ -91,7 +92,7 @@ function l10n_br_pos_models(instance, module) {
             });
             this.models.push({
                 model:  'res.partner',
-                fields: ['name', 'data_alteracao', 'whatsapp', 'gender', 'birthdate', 'number', 'street2', 'opt_out', 'create_date', 'cnpj_cpf', 'street','city','state_id','country_id','vat','phone','zip','mobile','email','ean13','write_date', 'debit', 'credit', 'credit_limit', 'user_ids', 'l10n_br_city_id'],
+                fields: ['name', 'o', 'whatsapp', 'gender', 'birthdate', 'number', 'street2', 'opt_out', 'create_date', 'cnpj_cpf', 'street','city','state_id','country_id','vat','phone','zip','mobile','email','ean13','write_date', 'debit', 'credit', 'credit_limit', 'user_ids', 'l10n_br_city_id'],
                 domain: [['customer','=',true]],
                 loaded: function(self,partners){
                     self.partners = partners;
@@ -223,8 +224,8 @@ function l10n_br_pos_models(instance, module) {
         addPaymentline: function(cashregister) {
             if (cashregister.journal.sat_payment_mode == "05" && this.attributes.client) {
                     if (cashregister.journal.pagamento_funcionarios && !this.funcionario_verificar_pagamento_limite_credito()) {
-                        pos_db = self.pos.db;
-                        partner = pos_db.get_partner_by_identification(self.pos.partners, this.attributes.client.cnpj_cpf);
+                        var pos_db = self.pos.db;
+                        var partner = pos_db.get_partner_by_identification(self.pos.partners, this.attributes.client.cnpj_cpf);
                         if (partner.user_ids.length > 0 || (this.attributes.client.user_ids && this.attributes.client.user_ids.length)) {
                             this.add_payment_credito_loja(cashregister);
                         } else {
@@ -464,4 +465,4 @@ function l10n_br_pos_models(instance, module) {
             );
         }
     }
-}
+});

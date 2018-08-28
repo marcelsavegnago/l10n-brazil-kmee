@@ -118,6 +118,8 @@ class AccountFiscalPosition(models.Model):
             elif self.env.context.get('fiscal_type', 'product') == 'service':
                 service_taxes = \
                     product.service_type_id.service_tax_definition_line
+                if not service_taxes:
+                    service_taxes = self.company_id.product_tax_definition_line
                 for tax_def in service_taxes:
                     if tax_def.tax_id:
                         taxes |= tax_def.tax_id

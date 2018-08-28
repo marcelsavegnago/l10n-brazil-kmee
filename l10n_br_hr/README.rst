@@ -1,8 +1,9 @@
 .. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
     :alt: License: AGPL-3
 
+=================================
 Brazil Localization for HR module
-===========================================
+=================================
 
 This module adds contents used by Human Resources departments in Brazil.
 

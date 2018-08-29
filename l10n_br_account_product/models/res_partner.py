@@ -222,7 +222,7 @@ class AccountFiscalPosition(models.Model):
                 else:
                     result[tax.domain] = {'tax': tax}
 
-        result.update(self._map_tax_code(map_taxes))
+        result = self._map_tax_code(map_taxes)
         result.update(self._map_tax_code(map_taxes_origin))
         result.update(self._map_tax_code(map_taxes_ncm))
         result.update(self._map_tax_code(map_taxes_origin_ncm))

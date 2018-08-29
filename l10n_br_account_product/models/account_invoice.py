@@ -1311,7 +1311,7 @@ class AccountInvoice(models.Model):
             # get the same
             # account move reference when creating the same invoice after
             #  a cancelled one:
-            move.post()
+            # move.post()
 
         #
         # Chamamos o action_move_create para manter a chamadas de outros

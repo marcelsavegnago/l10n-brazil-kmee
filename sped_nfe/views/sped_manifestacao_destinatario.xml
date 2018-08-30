@@ -149,7 +149,7 @@ action= {
 
     <menuitem
         parent="l10n_br_base.menu_fiscal"
-        sequence="3"
+        sequence="4"
         id="menu_sped_dfe"
         name="Manifestação do Destinatário"
         />

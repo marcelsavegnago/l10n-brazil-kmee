@@ -17,9 +17,10 @@
 *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
 ******************************************************************************/
-function l10n_br_pos_devices(instance, module) {
-    var QWeb = instance.web.qweb;
-    var _t = instance.web._t;
+odoo.define("l10n_br_pos.devices",function (instance, module) {
+    'use strict';
+    var QWeb = instance("web.qweb");
+    var _t = instance("web._t");
 
     module.ProxyDevice = module.ProxyDevice.extend({
         init_sat: function(config){
@@ -75,7 +76,7 @@ function l10n_br_pos_devices(instance, module) {
                                 });
                                 return;
                             }
-                            self.receipt_queue.unshift(r)
+                            self.receipt_queue.unshift(r);
                             self.receipt_queue.unshift(j)
                         });
                 }
@@ -150,24 +151,24 @@ function l10n_br_pos_devices(instance, module) {
             var self = this;
             if(!this.keptalive){
                 this.keptalive = true;
-                function status(){
-                    self.connection.rpc('/hw_proxy/status_json',{},{timeout:2500})
-                        .then(function(driver_status){
-                            if(!driver_status.hasOwnProperty("satcfe")){
-                                self.pos.proxy.init_sat(self.pos.config);
-                            } else {
-                                self.set_connection_status('connected',driver_status);
-                            }
-                        },function(){
-                            if(self.get('status').driver_statusstatus !== 'connecting'){
-                                self.set_connection_status('disconnected');
-                            }
-                        }).always(function(){
-                            setTimeout(status,5000);
-                        });
-                }
-                status();
-            };
-        }
+                this.status();
+            }
+        },
+        status: function(){
+            self.connection.rpc('/hw_proxy/status_json',{},{timeout:2500})
+                .then(function(driver_status){
+                    if(!driver_status.hasOwnProperty("satcfe")){
+                        self.pos.proxy.init_sat(self.pos.config);
+                    } else {
+                        self.set_connection_status('connected',driver_status);
+                    }
+                },function(){
+                    if(self.get('status').driver_statusstatus !== 'connecting'){
+                        self.set_connection_status('disconnected');
+                    }
+                }).always(function(){
+                    setTimeout(status,5000);
+                });
+        },
     });
-}
+});

@@ -18,14 +18,14 @@
 // Check jQuery available
 if (typeof jQuery === 'undefined') { throw new Error('l10n_br POS Simplified invoice Addon requires jQuery') }
 
-+function ($) {
+odoo.define("l10n_br_pos.main",+function ($) {
     'use strict';
 
-    openerp.l10n_br_pos = function (instance) {
-        var _t = instance.web._t,
-            _lt = instance.web._lt;
-        var QWeb = instance.web.qweb;
-        var module = instance.point_of_sale;
+    odoo.l10n_br_pos = function (instance) {
+        var _t = instance("web._t"),
+            _lt = instance("web._lt");
+        var QWeb = instance("web.qweb");
+        var module = instance("point_of_sale");
 
         l10n_br_pos_db(instance, module);
         l10n_br_pos_models(instance, module);
@@ -34,7 +34,7 @@ if (typeof jQuery === 'undefined') { throw new Error('l10n_br POS Simplified inv
         l10n_br_pos_widgets(instance, module);
 
         var _simplified_limit_get = function() {
-            var limit = 3000
+            var limit = 3000;
             // Get simplified limit from POS config
             if (
                 posmodel
@@ -45,8 +45,9 @@ if (typeof jQuery === 'undefined') { throw new Error('l10n_br POS Simplified inv
             }
             return limit;
         };
+
         var _simplified_type_get = function() {
-            var limit = False
+            var limit = False;
             // Get simplified limit from POS config
             if (
                 posmodel
@@ -92,11 +93,10 @@ if (typeof jQuery === 'undefined') { throw new Error('l10n_br POS Simplified inv
         });
 
 
-
         instance.web.Widget.include({
             is_button_disabled: function(name){
                 var b = this.buttons[name];
-                if (b != undefined) {
+                if (b !== undefined) {
                     return b.disabled;
                 }
                 return true;
@@ -108,7 +108,7 @@ if (typeof jQuery === 'undefined') { throw new Error('l10n_br POS Simplified inv
             invoice_button_check: function() {
                 var currentOrder = this.pos.get('selectedOrder');
                 var dueTotal = currentOrder.getTotalTaxIncluded();
-                var limit = _simplified_limit_get()
+                var limit = _simplified_limit_get();
                 if (this.pos_widget.action_bar ) {
                     if (dueTotal > limit) {
                         this.pos_widget.action_bar.set_button_disabled('validation', true);
@@ -118,7 +118,7 @@ if (typeof jQuery === 'undefined') { throw new Error('l10n_br POS Simplified inv
             },
             update_payment_summary: function() {
                 var result = this._super.apply(this, arguments);
-                this.invoice_button_check()
+                this.invoice_button_check();
                 return result
             },
             validate_order: function(options) {
@@ -135,12 +135,12 @@ if (typeof jQuery === 'undefined') { throw new Error('l10n_br POS Simplified inv
                         return;
                     }
                     // Set this order as not simplified even if no limit raised
-                    currentOrder.set_simplified(false)
+                    currentOrder.set_simplified(false);
                     // Disable standard invoice flow
                     options.invoice = false
                 }
                 result = this._super.apply(this, arguments);
-                this.invoice_button_check()
+                this.invoice_button_check();
                 return result
             },
         });
@@ -148,4 +148,4 @@ if (typeof jQuery === 'undefined') { throw new Error('l10n_br POS Simplified inv
     };
 
 
-}(jQuery);
+})(jQuery);

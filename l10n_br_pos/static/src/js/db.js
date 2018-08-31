@@ -16,8 +16,8 @@
 *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
 ******************************************************************************/
-
-function l10n_br_pos_db(instance, module) {
+odoo.define("l10n_br_pos.db",function (instance, module) {
+    'use strict';
 
     module.PosDB = module.PosDB.extend({
         init: function (options) {
@@ -44,10 +44,10 @@ function l10n_br_pos_db(instance, module) {
                 str += '|' + partner.email;
             }
             if(partner.cnpj_cpf){
-                var cnpj_cpf =  partner.cnpj_cpf
+                var cnpj_cpf =  partner.cnpj_cpf;
                 str += '|' + cnpj_cpf;
                 cnpj_cpf = cnpj_cpf.replace(
-                    '.','').replace('/','').replace('-','')
+                    '.','').replace('/','').replace('-','');
                 str += '|' + cnpj_cpf;
             }
             str = '' + partner.id + ':' + str.replace(':','') + '\n';
@@ -76,11 +76,11 @@ function l10n_br_pos_db(instance, module) {
                 if (parseInt(create_date.substr(8,2)) < 12){
                     create_date = create_date.substr(0, 4) + '-' + create_date.substr(8, 2) + '-' + create_date.substr(5, 2) //dia,mes e ano
                 }
-                if (create_date.substr(8, 2) == "") {
+                if (create_date.substr(8, 2) === "") {
                     create_date = create_date.substr(0, 4) + '-'+ '01' + '-' + create_date.substr(5, 2)
                 }
                 var date_partner = new Date(create_date.substr(0,4)+'-'+create_date.substr(5,2)+'-'+create_date.substr(8,2));
-                var tempo = parseInt(((today.getTime() - date_partner.getTime())*3.81E-10)+0.5)
+                var tempo = parseInt(((today.getTime() - date_partner.getTime())*3.81E-10)+0.5);
                 return tempo < 0? 0: tempo;
             }
         },
@@ -89,7 +89,7 @@ function l10n_br_pos_db(instance, module) {
             for (var i = 0; i < partners.length; i++){
                 var cnpj_cpf = partners[i].cnpj_cpf;
                 if (cnpj_cpf){
-                    if ((cnpj_cpf == identification) || (cnpj_cpf == identification_with_pontuation)){
+                    if ((cnpj_cpf === identification) || (cnpj_cpf === identification_with_pontuation)){
                         partners[i].create_date = partners[i].create_date? partners[i].create_date.substr(0,7): (this.today_date()).substr(0,7);
                         return partners[i];
                     }
@@ -101,9 +101,9 @@ function l10n_br_pos_db(instance, module) {
             var document_with_pontuation = '';
             if(document.length <= 11){
                 for (var j = 1; j <= document.length; j++){
-                    if ((j == 3) || (j == 6)){
+                    if ((j === 3) || (j === 6)){
                         document_with_pontuation += document.split('')[j-1] + ".";
-                    }else if (j == 9){
+                    }else if (j === 9){
                         document_with_pontuation += document.split('')[j-1] + "-";
                     }else{
                         document_with_pontuation += document.split('')[j-1];
@@ -111,11 +111,11 @@ function l10n_br_pos_db(instance, module) {
                 }
             }else if(document.length > 11 && document.length <= 14){
                 for (var j = 1; j <= document.length; j++){
-                    if ((j == 2) || (j == 5)){
+                    if ((j === 2) || (j === 5)){
                         document_with_pontuation += document.split('')[j-1] + ".";
-                    }else if (j == 8){
+                    }else if (j === 8){
                         document_with_pontuation += document.split('')[j-1] + "/";
-                    }else if (j == 12){
+                    }else if (j === 12){
                         document_with_pontuation += document.split('')[j-1] + "-";
                     }else{
                         document_with_pontuation += document.split('')[j-1];
@@ -145,7 +145,7 @@ function l10n_br_pos_db(instance, module) {
             return results;
         }
     })
-}
+});
 
 
 

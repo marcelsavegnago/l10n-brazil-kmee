@@ -15,9 +15,11 @@
 *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
 ******************************************************************************/
-function l10n_br_pos_screens(instance, module) {
-    var QWeb = instance.web.qweb;
-    var _t = instance.web._t;
+odoo.define("l10n_br_pos.screens",function (instance, module) {
+    'use strict';
+
+    var QWeb = instance("web.qweb");
+    var _t = instance("web._t");
     var save_state = false;
     var cpf_na_nota = false;
     var ultima_venda = false;
@@ -56,7 +58,7 @@ function l10n_br_pos_screens(instance, module) {
 
             this.el.querySelector('.busca-cpf-cnpj').addEventListener('keydown',this.search_handler);
             $('.busca-cpf-cnpj', this.el).keydown(function(e){
-                if(e.which == 13){
+                if(e.which === 13){
                     self.search_client_by_cpf_cnpj($('.busca-cpf-cnpj').val().replace(/[^\d]+/g,''));
                 }
             });
@@ -69,8 +71,8 @@ function l10n_br_pos_screens(instance, module) {
         },
 
         verifica_campos_vazios: function(partner){
-            for (key in partner){
-                if ((key != 'ean13' && key != 'vat' && key != 'opt_out' && key != 'city' && key != 'mobile' && key != 'whatsapp' && key != 'street2') && (partner[key] == null || partner[key] === false || partner[key] === 'false' || partner[key] === ''))
+            for (var key in partner){
+                if ((key !== 'ean13' && key !== 'vat' && key !== 'opt_out' && key !== 'city' && key !== 'mobile' && key !== 'whatsapp' && key !== 'street2') && (partner[key] == null || partner[key] === false || partner[key] === 'false' || partner[key] === ''))
                     return true
             }
             return false
@@ -98,7 +100,7 @@ function l10n_br_pos_screens(instance, module) {
            var lines = order.get('orderLines');
                lines.unbind();
                lines.bind('add', function(){
-                       if(lines.length == 1 && this.pos.config.crm_ativo){
+                       if(lines.length === 1 && this.pos.config.crm_ativo){
                            self.pos_widget.screen_selector.show_popup('cpf_nota_sat_popup',{
                            message: _t('Informar CPF'),
                            });
@@ -133,7 +135,7 @@ function l10n_br_pos_screens(instance, module) {
         },
 
         active_client: function (self, documento, partner) {
-            pos_db = self.pos.db;
+            var pos_db = self.pos.db;
             self.old_client = partner;
             self.new_client = self.old_client;
             if (partner) {
@@ -146,7 +148,7 @@ function l10n_br_pos_screens(instance, module) {
 
             } else {
                 if (self.pos.config.save_identity_automatic) {
-                    new_partner = {};
+                    var new_partner = {};
 //                  new_partner["name"] = pos_db.add_pontuation_document(documento);
                     new_partner["name"] = 'Anônimo';
                     new_partner['create_date'] =  new Date(pos_db.today_date());
@@ -169,16 +171,16 @@ function l10n_br_pos_screens(instance, module) {
             var self = this;
 
             if (self.verificar_cpf_cnpj(documento)){
-                pos_db = self.pos.db;
-                partner = pos_db.get_partner_by_identification(self.pos.partners, documento);
+                var pos_db = self.pos.db;
+                var partner = pos_db.get_partner_by_identification(self.pos.partners, documento);
                 if(partner){
-                    for (key in partner){
+                    for (var key in partner){
                         if (partner[key] === 'false')
                             partner[key] = null;
                     }
                         this.active_client(self, documento, partner);
                 } else {
-                    documento_pontuacao = pos_db.add_pontuation_document(documento);
+                    var documento_pontuacao = pos_db.add_pontuation_document(documento);
                     return new instance.web.Model("res.partner").get_func("search_read")([['cnpj_cpf', '=', documento_pontuacao]], ['name', 'cnpj_cpf', 'country_id']).then(function(res) {
                         if (res){
                             pos_db.add_partners(res);
@@ -224,11 +226,11 @@ function l10n_br_pos_screens(instance, module) {
             new instance.web.Model('res.partner').call('create_from_ui',[partner]).then(function(partner_id){
                 self.pos.pos_widget.clientlist_screen.reload_partners().then(function(){
                     var new_partner = self.pos.db.get_partner_by_id(partner_id);
-                    for (key in new_partner){
+                    for (var key in new_partner){
                         if (new_partner[key] === false)
                             new_partner[key] = null;
                     }
-                    if (new_partner['address'].replace(/,|\s/g,'') == '')
+                    if (new_partner['address'].replace(/,|\s/g,'') === '')
                         new_partner['address'] = null;
                     new_partner['country_id'] = false
 //                    new_partner['cnpj_cpf'] = new_partner['name'];
@@ -261,69 +263,69 @@ function l10n_br_pos_screens(instance, module) {
                 var Soma;
                 var Resto;
                 Soma = 0;
-                if (documento == "00000000000" ||
-                    documento == "11111111111" ||
-                    documento == "22222222222" ||
-                    documento == "33333333333" ||
-                    documento == "44444444444" ||
-                    documento == "55555555555" ||
-                    documento == "66666666666" ||
-                    documento == "77777777777" ||
-                    documento == "88888888888" ||
-                    documento == "99999999999")
+                if (documento === "00000000000" ||
+                    documento === "11111111111" ||
+                    documento === "22222222222" ||
+                    documento === "33333333333" ||
+                    documento === "44444444444" ||
+                    documento === "55555555555" ||
+                    documento === "66666666666" ||
+                    documento === "77777777777" ||
+                    documento === "88888888888" ||
+                    documento === "99999999999")
                     return false;
 
                 for (i=1; i<=9; i++) Soma = Soma + parseInt(documento.substring(i-1, i)) * (11 - i);
                 Resto = (Soma * 10) % 11;
 
-                if ((Resto == 10) || (Resto == 11))  Resto = 0;
-                if (Resto != parseInt(documento.substring(9, 10)) ) return false;
+                if ((Resto === 10) || (Resto === 11))  Resto = 0;
+                if (Resto !== parseInt(documento.substring(9, 10)) ) return false;
 
                 Soma = 0;
                 for (i = 1; i <= 10; i++) Soma = Soma + parseInt(documento.substring(i-1, i)) * (12 - i);
                 Resto = (Soma * 10) % 11;
 
-                if ((Resto == 10) || (Resto == 11))  Resto = 0;
-                if (Resto != parseInt(documento.substring(10, 11) ) ) return false;
+                if ((Resto === 10) || (Resto === 11))  Resto = 0;
+                if (Resto !== parseInt(documento.substring(10, 11) ) ) return false;
                 return true;
             }else{
                 documento = documento.replace(/[^\d]+/g,'');
 
-                if(documento == '') return false;
+                if(documento === '') return false;
 
-                if (documento.length != 14)
+                if (documento.length !== 14)
                     return false;
 
                 // Elimina CNPJs invalidos conhecidos
-                if (documento == "00000000000000" ||
-                    documento == "11111111111111" ||
-                    documento == "22222222222222" ||
-                    documento == "33333333333333" ||
-                    documento == "44444444444444" ||
-                    documento == "55555555555555" ||
-                    documento == "66666666666666" ||
-                    documento == "77777777777777" ||
-                    documento == "88888888888888" ||
-                    documento == "99999999999999")
+                if (documento === "00000000000000" ||
+                    documento === "11111111111111" ||
+                    documento === "22222222222222" ||
+                    documento === "33333333333333" ||
+                    documento === "44444444444444" ||
+                    documento === "55555555555555" ||
+                    documento === "66666666666666" ||
+                    documento === "77777777777777" ||
+                    documento === "88888888888888" ||
+                    documento === "99999999999999")
                     return false;
 
                 // Valida DVs
-                tamanho = documento.length - 2
+                var tamanho = documento.length - 2
                 numeros = documento.substring(0,tamanho);
-                digitos = documento.substring(tamanho);
-                soma = 0;
-                pos = tamanho - 7;
+                var digitos = documento.substring(tamanho);
+                var soma = 0;
+                var pos = tamanho - 7;
                 for (i = tamanho; i >= 1; i--) {
                   soma += numeros.charAt(tamanho - i) * pos--;
                   if (pos < 2)
                         pos = 9;
                 }
                 resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-                if (resultado != digitos.charAt(0))
+                if (resultado !== digitos.charAt(0))
                     return false;
 
                 tamanho = tamanho + 1;
-                numeros = documento.substring(0,tamanho);
+                var numeros = documento.substring(0,tamanho);
                 soma = 0;
                 pos = tamanho - 7;
                 for (i = tamanho; i >= 1; i--) {
@@ -331,8 +333,8 @@ function l10n_br_pos_screens(instance, module) {
                   if (pos < 2)
                         pos = 9;
                 }
-                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-                if (resultado != digitos.charAt(1))
+                var resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                if (resultado !== digitos.charAt(1))
                       return false;
 
                 return true;
@@ -343,7 +345,7 @@ function l10n_br_pos_screens(instance, module) {
     module.ClientListScreenWidget = module.ClientListScreenWidget.extend({
         save_client_details: function(partner) {
             var self = this;
-            var fields = {}
+            var fields = {};
             this.$('.client-details-contents .detail').each(function(idx,el){
                 fields[el.name] = el.value;
             });
@@ -355,7 +357,7 @@ function l10n_br_pos_screens(instance, module) {
             } else {
                 var cliente_cpf = fields.cnpj_cpf;
                 if (self.pos_widget.order_widget.verificar_cpf_cnpj(cliente_cpf.replace(/[^\d]+/g,''))){
-                    pos_db = self.pos.db;
+                    var pos_db = self.pos.db;
                     partner = pos_db.get_partner_by_identification(self.pos.partners, cliente_cpf.replace(/[^\d]+/g,''));
                     partner['user_ids'] = partner.user_ids || [];
                     fields.id           = partner.id || false;
@@ -363,10 +365,10 @@ function l10n_br_pos_screens(instance, module) {
                     partner.name = fields.name;
                     partner.birthdate = fields.birthdate;
                     partner.cnpj_cpf = fields.cnpj_cpf;
-                    var country = this.pos.countries.find(function(element) {return element.id==fields.country_id;}) || false;
+                    var country = this.pos.countries.find(function(element) {return element.id===fields.country_id;}) || false;
                     partner.email = fields.email;
                     partner.gender = fields.gender;
-                    var city = this.pos.cities.find(function(element) {return element.id==fields.l10n_br_city_id});
+                    var city = this.pos.cities.find(function(element) {return element.id===fields.l10n_br_city_id});
                     partner.number = fields.number;
                     partner.opt_out = 'sim'  === fields.opt_out;
                     partner.phone = fields.phone;
@@ -441,7 +443,7 @@ function l10n_br_pos_screens(instance, module) {
                 new instance.web.Model('res.country.state').call('get_states_ids', [country_id]).then(function (result) {
                 $('.client-address-state').children('option:not(:first)').remove();
                     $.each(result, function(key, value){
-                        if(state_id != null && state_id == key){
+                        if(state_id != null && state_id === key){
                              $('.client-address-state').append($("<option></option>")
                                           .attr("value",key)
                                           .attr("selected",true)
@@ -459,7 +461,7 @@ function l10n_br_pos_screens(instance, module) {
                     new instance.web.Model('l10n_br_base.city').call('get_city_ids', [state_id]).then(function (result) {
                     $('.client-address-city').children('option:not(:first)').remove();
                         $.each(result, function(key, value){
-                            if(l10n_br_city != null && l10n_br_city == key){
+                            if(l10n_br_city != null && l10n_br_city === key){
                             $('.client-address-city').append($("<option></option>")
                                               .attr("value",key)
                                               .attr("selected", true)
@@ -491,8 +493,9 @@ function l10n_br_pos_screens(instance, module) {
             this.uploaded_picture = null;
 
             if(visibility === 'show'){
-                for (key in partner){
-                    if ((key != 'ean13' && key != 'vat' && key != 'opt_out' && key != 'country_id' && key != 'city' && key != 'mobile' && key != 'whatsapp' && key != 'street2') && (partner[key] == null || partner[key] === false || partner[key] === 'false'))
+                for (var key in partner){
+                    if ((key !== 'ean13' && key !== 'vat' && key !== 'opt_out' && key !== 'country_id' && key !== 'city' && key !== 'mobile' && key !== 'whatsapp' && key !== 'street2')
+                        && (partner[key] === null || partner[key] === false || partner[key] === 'false'))
                         partner[key] = null;
                 }
                 contents.empty();
@@ -630,8 +633,8 @@ function l10n_br_pos_screens(instance, module) {
                     if (self.pos_widget.order_widget.verificar_cpf_cnpj(cpf.replace(/[^\d]+/g,''))) {
                         $(".pos-leftpane *").prop('disabled', save_state);
                         self.pos_widget.screen_selector.close_popup();
-                        pos_db = self.pos.db;
-                        partner = pos_db.get_partner_by_identification(self.pos.partners, cpf.replace(/[^\d]+/g, ''));
+                        var pos_db = self.pos.db;
+                        var partner = pos_db.get_partner_by_identification(self.pos.partners, cpf.replace(/[^\d]+/g, ''));
                         if (partner) {
                             self.pos.get('selectedOrder').set_client(partner);
                             currentOrder = self.pos.get('selectedOrder').attributes;
@@ -644,7 +647,7 @@ function l10n_br_pos_screens(instance, module) {
                             if(!self.pos.config.crm_ativo && cpf_na_nota)
                                 self.pos_widget.payment_screen.validate_order();
                         } else {
-                            new_partner = {};
+                            var new_partner = {};
                             new_partner["name"] = 'Anônimo';
                             if (new_partner["name"].length > 14) {
                                 new_partner["is_company"] = true;
@@ -654,7 +657,7 @@ function l10n_br_pos_screens(instance, module) {
                             new instance.web.Model('res.partner').call('create_from_ui', [new_partner]).then(function (partner_id) {
                                 self.pos.pos_widget.clientlist_screen.reload_partners().then(function () {
                                     var new_partner = self.pos.db.get_partner_by_id(partner_id);
-                                    for (key in new_partner){
+                                    for (var key in new_partner){
                                         if (new_partner[key] == false)
                                             new_partner[key] = null;
                                     }
@@ -694,7 +697,7 @@ function l10n_br_pos_screens(instance, module) {
                 } else {
                     pos_db = self.pos.db;
                     partner = pos_db.get_partner_by_identification(self.pos.partners, cpf.replace(/[^\d]+/g, ''));
-                    for (key in partner){
+                    for (var key in partner){
                         if (partner[key] === 'false' )
                             partner[key] = null;
                     }
@@ -1031,8 +1034,8 @@ function l10n_br_pos_screens(instance, module) {
         },
 
         push_list_order_frontend: function (currentOrder) {
-            date = new Date(currentOrder.attributes.creationDate);
-            dict_order = {
+            var date = new Date(currentOrder.attributes.creationDate);
+            var dict_order = {
                 can_cancel: true,
                 canceled_order: false,
                 chave_cfe: currentOrder.chave_cfe,
@@ -1190,4 +1193,4 @@ function l10n_br_pos_screens(instance, module) {
             this._super();
         }
     });
-}
+});

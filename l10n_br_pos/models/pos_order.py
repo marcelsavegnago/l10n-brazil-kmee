@@ -66,7 +66,7 @@ class PosOrder(models.Model):
         related='partner_id.cnpj_cpf',
     )
 
-    @api.one
+    @api.onchange
     def action_invoice(self):
         self.simplified = False
         self.fiscal_document_type = 'nfe'

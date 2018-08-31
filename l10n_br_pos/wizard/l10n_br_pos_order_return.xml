@@ -6,7 +6,7 @@
             <field name="model">pos.order.return</field>
             <field name="arch" type="xml">
                 <form string="Retorno">
-                    <group string="Selecione / Cadastre um cliente para efetuar a devolução">
+                    <group name="Selecione / Cadastre um cliente para efetuar a devolução">
                         <field name="partner_id"/>
                     </group>
                     <footer>

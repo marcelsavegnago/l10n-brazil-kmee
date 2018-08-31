@@ -135,8 +135,8 @@
             <field name="lim_data_alteracao"/>
             <field name="crm_ativo"/>
         </field>
-        <group string="Hardware Proxy" position="after" >
-            <group string="Configuraçoes SAT" attrs="{'invisible': [('iface_sat_via_proxy', '=', False)]}">
+        <group name="Hardware Proxy" position="after" >
+            <group name="Configuraçoes SAT" attrs="{'invisible': [('iface_sat_via_proxy', '=', False)]}">
                 <group>
                     <field name='sat_ambiente' invisible='1'/>
                     <field name="cnpj_homologacao" attrs="{'invisible': [('sat_ambiente', '=', 'producao')]}"/>

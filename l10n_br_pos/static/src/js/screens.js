@@ -232,7 +232,7 @@ odoo.define("l10n_br_pos.screens",function (instance, module) {
                     }
                     if (new_partner['address'].replace(/,|\s/g,'') === '')
                         new_partner['address'] = null;
-                    new_partner['country_id'] = false
+                    new_partner['country_id'] = false;
 //                    new_partner['cnpj_cpf'] = new_partner['name'];
                     if (self.pos.config.pricelist_id){
                        new_partner['property_product_pricelist'][0] = self.pos.pricelist.id;
@@ -310,7 +310,7 @@ odoo.define("l10n_br_pos.screens",function (instance, module) {
                     return false;
 
                 // Valida DVs
-                var tamanho = documento.length - 2
+                var tamanho = documento.length - 2;
                 numeros = documento.substring(0,tamanho);
                 var digitos = documento.substring(tamanho);
                 var soma = 0;
@@ -419,10 +419,10 @@ odoo.define("l10n_br_pos.screens",function (instance, module) {
                     partner['property_product_pricelist'][0] = self.pos.pricelist.id;
                     partner.birthdate = $('.birthdate').val();
                     partner.data_alteracao = date.getFullYear() + '-' + date.getMonth();
-                    partner.street2 = $('.client-address-street2').val()
-                    partner.gender = $('.gender').val()
-                    partner.whatsapp = 'sim' === $('.whatsapp').val()
-                    partner.opt_out = 'sim' === $('.opt_out').val()
+                    partner.street2 = $('.client-address-street2').val();
+                    partner.gender = $('.gender').val();
+                    partner.whatsapp = 'sim' === $('.whatsapp').val();
+                    partner.opt_out = 'sim' === $('.opt_out').val();
 
                     self.new_client = partner;
                     self.toggle_save_button();
@@ -517,7 +517,7 @@ odoo.define("l10n_br_pos.screens",function (instance, module) {
                 this.toggle_save_button();
             } else if (visibility === 'edit') {
                 for (key in partner){
-                    if ((key != 'ean13' && key != 'vat' && key != 'country_id' && key != 'opt_out' && key != 'city' && key != 'mobile' && key != 'whatsapp') && (partner[key] == null || partner[key] === false || partner[key] === 'false'))
+                    if ((key !== 'ean13' && key !== 'vat' && key !== 'country_id' && key !== 'opt_out' && key !== 'city' && key !== 'mobile' && key !== 'whatsapp') && (partner[key] === null || partner[key] === false || partner[key] === 'false'))
                     partner[key] = null;
                 }
                 this.editing_client = true;
@@ -535,7 +535,7 @@ odoo.define("l10n_br_pos.screens",function (instance, module) {
                 });
 		       $('.client-address-country', this.el).change(function(e){
                 var country_id = $('.client-address-country').val();
-                if (country_id != ""){
+                if (country_id !== ""){
                     new instance.web.Model('res.country.state').call('get_states_ids', [country_id]).then(function (result) {
                         $('.client-address-state').children('option:not(:first)').remove();
                             $.each(result, function(key, value){
@@ -548,7 +548,7 @@ odoo.define("l10n_br_pos.screens",function (instance, module) {
                    });
                $('.client-address-state', this.el).change(function(e){
                 var state_id = $('.client-address-state').val();
-                if (state_id != ""){
+                if (state_id !== ""){
                 new instance.web.Model('l10n_br_base.city').call('get_city_ids', [state_id]).then(function (result) {
                     $('.client-address-city').children('option:not(:first)').remove();
                         $.each(result, function(key, value){
@@ -562,7 +562,7 @@ odoo.define("l10n_br_pos.screens",function (instance, module) {
 
                 $('.client-address-zip', this.el).blur(function(e){
                     var cep = $('.client-address-zip').val().replace(/[^\d]+/g,'');
-                        if (cep.length == 8){
+                        if (cep.length === 8){
                             new instance.web.Model('l10n_br.zip').call('zip_search_multi_json', [[]], {'zip_code': cep}).then(function (result) {
                                 $('.client-address-street').val(result.street);
                                 $('.client-address-country').val(result.country_id);
@@ -658,11 +658,11 @@ odoo.define("l10n_br_pos.screens",function (instance, module) {
                                 self.pos.pos_widget.clientlist_screen.reload_partners().then(function () {
                                     var new_partner = self.pos.db.get_partner_by_id(partner_id);
                                     for (var key in new_partner){
-                                        if (new_partner[key] == false)
+                                        if (new_partner[key] === false)
                                             new_partner[key] = null;
                                     }
                                     new_partner['user_ids'] = [];
-                                    new_partner['country_id'] = false
+                                    new_partner['country_id'] = false;
                                     new_partner['cnpj_cpf'] = cpf;
                                     if (self.pos.config.pricelist_id) {
                                         new_partner['property_product_pricelist'][0] = self.pos.pricelist.id;
@@ -848,7 +848,7 @@ odoo.define("l10n_br_pos.screens",function (instance, module) {
                 }
                 if(!cpf_na_nota)
                     currentOrder.attributes.cpf_nota = null;
-                if(sat_status == 'connected'){
+                if(sat_status === 'connected'){
                     if(options.invoice){
                         // deactivate the validation button while we try to send the order
                         this.pos_widget.action_bar.set_button_disabled('validation',true);
@@ -1000,7 +1000,7 @@ odoo.define("l10n_br_pos.screens",function (instance, module) {
             this.render_list(self.orders.Orders);
             this.$('.client-list-contents').delegate('.cancel_order','click',function(event){
                 var order_id = $(this).parent().parent().data('id');
-                if(order_id == ''){
+                if(order_id === ''){
                     self.pos_widget.screen_selector.show_popup('error', {
                         message: _t('Erro:Cancelar Venda'),
                         comment: _t('Última venda ainda não foi sincronizada'),
@@ -1039,7 +1039,9 @@ odoo.define("l10n_br_pos.screens",function (instance, module) {
                 can_cancel: true,
                 canceled_order: false,
                 chave_cfe: currentOrder.chave_cfe,
-                date: date.getFullYear() + '-' + ((date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)) + '-' + (date.getDay() < 10 ? '0' + date.getDay() : date.getDay()) + ' ' + (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':' + (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()),
+                date: date.getFullYear() + '-' + ((date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)) + '-' +
+                (date.getDay() < 10 ? '0' + date.getDay() : date.getDay()) + ' ' + (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':' +
+                (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':' + (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()),
                 id: '',
                 name: '',//"LJ 0005 / CAIXA 1/900006030 / 000159",
                 partner: false,
@@ -1071,7 +1073,7 @@ odoo.define("l10n_br_pos.screens",function (instance, module) {
                 for (var i=0; i < orders.Orders.length; i++){
                     var index = -1;
                     for (var j=0; j< 5 && j < list_orders_frontend.length; j++){
-                        if(list_orders_frontend[j].chave_cfe == orders.Orders[i].chave_cfe){
+                        if(list_orders_frontend[j].chave_cfe === orders.Orders[i].chave_cfe){
                              index = j;
                             break;
                         }
@@ -1125,7 +1127,7 @@ odoo.define("l10n_br_pos.screens",function (instance, module) {
 
             var status = this.pos.proxy.get('status');
             var sat_status = status.drivers.satcfe ? status.drivers.satcfe.status : false;
-            if( sat_status == 'connected'){
+            if( sat_status === 'connected'){
                 if(this.pos.config.iface_sat_via_proxy){
                     this.pos.proxy.cancel_last_order(order);
                 }

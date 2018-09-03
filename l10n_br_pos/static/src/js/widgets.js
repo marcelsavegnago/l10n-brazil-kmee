@@ -30,7 +30,7 @@ odoo.define("l10n_br_pos.widgets",function (instance, module) {
                 var msg = '';
                 if(this.pos.config.iface_scan_via_proxy){
                     var scanner = status.drivers.scanner ? status.drivers.scanner.status : false;
-                    if( scanner != 'connected' && scanner != 'connecting'){
+                    if( scanner !== 'connected' && scanner !== 'connecting'){
                         warning = true;
                         msg += _t('Scanner');
                     }
@@ -38,7 +38,7 @@ odoo.define("l10n_br_pos.widgets",function (instance, module) {
                 if( this.pos.config.iface_print_via_proxy ||
                     this.pos.config.iface_cashdrawer ){
                     var printer = status.drivers.escpos ? status.drivers.escpos.status : false;
-                    if( printer != 'connected' && printer != 'connecting'){
+                    if( printer !== 'connected' && printer !== 'connecting'){
                         warning = true;
                         msg = msg ? msg + ' & ' : msg;
                         msg += _t('Printer');
@@ -46,14 +46,14 @@ odoo.define("l10n_br_pos.widgets",function (instance, module) {
                 }
                 if( this.pos.config.iface_electronic_scale ){
                     var scale = status.drivers.scale ? status.drivers.scale.status : false;
-                    if( scale != 'connected' && scale != 'connecting' ){
+                    if( scale !== 'connected' && scale !== 'connecting' ){
                         warning = true;
                         msg = msg ? msg + ' & ' : msg;
                         msg += _t('Scale');
                     }
                 }
                 var sat = status.drivers.satcfe ? status.drivers.satcfe.status : false;
-                if( sat != 'connected' && sat != 'connecting'){
+                if( sat !== 'connected' && sat !== 'connecting'){
                     warning = true;
                     msg = msg ? msg + ' & ' : msg;
                     msg += _t('SAT');
@@ -74,7 +74,7 @@ odoo.define("l10n_br_pos.widgets",function (instance, module) {
             PaypadButtonWidget.prototype.renderElement.apply(this);
 
             this.$el.click(function() {
-                if (self.pos.get('selectedOrder').get('orderLines').length == 0){
+                if (self.pos.get('selectedOrder').get('orderLines').length === 0){
                     self.pos.pos_widget.screen_selector.show_popup('error',{
                         message: 'Nenhum produto selecionado!',
                         comment: 'Você precisa selecionar pelo menos um produto para abrir a tela de pagamentos',

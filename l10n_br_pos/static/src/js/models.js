@@ -272,9 +272,9 @@ odoo.define("l10n_br_pos.models", function (instance, module) {
             var status = this.pos.proxy.get('status');
             var sat_status = status.drivers.satcfe ? status.drivers.satcfe.status : false;
             var result = PosOrderSuper.prototype.export_for_printing.call(this);
-            if( sat_status == 'connected') {
+            if( sat_status === 'connected') {
                 var pos_config = this.pos.config;
-                if (this.pos.company.ambiente_sat == "homologacao") {
+                if (this.pos.company.ambiente_sat === "homologacao") {
                     company.cnpj = pos_config.cnpj_homologacao;
                     company.ie = pos_config.ie_homologacao;
                     company.cnpj_software_house = pos_config.cnpj_software_house;
@@ -315,9 +315,9 @@ odoo.define("l10n_br_pos.models", function (instance, module) {
             var status = this.pos.proxy.get('status');
             var sat_status = status.drivers.satcfe ? status.drivers.satcfe.status : false;
             var result = PosOrderSuper.prototype.export_as_JSON.call(this);
-            if( sat_status == 'connected') {
+            if( sat_status === 'connected') {
                 var pos_config = this.pos.config;
-                if (this.pos.company.ambiente_sat == "homologacao") {
+                if (this.pos.company.ambiente_sat === "homologacao") {
                     company.cnpj = pos_config.cnpj_homologacao;
                     company.ie = pos_config.ie_homologacao;
                     company.cnpj_software_house = pos_config.cnpj_software_house;
@@ -408,7 +408,7 @@ odoo.define("l10n_br_pos.models", function (instance, module) {
 
     function arrange_elements(pos_model) {
         var product_product_model = pos_model.find_model('product.product');
-        if (_.size(product_product_model) == 1) {
+        if (_.size(product_product_model) === 1) {
             var res_partner_index =
                 parseInt(Object.keys(product_product_model)[0]);
             pos_model.models[res_partner_index].fields.push(
@@ -420,7 +420,7 @@ odoo.define("l10n_br_pos.models", function (instance, module) {
             pos_model.models[res_partner_index].domain.push(['qty_available', '>', 0]);
         }
         var account_journal_model = pos_model.find_model('account.journal');
-        if (_.size(account_journal_model) == 1) {
+        if (_.size(account_journal_model) === 1) {
             var account_journal_model =
                 parseInt(Object.keys(account_journal_model)[0]);
             pos_model.models[res_partner_index].fields.push(
@@ -429,7 +429,7 @@ odoo.define("l10n_br_pos.models", function (instance, module) {
             );
         }
         var res_partner_model = pos_model.find_model('res.partner');
-        if (_.size(res_partner_model) == 1) {
+        if (_.size(res_partner_model) === 1) {
             var res_partner_index =
                 parseInt(Object.keys(res_partner_model)[0]);
             pos_model.models[res_partner_index].fields.push(
@@ -448,7 +448,7 @@ odoo.define("l10n_br_pos.models", function (instance, module) {
         }
 
         var res_company_model = pos_model.find_model('res.company');
-        if (_.size(res_company_model) == 1) {
+        if (_.size(res_company_model) === 1) {
             var res_company_index =
                 parseInt(Object.keys(res_company_model)[0]);
             pos_model.models[res_company_index].fields.push(

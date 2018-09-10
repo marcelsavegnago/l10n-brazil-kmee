@@ -59,9 +59,10 @@ class SaleOrder(models.Model):
                 value += computed.get('amount', 0.0)
         return value
 
-    def _invoiced_rate(self, cursor, user, ids, name, arg, context=None):
+    @api.cr_uid_ids_context
+    def _invoiced_rate(self, cr, uid, ids, context=None):
         result = {}
-        for sale in self.browse(cursor, user, ids, context=context):
+        for sale in self.browse(cr, uid, ids, context=context):
             if sale.invoiced:
                 result[sale.id] = 100.0
                 continue

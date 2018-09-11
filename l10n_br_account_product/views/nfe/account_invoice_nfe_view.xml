@@ -526,7 +526,7 @@
                                 <field name="account_id" required="0" invisible="1"/>
                                 <field name="cest_id" attrs="{'readonly': [('product_id','!=', False)]}" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                 <field name="fci" attrs="{'readonly': [('product_id','!=', False)]}"/>
-                                <field name="inss_base_wh_reducao" />
+                                <field name="inss_base_wh_reducao" attrs="{'readonly': [('price_unit', '=', 0)]}"/>
                                 <field name="invoice_line_tax_id" context="{'type':parent.type}" domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit': True}"/>
                                 <field domain="[('type','&lt;&gt;','view'), ('company_id', '=', parent.company_id)]" name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
                                 <field name="company_id" groups="base.group_multi_company" readonly="1"/>

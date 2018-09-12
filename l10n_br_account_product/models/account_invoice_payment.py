@@ -91,7 +91,6 @@ class AccountInvoicePayment(models.Model):
             self.invoice_id = field_parent_id
         return date or fields.Date.context_today(field_parent_id)
 
-    @api.onchange('payment_term_id', 'amount', 'item_ids', 'date')
     def onchange_payment_term_id(self):
 
         if not (self.payment_term_id and self.amount):

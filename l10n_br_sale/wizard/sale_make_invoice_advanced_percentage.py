@@ -100,3 +100,13 @@ class SaleAdvancePaymentInvoice(models.TransientModel):
                 res[1]['invoice_line'] = list_invoice
                 res[1]['comment'] = invoice_dict['name']
         return result
+
+    def create_invoices(self, cr, uid, ids, context=None):
+        for sale in self.pool.get('sale.order').browse(
+                cr, uid, context.get('active_ids', []), context):
+            if sale.account_payment_ids:
+                for item in sale.account_payment_ids:
+                    item.onchange_payment_term_id()
+
+        return super(SaleAdvancePaymentInvoice, self
+                     ).create_invoices(cr, uid, ids, context)

@@ -48,6 +48,7 @@ class SpedHrRescisao(models.Model, SpedRegistroIntermediario):
             ('3', 'Erro(s)'),
             ('4', 'Sucesso'),
             ('5', 'Precisa Retificar'),
+            ('6', 'Retificado'),
         ],
         compute="compute_situacao_esocial",
         store=True,
@@ -115,7 +116,7 @@ class SpedHrRescisao(models.Model, SpedRegistroIntermediario):
                     desligamento.sped_s2299_registro_inclusao.situacao
 
             for retificao in desligamento.sped_s2299_registro_retificacao:
-                situacao_esocial = retificao.situacao
+                situacao_esocial = self.get_registro_para_retificar(retificao[0])
 
             # Popula na tabela
             desligamento.situacao_s2299 = situacao_esocial
@@ -138,17 +139,38 @@ class SpedHrRescisao(models.Model, SpedRegistroIntermediario):
             # Cria o registro de envio
             sped_inclusao = self.env['sped.registro'].create(values)
             self.sped_s2299_registro_inclusao = sped_inclusao
-        elif self.precisa_atualizar:
-            # Cria o registro de Retificação
-            values['operacao'] = 'R'
-            sped_retificacao = self.env['sped.registro'].create(values)
-            self.sped_s2299_registro_retificacao = [(4, sped_retificacao.id)]
+            return
+
+        # Cria o registro de Retificação
+        values['operacao'] = 'R'
+        sped_retificacao = self.env['sped.registro'].create(values)
+        self.sped_s2299_registro_retificacao = [(4, sped_retificacao.id)]
 
     @api.multi
     def _compute_display_name(self):
         for record in self:
             record.name = 'S-2299 - Desligamento {}'.format(
                 record.sped_hr_rescisao_id.contract_id.display_name)
+
+    def get_registro_para_retificar(self, sped_registro):
+        """
+        Identificar o registro para retificar
+        :return:
+        """
+        # Se tiver registro de retificação com erro ou nao possuir nenhuma
+        # retificação ainda, retornar o registro que veio no parametro
+        retificacao_com_erro = sped_registro.retificacao_ids.filtered(
+            lambda x: x.situacao in ['1', '3'])
+        if retificacao_com_erro or not sped_registro.retificacao_ids:
+            return sped_registro
+
+        # Do contrario navegar ate as retificacoes com sucesso e efetuar a
+        # verificacao de erro novamente
+        else:
+            registro_com_sucesso = sped_registro.retificacao_ids.filtered(
+                lambda x: x.situacao not in ['1', '3'])
+
+            return self.get_registro_para_retificar(registro_com_sucesso[0])
 
     @api.multi
     def popula_xml(self, ambiente='2', operacao='I'):
@@ -179,17 +201,12 @@ class SpedHrRescisao(models.Model, SpedRegistroIntermediario):
         # Se for uma retificação
         if operacao == 'R':
             indRetif = '2'
-            # Identifica o Recibo a ser retificado
-            registro_para_retificar = self.sped_registro
-            tem_retificacao = True
-            while tem_retificacao:
-                if registro_para_retificar.retificacao_ids and \
-                        registro_para_retificar.retificacao_ids[0].situacao not in ['1', '3']:
-                    registro_para_retificar = registro_para_retificar.retificacao_ids[0]
-                else:
-                    tem_retificacao = False
 
-            S2299.evento.ideEvento.nrRecibo.valor = registro_para_retificar.recibo
+            registro_para_retificar = self.get_registro_para_retificar(
+                self.sped_s2299_registro_inclusao)
+
+            S2299.evento.ideEvento.nrRecibo.valor = \
+                registro_para_retificar.recibo
 
         S2299.evento.ideEvento.indRetif.valor = indRetif
 

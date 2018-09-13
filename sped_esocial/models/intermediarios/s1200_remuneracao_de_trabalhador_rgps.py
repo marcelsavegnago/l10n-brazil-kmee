@@ -64,8 +64,6 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
     def _compute_codigo(self):
         for esocial in self:
             codigo = ''
-            if esocial.company_id:
-                codigo += esocial.company_id.name or ''
             if esocial.trabalhador_id:
                 codigo += ' - ' if codigo else ''
                 codigo += esocial.trabalhador_id.name or ''
@@ -384,6 +382,10 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
 
                     # Popula o intermediário S1200 com o intermediário totalizador
                     self.s5001_id = sped_intermediario
+
+                    # Popula o intermediario do sped.registro enviado com o
+                    # totalizador 5001 retornado
+                    sped_registro.sped_s5001 = sped_intermediario
 
                     # Popula o XML em anexo no sped.registro totalizador
                     if sped_s5001.consulta_xml_id:

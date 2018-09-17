@@ -9,7 +9,7 @@
         <field name="name">account.invoice.payment.line.tree (in l10n_br_account)</field>
         <field name="model">account.invoice.payment.line</field>
         <field name="arch" type="xml">
-            <tree string="Dados da cobrança">
+            <tree string="Dados da cobrança" editable="bottom">
                 <field name="currency_id" invisible="1"/>
                 <field name="number"/>
                 <field name="date_due"/>

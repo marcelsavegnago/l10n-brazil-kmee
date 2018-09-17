@@ -41,8 +41,8 @@
                         <field name="payment_term_id" colspan="4"/>
                     </group>
                 </group>
-                <separator string="Vencimentos"/>
-                <field name="item_ids" editable="bottom"/>
+                <separator string="Vencimentos" invisible="True"/>
+                <field name="item_ids" editable="bottom" invisible="True"/>
             </form>
         </field>
     </record>

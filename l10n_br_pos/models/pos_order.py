@@ -146,7 +146,7 @@ class PosOrder(models.Model):
             'partner_shipping_id':
                 current_session_ids[0].config_id.company_id.partner_id.id,
             'fiscal_category_id': fiscal_category.id,
-            'company_id': current_session_ids[0].config_id.company_id.id,
+            'company_id': picking_devolucao.company_id.id,
         }
         self.picking_id.fiscal_position = obj_fp_rule.apply_fiscal_mapping(
             {'value': {}}, **kwargs

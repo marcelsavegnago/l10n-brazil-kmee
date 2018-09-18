@@ -66,14 +66,14 @@ class StockPickingReturn(models.TransientModel):
                 'partner_shipping_id':
                     current_session_ids[0].config_id.company_id.partner_id.id,
                 'fiscal_category_id': cat_fiscal_devolucao.id,
-                'company_id': current_session_ids[0].config_id.company_id.id,
+                'company_id': picking_devolucao.company_id.id,
             }
             picking_devolucao.fiscal_position = \
                 obj_fp_rule.apply_fiscal_mapping({'value': {}}, **kwargs
                                                 )['value']['fiscal_position']
 
             picking_devolucao.company_id = \
-                current_session_ids[0].config_id.company_id.id
+                picking_devolucao.company_id.id
 
             valor_total_devolucao = self._buscar_valor_total_devolucao(
                 pos_order
@@ -142,6 +142,7 @@ class PorOrderReturn(models.TransientModel):
         ctx['contact_display'] = 'partner_address'
         ctx['search_disable_custom_filters'] = True
         ctx['partner_id'] = self.partner_id.id
+        ctx['default_invoice_state'] = '2binvoiced'
 
         form = self.env.ref('stock.view_stock_return_picking_form', False)
         self.sudo()

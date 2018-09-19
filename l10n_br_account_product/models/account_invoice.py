@@ -1619,6 +1619,12 @@ class AccountInvoice(models.Model):
         # verificar metodo: onchange_fiscal_payment_term
         if result.get('value'):
             result['value'].pop('payment_term', None)
+
+        partner = self.env['res.partner'].browse(partner_id)
+        payment_term = partner.property_payment_term or \
+                       partner.parent_id.property_payment_term
+        if payment_term:
+            result['value']['payment_term'] = payment_term.id
         return result
 
     @api.onchange('fiscal_category_id', 'fiscal_position_id')

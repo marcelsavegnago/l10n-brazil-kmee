@@ -141,7 +141,7 @@ class StockInvoiceOnShipping(models.TransientModel):
         context = dict(self.env.context)
         for wizard in self:
             fiscal_document_code = (wizard.journal_id.company_id.
-                                    product_invoice_id. code)
+                                    product_invoice_id.code)
             context.update(
                 {'fiscal_document_code': fiscal_document_code})
         result = super(StockInvoiceOnShipping,

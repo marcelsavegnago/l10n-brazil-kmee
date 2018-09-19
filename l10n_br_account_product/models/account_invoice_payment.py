@@ -105,7 +105,7 @@ class AccountInvoicePayment(models.Model):
 
         pterm_list = self.payment_term_id.compute(self.amount, self.date)[0]
 
-        self.forma_pagameto = self.payment_term_id.forma_pagamento
+        self.forma_pagamento = self.payment_term_id.forma_pagamento
 
         item_ids = [
             (5, 0, {})

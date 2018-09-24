@@ -16,7 +16,7 @@ import pysped
 class SpedInssConsolidado(models.Model, SpedRegistroIntermediario):
     _name = "sped.inss.consolidado"
     _rec_name = "nome"
-    _order = "company_id, create_date DESC"
+    _order = "create_date DESC"
 
     nome = fields.Char(
         string='Nome',
@@ -36,6 +36,10 @@ class SpedInssConsolidado(models.Model, SpedRegistroIntermediario):
     )
     sped_registro_s5011 = fields.Many2one(
         string='S-5011',
+        comodel_name='sped.registro',
+    )
+    sped_registro_s1295 = fields.Many2one(
+        string='S-1295',
         comodel_name='sped.registro',
     )
     sped_registro_s1299 = fields.Many2one(

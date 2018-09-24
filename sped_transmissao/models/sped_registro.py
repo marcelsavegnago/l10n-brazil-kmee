@@ -18,7 +18,7 @@ class SpedRegistro(models.Model):
     _inherit = []
     _description = 'Registros SPED'
     _rec_name = 'name'
-    _order = "registro, data_hora_origem ASC, situacao"
+    _order = "data_hora_origem DESC"
 
     # Campo para mostrar que está limpado db
     limpar_db = fields.Boolean()
@@ -555,12 +555,13 @@ class SpedRegistro(models.Model):
         # Retorno XML preenchido
         return registro, validacao
 
-    # Este método será chamado pelo lote quando a consulta for concluída com sucesso
+    # Este método será chamado pelo lote quando a consulta concluír com sucesso
     @api.multi
     def retorno_sucesso(self, evento):
         self.ensure_one()
 
-        # Se esse registro é uma retificação de outro, muda o status do registro retificado para "Retificado"
+        # Se esse registro é uma retificação de outro,
+        # muda o status do registro retificado para "Retificado"
         if self.retificado_id:
             self.retificado_id.situacao = '6'
 

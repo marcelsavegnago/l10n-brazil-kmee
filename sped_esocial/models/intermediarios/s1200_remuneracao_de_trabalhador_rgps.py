@@ -64,8 +64,6 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
     def _compute_codigo(self):
         for esocial in self:
             codigo = ''
-            if esocial.company_id:
-                codigo += esocial.company_id.name or ''
             if esocial.trabalhador_id:
                 codigo += ' - ' if codigo else ''
                 codigo += esocial.trabalhador_id.name or ''
@@ -141,13 +139,14 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
             registro_para_retificar = self.sped_registro
             tem_retificacao = True
             while tem_retificacao:
-                if registro_para_retificar.retificacao_ids:
-                    if registro_para_retificar.retificacao_ids[0].situacao != '1':
-                        registro_para_retificar = \
-                        registro_para_retificar.retificacao_ids[0]
+                if registro_para_retificar.retificacao_ids and \
+                        registro_para_retificar.retificacao_ids[
+                            0].situacao not in ['1', '3']:
+                    registro_para_retificar = \
+                    registro_para_retificar.retificacao_ids[0]
                 else:
                     tem_retificacao = False
-            S1200.evento.ideEvento.nrRecibo.valor = registro_para_retificar.sped_registro.recibo
+            S1200.evento.ideEvento.nrRecibo.valor = registro_para_retificar.recibo
         S1200.evento.ideEvento.indRetif.valor = indRetif
         S1200.evento.ideEvento.indApuracao.valor = '1'  # TODO Lidar com os holerites de 13º salário
                                                         # '1' - Mensal
@@ -166,17 +165,31 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
         # Popula ideTrabalhador (Dados do Trabalhador)
         S1200.evento.ideTrabalhador.cpfTrab.valor = limpa_formatacao(self.trabalhador_id.cpf)
         S1200.evento.ideTrabalhador.nisTrab.valor = limpa_formatacao(self.trabalhador_id.pis_pasep)
-	
-        # # Popula ideTrabalhador.infoMV (Dados do Empregador Cedente)  # TODO
-        # #        ideTrabalhador.infoMV.remunOutrEmpr
-        # #
-        # # Registro preenchido exclusivamente em caso de trabalhador que possua outros vínculos/atividades
-        # # para definição do limite do salário-de-contribuição e da alíquota a ser aplicada no desconto da
-        # # contribuição previdenciária.
-        #
-        # if self.trabalhador_id.
-        # info_mv = pysped.esocial.leiaute.S1200_InfoMV_2()
-        # info_mv
+
+        for contrato in self.trabalhador_id.contract_ids:
+            if contrato.contribuicao_inss_ids:
+                for vinculo in contrato.contribuicao_inss_ids:
+                    info_mv = pysped.esocial.leiaute.S1200_InfoMV_2()
+
+                    remun_outr_empr = \
+                        pysped.esocial.leiaute.S1200_RemunOutrEmpr_2()
+                    remun_outr_empr.tpInsc.valor = \
+                        vinculo.tipo_inscricao_vinculo
+                    remun_outr_empr.nrInsc.valor = limpa_formatacao(
+                        vinculo.cnpj_cpf_vinculo)
+                    remun_outr_empr.codCateg.valor = \
+                        vinculo.cod_categ_vinculo
+                    remun_outr_empr.vlrRemunOE.valor = \
+                        vinculo.valor_remuneracao_vinculo
+
+                    info_mv.remunOutrEmpr.append(remun_outr_empr)
+
+                    if vinculo.valor_alicota_vinculo >= 621.03:
+                        info_mv.indMV.valor = '3'
+                    else:
+                        info_mv.indMV.valor = '2'
+
+                    S1200.evento.ideTrabalhador.infoMV.append(info_mv)
 
         # # Popula ideTrabalhador.infoComplem               # TODO
         # #        ideTrabalhador.infoComplem.sucessaoVinc
@@ -240,7 +253,7 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
                 if line.salary_rule_id.nat_rubr:
 
                     if line.salary_rule_id.cod_inc_irrf_calculado not in \
-                            ['31', '32', '33', '34', '35', '51', '52', '53', '54', '55', '81', '82', '83']:
+                            ['13', '31', '32', '33', '34', '35', '51', '52', '53', '54', '55', '81', '82', '83']:
 
                         if line.salary_rule_id.code == 'BASE_INSS' and line.slip_id.tipo_de_folha == 'ferias':
                             continue
@@ -384,6 +397,10 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
 
                     # Popula o intermediário S1200 com o intermediário totalizador
                     self.s5001_id = sped_intermediario
+
+                    # Popula o intermediario do sped.registro enviado com o
+                    # totalizador 5001 retornado
+                    sped_registro.sped_s5001 = sped_intermediario
 
                     # Popula o XML em anexo no sped.registro totalizador
                     if sped_s5001.consulta_xml_id:

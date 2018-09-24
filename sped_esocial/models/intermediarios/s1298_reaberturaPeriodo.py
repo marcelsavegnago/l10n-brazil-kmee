@@ -10,7 +10,7 @@ from pybrasil.inscricao.cnpj_cpf import limpa_formatacao
 import pysped
 
 
-class SpedEsocialFechamento(models.Model, SpedRegistroIntermediario):
+class SpedEsocialReabertura(models.Model, SpedRegistroIntermediario):
     _name = "sped.esocial.reabertura"
     _rec_name = "codigo"
     _order = "company_id,periodo_id"
@@ -60,11 +60,6 @@ class SpedEsocialFechamento(models.Model, SpedRegistroIntermediario):
         store=True,
     )
 
-    sped_fechamento_id = fields.Many2one(
-        comodel_name='sped.esocial.fechamento',
-        string=u'Fechamento de Período',
-    )
-
     # Roda a atualização do e-Social (não transmite ainda)
     @api.multi
     def atualizar_esocial(self):
@@ -77,7 +72,7 @@ class SpedEsocialFechamento(models.Model, SpedRegistroIntermediario):
                 'company_id': self.company_id.id,
                 'operacao': 'na',
                 'evento': 'evtReabreEvPer',
-                'origem': ('sped.esocial.fechamento,%s' % self.sped_fechamento_id.id),
+                'origem': ('sped.esocial.reabertura,%s' % self.id),
                 'origem_intermediario': ('sped.esocial.reabertura,%s' % self.id),
             }
 
@@ -117,4 +112,12 @@ class SpedEsocialFechamento(models.Model, SpedRegistroIntermediario):
     @api.multi
     def retorno_sucesso(self, evento):
         self.ensure_one()
-        pass
+
+        if evento:
+
+            # Fecha o periodo relacionado
+            periodo = self.env['sped.esocial'].search([
+                ('company_id', '=', self.company_id.id),
+                ('periodo_id', '=', self.periodo_id.id),
+            ])
+            periodo.situacao = '1'

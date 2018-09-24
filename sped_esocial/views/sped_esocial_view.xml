@@ -17,12 +17,20 @@
                                 confirm="Confirma a transmissão dos registros deste período para o e-Social?"
                         />
                         <button name="importar_fechamentos" type="object" string="Fechar Período"
-                                attrs="{'invisible': ['|', ('id', '=', False), ('pode_fechar', '=', False)]}"
+                                attrs="{'invisible': ['|', '|', ('id', '=', False), ('pode_fechar', '=', False), ('situacao_reabertura', 'in', ['4', '6'])]}"
                                 class="oe_highlight"
                         />
                         <button name="importar_reabertura" type="object" string="Reabrir Período"
+                                attrs="{'invisible': [('situacao', '!=', '3')]}"
                                 groups="base.group_no_one"
                                 class="oe_highlight"
+                                confirm="Confirma a reabertura deste período?"
+                        />
+                        <button name="importar_fechamento_contingencia" type="object" string="Fechamento em Contingência"
+                                attrs="{'invisible': [('situacao', '=', '3')]}"
+                                groups="base.group_no_one"
+                                class="oe_highlight"
+                                confirm="Confirma o fechamento em contingência deste período?"
                         />
                         <field name="situacao" widget="statusbar" select="1"
                                nolabel="1"
@@ -243,6 +251,12 @@
                                                     <field name="alteracao_sem_vinculo_ids" readonly="1" nolabel="1" colspan="4"/>
                                                 </group>
                                             </page>
+                                            <page name="s2399" string="S-2399" attrs="{'invisible': [('desligamento_sem_vinculo_ids', '=', False)]}">
+                                                <group colspan="4" col="4">
+                                                    <separator string="Desligamento de Contrato sem Vínculo" />
+                                                    <field name="desligamento_sem_vinculo_ids" readonly="1" nolabel="1" colspan="4"/>
+                                                </group>
+                                            </page>
                                             <page name="s5001" string="S-5001" attrs="{'invisible': [('tem_s5001', '=', False)]}">
                                                 <group colspan="4" col="4">
                                                     <separator string="INSS por Trabalhador" />
@@ -301,22 +315,27 @@
                                     </field>
                                 </group>
                             </page>
-                            <page name="fechamento" string="Fechamento (S-1299)"
-                                  attrs="{'invisible': [('tem_fechamentos', '=', False)]}"
-                            >
-                                <group colspan="4" col="4">
+                            <page name="reabertura" string="Reabertura (S-1298)" attrs="{'invisible': [('sped_reabertura_id', '=', False)]}">
+                                <separator string="Reabertura dos Eventos Periódicos" />
+                                <group>
+                                    <field name="sped_reabertura_id" readonly="1"/>
+                                    <field name="situacao_reabertura" readonly="1"/>
+                                </group>
+                            </page>
+                            <page name="fechamento" string="Fechamento (S-1299)">
+                                <separator string="Fechamento dos Eventos Periódicos em Contingência" attrs="{'invisible': [('fechamento_contingencia_id', '=', False)]}"/>
+                                <group attrs="{'invisible': [('fechamento_contingencia_id', '=', False)]}">
+                                    <field name="fechamento_contingencia_id" readonly="1"/>
+                                    <field name="situacao_fechamento_contingencia" readonly="1"/>
+                                </group>
+                                <group colspan="4" col="4" attrs="{'invisible': [('tem_fechamentos', '=', False)]}">
                                     <group colspan="2" col="1">
                                         <div class="oe_title">
                                             <button name="importar_fechamentos" type="object" string="Calcular" />
                                         </div>
                                     </group>
                                     <separator string="Fechamento dos Eventos Periódicos" />
-                                    <field name="fechamento_ids" readonly="1" nolabel="1" colspan="4">
-                                        <tree string="S-1299 (Fechamento)">
-                                            <field name="codigo"/>
-                                            <field name="situacao_esocial"/>
-                                        </tree>
-                                    </field>
+                                    <field name="fechamento_id" readonly="1" nolabel="1" colspan="4"/>
                                 </group>
                             </page>
                             <page name="registros" string="Registros para transmitir ao e-Social"

@@ -64,8 +64,6 @@ class SpedEsocialPagamento(models.Model, SpedRegistroIntermediario):
     def _compute_codigo(self):
         for esocial in self:
             codigo = ''
-            if esocial.company_id:
-                codigo += esocial.company_id.name or ''
             if esocial.beneficiario_id:
                 codigo += ' - ' if codigo else ''
                 codigo += esocial.beneficiario_id.name or ''
@@ -188,9 +186,6 @@ class SpedEsocialPagamento(models.Model, SpedRegistroIntermediario):
         # Popula infoPgto (1 para cada payslip)
         for payslip in self.payslip_ids or self.payslip_autonomo_ids:
 
-            if payslip.tipo_de_folha == 'ferias':
-                continue
-
             info_pgto = pysped.esocial.leiaute.S1210_InfoPgto_2()
 
             # TODO Identificar a data do pagamento de acordo com o arquivo CNAB
@@ -225,8 +220,14 @@ class SpedEsocialPagamento(models.Model, SpedRegistroIntermediario):
             if tipo != '7':
                 # Popula detPgtoFl
                 det_pgto_fl = pysped.esocial.leiaute.S1210_DetPgtoFl_2()
-                periodo = self.periodo_id.code[3:7] + '-' + self.periodo_id.code[0:2] \
-                    if payslip.tipo_de_folha != 'decimo_terceiro' else self.periodo_id.fiscalyear_id.code
+
+                if payslip.tipo_de_folha == 'decimo_terceiro':
+                    periodo = self.periodo_id.fiscalyear_id.code
+                elif payslip.tipo_de_folha == 'rescisao':
+                    periodo = ''
+                else:
+                    periodo = self.periodo_id.code[3:7] + '-' + \
+                              self.periodo_id.code[0:2]
                 det_pgto_fl.perRef.valor = periodo
                 det_pgto_fl.ideDmDev.valor = payslip.number
                 det_pgto_fl.indPgtoTt.valor = 'S'  # TODO Lidar com pagamento de adiantamentos mensais, quando tivermos
@@ -294,7 +295,8 @@ class SpedEsocialPagamento(models.Model, SpedRegistroIntermediario):
 
                     # Somente pega as Rubricas de Retenção de IRRF e Pensão Alimentícia
                     if line.salary_rule_id.cod_inc_irrf_calculado in \
-                            ['00', '01', '09', '13', '33', '43', '46', '53', '63', '75', '93'] and line.total:
+                            ['00', '01', '09', '13', '33', '43', '46', '53',
+                             '63', '75', '93'] and line.total:
 
                         det_rubr_fer = pysped.esocial.leiaute.S1210_DetRubrFer_2()
                         det_rubr_fer.codRubr.valor = line.salary_rule_id.codigo

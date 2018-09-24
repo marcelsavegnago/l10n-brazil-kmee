@@ -116,7 +116,7 @@ class SpedEsocial(models.Model):
         comodel_name='hr.payslip',
     )
 
-    @api.depends('registro_ids.situacao')
+    @api.depends('registro_ids.situacao', 'situacao_reabertura')
     def compute_erro_ids(self):
         for periodo in self:
             registros = []
@@ -143,12 +143,16 @@ class SpedEsocial(models.Model):
             periodo.em_transmissao = em_transmissao
             periodo.erros = len(periodo.erro_ids)
             if periodo.registros == (periodo.transmitidos + periodo.em_transmissao):
-                if not periodo.fechamento_ids and periodo.registros == periodo.transmitidos:
+                if not periodo.fechamento_id and periodo.registros == periodo.transmitidos:
                     pode_fechar = True
             else:
                 pode_transmitir = True
             if periodo.rescisoes_sem_registro:
                 pode_fechar = False
+            if periodo.situacao_reabertura == '4':
+                periodo.situacao = '1'
+                pode_fechar = True
+                pode_transmitir = True
             periodo.pode_fechar = pode_fechar
             periodo.pode_transmitir = pode_transmitir
 
@@ -296,7 +300,7 @@ class SpedEsocial(models.Model):
                     registros.append(pagamento.sped_registro.id)
 
             # Fechamento (S-1299)
-            for fechamento in esocial.fechamento_ids:
+            for fechamento in esocial.fechamento_id:
                 # Identifica o registro a ser transmitido
                 if fechamento.sped_registro.situacao in ['1', '3']:
                     registros.append(fechamento.sped_registro.id)
@@ -1091,7 +1095,7 @@ class SpedEsocial(models.Model):
         string='Tem Fechamentos?',
         compute='compute_tem_fechamentos',
     )
-    fechamento_ids = fields.Many2many(
+    fechamento_id = fields.Many2one(
         string='Fechamento',
         comodel_name='sped.esocial.fechamento',
     )
@@ -1099,6 +1103,35 @@ class SpedEsocial(models.Model):
     sped_reabertura_id = fields.Many2one(
         comodel_name='sped.esocial.reabertura',
         string='Reabertura'
+    )
+
+    situacao_reabertura = fields.Selection(
+        string='Situação',
+        selection=[
+            ('1', 'Pendente'),
+            ('2', 'Transmitida'),
+            ('3', 'Erro(s)'),
+            ('4', 'Sucesso'),
+            ('5', 'Precisa Retificar'),
+        ],
+        related='sped_reabertura_id.situacao_esocial',
+    )
+
+    fechamento_contingencia_id = fields.Many2one(
+        comodel_name=
+        'sped.esocial.fechamento.contingencia',
+        string='Fechamento em Contingência',
+    )
+    situacao_fechamento_contingencia = fields.Selection(
+        string='Situação',
+        selection=[
+            ('1', 'Pendente'),
+            ('2', 'Transmitida'),
+            ('3', 'Erro(s)'),
+            ('4', 'Sucesso'),
+            ('5', 'Precisa Retificar'),
+        ],
+        related='fechamento_contingencia_id.situacao_esocial',
     )
 
     @api.multi
@@ -1109,17 +1142,21 @@ class SpedEsocial(models.Model):
             reabertura_id = self.env['sped.esocial.reabertura'].create({
                 'company_id': self.company_id.id,
                 'periodo_id': self.periodo_id.id,
-                'sped_fechamento_id': self.id,
             })
 
             self.sped_reabertura_id = reabertura_id
 
+        # Desvincular , se existir, o registro do modelo intermediário do S-1299
+        # TODO Criar uma validação para ir adicionando varios registros
+        # de fechamento de periodo para um mesmo modelo intermediário
+        self.sped_reabertura_id.sped_registro = False
+
         self.sped_reabertura_id.atualizar_esocial()
 
-    @api.depends('fechamento_ids')
+    @api.depends('fechamento_id')
     def compute_tem_fechamentos(self):
         for periodo in self:
-            periodo.tem_fechamentos = True if periodo.fechamento_ids else False
+            periodo.tem_fechamentos = True if periodo.fechamento_id else False
 
     @api.depends('remuneracao_rpps_ids')
     def compute_msg_remuneracao_rpps(self):
@@ -1171,9 +1208,10 @@ class SpedEsocial(models.Model):
                 s1299 = self.env['sped.esocial.fechamento'].create(vals)
             else:
                 s1299.write(vals)
+                s1299.sped_registro = False
 
             # Relaciona o s1299 com o período do e-Social
-            self.fechamento_ids = [(6, 0, [s1299.id])]
+            self.fechamento_id = s1299.id
 
             # Cria o registro de transmissão sped (se ainda não existir)
             s1299.atualizar_esocial()
@@ -1430,8 +1468,19 @@ class SpedEsocial(models.Model):
         string='Deslig.sem e-Social',
     )
 
+    # Controle de registros S-2399
+    desligamento_sem_vinculo_ids = fields.Many2many(
+        string='Desligamentos Sem Vínculo',
+        comodel_name='hr.contract',
+    )
+    necessita_s2399 = fields.Boolean(
+        string='Necessita S2399',
+        compute='compute_necessita_s2399',
+        default=False,
+    )
+
     # Calcula se é necessário criar algum registro S-2299
-    @api.depends('desligamento_ids.situacao_s2299', 'fechamento_ids.situacao_esocial')
+    @api.depends('desligamento_ids.situacao_s2299', 'fechamento_id.situacao_esocial')
     def compute_necessita_s2299(self):
         for esocial in self:
             necessita_s2299 = False
@@ -1453,6 +1502,36 @@ class SpedEsocial(models.Model):
             if esocial.rescisoes_sem_registro:
                 necessita_s2299 = True
             esocial.necessita_s2299 = necessita_s2299
+            esocial.msg_desligamentos = msg_desligamentos
+
+    # Calcula se é necessário criar algum registro S-2399
+    @api.depends('desligamento_sem_vinculo_ids.situacao_esocial',
+                 'fechamento_id.situacao_esocial')
+    def compute_necessita_s2399(self):
+        for esocial in self:
+            necessita_s2399 = False
+            msg_desligamentos = False
+            for desligamento in esocial.desligamento_ids:
+                if desligamento.situacao_s2399 not in ['4']:
+                    necessita_s2399 = True
+                    msg_desligamentos = 'Pendências não enviadas ao e-Social'
+            if not msg_desligamentos and \
+                    esocial.rescisoes_sem_registro == 0:
+                msg_desligamentos = 'OK'
+            else:
+                msg_desligamentos = 'Pendências não enviadas ao e-Social'
+            if esocial.desligamento_ids or \
+                    esocial.rescisoes_sem_registro > 0:
+                txt = 'Desligamento'
+                qtd = len(esocial.desligamento_ids) + \
+                      esocial.rescisoes_sem_registro
+                if qtd > 1:
+                    txt += 's'
+                msg_desligamentos = '{} {} - '.format(
+                    qtd, txt) + msg_desligamentos
+            if esocial.rescisoes_sem_registro:
+                necessita_s2399 = True
+            esocial.necessita_s2399 = necessita_s2399
             esocial.msg_desligamentos = msg_desligamentos
 
     @api.multi
@@ -1679,6 +1758,26 @@ class SpedEsocial(models.Model):
 
             self.alteracao_sem_vinculo_ids = [(6, 0, alteracao_sem_vinculo_ids.ids)]
 
+    # Outros métodos
+    @api.multi
+    def importar_desligamento_sem_vinculo(self):
+        self.ensure_one()
+
+        contrato_sem_vinculo_ids = self.env['hr.contract'].search([
+            ('situacao_esocial', 'in', ['1', '2']),
+            ('sped_s2399_id', '!=', False),
+            ('date_start', '>=', self.periodo_id.date_start),
+            ('date_end', '<=', self.periodo_id.date_stop),
+        ])
+
+        for contrato in contrato_sem_vinculo_ids:
+            if contrato.categoria == '701':
+                contrato.finalizar_contrato_autonomo()
+
+        self.desligamento_sem_vinculo_ids = [
+            (6, 0, contrato_sem_vinculo_ids.ids)
+        ]
+
     @api.multi
     def get_esocial_vigente(self, company_id=False):
         """
@@ -1748,7 +1847,7 @@ class SpedEsocial(models.Model):
             esocial.importar_desligamento()             # S-2299
             esocial.importar_admissao_sem_vinculo()     # S-2300
             esocial.importar_alteracao_sem_vinculo()    # S-2306
-            # TODO S-2399
+            esocial.importar_desligamento_sem_vinculo() # S-2399
 
             # Periódicos
             esocial.importar_remuneracoes()             # S-1200
@@ -1812,3 +1911,19 @@ class SpedEsocial(models.Model):
         wizard.lote_ids = [(6, 0, lotes)]
         wizard.criar_lotes()
         self.env['sped.lote'].transmitir_lotes_preparados()
+
+    @api.multi
+    def importar_fechamento_contingencia(self):
+        self.ensure_one()
+
+        if not self.fechamento_contingencia_id:
+            fechamento_contingencia_id = self.env[
+                'sped.esocial.fechamento.contingencia'
+            ].create({
+                'company_id': self.company_id.id,
+                'periodo_id': self.periodo_id.id,
+            })
+
+            self.fechamento_contingencia_id = fechamento_contingencia_id
+
+        self.fechamento_contingencia_id.atualizar_esocial()

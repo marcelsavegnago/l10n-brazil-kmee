@@ -928,7 +928,10 @@ class AccountInvoice(models.Model):
                         payment_id = invoice.account_payment_ids.new()
                         payment_id.payment_term_id = \
                             invoice.fiscal_category_id.account_payment_term_id
-                        payment_id.amount = invoice.amount_total
+                        payment_id.amount = \
+                            invoice.amount_total if \
+                            payment_id.payment_term_id.forma_pagamento != '90'\
+                            else 0.0
                         payment_id.date = date_invoice
                         payment_id.onchange_payment_term_id()
                         invoice.account_payment_ids |= payment_id

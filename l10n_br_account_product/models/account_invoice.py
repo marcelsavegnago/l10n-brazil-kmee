@@ -917,6 +917,23 @@ class AccountInvoice(models.Model):
                         payment_id.onchange_payment_term_id()
                         invoice.account_payment_ids |= payment_id
 
+                    elif (invoice.amount_total and
+                          invoice.fiscal_category_id and
+                          invoice.fiscal_category_id.account_payment_term_id):
+
+                        date_invoice = invoice.date_invoice
+                        if not date_invoice:
+                            date_invoice = fields.Date.context_today(invoice)
+
+                        payment_id = invoice.account_payment_ids.new()
+                        payment_id.payment_term_id = \
+                            invoice.fiscal_category_id.account_payment_term_id
+                        payment_id.amount = invoice.amount_total
+                        payment_id.date = date_invoice
+                        payment_id.onchange_payment_term_id()
+                        invoice.account_payment_ids |= payment_id
+
+
                 if not invoice.account_payment_ids:
                     raise UserError(
                         _(u'A nota fiscal deve conter dados de pagamento')

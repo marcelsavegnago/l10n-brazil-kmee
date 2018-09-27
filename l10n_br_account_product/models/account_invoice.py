@@ -1647,7 +1647,7 @@ class AccountInvoice(models.Model):
             result['value']['payment_term'] = payment_term.id
         return result
 
-    @api.onchange('fiscal_category_id', 'fiscal_position_id')
+    @api.onchange('fiscal_category_id', 'fiscal_position')
     def onchange_fiscal_payment_term(self):
         """ Quando a posição fiscal for preenchida temos os dados da categoria e do partner
         e então podemos tomar decidir qual o payment_term adequado

@@ -912,7 +912,10 @@ class AccountInvoice(models.Model):
 
                         payment_id = invoice.account_payment_ids.new()
                         payment_id.payment_term_id = invoice.payment_term
-                        payment_id.amount = invoice.amount_total
+                        payment_id.amount = (
+                            invoice.amount_total if
+                            invoice.payment_term.forma_pagamento !=
+                            FORMA_PAGAMENTO_SEM_PAGAMENTO else 0.0)
                         payment_id.date = date_invoice
                         payment_id.onchange_payment_term_id()
                         invoice.account_payment_ids |= payment_id
@@ -921,17 +924,19 @@ class AccountInvoice(models.Model):
                           invoice.fiscal_category_id and
                           invoice.fiscal_category_id.account_payment_term_id):
 
+                        p_term_id = \
+                            invoice.fiscal_category_id.account_payment_term_id
                         date_invoice = invoice.date_invoice
                         if not date_invoice:
                             date_invoice = fields.Date.context_today(invoice)
 
                         payment_id = invoice.account_payment_ids.new()
-                        payment_id.payment_term_id = \
-                            invoice.fiscal_category_id.account_payment_term_id
-                        payment_id.amount = \
-                            invoice.amount_total if \
-                            payment_id.payment_term_id.forma_pagamento != '90'\
-                            else 0.0
+                        payment_id.payment_term_id = p_term_id
+                        payment_id.amount = (
+                            invoice.amount_total if
+                            p_term_id.forma_pagamento !=
+                            FORMA_PAGAMENTO_SEM_PAGAMENTO
+                            else 0.0)
                         payment_id.date = date_invoice
                         payment_id.onchange_payment_term_id()
                         invoice.account_payment_ids |= payment_id

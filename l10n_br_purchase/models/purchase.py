@@ -182,9 +182,7 @@ class PurchaseOrder(models.Model):
                      self.with_context(context)).action_invoice_create()
 
         # Encontra a invoice criada
-        invoice = self.env['account.invoice'].search(
-            [('id', '=', invoice_id)]
-        )
+        invoice = self.env['account.invoice'].browse(invoice_id)
 
         # Se a invoice tiver um payment term já setado mas nao tiver os
         # account_payment_ids então ele faz a criacao de pagamentos automatica

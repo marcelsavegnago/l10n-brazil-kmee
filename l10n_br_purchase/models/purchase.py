@@ -176,8 +176,34 @@ class PurchaseOrder(models.Model):
     def action_invoice_create(self):
         context = dict(self.env.context)
         context.update({'fiscal_document_code': 55})
-        return super(PurchaseOrder,
+
+        # Retorna id da invoice criada
+        invoice_id = super(PurchaseOrder,
                      self.with_context(context)).action_invoice_create()
+
+        # Encontra a invoice criada
+        invoice = self.env['account.invoice'].search(
+            [('id', '=', invoice_id)]
+        )
+
+        # Se a invoice tiver um payment term já setado mas nao tiver os
+        # account_payment_ids então ele faz a criacao de pagamentos automatica
+        # baseado no payment term cadastrado no cliente
+        if (invoice.payment_term and invoice.amount_total and
+                not invoice.account_payment_ids):
+            date_invoice = invoice.date_invoice
+
+            if not date_invoice:
+                date_invoice = fields.Date.context_today(invoice)
+
+            payment_id = invoice.account_payment_ids.new()
+            payment_id.payment_term_id = invoice.payment_term
+            payment_id.amount = invoice.amount_total
+            payment_id.date = date_invoice
+            payment_id.onchange_payment_term_id()
+            invoice.account_payment_ids |= payment_id
+
+        return invoice_id
 
     # TODO migrate to new API
     def _prepare_inv_line(self, cr, uid, account_id, order_line, context=None):

@@ -48,3 +48,9 @@ class AccountFiscalPositionTaxTemplate(models.Model):
     origin = fields.Selection(
         selection=PRODUCT_ORIGIN,
         string=u'Origem')
+
+    cst_dest_id = fields.Many2one(
+        comodel_name='l10n_br_account_product.cst',
+        string=u'CST',
+        required=False
+    )

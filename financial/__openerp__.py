@@ -12,7 +12,7 @@
     'website': 'www.kmee.com.br',
     'depends': [
         'base',
-        'l10n_br_resource',  # FIXME: Implementar esta funcionalidade no core
+        'l10n_br_hr_resource',  # FIXME: Implementar esta funcionalidade no core
         'mail',
         'report_xlsx',
         # 'account_payment_mode' # FIXME: Modulo da OCA/bank-payment in v10

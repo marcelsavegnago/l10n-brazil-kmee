@@ -57,6 +57,7 @@ class SpedEsocialRubrica(models.Model, SpedRegistroIntermediario):
         ],
         string='Situação no e-Social',
         compute='compute_situacao_esocial',
+        inverse='inverse_situacao_esocial',
         store=True,
     )
     precisa_incluir = fields.Boolean(
@@ -65,7 +66,6 @@ class SpedEsocialRubrica(models.Model, SpedRegistroIntermediario):
     )
     precisa_atualizar = fields.Boolean(
         string='Precisa atualizar dados?',
-        related='rubrica_id.precisa_atualizar',
     )
     precisa_excluir = fields.Boolean(
         string='Precisa excluir dados?',
@@ -86,6 +86,16 @@ class SpedEsocialRubrica(models.Model, SpedRegistroIntermediario):
                 nome += ')'
 
             rubrica.nome = nome
+
+    @api.depends('sped_inclusao.situacao', 'sped_alteracao.situacao',
+                 'sped_exclusao.situacao', 'precisa_atualizar')
+    def inverse_situacao_esocial(self):
+        """
+        Função apenas para liberar edição do campo situacao_esocial
+        :return:
+        """
+        for rubrica in self:
+            pass
 
     @api.depends('sped_inclusao.situacao', 'sped_alteracao.situacao', 'sped_exclusao.situacao', 'precisa_atualizar')
     def compute_situacao_esocial(self):
@@ -228,7 +238,7 @@ class SpedEsocialRubrica(models.Model, SpedRegistroIntermediario):
                 if not reg:
                     values['operacao'] = 'A'
                     sped_alteracao = self.env['sped.registro'].create(values)
-                    self.sped_inclusao = sped_alteracao
+                    self.sped_alteracao = sped_alteracao
             elif self.precisa_excluir and not self.sped_exclusao:
                 values['operacao'] = 'E'
                 sped_exclusao = self.env['sped.registro'].create(values)
@@ -340,8 +350,8 @@ class SpedEsocialRubrica(models.Model, SpedRegistroIntermediario):
     @api.multi
     def retorno_sucesso(self, evento):
         self.ensure_one()
-
-        self.rubrica_id.precisa_atualizar = False
+        self.precisa_atualizar = False
+        self.situacao_esocial = '1'
 
     @api.multi
     def transmitir(self):
@@ -383,15 +393,6 @@ class SpedEsocialRubrica(models.Model, SpedRegistroIntermediario):
                 if self.sped_exclusao == '2':
                     registro = self.sped_exclusao
 
-            # Com o registro identificado, é só rodar o método consulta_lote() do registro
+            # Com o registro identificado, é só rodar o método consulta_lote()
             if registro:
                 registro.consulta_lote()
-
-
-# class HrSalaryRule(models.Model):
-#     _inherit = "hr.salary.rule"
-#
-#     sped_esocial_rubrica_ids = fields.One2many(
-#         comodel_name='sped.esocial.rubrica',
-#         inverse_name='rubrica_id',
-#     )

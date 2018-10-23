@@ -514,7 +514,7 @@ class FinancialMove(models.Model):
         # for move in self:
         #     if move.date_maturity:
         #         move.date_business_maturity = move.date_maturity
-        # # TODO: refactory for global OCA use avoiding l10n_br_resource
+        # # TODO: refactory for global OCA use avoiding l10n_br_hr_resource
         for record in self:
             if record.date_maturity:
                 if record.document_type_id.adiantar_dia_pagamento_util or \

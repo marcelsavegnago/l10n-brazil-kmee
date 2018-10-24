@@ -24,7 +24,6 @@ from . import wizard_account_product_fiscal_classification
 from . import account_invoice
 from . import account_invoice_line
 from . import account_invoice_tax
-from . import account_payment_term
 from . import account_tax_template
 from . import account_tax
 from . import product_template

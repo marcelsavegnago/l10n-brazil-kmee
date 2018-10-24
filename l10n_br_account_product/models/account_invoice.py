@@ -24,7 +24,8 @@ class AccountInvoice(models.Model):
 
     @api.one
     @api.depends('invoice_line_ids.price_subtotal', 'tax_line_ids.amount',
-                 'currency_id', 'company_id', 'date_invoice', 'type')
+                 'currency_id', 'company_id', 'date_invoice', 'type',
+                 'account_payment_ids.amount')
     def _compute_amount(self):
         self.icms_base = 0.0
         self.icms_base_other = 0.0
@@ -80,6 +81,11 @@ class AccountInvoice(models.Model):
                 self.icms_value += 0.00
             self.icms_st_base += line.icms_st_base
             self.icms_st_value += line.icms_st_value
+
+        # Calculando o troco
+        amount_payments = sum(p.amount for p in self.account_payment_ids)
+        if amount_payments:
+            self.amount_change = amount_payments - self.amount_total
 
     @api.model
     @api.returns('l10n_br_account.fiscal_category')
@@ -533,6 +539,12 @@ class AccountInvoice(models.Model):
         digits=dp.get_precision('Account'),
         compute='_compute_amount')
 
+    amount_change = fields.Float(
+        string='Troco',
+        store=True,
+        digits=dp.get_precision('Account'),
+        compute='_compute_amount')
+
     account_payment_ids = fields.One2many(
         string='Dados de Pagamento',
         comodel_name='account.invoice.payment',
@@ -652,6 +664,12 @@ class AccountInvoice(models.Model):
                         invoice.nfe_version == '4.00':
                     raise UserError(
                         _(u'A nota fiscal deve conter dados de pagamento')
+                    )
+                elif invoice.amount_change < 0:
+                    raise UserError(
+                        _(u'O total de pagamentos deve ser maior ou igual ao '
+                          u'total da nota.\nResta realizar o pagamento de '
+                          u'%0.2f' % invoice.amount_change)
                     )
                 for item, payment in enumerate(
                         invoice.account_payment_line_ids):

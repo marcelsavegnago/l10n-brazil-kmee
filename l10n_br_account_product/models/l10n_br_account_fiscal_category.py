@@ -20,3 +20,8 @@ class L10nBrAccountFiscalCategory(models.Model):
         default=PRODUCT_FISCAL_TYPE_DEFAULT
     )
 
+    account_payment_term_id = fields.Many2one(
+        comodel_name='account.payment.term',
+        string=u'Condição de pagamento'
+    )
+

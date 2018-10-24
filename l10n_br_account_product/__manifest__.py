@@ -13,8 +13,6 @@
     'depends': [
         'account_product_fiscal_classification',
         'l10n_br_account',
-        'account_payment_mode',
-        'account_payment_partner',
     ],
     'data': [
         'l10n_br_account_product_sequence.xml',
@@ -50,7 +48,6 @@
         'views/account_product_fiscal_classification_view.xml',
         'views/product_template_view.xml',
         'views/res_country_view.xml',
-        'views/account_payment_mode.xml',
         'views/account_payment_term_view.xml',
         'views/account_invoice_payment.xml',
         'views/account_invoice_payment_line.xml',

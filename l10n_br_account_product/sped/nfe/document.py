@@ -3,8 +3,10 @@
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
 from datetime import datetime
+from unicodedata import normalize
 
 from odoo import registry
+from odoo.api import Environment
 from odoo.exceptions import Warning as UserError
 from odoo.tools.translate import _
 
@@ -27,17 +29,17 @@ class NFe200(FiscalDocument):
 
     def _serializer(self, cr, uid, ids, nfe_environment, context=None):
 
-        pool = registry.get_pool(cr.dbname)
         nfes = []
+
+        env = Environment(cr, uid, context)
 
         if not context:
             context = {'lang': 'pt_BR'}
 
-        for invoice in pool.get('account.invoice').browse(cr, uid, ids,
-                                                          context):
+        for invoice in env['account.invoice'].browse(ids):
 
-            company = pool.get('res.partner').browse(
-                cr, uid, invoice.company_id.partner_id.id, context)
+            company = env['res.partner'].browse(
+                invoice.company_id.partner_id.id)
 
             self.nfe = self.get_NFe()
 
@@ -54,7 +56,7 @@ class NFe200(FiscalDocument):
             self._receiver(invoice, company, nfe_environment)
 
             i = 0
-            for inv_line in invoice.invoice_line:
+            for inv_line in invoice.invoice_line_ids:
                 i += 1
                 self.det = self._get_Det()
                 self._details(invoice, inv_line, i)
@@ -300,9 +302,10 @@ class NFe200(FiscalDocument):
 
         # Se o ambiente for de teste deve ser
         # escrito na razão do destinatário
-        if nfe_environment == '2':
+        if nfe_environment == 2:
             self.nfe.infNFe.dest.xNome.valor = (
                 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL')
+            self.nfe.infNFe.dest.CNPJ.valor = '99999999000191'
         else:
             self.nfe.infNFe.dest.xNome.valor = (normalize(
             'NFKD', unicode(
@@ -354,8 +357,8 @@ class NFe200(FiscalDocument):
 
         if invoice_line.product_id:
             self.det.prod.cProd.valor = invoice_line.product_id.code or ''
-            self.det.prod.cEAN.valor = invoice_line.product_id.ean13 or ''
-            self.det.prod.cEANTrib.valor = invoice_line.product_id.ean13 or ''
+            self.det.prod.cEAN.valor = invoice_line.product_id.barcode or 'SEM GTIN'
+            self.det.prod.cEANTrib.valor = invoice_line.product_id.barcode or ''
             self.det.prod.xProd.valor = (normalize(
             'NFKD', unicode(
                     invoice_line.product_id.name[:120] or '')
@@ -375,7 +378,7 @@ class NFe200(FiscalDocument):
             invoice_line.cest_id.code or '')
         self.det.prod.nFCI.valor = invoice_line.fci or ''
         self.det.prod.CFOP.valor = invoice_line.cfop_id.code
-        self.det.prod.uCom.valor = invoice_line.uos_id.name or ''
+        self.det.prod.uCom.valor = invoice_line.uom_id.name or ''
         self.det.prod.qCom.valor = str("%.4f" % invoice_line.quantity)
         self.det.prod.vUnCom.valor = str("%.7f" % invoice_line.price_unit)
         self.det.prod.vProd.valor = str("%.2f" % invoice_line.price_gross)
@@ -567,16 +570,16 @@ class NFe200(FiscalDocument):
                 dup.vDup.valor = str("%.2f" % value)
                 cobr.dup.append(dup)
 
-        if invoice.type in ('out_invoice', 'in_refund'):
-            value = move_line.debit
-        else:
-            value = move_line.credit
-
-        self.dup.nDup.valor = move_line.name
-        self.dup.dVenc.valor = (move_line.date_maturity or
-                                invoice.date_due or
-                                invoice.date_invoice)
-        self.dup.vDup.valor = str("%.2f" % value)
+        # if invoice.type in ('out_invoice', 'in_refund'):
+        #     value = move_line.debit
+        # else:
+        #     value = move_line.credit
+        #
+        # self.dup.nDup.valor = move_line.name
+        # self.dup.dVenc.valor = (move_line.date_maturity or
+        #                         invoice.date_due or
+        #                         invoice.date_invoice)
+        # self.dup.vDup.valor = str("%.2f" % value)
 
     def _carrier_data(self, invoice):
         """Dados da Transportadora e veiculo"""
@@ -764,7 +767,7 @@ class NFe310(NFe200):
             invoice, company, nfe_environment)
 
         self.nfe.infNFe.ide.idDest.valor = (
-            invoice.fiscal_position.cfop_id.id_dest or '')
+            invoice.fiscal_position_id.cfop_id.id_dest or '')
         self.nfe.infNFe.ide.indFinal.valor = invoice.ind_final or ''
         self.nfe.infNFe.ide.indPres.valor = invoice.ind_pres or ''
         self.nfe.infNFe.ide.dhEmi.valor = datetime.strptime(

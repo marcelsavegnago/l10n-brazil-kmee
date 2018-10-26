@@ -41,7 +41,7 @@ class AccountInvoiceLine(models.Model):
             self.price_gross = self.invoice_id.currency_id.round(
                 self.price_unit * self.quantity * sign)
             self.discount_value = self.invoice_id.currency_id.round(
-                self.price_gross - taxes['total_excluded'] * sign)
+                self.price_gross - taxes['base'] * sign)
 
     code = fields.Char(
         string=u'Código do Produto',

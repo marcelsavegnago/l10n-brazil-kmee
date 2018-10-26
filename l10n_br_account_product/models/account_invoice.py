@@ -801,18 +801,13 @@ class AccountInvoice(models.Model):
                 )
             date_invoice = date_hour_invoice.strftime(
                 tools.DEFAULT_SERVER_DATE_FORMAT)
-            res = self.onchange_payment_term_date_invoice(
-                inv.payment_term.id, date_invoice)
-            if res and res['value']:
-                res['value'].update({
-                    'date_invoice': date_invoice
-                })
-                date_time_now = fields.datetime.now()
-                if not inv.date_hour_invoice:
-                    res['value'].update({'date_hour_invoice': date_time_now})
-                if not inv.date_in_out:
-                    res['value'].update({'date_in_out': date_time_now})
-                inv.write(res['value'])
+            inv.date_invoice = date_invoice
+            inv._onchange_payment_term_date_invoice()
+            date_time_now = fields.datetime.now()
+            if not inv.date_hour_invoice:
+                inv.date_hour_invoice = date_time_now
+            if not inv.date_in_out:
+                inv.date_in_out = date_time_now
         return True
 
     # TODO: Reavaliar a necessidade do método

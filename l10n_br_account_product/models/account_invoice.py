@@ -705,9 +705,7 @@ class AccountInvoice(models.Model):
 
         for invoice in self:
             if invoice.issuer == '0':
-                sequence_obj = self.env['ir.sequence']
-                sequence = sequence_obj.browse(
-                    invoice.document_serie_id.internal_sequence_id.id)
+                sequence = invoice.document_serie_id.internal_sequence_id
                 invalid_number = self.env[
                     'l10n_br_account.invoice.invalid.number'].search(
                     [('number_start', '<=', sequence.number_next),
@@ -717,12 +715,12 @@ class AccountInvoice(models.Model):
 
                 if invalid_number:
                     raise UserError(
-                        _(u'Número Inválido !'),
-                        _("O número: %s da série: %s, esta inutilizado") % (
+                        _(u'Número Inválido !\n'
+                          u'O número: %s da série: %s, esta inutilizado') % (
                             sequence.number_next,
                             invoice.document_serie_id.name))
 
-                seq_number = sequence_obj.get_id(
+                seq_number = self.env['ir.sequence'].get_id(
                     invoice.document_serie_id.internal_sequence_id.id)
                 date_time_invoice = (invoice.date_hour_invoice or
                                      fields.datetime.now())

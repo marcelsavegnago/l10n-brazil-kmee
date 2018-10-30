@@ -34,7 +34,12 @@ class StockReturnPicking(models.TransientModel):
             res_domain_invoice = wizard_invoice.open_invoice()
 
             # Confirm and send to SEFAZ the created returning invoice
-            picking_devolucao.invoice_id.signal_workflow('invoice_validate')
+            invoice = picking_devolucao.invoice_id
+            invoice.onchange_fiscal()
+            for line in invoice.invoice_line:
+                line.onchange_fiscal()
+            invoice.button_reset_taxes()
+            invoice.signal_workflow('invoice_validate')
 
             return res_domain_invoice
         else:

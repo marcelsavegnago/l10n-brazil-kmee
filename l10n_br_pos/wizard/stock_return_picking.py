@@ -37,6 +37,7 @@ class StockReturnPicking(models.TransientModel):
             invoice = picking_devolucao.invoice_id
             invoice.onchange_fiscal()
             for line in invoice.invoice_line:
+                line.fiscal_category_id = invoice.fiscal_category_id
                 line.onchange_fiscal()
                 line._validate_taxes({})
             invoice.button_reset_taxes()

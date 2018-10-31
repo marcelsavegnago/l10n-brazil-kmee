@@ -211,7 +211,7 @@ class NFe200(FiscalDocument):
                 self.nfref.refNFP.CPF.valor = punctuation_rm(
                     inv_related.cnpj_cpf)
 
-        elif inv_related.document_type == 'nfe':
+        elif inv_related.document_type in ('nfe', 'sat'):
             self.nfref.refNFe.valor = inv_related.access_key or ''
 
         elif inv_related.document_type == 'cte':

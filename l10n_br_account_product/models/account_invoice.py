@@ -957,6 +957,8 @@ class AccountInvoice(models.Model):
                           % invoice.amount_change)
                     )
                 else:
+                    invoice._onchange_dates()
+
                     for item, payment in enumerate(
                             invoice.account_payment_line_ids):
                         if payment.number:
@@ -1669,6 +1671,11 @@ class AccountInvoice(models.Model):
         if self.fiscal_category_id and self.fiscal_category_id.account_payment_term_id:
             payment_term = self.fiscal_category_id.account_payment_term_id
         self.payment_term = payment_term
+
+    @api.onchange('date_in_out')
+    def _onchange_dates(self):
+        for payment in self.account_payment_ids:
+            payment.onchange_payment_term_id()
 
 
 class AccountInvoiceLine(models.Model):

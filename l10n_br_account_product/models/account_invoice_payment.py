@@ -103,15 +103,20 @@ class AccountInvoicePayment(models.Model):
             field_parent_id = getattr(self, field_parent)
             self.date = self._set_parent(field_parent, field_parent_id)[:10]
 
-        pterm_list = self.payment_term_id.compute(self.amount, self.date)[0]
+        if self.invoice_id.issuer == '1' and self.invoice_id.date_in_out:
+            pterm_list = self.payment_term_id.compute(self.amount, self.invoice_id.date_in_out[:10])[0]
+
+        else:
+            pterm_list = self.payment_term_id.compute(self.amount, self.date)[0]
 
         item_ids = [
             (5, 0, {})
         ]
 
-        for term in pterm_list:
+        for item, term in enumerate(pterm_list):
             item_ids.append(
                 (0, 0, {
+                    'number':str(item + 1).zfill(3),
                     'payment_id': self.id,
                     'date_due': term[0],
                     'amount_original': term[1],

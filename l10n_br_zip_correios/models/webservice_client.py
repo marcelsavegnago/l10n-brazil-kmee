@@ -65,12 +65,12 @@ class WebServiceClient(object):
                     values = {
                         'zip': zip_str,
                         'street': str(
-                            res.end.encode('utf8')) if res.end else '',
+                            res.end.encode('utf8')) if hasattr(res, 'end') else '',
                         'district': str(
-                            res.bairro.encode('utf8')) if res.bairro
+                            res.bairro.encode('utf8')) if hasattr(res, 'bairro')
                         else '',
                         'street_type': str(
-                            res.complemento.encode('utf8')) if res.complemento
+                            res.complemento.encode('utf8')) if hasattr(res, 'complemento')
                         else '',
                         'l10n_br_city_id': city_ids.ids[
                             0] if city_ids else False,

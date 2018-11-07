@@ -28,6 +28,7 @@ class AccountInvoice(models.Model):
                  'currency_id', 'company_id', 'date_invoice', 'type',
                  'account_payment_line_ids')
     def _compute_amount(self):
+        super(AccountInvoice, self)._compute_amount()
         self.icms_base = 0.0
         self.icms_base_other = 0.0
         self.icms_value = 0.0

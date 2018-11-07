@@ -684,6 +684,12 @@ class AccountInvoiceLine(models.Model):
         quantity = values.get('quantity') or self.quantity
         fiscal_position = values.get(
             'fiscal_position') or self.fiscal_position_id
+        if isinstance(fiscal_position, int):
+            fiscal_position = \
+                self.env['account.fiscal.position'].browse(fiscal_position)
+        if isinstance(product_id, int):
+            product_id = \
+                self.env['product.product'].browse(product_id)
 
         if not product_id or not quantity or not fiscal_position:
             return {}

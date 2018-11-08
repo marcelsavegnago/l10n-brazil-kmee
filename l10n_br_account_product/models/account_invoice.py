@@ -957,7 +957,6 @@ class AccountInvoice(models.Model):
                           % invoice.amount_change)
                     )
                 else:
-                    invoice._onchange_dates()
 
                     for item, payment in enumerate(
                             invoice.account_payment_line_ids):
@@ -1672,10 +1671,44 @@ class AccountInvoice(models.Model):
             payment_term = self.fiscal_category_id.account_payment_term_id
         self.payment_term = payment_term
 
-    @api.onchange('date_in_out')
-    def _onchange_dates(self):
-        for payment in self.account_payment_ids:
-            payment.onchange_payment_term_id()
+    @api.multi
+    def write(self, vals):
+        # Caso seja uma nota de fornecedor
+        if self.issuer == '1':
+            # Se houver algumas altercao nas linhas da fatura
+            if 'invoice_line' in vals:
+
+                for invoice_line in vals['invoice_line']:
+                    line = self.env['account.invoice.line'].search([('id', '=', invoice_line[1])])
+
+                    # Garante que existe as mudancas
+                    if invoice_line[2]:
+                        line.write(invoice_line[2])
+
+                        # Caso exista alteracao de alguma linha de fatura
+                        # entao eh preciso recalcular os impostos
+                        taxes = self.env['account.invoice.tax'].compute(self)
+
+                        # Subtitui os impostos velhos por novos
+                        items = [(5, 0, {})]
+                        for t in taxes:
+                            items.append((0, 0, taxes[t]))
+
+                        self.tax_line = items
+
+            # Caso exista alteracao na data de entrada e saida
+            # entao deve ser recalculada as linhas de pagamento
+            if 'date_in_out' in vals:
+                vals['account_payment_line_ids'] = \
+                    self.account_payment_ids.compute_new_payment(vals['date_in_out'], self.id, self.amount_total)
+
+            # Caso exista alteracao nas linhas de fatura
+            # as linhas de pagamento tambem devem ser recalculadas
+            elif self.date_in_out or 'invoice_line' in vals:
+                vals['account_payment_line_ids'] = \
+                    self.account_payment_ids.compute_new_payment(self.date_in_out, self.id, self.amount_total)
+
+        return super(AccountInvoice, self).write(vals)
 
 
 class AccountInvoiceLine(models.Model):

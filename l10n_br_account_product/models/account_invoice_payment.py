@@ -116,7 +116,7 @@ class AccountInvoicePayment(models.Model):
         for item, term in enumerate(pterm_list):
             item_ids.append(
                 (0, 0, {
-                    'number':str(item + 1).zfill(3),
+                    'number': str(item + 1).zfill(3),
                     'payment_id': self.id,
                     'date_due': term[0],
                     'amount_original': term[1],
@@ -125,6 +125,35 @@ class AccountInvoicePayment(models.Model):
                 })
             )
         self.item_ids = item_ids
+
+    def compute_new_payment(self, new_date, origin_id, total):
+
+        # Computa as linhas de pagamento caso seja uma fatura de fornecedor
+        if self.invoice_id.issuer == '1':
+
+            # Garante que o pagamento terá dada de validade
+            if new_date:
+                date_p = new_date[:10]
+            else:
+                date_p = self.date
+
+            pterm_list = self.payment_term_id.compute(total, date_p)[0]
+
+            payment_c = self.env['account.invoice.payment'].search([('invoice_id', '=', origin_id)])
+            payment_c.write({'amount': total})
+
+            payment_lines = self.env['account.invoice.payment.line'].search([('invoice_id', '=', origin_id)])
+
+            for payment, term in zip(payment_lines, pterm_list):
+                values = {
+                    'date_due': term[0],
+                    'amount_original': term[1],
+                    'amount_discount': 0.00,
+                    'amount_net': term[1],
+                }
+                payment.write(values)
+
+            return payment_lines
 
     def default_payment_term(self, payment_term_id, amount=0.00, object=False, date=False):
 

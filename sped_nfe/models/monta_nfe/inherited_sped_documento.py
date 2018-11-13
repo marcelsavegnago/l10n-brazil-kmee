@@ -136,17 +136,18 @@ class SpedDocumento(models.Model):
         # Tratamento das datas de UTC para o horário de brasília
         #
         ide.dhEmi.valor = data_hora_horario_local(
-            parse_datetime(self.data_hora_emissao + ' GMT')
-        )
+            parse_datetime(self.data_hora_emissao + ' GMT'), empresa.estado)
         ide.dEmi.valor = ide.dhEmi.valor
 
         if self.data_hora_entrada_saida:
             ide.dhSaiEnt.valor = data_hora_horario_local(
-                parse_datetime(self.data_hora_entrada_saida + ' GMT')
+                parse_datetime(self.data_hora_entrada_saida + ' GMT'),
+                empresa.estado
             )
         else:
             ide.dhSaiEnt.valor = data_hora_horario_local(
-                parse_datetime(self.data_hora_emissao + ' GMT')
+                parse_datetime(self.data_hora_emissao + ' GMT'),
+                empresa.estado
             )
 
         ide.dSaiEnt.valor = ide.dhSaiEnt.valor

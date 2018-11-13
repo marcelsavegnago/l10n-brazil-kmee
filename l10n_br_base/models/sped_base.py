@@ -87,7 +87,8 @@ class SpedBase(object):
             return None, None
 
         data_hora = data_hora_horario_local(
-            parse_datetime(data_hora_odoo + ' UTC'))
+            parse_datetime(data_hora_odoo + ' UTC'),
+            getattr(self, 'empresa_id', None))
         data = str(data_hora)[:10]
         hora = str(data_hora)[11:19]
         return data, hora

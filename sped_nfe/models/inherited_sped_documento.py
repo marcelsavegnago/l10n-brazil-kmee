@@ -180,17 +180,23 @@ class SpedDocumento(models.Model):
         for documento in self:
             if documento.data_hora_autorizacao:
                 data_hora_autorizacao = data_hora_horario_local(
-                    parse_datetime(documento.data_hora_autorizacao))
+                    parse_datetime(documento.data_hora_autorizacao),
+                    documento.empresa_id.estado
+                )
                 documento.data_autorizacao = str(data_hora_autorizacao)[:10]
 
             if documento.data_hora_cancelamento:
                 data_hora_cancelamento = data_hora_horario_local(
-                    parse_datetime(documento.data_hora_cancelamento))
+                    parse_datetime(documento.data_hora_cancelamento),
+                    documento.empresa_id.estado
+                )
                 documento.data_cancelamento = str(data_hora_cancelamento)[:10]
 
             if documento.data_hora_inutilizacao:
                 data_hora_inutilizacao = data_hora_horario_local(
-                    parse_datetime(documento.data_hora_inutilizacao))
+                    parse_datetime(documento.data_hora_inutilizacao),
+                    documento.empresa_id.estado
+                )
                 documento.data_inutilizacao = str(data_hora_inutilizacao)[:10]
 
     @api.depends('modelo', 'emissao', 'importado_xml', 'situacao_nfe')

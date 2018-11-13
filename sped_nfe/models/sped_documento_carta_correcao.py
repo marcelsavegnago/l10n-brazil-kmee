@@ -136,7 +136,9 @@ class SpedCartaCorrecao(models.Model):
         for carta_correcao in self:
             if carta_correcao.data_hora_autorizacao:
                 data_hora_autorizacao = data_hora_horario_local(
-                    parse_datetime(carta_correcao.data_hora_autorizacao))
+                    parse_datetime(carta_correcao.data_hora_autorizacao),
+                    self.documento_id.empresa_id.estado
+                )
                 carta_correcao.data_autorizacao = \
                     str(data_hora_autorizacao)[:10]
 

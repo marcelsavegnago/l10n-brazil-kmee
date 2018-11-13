@@ -26,8 +26,7 @@ try:
     from pysped.nfe.leiaute import *
     from pybrasil.base import mascara
     from pybrasil.inscricao import limpa_formatacao
-    from pybrasil.data import (parse_datetime, UTC, data_hora_horario_brasilia,
-                               agora)
+    from pybrasil.data import (parse_datetime, UTC, agora)
     from email_validator import validate_email
     from pybrasil.telefone import valida_fone_fixo, valida_fone_celular
     from pybrasil.valor import formata_valor

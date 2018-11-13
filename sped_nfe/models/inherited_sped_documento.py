@@ -18,6 +18,8 @@ from odoo import api, fields, models
 from odoo.exceptions import UserError
 
 from odoo.addons.l10n_br_base.constante_tributaria import *
+from odoo.addons.l10n_br_base.tools.fuso_horario import \
+    data_hora_horario_local
 
 _logger = logging.getLogger(__name__)
 
@@ -25,8 +27,7 @@ try:
     from pysped.nfe.webservices_flags import *
     from pysped.nfe.leiaute import *
     from pybrasil.inscricao import limpa_formatacao
-    from pybrasil.data import (parse_datetime, UTC, data_hora_horario_brasilia,
-                               agora)
+    from pybrasil.data import (parse_datetime, UTC, agora)
     from pybrasil.valor import formata_valor
     from pybrasil.valor.decimal import Decimal as D
     from pybrasil.template import TemplateBrasil
@@ -178,17 +179,17 @@ class SpedDocumento(models.Model):
 
         for documento in self:
             if documento.data_hora_autorizacao:
-                data_hora_autorizacao = data_hora_horario_brasilia(
+                data_hora_autorizacao = data_hora_horario_local(
                     parse_datetime(documento.data_hora_autorizacao))
                 documento.data_autorizacao = str(data_hora_autorizacao)[:10]
 
             if documento.data_hora_cancelamento:
-                data_hora_cancelamento = data_hora_horario_brasilia(
+                data_hora_cancelamento = data_hora_horario_local(
                     parse_datetime(documento.data_hora_cancelamento))
                 documento.data_cancelamento = str(data_hora_cancelamento)[:10]
 
             if documento.data_hora_inutilizacao:
-                data_hora_inutilizacao = data_hora_horario_brasilia(
+                data_hora_inutilizacao = data_hora_horario_local(
                     parse_datetime(documento.data_hora_inutilizacao))
                 documento.data_inutilizacao = str(data_hora_inutilizacao)[:10]
 

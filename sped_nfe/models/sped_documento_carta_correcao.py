@@ -12,6 +12,8 @@ import base64
 from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.addons.l10n_br_base.constante_tributaria import *
+from odoo.addons.l10n_br_base.tools.fuso_horario import \
+    data_hora_horario_local
 
 _logger = logging.getLogger(__name__)
 
@@ -23,7 +25,6 @@ try:
     from pybrasil.data import (
         parse_datetime,
         UTC,
-        data_hora_horario_brasilia,
         agora
     )
     from pybrasil.valor import formata_valor
@@ -134,7 +135,7 @@ class SpedCartaCorrecao(models.Model):
     def _compute_data_hora_separadas(self):
         for carta_correcao in self:
             if carta_correcao.data_hora_autorizacao:
-                data_hora_autorizacao = data_hora_horario_brasilia(
+                data_hora_autorizacao = data_hora_horario_local(
                     parse_datetime(carta_correcao.data_hora_autorizacao))
                 carta_correcao.data_autorizacao = \
                     str(data_hora_autorizacao)[:10]

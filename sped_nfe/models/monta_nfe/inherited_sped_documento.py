@@ -17,6 +17,8 @@ from odoo import api, fields, models
 from odoo.exceptions import UserError
 
 from odoo.addons.l10n_br_base.constante_tributaria import *
+from odoo.addons.l10n_br_base.tools.fuso_horario import \
+    data_hora_horario_local
 
 _logger = logging.getLogger(__name__)
 
@@ -26,8 +28,7 @@ try:
     from pysped.nfe.webservices_flags import *
     from pysped.nfe.leiaute import *
     from pybrasil.inscricao import limpa_formatacao
-    from pybrasil.data import (parse_datetime, UTC, data_hora_horario_brasilia,
-                               agora)
+    from pybrasil.data import (parse_datetime, UTC, agora)
     from pybrasil.valor import formata_valor
     from pybrasil.valor.decimal import Decimal as D
     from pysped.nfe.leiaute import Pag_400, DetPag_400
@@ -134,17 +135,17 @@ class SpedDocumento(models.Model):
         #
         # Tratamento das datas de UTC para o horário de brasília
         #
-        ide.dhEmi.valor = data_hora_horario_brasilia(
+        ide.dhEmi.valor = data_hora_horario_local(
             parse_datetime(self.data_hora_emissao + ' GMT')
         )
         ide.dEmi.valor = ide.dhEmi.valor
 
         if self.data_hora_entrada_saida:
-            ide.dhSaiEnt.valor = data_hora_horario_brasilia(
+            ide.dhSaiEnt.valor = data_hora_horario_local(
                 parse_datetime(self.data_hora_entrada_saida + ' GMT')
             )
         else:
-            ide.dhSaiEnt.valor = data_hora_horario_brasilia(
+            ide.dhSaiEnt.valor = data_hora_horario_local(
                 parse_datetime(self.data_hora_emissao + ' GMT')
             )
 

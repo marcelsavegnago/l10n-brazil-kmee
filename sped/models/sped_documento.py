@@ -13,7 +13,6 @@ import logging
 
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError, UserError
-from odoo.addons.sped_imposto.models.sped_calculo_imposto import SpedCalculoImposto
 
 from odoo.addons.l10n_br_base.constante_tributaria import *
 from openerp.addons.sped_imposto.models.sped_calculo_imposto import \
@@ -22,8 +21,7 @@ from openerp.addons.sped_imposto.models.sped_calculo_imposto import \
 _logger = logging.getLogger(__name__)
 
 try:
-    from pybrasil.data import parse_datetime, data_hora_horario_brasilia, \
-        formata_data
+    from pybrasil.data import parse_datetime, formata_data
     from pybrasil.valor.decimal import Decimal as D
     from pybrasil.valor import formata_valor
     from pybrasil.template import TemplateBrasil

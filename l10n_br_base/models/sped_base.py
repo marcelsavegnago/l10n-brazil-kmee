@@ -10,12 +10,14 @@ from __future__ import division, print_function, unicode_literals
 import logging
 import base64
 
-from odoo import fields, models
+from odoo import fields
+from odoo.addons.l10n_br_base.tools.fuso_horario import \
+    data_hora_horario_local
 
 _logger = logging.getLogger(__name__)
 
 try:
-    from pybrasil.data import parse_datetime, data_hora_horario_brasilia
+    from pybrasil.data import parse_datetime
 
 except (ImportError, IOError) as err:
     _logger.debug(err)
@@ -84,7 +86,7 @@ class SpedBase(object):
         if not data_hora_odoo:
             return None, None
 
-        data_hora = data_hora_horario_brasilia(
+        data_hora = data_hora_horario_local(
             parse_datetime(data_hora_odoo + ' UTC'))
         data = str(data_hora)[:10]
         hora = str(data_hora)[11:19]

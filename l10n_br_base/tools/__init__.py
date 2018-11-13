@@ -4,3 +4,4 @@
 
 from . import fiscal
 from . import misc
+from . import fuso_horario

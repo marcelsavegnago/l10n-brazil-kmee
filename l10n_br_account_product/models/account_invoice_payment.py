@@ -126,32 +126,37 @@ class AccountInvoicePayment(models.Model):
             )
         self.item_ids = item_ids
 
-    def compute_new_payment(self, new_date, origin_id, total):
+    def compute_new_payment(self, new_date, origin_id):
 
         # Computa as linhas de pagamento caso seja uma fatura de fornecedor
-        if self.invoice_id.issuer == '1':
+        if self:
+            for record in self:
+                if record.invoice_id.issuer == '1':
 
-            # Garante que o pagamento terá dada de validade
-            if new_date:
-                date_p = new_date[:10]
-            else:
-                date_p = self.date
+                    # Garante que o pagamento terá dada de validade
+                    if new_date:
+                        date_p = str(new_date)[:10]
+                    else:
+                        date_p = record.date
 
-            pterm_list = self.payment_term_id.compute(total, date_p)[0]
+                    pterm_list = record.payment_term_id.compute(record.amount, date_p)
 
-            payment_c = self.env['account.invoice.payment'].search([('invoice_id', '=', origin_id)])
-            payment_c.write({'amount': total})
+                    if len(pterm_list):
+                       pterm_list = pterm_list[0]
 
-            payment_lines = self.env['account.invoice.payment.line'].search([('invoice_id', '=', origin_id)])
+                    record.write({'amount': record.amount})
 
-            for payment, term in zip(payment_lines, pterm_list):
-                values = {
-                    'date_due': term[0],
-                    'amount_original': term[1],
-                    'amount_discount': 0.00,
-                    'amount_net': term[1],
-                }
-                payment.write(values)
+                    payment_lines = record.env['account.invoice.payment.line'].search([('invoice_id', '=', origin_id),
+                                                                                       ('payment_id', '=', record.id)])
+
+                    for payment, term in zip(payment_lines, pterm_list):
+                        values = {
+                            'date_due': term[0],
+                            'amount_original': term[1],
+                            'amount_discount': 0.00,
+                            'amount_net': term[1],
+                        }
+                        payment.write(values)
 
             return payment_lines
 

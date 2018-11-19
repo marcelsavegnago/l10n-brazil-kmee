@@ -941,6 +941,41 @@ class AccountInvoice(models.Model):
                         payment_id.onchange_payment_term_id()
                         invoice.account_payment_ids |= payment_id
 
+                elif invoice.issuer == '1':
+                    if invoice.payment_term and invoice.amount_total and len(invoice.account_payment_ids) == 1:
+                        date_invoice = invoice.date_in_out
+
+                        if not date_invoice:
+                            date_invoice = fields.Date.context_today(invoice)
+
+                        payment_id = invoice.account_payment_ids
+                        payment_id.amount = (
+                            invoice.amount_total if
+                            invoice.payment_term.forma_pagamento !=
+                            FORMA_PAGAMENTO_SEM_PAGAMENTO else 0.0)
+                        payment_id.date = date_invoice
+                        payment_id.onchange_payment_term_id()
+                        invoice.account_payment_ids |= payment_id
+
+                    elif (invoice.amount_total and
+                          invoice.fiscal_category_id and
+                          invoice.fiscal_category_id.account_payment_term_id and
+                            not invoice.account_payment_ids):
+                        p_term_id = \
+                            invoice.fiscal_category_id.account_payment_term_id
+                        date_invoice = invoice.date_in_out
+                        if not date_invoice:
+                            date_invoice = fields.Date.context_today(invoice)
+                        payment_id = invoice.account_payment_ids.new()
+                        payment_id.payment_term_id = p_term_id
+                        payment_id.amount = (
+                            invoice.amount_total if
+                            p_term_id.forma_pagamento !=
+                            FORMA_PAGAMENTO_SEM_PAGAMENTO
+                            else 0.0)
+                        payment_id.date = date_invoice
+                        payment_id.onchange_payment_term_id()
+                        invoice.account_payment_ids |= payment_id
 
                 if not invoice.account_payment_ids:
                     raise UserError(
@@ -1542,7 +1577,7 @@ class AccountInvoice(models.Model):
                     'date_maturity': t.date_due,
                     'amount_currency': diff_currency and amount_currency,
                     'currency_id': diff_currency and inv.currency_id.id,
-                    'ref': ref + '/' + t.number,
+                    'ref': str(ref) + '/' + str(t.number),
                 })
 
             if not inv.account_payment_line_ids:
@@ -1700,13 +1735,13 @@ class AccountInvoice(models.Model):
             # entao deve ser recalculada as linhas de pagamento
             if 'date_in_out' in vals:
                 vals['account_payment_line_ids'] = \
-                    self.account_payment_ids.compute_new_payment(vals['date_in_out'], self.id, self.amount_total)
+                    self.account_payment_ids.compute_new_payment(vals['date_in_out'], self.id)
 
             # Caso exista alteracao nas linhas de fatura
             # as linhas de pagamento tambem devem ser recalculadas
             elif self.date_in_out or 'invoice_line' in vals:
                 vals['account_payment_line_ids'] = \
-                    self.account_payment_ids.compute_new_payment(self.date_in_out, self.id, self.amount_total)
+                    self.account_payment_ids.compute_new_payment(self.date_in_out, self.id)
 
         return super(AccountInvoice, self).write(vals)
 

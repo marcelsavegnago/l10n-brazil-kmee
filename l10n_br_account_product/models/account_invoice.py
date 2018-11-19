@@ -1577,7 +1577,7 @@ class AccountInvoice(models.Model):
                     'date_maturity': t.date_due,
                     'amount_currency': diff_currency and amount_currency,
                     'currency_id': diff_currency and inv.currency_id.id,
-                    'ref': ref + '/' + t.number,
+                    'ref': str(ref) + '/' + str(t.number),
                 })
 
             if not inv.account_payment_line_ids:

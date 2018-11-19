@@ -139,8 +139,10 @@ class AccountInvoicePayment(models.Model):
                     else:
                         date_p = record.date
 
-                    pterm_list = record.payment_term_id.compute(record.amount, date_p)[0]
+                    pterm_list = record.payment_term_id.compute(record.amount, date_p)
 
+                    if len(pterm_list):
+                       pterm_list = pterm_list[0]
 
                     record.write({'amount': record.amount})
 

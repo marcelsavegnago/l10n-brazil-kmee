@@ -310,6 +310,20 @@ class SpedDocumento(models.Model):
             if permite_alteracao:
                 continue
 
+    def _gera_numero_sessao(self):
+
+        def gerador():
+            numero_sessao = self.env['ir.sequence'].next_by_code('cfesessao')
+
+            if numero_sessao == '999999':
+                self.env.ref('sped_cfe.saq_numero_sessao').write({'number_next': 1})
+
+            self.write({'numero_identificador_sessao': numero_sessao})
+            self.env.cr.commit()
+            return numero_sessao
+
+        return gerador
+
     def processador_cfe(self):
         """
         Busca classe do processador do cadastro da empresa, onde podemos ter

@@ -764,18 +764,26 @@ class SpedDocumento(models.Model):
         #
         # Processa resposta
         #
+        resposta = None
         try:
-            if self.configuracoes_pdv.tipo_sat == 'local':
-                resposta = cliente.enviar_dados_venda(cfe)
-            elif self.configuracoes_pdv.tipo_sat == 'rede_interna':
-                resposta = cliente.enviar_dados_venda(
-                    cfe, self.configuracoes_pdv.codigo_ativacao,
-                    self.configuracoes_pdv.path_integrador,
+            if self.numero_identificador_sessao:
+                resposta = cliente.consultar_numero_sessao(
                     self.numero_identificador_sessao
                 )
-            else:
-                resposta = None
-            if resposta.EEEEE in '06000':
+
+            if not resposta or resposta.EEEEE not in '06000':
+
+                if self.configuracoes_pdv.tipo_sat == 'local':
+                    resposta = cliente.enviar_dados_venda(
+                        cfe,
+                    )
+                elif self.configuracoes_pdv.tipo_sat == 'rede_interna':
+                    resposta = cliente.enviar_dados_venda(
+                        cfe, self.configuracoes_pdv.codigo_ativacao,
+                        self.configuracoes_pdv.path_integrador,
+                    )
+
+            if resposta and resposta.EEEEE in '06000':
                 self.executa_antes_autorizar()
                 self.executa_depois_autorizar()
                 self.data_hora_autorizacao = fields.Datetime.now()
@@ -797,9 +805,10 @@ class SpedDocumento(models.Model):
                 # self.protocolo_autorizacao = protNFe.infProt.nProt.valor
                 #
 
-            elif resposta.EEEEE in ('06001', '06002', '06003', '06004',
-                                    '06005', '06006', '06007', '06008',
-                                    '06009', '06010', '06098', '06099'):
+            elif resposta and resposta.EEEEE in (
+                    '06001', '06002', '06003', '06004',
+                    '06005', '06006', '06007', '06008',
+                    '06009', '06010', '06098', '06099'):
                 self.codigo_rejeicao_cfe = resposta.EEEEE
                 self.executa_antes_denegar()
                 self.situacao_fiscal = SITUACAO_FISCAL_DENEGADO

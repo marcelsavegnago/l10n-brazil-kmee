@@ -29,6 +29,7 @@
         'views/sped_documento_pagamento_view.xml',
         'views/sped_participante_administradora_cartao_view.xml',
         'views/inherited_sped_empresa_view.xml',
+        'data/ir_sequence_data.xml',
     ],
     'qweb': [
         # 'static/src/xml/*.xml',

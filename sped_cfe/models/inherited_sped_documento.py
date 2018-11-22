@@ -346,7 +346,8 @@ class SpedDocumento(models.Model):
             from mfecfe import BibliotecaSAT
             cliente = ClienteSATLocal(
                 BibliotecaSAT(self.configuracoes_pdv.path_integrador),
-                codigo_ativacao=self.configuracoes_pdv.codigo_ativacao
+                codigo_ativacao=self.configuracoes_pdv.codigo_ativacao,
+                numerador_sessao=self._gera_numero_sessao(),
             )
         elif self.configuracoes_pdv.tipo_sat == 'rede_interna':
             from mfecfe.clientesathub import ClienteSATHub
@@ -387,6 +388,7 @@ class SpedDocumento(models.Model):
                 BibliotecaSAT(
                     self.configuracoes_pdv.path_integrador),
                 chave_acesso_validador=chave,
+                numerador_sessao=self._gera_numero_sessao(),
             )
         elif self.configuracoes_pdv.tipo_sat == 'rede_interna':
             from mfecfe.clientesathub import ClienteVfpeHub
@@ -931,7 +933,6 @@ class SpedDocumento(models.Model):
                             int(config.numero_caixa),
                             config.chave_acesso_validador,
                             config.path_integrador,
-                            self.numero_identificador_sessao
                         )
                     resposta_pagamento = resposta.split('|')
                     if len(resposta_pagamento[0]) >= 7:

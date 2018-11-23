@@ -59,6 +59,45 @@ class SpedDocumentoPagamento(models.Model):
         string=u'Pagamento Válido'
     )
 
+    def processador_vfpe(self):
+        """
+        Busca classe do processador do cadastro da empresa, onde podemos
+        ter três tipos de processamento dependendo
+        de onde o equipamento esta instalado:
+
+        - Instalado no mesmo servidor que o Odoo;
+        - Instalado na mesma rede local do servidor do Odoo;
+        - Instalado em um local remoto onde o browser vai ser responsável
+        por se comunicar com o equipamento
+
+        :return:
+        """
+        self.ensure_one()
+
+        cliente = None
+
+        if self.documento_id.configuracoes_pdv.tipo_sat == 'local':
+            from mfecfe import BibliotecaSAT
+            from mfecfe import ClienteVfpeLocal
+
+            chave = self.documento_id.configuracoes_pdv.chave_acesso_validador
+            cliente = ClienteVfpeLocal(
+                BibliotecaSAT(
+                    self.documento_id.configuracoes_pdv.path_integrador),
+                    chave_acesso_validador=chave,
+            )
+        elif self.documento_id.configuracoes_pdv.tipo_sat == 'rede_interna':
+            from mfecfe.clientesathub import ClienteVfpeHub
+            cliente = ClienteVfpeHub(
+                self.documento_id.configuracoes_pdv.ip,
+                self.documento_id.configuracoes_pdv.porta,
+                numero_caixa=int(self.documento_id.configuracoes_pdv.numero_caixa)
+            )
+        elif self.documento_id.configuracoes_pdv.tipo_sat == 'remoto':
+            raise NotImplementedError
+
+        return cliente
+
     def monta_cfe(self):
         self.ensure_one()
 
@@ -93,12 +132,14 @@ class SpedDocumentoPagamento(models.Model):
             return
         else:
             config = self.documento_id.configuracoes_pdv
-            cliente = self.documento_id.processador_vfpe()
+            cliente = self.processador_vfpe()
 
             if config.tipo_sat == 'local':
                 resposta = cliente.enviar_pagamento(
-                    config.chave_requisicao, self.estabecimento,
-                    self.serial_pos, config.cnpjsh,
+                    config.chave_requisicao,
+                    self.estabecimento,
+                    self.serial_pos,
+                    config.cnpjsh,
                     self.documento_id.bc_icms_proprio,
                     self.valor,
                     config.multiplos_pag,
@@ -130,8 +171,8 @@ class SpedDocumentoPagamento(models.Model):
                 # efetuada por TEF.
 
                 if config.tipo_sat == 'local':
-                        config.cnpjsh, self.id_fila
                     cliente.verificar_status_validador(
+                        config.cnpjsh, self.id_fila
                     )
                 elif config.tipo_sat == 'rede_interna':
                     cliente.verificar_status_validador(

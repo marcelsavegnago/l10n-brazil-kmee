@@ -86,6 +86,8 @@
                         <separator string="Autorização" colspan="4" />
                         <field name="data_hora_autorizacao" />
                         <field name="protocolo_autorizacao" />
+                        <field name="numero_sessao" />
+                        <newline/>
                         <field name="arquivo_xml_id" colspan="4" string="CF-e" />
                         <field name="arquivo_xml_autorizacao_id" colspan="4" string="Processo" />
                         <field name="arquivo_pdf_id" colspan="4" string="Extrato CF-e" />

@@ -315,11 +315,9 @@ class SpedDocumento(models.Model):
         def gerador():
             numero_sessao = self.env['ir.sequence'].next_by_code('cfesessao')
 
-            if numero_sessao == '999999':
-                self.env.ref('sped_cfe.saq_numero_sessao').write({'number_next': 1})
-
-            self.write({'numero_identificador_sessao': numero_sessao})
+            self.write({'numero_identificador_sessao': numero_sessao[-6:]})
             self.env.cr.commit()
+
             return numero_sessao
 
         return gerador
@@ -708,40 +706,50 @@ class SpedDocumento(models.Model):
             mensagem += '\nMotivo: ' + resposta.resposta.mensagem
             raise UserError(mensagem)
 
+    def _consulta_numero_sessao(self):
+        if self.numero_identificador_sessao:
+            cliente = self.processador_cfe()
+            return cliente.consultar_numero_sessao(
+                self.numero_identificador_sessao
+            )
+
+    def _envia_cfe(self):
+        """
+        :return: resposta
+        """
+        cliente = self.processador_cfe()
+        cfe = self.monta_cfe()
+        self.grava_cfe(cfe)
+        if self.configuracoes_pdv.tipo_sat == 'local':
+            resposta = cliente.enviar_dados_venda(
+                cfe,
+            )
+        elif self.configuracoes_pdv.tipo_sat == 'rede_interna':
+            resposta = cliente.enviar_dados_venda(
+                cfe, self.configuracoes_pdv.codigo_ativacao,
+                self.configuracoes_pdv.path_integrador,
+            )
+        return resposta
+
     def _envia_documento(self):
         self.ensure_one()
+
         result = super(SpedDocumento, self)._envia_documento()
         if not self.modelo == MODELO_FISCAL_CFE:
             return result
 
         if not self.pagamento_autorizado_cfe:
             raise Warning('Pagamento(s) não autorizado(s)!')
-        cliente = self.processador_cfe()
-        impressao = self.configuracoes_pdv.impressora
-        cfe = self.monta_cfe()
-        self.grava_cfe(cfe)
-
         #
         # Processa resposta
         #
         resposta = None
+
         try:
-            if self.numero_identificador_sessao:
-                resposta = cliente.consultar_numero_sessao(
-                    self.numero_identificador_sessao
-                )
+            resposta = self._consulta_numero_sessao()
 
             if not resposta or resposta.EEEEE not in '06000':
-
-                if self.configuracoes_pdv.tipo_sat == 'local':
-                    resposta = cliente.enviar_dados_venda(
-                        cfe,
-                    )
-                elif self.configuracoes_pdv.tipo_sat == 'rede_interna':
-                    resposta = cliente.enviar_dados_venda(
-                        cfe, self.configuracoes_pdv.codigo_ativacao,
-                        self.configuracoes_pdv.path_integrador,
-                    )
+                resposta = self._envia_cfe()
 
             if resposta and resposta.EEEEE in '06000':
                 self.executa_antes_autorizar()
@@ -756,14 +764,6 @@ class SpedDocumento(models.Model):
                 self.grava_cfe_autorizacao(resposta.xml())
                 self.situacao_fiscal = SITUACAO_FISCAL_REGULAR
                 self.situacao_nfe = SITUACAO_NFE_AUTORIZADA
-                # # self.grava_pdf(nfe, procNFe.danfe_pdf)
-
-                # data_autorizacao = protNFe.infProt.dhRecbto.valor
-                # data_autorizacao = UTC.normalize(data_autorizacao)
-
-                # self.data_hora_autorizacao = data_autorizacao
-                # self.protocolo_autorizacao = protNFe.infProt.nProt.valor
-                #
 
             elif resposta and resposta.EEEEE in (
                     '06001', '06002', '06003', '06004',
@@ -774,27 +774,43 @@ class SpedDocumento(models.Model):
                 self.situacao_fiscal = SITUACAO_FISCAL_DENEGADO
                 self.situacao_nfe = SITUACAO_NFE_DENEGADA
                 self.executa_depois_denegar()
-        except (ErroRespostaSATInvalida, ExcecaoRespostaSAT) as resposta:
+
+        except ExcecaoRespostaSAT as resposta:
+
+            mensagem = 'EEEEE: ' + resposta.EEEEE
+            mensagem += '\nMensagem: ' + resposta.mensagem
+
             self.codigo_rejeicao_cfe = resposta.EEEEE
-            mensagem = 'Código de retorno: ' + \
-                       resposta.EEEEE
-            mensagem += '\nMensagem: ' + \
-                        resposta.mensagem
-            if resposta.resposta.mensagem == u'Erro interno' and \
-                    resposta.resposta.mensagemSEFAZ == u'ERRO' and not \
-                    self.numero_identificador_sessao:
-                self.numero_identificador_sessao = \
-                    resposta.resposta.numeroSessao
             self.mensagem_nfe = mensagem
             self.situacao_nfe = SITUACAO_NFE_REJEITADA
-        except Exception as resposta:
-            if hasattr(resposta, 'resposta'):
-                self.codigo_rejeicao_cfe = resposta.resposta.EEEEE
+
+        except ErroRespostaSATInvalida as resposta:
+
+            mensagem = 'Retorno Inválido : ' + resposta.EEEEE
+            mensagem += '\nMensagem: ' + resposta.mensagem
+
             if resposta.resposta.mensagem == u'Erro interno' and \
                     resposta.resposta.mensagemSEFAZ == u'ERRO' and not \
                     self.numero_identificador_sessao:
                 self.numero_identificador_sessao = \
                     resposta.resposta.numeroSessao
+
+            self.codigo_rejeicao_cfe = resposta.EEEEE
+            self.mensagem_nfe = mensagem
+            self.situacao_nfe = SITUACAO_NFE_REJEITADA
+
+        except Exception as exception:
+
+            if hasattr(exception, 'resposta'):
+                self.codigo_rejeicao_cfe = exception.resposta.EEEEE
+
+                if exception.resposta.mensagem == u'Erro interno' and \
+                        exception.resposta.mensagemSEFAZ == u'ERRO' and not \
+                        self.numero_identificador_sessao:
+
+                    self.numero_identificador_sessao = \
+                        exception.resposta.numeroSessao
+
             self.mensagem_nfe = "Falha na conexão com SATHUB"
             self.situacao_nfe = SITUACAO_NFE_REJEITADA
 

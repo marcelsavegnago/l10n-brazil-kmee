@@ -207,8 +207,8 @@ class SpedDocumento(models.Model):
         compute='_compute_cfe_cancel_image',
     )
 
-    numero_identificador_sessao = fields.Char(
-        string=u'Numero identificador sessao'
+    numero_sessao = fields.Char(
+        string=u'Numero sessao'
     )
 
     def executa_depois_autorizar(self):
@@ -315,7 +315,7 @@ class SpedDocumento(models.Model):
         def gerador():
             numero_sessao = self.env['ir.sequence'].next_by_code('cfesessao')
 
-            self.write({'numero_identificador_sessao': numero_sessao[-6:]})
+            self.write({'numero_sessao': numero_sessao[-6:]})
             self.env.cr.commit()
 
             return numero_sessao
@@ -707,10 +707,10 @@ class SpedDocumento(models.Model):
             raise UserError(mensagem)
 
     def _consulta_numero_sessao(self):
-        if self.numero_identificador_sessao:
+        if self.numero_sessao:
             cliente = self.processador_cfe()
             return cliente.consultar_numero_sessao(
-                self.numero_identificador_sessao
+                self.numero_sessao
             )
 
     def _envia_cfe(self):
@@ -791,8 +791,8 @@ class SpedDocumento(models.Model):
 
             if resposta.resposta.mensagem == u'Erro interno' and \
                     resposta.resposta.mensagemSEFAZ == u'ERRO' and not \
-                    self.numero_identificador_sessao:
-                self.numero_identificador_sessao = \
+                    self.numero_sessao:
+                self.numero_sessao = \
                     resposta.resposta.numeroSessao
 
             self.codigo_rejeicao_cfe = resposta.EEEEE
@@ -806,9 +806,9 @@ class SpedDocumento(models.Model):
 
                 if exception.resposta.mensagem == u'Erro interno' and \
                         exception.resposta.mensagemSEFAZ == u'ERRO' and not \
-                        self.numero_identificador_sessao:
+                        self.numero_sessao:
 
-                    self.numero_identificador_sessao = \
+                    self.numero_sessao = \
                         exception.resposta.numeroSessao
 
             self.mensagem_nfe = "Falha na conexão com SATHUB"

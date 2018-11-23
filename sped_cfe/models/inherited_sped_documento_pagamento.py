@@ -130,15 +130,12 @@ class SpedDocumentoPagamento(models.Model):
                 # efetuada por TEF.
 
                 if config.tipo_sat == 'local':
-                    cliente.enviar_status_pagamento(
                         config.cnpjsh, self.id_fila
+                    cliente.verificar_status_validador(
                     )
                 elif config.tipo_sat == 'rede_interna':
-                    cliente.enviar_status_pagamento(
+                    cliente.verificar_status_validador(
                         config.cnpjsh, self.id_fila,
-                        int(config.numero_caixa),
-                        config.chave_acesso_validador,
-                        config.path_integrador
                     )
 
                 self.pagamento_valido = True

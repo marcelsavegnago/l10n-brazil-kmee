@@ -352,7 +352,9 @@ class SpedDocumento(models.Model):
             cliente = ClienteSATHub(
                 self.configuracoes_pdv.ip,
                 self.configuracoes_pdv.porta,
-                numero_caixa=int(self.configuracoes_pdv.numero_caixa)
+                numero_caixa=int(self.configuracoes_pdv.numero_caixa),
+                codigo_ativacao=self.configuracoes_pdv.codigo_ativacao,
+                numerador_sessao=self._gera_numero_sessao(),
             )
         elif self.configuracoes_pdv.tipo_sat == 'remoto':
             cliente = None

@@ -91,7 +91,8 @@ class SpedDocumentoPagamento(models.Model):
             cliente = ClienteVfpeHub(
                 self.documento_id.configuracoes_pdv.ip,
                 self.documento_id.configuracoes_pdv.porta,
-                numero_caixa=int(self.documento_id.configuracoes_pdv.numero_caixa)
+                numero_caixa=int(self.documento_id.configuracoes_pdv.numero_caixa),
+                chave_acesso_validador=self.documento_id.configuracoes_pdv.chave_acesso_validador,
             )
         elif self.documento_id.configuracoes_pdv.tipo_sat == 'remoto':
             raise NotImplementedError
@@ -177,6 +178,9 @@ class SpedDocumentoPagamento(models.Model):
                 elif config.tipo_sat == 'rede_interna':
                     cliente.verificar_status_validador(
                         config.cnpjsh, self.id_fila,
+                        int(config.numero_caixa),
+                        config.chave_acesso_validador,
+                        config.path_integrador
                     )
 
                 self.pagamento_valido = True

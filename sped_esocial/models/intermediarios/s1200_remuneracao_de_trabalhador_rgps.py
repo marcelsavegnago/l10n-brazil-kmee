@@ -162,15 +162,26 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
                     tem_retificacao = False
             S1200.evento.ideEvento.nrRecibo.valor = registro_para_retificar.recibo
         S1200.evento.ideEvento.indRetif.valor = indRetif
-        S1200.evento.ideEvento.indApuracao.valor = '1'  # TODO Lidar com os holerites de 13º salário
-                                                        # '1' - Mensal
-                                                        # '2' - Anual (13º salário)
-        S1200.evento.ideEvento.perApur.valor = \
-            self.periodo_id.code[3:7] + '-' + \
-            self.periodo_id.code[0:2]
+
+        ind_apuracao = False
+        per_apur = False
+
+        remuneracoes_ids = self.payslip_ids or self.payslip_autonomo_ids
+        for remuneracao in remuneracoes_ids:
+            if remuneracao.tipo_de_folha == 'decimo_terceiro':
+                ind_apuracao = '2'
+                per_apur = self.periodo_id.code[3:7]
+                break
+
+        if not (ind_apuracao and per_apur):
+            ind_apuracao = '1'
+            per_apur = self.periodo_id.code[3:7] + '-' + self.periodo_id.code[0:2]
+
+        S1200.evento.ideEvento.indApuracao.valor = ind_apuracao
+        S1200.evento.ideEvento.perApur.valor = per_apur
         S1200.evento.ideEvento.tpAmb.valor = ambiente
         S1200.evento.ideEvento.procEmi.valor = '1'    # Aplicativo do empregador
-        S1200.evento.ideEvento.verProc.valor = '8.0'  # Odoo v.8.0
+        S1200.evento.ideEvento.verProc.valor = 'Odoo v.8.0'  # Odoo v.8.0
 
         # Popula ideEmpregador (Dados do Empregador)
         S1200.evento.ideEmpregador.tpInsc.valor = '1'
@@ -265,6 +276,9 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
                 # Só adiciona a rubrica se o campo nat_rubr estiver definido, isso define que a rubrica deve
                 # ser transmitida para o e-Social.
                 if line.salary_rule_id.nat_rubr:
+                    if payslip.tipo_de_folha == 'decimo_terceiro':
+                        if line.salary_rule_id.code == 'INSS':
+                            continue
 
                     if self.verificar_rubricas_ferias_holerite(
                             line.salary_rule_id):

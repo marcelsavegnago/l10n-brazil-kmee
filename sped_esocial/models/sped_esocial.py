@@ -648,6 +648,7 @@ class SpedEsocial(models.Model):
     remuneracao_ids = fields.Many2many(
         string='Remuneração de Trabalhador',
         comodel_name='sped.esocial.remuneracao',
+        ondelete='cascade',
     )
     msg_remuneracao = fields.Char(
         string='Remunerações',
@@ -674,6 +675,7 @@ class SpedEsocial(models.Model):
         self.ensure_one()
 
         if self.empregador_ids:
+            self.remuneracao_ids.unlink()
             # Buscar Trabalhadores
             trabalhadores = self.env['hr.employee'].search([
                 '|',
@@ -715,6 +717,8 @@ class SpedEsocial(models.Model):
                     mes = datetime.strptime(self.periodo_id.date_start, '%Y-%m-%d').month
                     ano = datetime.strptime(self.periodo_id.date_start, '%Y-%m-%d').year
 
+                    payslips = False
+                    payslips_decimo_terceiro = False
                     # Trabalhadores autonomos tem holerite separado
                     if trabalhador.tipo != 'autonomo':
                         # Busca os payslips de pagamento mensal deste trabalhador
@@ -725,10 +729,26 @@ class SpedEsocial(models.Model):
                             ('mes_do_ano', '=', mes),
                             ('ano', '=', ano),
                             # ('state', 'in', ['verify', 'done']),
-                            ('tipo_de_folha', 'in', ['normal', 'ferias', 'decimo_terceiro']),
+                            ('tipo_de_folha', 'in', ['normal', 'ferias']),
                             ('is_simulacao', '=', False),
                         ]
+
                         payslips = self.env['hr.payslip'].search(domain_payslip)
+
+                        if mes == 12:
+                            domain_payslip_decimo_terceiro = [
+                                ('company_id', 'in', empresas),
+                                ('contract_id', 'in', contratos_validos),
+                                ('mes_do_ano', '=', 13),
+                                ('ano', '=', ano),
+                                # ('state', 'in', ['verify', 'done']),
+                                ('tipo_de_folha', 'in', ['decimo_terceiro']),
+                                ('is_simulacao', '=', False),
+                            ]
+
+                            payslips_decimo_terceiro = self.env['hr.payslip'].search(domain_payslip_decimo_terceiro)
+
+                            # payslips |= payslip_decimo_terceiro
 
                     else:
                         # Busca os payslips de pagamento mensal deste autonomo
@@ -739,59 +759,22 @@ class SpedEsocial(models.Model):
                             ('ano', '=', ano),
                             ('state', 'not in', ['cancel']),
                             # ('state', 'in', ['verify', 'done']),
-                            ('tipo_de_folha', 'in',  ['normal', 'ferias', 'decimo_terceiro']),
+                            ('tipo_de_folha', 'in',  ['normal', 'ferias']),
                         ]
                         payslips = self.env['hr.payslip.autonomo'].search(domain_payslip_autonomo)
 
                     # Se tem payslip, cria o registro S-1200
                     if payslips:
 
-                        # Se o payslip não está em 'verify' ou 'done' manda um raise
-                        for payslip in payslips:
-                            if payslip.state not in ['verify', 'done']:
-                                raise ValidationError("Existem Holerites não validados neste período !\n"
-                                                      "Confirme ou Cancele todos os holerites deste período"
-                                                      "antes de processar o e-Social.")
+                        self._gerar_intermediario_s1200(
+                            contratos, matriz, payslips, periodo, trabalhador
+                        )
 
-                        # Verifica se o registro S-1200 já existe, cria ou atualiza
-                        domain_s1200 = [
-                            ('company_id', '=', matriz.id),
-                            ('trabalhador_id', '=', trabalhador.id),
-                            ('periodo_id', '=', periodo.id),
-                        ]
-                        s1200 = self.env['sped.esocial.remuneracao'].search(domain_s1200)
-                        if not s1200:
-                            vals = {
-                                'company_id': matriz.id,
-                                'trabalhador_id': trabalhador.id,
-                                'periodo_id': periodo.id,
-                                'contract_ids': [(6, 0, contratos.ids)],
-                            }
-
-                            # Criar intermediario de acordo com o tipo de employee
-                            if trabalhador.tipo != 'autonomo':
-                                vals.update(
-                                    {'payslip_ids': [(6, 0, payslips.ids)]})
-                            else:
-                                vals.update(
-                                    {'payslip_autonomo_ids': [(6, 0, payslips.ids)]})
-
-                            s1200 = self.env['sped.esocial.remuneracao'].create(vals)
-
-                        # Se ja existe o registro apenas criar o relacionamento
-                        else:
-                            s1200.contract_ids = [(6, 0, contratos.ids)]
-
-                            if trabalhador.tipo != 'autonomo':
-                                s1200.payslip_ids = [(6, 0, payslips.ids)]
-                            else:
-                                s1200.payslip_autonomo_ids = [(6, 0, payslips.ids)]
-
-                        # Relaciona o s1200 com o período do e-Social
-                        self.remuneracao_ids = [(4, s1200.id)]
-
-                        # Cria o registro de transmissão sped (se ainda não existir)
-                        s1200.atualizar_esocial()
+                    if mes == 12 and payslips_decimo_terceiro:
+                        self._gerar_intermediario_s1200(
+                            contratos, matriz, payslips_decimo_terceiro,
+                            periodo, trabalhador
+                        )
                 else:
 
                     # Se não tem contrato válido, remove o registro S-1200 (se existir)
@@ -804,6 +787,41 @@ class SpedEsocial(models.Model):
                     if s1200:
                         s1200.sped_registro.unlink()
                         s1200.unlink()
+
+    def _gerar_intermediario_s1200(self, contratos, matriz, payslips, periodo,
+                                   trabalhador):
+        decimo_terceiro = False
+        # Se o payslip não está em 'verify' ou 'done' manda um raise
+        for payslip in payslips:
+            if payslip.state not in ['verify', 'done']:
+                raise ValidationError(
+                    "Existem Holerites não validados neste período !\n"
+                    "Confirme ou Cancele todos os holerites deste período"
+                    "antes de processar o e-Social.")
+            if payslip.tipo_de_folha == 'decimo_terceiro':
+                decimo_terceiro = True
+
+        vals = {
+            'company_id': matriz.id,
+            'trabalhador_id': trabalhador.id,
+            'contract_ids': [(6, 0, contratos.ids)],
+            'periodo_id': periodo.id,
+        }
+
+        # Criar intermediario de acordo com o tipo de employee
+        if trabalhador.tipo != 'autonomo' or decimo_terceiro:
+            vals.update(
+                {'payslip_ids': [(6, 0, payslips.ids)]})
+        else:
+            vals.update(
+                {'payslip_autonomo_ids': [(6, 0, payslips.ids)]})
+
+        s1200 = self.env['sped.esocial.remuneracao'].create(vals)
+
+        # Relaciona o s1200 com o período do e-Social
+        self.remuneracao_ids = [(4, s1200.id)]
+        # Cria o registro de transmissão sped (se ainda não existir)
+        s1200.atualizar_esocial()
 
     # Controle de registros S-1202
     remuneracao_rpps_ids = fields.Many2many(
@@ -943,6 +961,7 @@ class SpedEsocial(models.Model):
     pagamento_ids = fields.Many2many(
         string='Pagamentos a Trabalhadores',
         comodel_name='sped.esocial.pagamento',
+        ondelete='cascade',
     )
     msg_pagamento = fields.Char(
         string='Pagamentos',
@@ -1017,26 +1036,40 @@ class SpedEsocial(models.Model):
                     # Trabalhadores autonomos tem holerite separado
                     if beneficiario.tipo != 'autonomo':
 
-                        # Busca os payslips de pagamento mensal deste beneficiário
                         domain_payslip = [
                             ('company_id', 'in', empresas),
                             ('contract_id', 'in', contratos_validos),
                             ('mes_do_ano', '=', mes),
                             ('ano', '=', ano),
                             ('state', 'in', ['verify', 'done']),
-                            ('tipo_de_folha', 'in', ['normal', 'ferias', 'decimo_terceiro', 'rescisao']),
+                            ('tipo_de_folha', 'in', ['normal', 'ferias']),
                             ('is_simulacao', '=', False),
                         ]
                         payslips = self.env['hr.payslip'].search(domain_payslip)
+
+                        if mes == 12:
+                            domain_payslip_decimo_terceiro = [
+                                ('company_id', 'in', empresas),
+                                ('contract_id', 'in', contratos_validos),
+                                ('mes_do_ano', '=', 13),
+                                ('ano', '=', ano),
+                                # ('state', 'in', ['verify', 'done']),
+                                ('tipo_de_folha', '=', 'decimo_terceiro'),
+                                ('is_simulacao', '=', False),
+                            ]
+                            payslips_decimo_terceiro = self.env['hr.payslip'].search(
+                                domain_payslip_decimo_terceiro)
+
+                            payslips |= payslips_decimo_terceiro
 
                     else:
                         # Busca os payslips de pagamento mensal deste autonomo
                         domain_payslip_autonomo = [
                             ('company_id', 'in', empresas),
                             ('contract_id', 'in', contratos_validos),
-                            ('mes_do_ano', '=', mes),
+                            ('mes_do_ano', '=', 13),
                             ('ano', '=', ano),
-                            ('state', 'in', ['verify', 'done']),
+                            # ('state', 'in', ['verify', 'done']),
                             ('tipo_de_folha', 'in',
                              ['normal', 'ferias', 'decimo_terceiro', 'rescisao']),
                         ]
@@ -1861,11 +1894,8 @@ class SpedEsocial(models.Model):
 
             # Periódicos
             esocial.importar_remuneracoes()             # S-1200
-            # esocial.importar_remuneracoes_rpps()        # S-1202 (Por enquanto não deve-se enviar o S-1202)
+            # esocial.importar_remuneracoes_rpps()      # S-1202
             esocial.importar_pagamentos()               # S-1210
-
-            # Calcula os registros para transmitir
-            esocial.compute_registro_ids()
 
             # Relaciona as Rescisões do Período para facilmente visualizá-las
             data = fields.Date.from_string(esocial.periodo_id.date_start)
@@ -1879,6 +1909,9 @@ class SpedEsocial(models.Model):
                 ('is_simulacao', '=', False),
             ])
             esocial.rescisao_ids = [(6, 0, rescisoes.ids)]
+
+            # Calcula os registros para transmitir
+            esocial.compute_registro_ids()
 
     @api.model
     def create(self, vals):
@@ -1898,7 +1931,6 @@ class SpedEsocial(models.Model):
         """
         domain = [
             ('date_start', '>=', '2017-01-01'),
-            ('special', '=', False)
         ]
 
         return domain

@@ -162,7 +162,7 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
                     tem_retificacao = False
             S1200.evento.ideEvento.nrRecibo.valor = registro_para_retificar.recibo
         S1200.evento.ideEvento.indRetif.valor = indRetif
-
+        
         if not int(self.periodo_id.code.split('/')[0]) == 13:
             S1200.evento.ideEvento.indApuracao.valor = '1'
             S1200.evento.ideEvento.perApur.valor = \
@@ -171,6 +171,7 @@ class SpedEsocialRemuneracao(models.Model, SpedRegistroIntermediario):
         else:
             S1200.evento.ideEvento.indApuracao.valor = '2'
             S1200.evento.ideEvento.perApur.valor = self.periodo_id.code[3:7]
+
         S1200.evento.ideEvento.tpAmb.valor = ambiente
         S1200.evento.ideEvento.procEmi.valor = '1'    # Aplicativo do empregador
         S1200.evento.ideEvento.verProc.valor = 'Odoo v.8.0'  # Odoo v.8.0

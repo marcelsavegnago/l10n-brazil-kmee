@@ -793,6 +793,10 @@ class SpedEsocial(models.Model):
                                 vals.update(
                                     {'payslip_autonomo_ids': [(6, 0, payslips.ids)]})
 
+                            self._gerar_intermediario_s1200(
+                                contratos, matriz, payslips,
+                                periodo, trabalhador
+                            )
                 else:
 
                     # Se não tem contrato válido, remove o registro S-1200 (se existir)

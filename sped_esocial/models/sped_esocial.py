@@ -723,20 +723,8 @@ class SpedEsocial(models.Model):
                     if trabalhador.tipo != 'autonomo':
                         # Busca os payslips de pagamento mensal deste trabalhador
 
-                        domain_payslip = [
-                            ('company_id', 'in', empresas),
-                            ('contract_id', 'in', contratos_validos),
-                            ('mes_do_ano', '=', mes),
-                            ('ano', '=', ano),
-                            # ('state', 'in', ['verify', 'done']),
-                            ('tipo_de_folha', 'in', ['normal', 'ferias']),
-                            ('is_simulacao', '=', False),
-                        ]
-
-                        payslips = self.env['hr.payslip'].search(domain_payslip)
-
-                        if mes == 12:
-                            domain_payslip_decimo_terceiro = [
+                        if self.periodo_id.code == '13/{}'.format(ano):
+                            domain_payslip = [
                                 ('company_id', 'in', empresas),
                                 ('contract_id', 'in', contratos_validos),
                                 ('mes_do_ano', '=', 13),
@@ -746,9 +734,18 @@ class SpedEsocial(models.Model):
                                 ('is_simulacao', '=', False),
                             ]
 
-                            payslips_decimo_terceiro = self.env['hr.payslip'].search(domain_payslip_decimo_terceiro)
+                        else:
+                            domain_payslip = [
+                                ('company_id', 'in', empresas),
+                                ('contract_id', 'in', contratos_validos),
+                                ('mes_do_ano', '=', mes),
+                                ('ano', '=', ano),
+                                # ('state', 'in', ['verify', 'done']),
+                                ('tipo_de_folha', 'in', ['normal', 'ferias']),
+                                ('is_simulacao', '=', False),
+                            ]
 
-                            # payslips |= payslip_decimo_terceiro
+                        payslips = self.env['hr.payslip'].search(domain_payslip)
 
                     else:
                         # Busca os payslips de pagamento mensal deste autonomo
@@ -766,15 +763,40 @@ class SpedEsocial(models.Model):
                     # Se tem payslip, cria o registro S-1200
                     if payslips:
 
-                        self._gerar_intermediario_s1200(
-                            contratos, matriz, payslips, periodo, trabalhador
-                        )
+                        # Se o payslip não está em 'verify' ou 'done' manda um raise
+                        for payslip in payslips:
+                            if payslip.state not in ['verify', 'done']:
+                                raise ValidationError("Existem Holerites não validados neste período !\n"
+                                                      "Confirme ou Cancele todos os holerites deste período"
+                                                      "antes de processar o e-Social.")
 
-                    if mes == 12 and payslips_decimo_terceiro:
-                        self._gerar_intermediario_s1200(
-                            contratos, matriz, payslips_decimo_terceiro,
-                            periodo, trabalhador
-                        )
+                        # Verifica se o registro S-1200 já existe, cria ou atualiza
+                        domain_s1200 = [
+                            ('company_id', '=', matriz.id),
+                            ('trabalhador_id', '=', trabalhador.id),
+                            ('periodo_id', '=', periodo.id),
+                        ]
+                        s1200 = self.env['sped.esocial.remuneracao'].search(domain_s1200)
+                        if not s1200:
+                            vals = {
+                                'company_id': matriz.id,
+                                'trabalhador_id': trabalhador.id,
+                                'contract_ids': [(6, 0, contratos.ids)],
+                                'periodo_id': periodo.id,
+                            }
+
+                            # Criar intermediario de acordo com o tipo de employee
+                            if trabalhador.tipo != 'autonomo':
+                                vals.update(
+                                    {'payslip_ids': [(6, 0, payslips.ids)]})
+                            else:
+                                vals.update(
+                                    {'payslip_autonomo_ids': [(6, 0, payslips.ids)]})
+
+                            self._gerar_intermediario_s1200(
+                                contratos, matriz, payslips,
+                                periodo, trabalhador
+                            )
                 else:
 
                     # Se não tem contrato válido, remove o registro S-1200 (se existir)
@@ -1875,40 +1897,49 @@ class SpedEsocial(models.Model):
             #
             # ])
 
-            # Tabelas
-            esocial.importar_empregador()               # S-1000
-            esocial.importar_estabelecimentos()         # S-1005
-            esocial.importar_rubricas()                 # S-1010
-            esocial.importar_lotacoes()                 # S-1020
-            esocial.importar_cargos()                   # S-1030
-            esocial.importar_turnos_trabalho()          # S-1050
+            # Calcula campos de mês e ano para busca dos payslip
+            ano = datetime.strptime(self.periodo_id.date_start, '%Y-%m-%d').year
 
-            # Não Periódicos
-            esocial.importar_admissao()                 # S-2200
-            esocial.importar_alteracao_trabalhador()    # S-2205
-            esocial.importar_afastamento()              # S-2230
-            esocial.importar_desligamento()             # S-2299
-            esocial.importar_admissao_sem_vinculo()     # S-2300
-            esocial.importar_alteracao_sem_vinculo()    # S-2306
-            esocial.importar_desligamento_sem_vinculo() # S-2399
+            if not self.periodo_id.code == '13/{}'.format(ano):
 
-            # Periódicos
-            esocial.importar_remuneracoes()             # S-1200
-            # esocial.importar_remuneracoes_rpps()      # S-1202
-            esocial.importar_pagamentos()               # S-1210
+                # Tabelas
+                esocial.importar_empregador()               # S-1000
+                esocial.importar_estabelecimentos()         # S-1005
+                esocial.importar_rubricas()                 # S-1010
+                esocial.importar_lotacoes()                 # S-1020
+                esocial.importar_cargos()                   # S-1030
+                esocial.importar_turnos_trabalho()          # S-1050
 
-            # Relaciona as Rescisões do Período para facilmente visualizá-las
-            data = fields.Date.from_string(esocial.periodo_id.date_start)
-            mes = data.month
-            ano = data.year
-            rescisoes = self.env['hr.payslip'].search([
-                ('tipo_de_folha', '=', 'rescisao'),
-                ('mes_do_ano', '=', mes),
-                ('ano', '=', ano),
-                ('state', 'in', ['wait', 'done']),
-                ('is_simulacao', '=', False),
-            ])
-            esocial.rescisao_ids = [(6, 0, rescisoes.ids)]
+                # Não Periódicos
+                esocial.importar_admissao()                 # S-2200
+                esocial.importar_alteracao_trabalhador()    # S-2205
+                esocial.importar_afastamento()              # S-2230
+                esocial.importar_desligamento()             # S-2299
+                esocial.importar_admissao_sem_vinculo()     # S-2300
+                esocial.importar_alteracao_sem_vinculo()    # S-2306
+                esocial.importar_desligamento_sem_vinculo() # S-2399
+
+                # Periódicos
+                esocial.importar_remuneracoes()             # S-1200
+                # esocial.importar_remuneracoes_rpps()      # S-1202
+                esocial.importar_pagamentos()               # S-1210
+
+                # Relaciona as Rescisões do Período para facilmente visualizá-las
+                data = fields.Date.from_string(esocial.periodo_id.date_start)
+                mes = data.month
+                ano = data.year
+                rescisoes = self.env['hr.payslip'].search([
+                    ('tipo_de_folha', '=', 'rescisao'),
+                    ('mes_do_ano', '=', mes),
+                    ('ano', '=', ano),
+                    ('state', 'in', ['wait', 'done']),
+                    ('is_simulacao', '=', False),
+                ])
+                esocial.rescisao_ids = [(6, 0, rescisoes.ids)]
+            else:
+                esocial.importar_empregador()  # S-1000
+                esocial.importar_estabelecimentos()  # S-1005
+                esocial.importar_remuneracoes()  # S-1200
 
             # Calcula os registros para transmitir
             esocial.compute_registro_ids()

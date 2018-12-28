@@ -20,6 +20,10 @@ class SpedProtocoloICMS(models.Model):
     _rec_name = 'descricao'
     _order = 'descricao'
 
+    active = fields.Boolean(
+        string="Ativo",
+        default=True,
+    )
     tipo = fields.Selection([
         ('P', 'Próprio'),
         ('S', 'ST')

@@ -29,6 +29,13 @@
         <field name="arch" type="xml">
             <form string="Protocolo/Convênio ICMS" delete="true" create="true" edit="true">
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object"
+                                class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button"
+                                options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
                     <field name="tipo" invisible="1" />
                     <div class="oe_title">
                         <h1>

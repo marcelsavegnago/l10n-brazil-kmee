@@ -1419,11 +1419,11 @@ class SpedCalculoImpostoItem(SpedBase):
             protocolo = self.produto_id.protocolo_id
 
         if not protocolo and (
-                self.produto_id.categ_id and
-                self.produto_id.categ_id.protocolo_ids
+                self.produto_id.ncm_id and
+                self.produto_id.ncm_id.protocolo_ids
         ):
             busca_protocolo = [
-                ('categ_ids.id', '=', self.produto_id.categ_id.id),
+                ('ncm_ids.ncm_id', '=', self.produto_id.ncm_id.id),
                 '|',
                 ('estado_ids', '=', False),
                 ('estado_ids.uf', '=', estado_destino)
@@ -1433,11 +1433,11 @@ class SpedCalculoImpostoItem(SpedBase):
             )
 
         if not protocolo and (
-                self.produto_id.ncm_id and
-                self.produto_id.ncm_id.protocolo_ids
+                self.produto_id.categ_id and
+                self.produto_id.categ_id.protocolo_ids
         ):
             busca_protocolo = [
-                ('ncm_ids.ncm_id', '=', self.produto_id.ncm_id.id),
+                ('categ_ids.id', '=', self.produto_id.categ_id.id),
                 '|',
                 ('estado_ids', '=', False),
                 ('estado_ids.uf', '=', estado_destino)

@@ -2,11 +2,11 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-==================
-ABGF Contabilidade
-==================
+====================
+L10nBR Contabilidade
+====================
 
-Este módulo prevê adaptações à contabilidade para ABGF
+Este módulo prevê adaptações à contabilidade para L10nBR
 
 Installation
 ============

@@ -5,8 +5,8 @@
 <openerp>
     <data>
 
-        <record id="abgf_view_account_journal" model="ir.ui.view">
-            <field name="name">account.journal.form (in abgf_contabilidade)</field>
+        <record id="l10n_br_contabilidade_view_account_journal" model="ir.ui.view">
+            <field name="name">account.journal.form (in l10n_br_contabilidade)</field>
             <field name="model">account.journal</field>
             <field eval="1" name="priority"/>
             <field name="mode">primary</field>
@@ -64,8 +64,8 @@
             </field>
         </record>
 
-        <record id="abgf_view_account_journal_tree" model="ir.ui.view">
-            <field name="name">account.journal.tree (in abgf_contabilidade)</field>
+        <record id="l10n_br_contabilidade_view_account_journal_tree" model="ir.ui.view">
+            <field name="name">account.journal.tree (in l10n_br_contabilidade)</field>
             <field name="model">account.journal</field>
             <field eval="1" name="priority"/>
             <field name="mode">primary</field>
@@ -77,8 +77,8 @@
             </field>
         </record>
 
-        <record id="abgf_view_account_journal_search" model="ir.ui.view">
-            <field name="name">account.journal.search (in abgf_contabilidade)</field>
+        <record id="l10n_br_contabilidade_view_account_journal_search" model="ir.ui.view">
+            <field name="name">account.journal.search (in l10n_br_contabilidade)</field>
             <field name="model">account.journal</field>
             <field eval="1" name="priority"/>
             <field name="mode">primary</field>
@@ -90,17 +90,19 @@
             </field>
         </record>
 
-        <record id="abgf_action_account_journal_form" model="ir.actions.act_window">
+        <record id="l10n_br_contabilidade_action_account_journal_form" model="ir.actions.act_window">
             <field name="name">Lote de lançamentos</field>
             <field name="res_model">account.journal</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem
-                action="abgf_action_account_journal_form"
-                id="menu_abgf_action_account_journal_form"
-                parent="abgf_menu_configuracao_contabilidade"/>
+        <record id="account.menu_action_account_journal_form" model="ir.ui.menu" >
+            <field name="name">Lote de lançamentos</field>
+            <!--TODO: Renomear no resto do sistema Diário para Lote de lançamento -->
+            <field name="action_id" ref="l10n_br_contabilidade_action_account_journal_form"/>
+            <field name="sequence">-100</field>
+        </record>
 
     </data>
 </openerp>

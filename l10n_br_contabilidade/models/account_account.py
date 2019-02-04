@@ -87,6 +87,12 @@ class AccountAccount(models.Model):
         compute='compute_tipo_apresentacao',
     )
 
+    mis_report_kpi_ids = fields.Many2many(
+        comodel_name='mis.report.kpi',
+        inverse_name='account_ids',
+        readonly=True,
+    )
+
     @api.multi
     @api.depends('report_type')
     def compute_tipo_apresentacao(self):

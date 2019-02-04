@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 KMEE INFORMATICA LTDA
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<openerp>
+<data>
+
+    <record model="ir.ui.view" id="mis_report_form_view">
+        <field name="name">mis.report.form (in l10n_br_mis_builder)</field>
+        <field name="model">mis.report</field>
+        <field name="inherit_id" ref="mis_builder.mis_report_view_form"/>
+        <field name="arch" type="xml">
+            <field name="description" position="after">
+                <field name="report_mode" required="1"/>
+                <field name="considerations"/>
+            </field>
+            <field name="kpi_ids" position="attributes">
+                <attribute name="context">{'default_report_mode':report_mode}</attribute>
+                <attribute name="editable">false</attribute>
+            </field>
+        </field>
+    </record>
+
+</data>
+</openerp>

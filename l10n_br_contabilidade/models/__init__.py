@@ -20,3 +20,11 @@ from . import account_mapeamento
 from . import account_period
 from . import account_saldo
 from . import account_divisao_resultado
+from . import mis_report_kpi
+from . import mis_report_style
+from . import mis_report
+from . import mis_builder
+from . import res_partner
+from . import mis_report_instance
+from . import mis_builder_report_xls
+from . import ir_attachment

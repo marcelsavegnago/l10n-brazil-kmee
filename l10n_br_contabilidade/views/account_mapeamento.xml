@@ -5,8 +5,8 @@
 <openerp>
     <data>
 
-        <record id="abgf_account_mapeamento_form_view" model="ir.ui.view">
-            <field name="name">abgf.conta.mapeamento.form</field>
+        <record id="l10n_br_account_mapeamento_form_view" model="ir.ui.view">
+            <field name="name">l10n_br.conta.mapeamento.form</field>
             <field name="model">account.mapeamento</field>
             <field name="arch" type="xml">
                 <form>
@@ -23,8 +23,8 @@
             </field>
         </record>
 
-        <record id="abgf_account_mapeamento_de_para_tree_view" model="ir.ui.view">
-            <field name="name">abgf.conta.mapeamento.tree</field>
+        <record id="l10n_br_account_mapeamento_de_para_tree_view" model="ir.ui.view">
+            <field name="name">l10n_br.conta.mapeamento.tree</field>
             <field name="model">account.mapeamento</field>
             <field name="arch" type="xml">
                 <tree>
@@ -36,22 +36,15 @@
             </field>
         </record>
 
-        <record id="abgf_account_mapeamento_form" model="ir.actions.act_window">
+        <record id="l10n_br_account_mapeamento_form" model="ir.actions.act_window">
             <field name="name">Mapeamento de Contas</field>
             <field name="res_model">account.mapeamento</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem
-                id="abgf_menu_account_mapeamento_form"
-                action="abgf_account_mapeamento_form"
-                parent="l10n_br_contabilidade.abgf_conta_mapeamento_menu"
-                sequence="10"
-        />
-
-        <record id="abgf_account_mapeamento_referencia_form_view" model="ir.ui.view">
-            <field name="name">abgf.conta.mapeamento.referencia.form</field>
+        <record id="l10n_br_account_mapeamento_referencia_form_view" model="ir.ui.view">
+            <field name="name">l10n_br.conta.mapeamento.referencia.form</field>
             <field name="model">account.mapeamento.referencia</field>
             <field name="arch" type="xml">
                 <form>
@@ -64,8 +57,8 @@
             </field>
         </record>
 
-        <record id="abgf_account_mapeamento_referencia_tree_view" model="ir.ui.view">
-            <field name="name">abgf.conta.mapeamento.referencia.tree</field>
+        <record id="l10n_br_account_mapeamento_referencia_tree_view" model="ir.ui.view">
+            <field name="name">l10n_br.conta.mapeamento.referencia.tree</field>
             <field name="model">account.mapeamento.referencia</field>
             <field name="arch" type="xml">
                 <tree>
@@ -80,13 +73,6 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
-
-        <menuitem
-                id="abgf_menu_account_mapeamento_referencia_form"
-                action="l10n_br_contabilidade_account_mapeamento_referencia_action"
-                parent="l10n_br_contabilidade.abgf_conta_mapeamento_menu"
-                sequence="20"
-        />
 
     </data>
 </openerp>

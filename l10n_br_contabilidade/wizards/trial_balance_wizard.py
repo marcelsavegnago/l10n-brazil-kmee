@@ -24,6 +24,6 @@ class AccountTrialBalanceWizard(models.TransientModel):
 
         data = super(AccountTrialBalanceWizard, self)._print_report(data)
 
-        data['report_name'] = 'account.abgf_account_report_trial_balance'
+        data['report_name'] = 'account.l10n_br_account_report_trial_balance'
 
         return data

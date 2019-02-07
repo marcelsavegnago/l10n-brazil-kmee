@@ -11,5 +11,5 @@ class AccountReportGeneralLedgerWizard(models.TransientModel):
         data = self.pre_print_report(cr, uid, ids, data, context=context)
 
         return {'type': 'ir.actions.report.xml',
-                'report_name': 'account.abgf_account_report_general_ledger',
+                'report_name': 'account.l10n_br_account_report_general_ledger',
                 'datas': data}

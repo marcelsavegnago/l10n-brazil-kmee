@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 ABGF
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<openerp>
+    <data>
+
+        <record id="view_account_form" model="ir.ui.view">
+            <field name="name">account.account.from in (l10n_br_contabilidade)</field>
+            <field name="type">form</field>
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="type" position="after">
+                        <field name="natureza_conta_id" attrs="{'invisible':[('type','=','view')], 'required':[('type','!=','view')]}" widget="selection"/>
+                    </field>
+                    <field name="tax_ids" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </field>
+                    <field name="reconcile" position="after">
+                            <field name="precisa_ramo"/>
+                            <field name="report_type" invisible="1"/>
+                            <field name="tipo_conta_apresentacao" invisible="1"/>
+                    </field>
+                    <xpath expr="//field[@name='credit']" position="after">
+                        <div>
+                            <label for="saldo"/>
+                            <field name="saldo" style='text-align:right'/>
+                            <field name="identificacao_saldo" style="font-weight:bold;text-align:left"/>
+                        </div>
+                    </xpath>
+                    <xpath expr="//field[@name='balance']" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='note']" position="replace">
+                        <notebook colspan="3">
+                            <page string="Função">
+                                <field name="funcao"/>
+                            </page>
+                            <page string="Funcionamento">
+                                <field name="funcionamento"/>
+                            </page>
+                            <page string="Observação">
+                                <field name="observacao"/>
+                            </page>
+                            <page string="DePara">
+                                <field name="depara_ids"/>
+                            </page>
+
+                            <!--<page string="Apresentação"-->
+                                  <!--attrs="{'invisible':['|',('report_type','=', False),('type', '!=', 'other')]}">-->
+                                <!--<separator string="Conta referente ao DRE"-->
+                                           <!--attrs="{'invisible':[('report_type', 'in', ['asset','liability'])]}"/>-->
+                                <!--<separator string="Conta referente ao Balanço Patrimonial"-->
+                                           <!--attrs="{'invisible':[('report_type', 'in', ['income','expense'])]}"/>-->
+                                <!--<group>-->
+                                    <!--<field name="account_account_report_id"-->
+                                           <!--attrs="{'required':[('type', '=', 'other')]}" nolabel="1">-->
+                                        <!--<tree>-->
+                                            <!--<field name="name"/>-->
+                                            <!--<field name="code"/>-->
+                                        <!--</tree>-->
+                                    <!--</field>-->
+                                <!--</group>-->
+                            <!--</page>-->
+                            <page string="Apresentação" name="apresentacao">
+                                <group>
+                                    <field name="mis_report_kpi_ids">
+                                        <tree>
+                                            <field name="report_id"/>
+                                            <field name="description"/>
+                                            <field name="name"/>
+                                            <field name="expression"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Contas Filhas" groups="base.group_no_one">
+                                <field name="child_parent_ids"/>
+                            </page>
+                        </notebook>
+                    </xpath>
+
+                </data>
+            </field>
+        </record>
+
+        <record id="view_account_tree" model="ir.ui.view">
+            <field name="name">account.account.tree</field>
+            <field name="type">tree</field>
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_list"/>
+            <field name="arch" type="xml">
+               <data>
+                   <xpath expr="//field[@name='type']" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
+                   <xpath expr="//field[@name='balance']" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
+                   <field name="debit" position="before">
+                        <field name="natureza_conta_id" string="Natureza"/>
+                    </field>
+                    <field name="balance" position="after">
+                        <field name="saldo"/>
+                        <field name="identificacao_saldo" string=" "/>
+                    </field>
+                   <xpath expr="//field[@name='company_currency_id']" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
+               </data>
+            </field>
+        </record>
+
+    </data>
+</openerp>

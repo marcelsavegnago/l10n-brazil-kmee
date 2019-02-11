@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 ABGF
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<openerp>
+    <data>
+
+        <record id="l10n_br_view_account_period_form" model="ir.ui.view">
+            <field name="name">account.period.form (in l10n_br_contabilidade)</field>
+            <field name="model">account.period</field>
+            <field name="inherit_id" ref="account.view_account_period_form" />
+            <field name="arch" type="xml">
+                <!--<button name="action_draft" position="replace">-->
+                    <!--<button name="reopen_period" groups="base.group_no_one" states="done" string="Re-Abrir Período" type="object"/>-->
+                    <!--<button name="gerar_balancete" groups="base.group_no_one" string="Gerar Balancete do Período" type="object" />-->
+                    <!--<button name="gerar_dre_periodo" groups="base.group_no_one" string="Gerar DRE" type="object" />-->
+                <!--</button>-->
+
+                <xpath expr="//sheet" position="inside">
+                    <group>
+                        <field name="account_journal_id" required="1"/>
+                    </group>
+
+
+                    <group string="Parametrização dos demonstrativos">
+                        <group>
+                            <field name="demonstracao_periodo_atual" />
+                            <field name="demonstracao_start_periodo" attrs="{'invisible': [('demonstracao_periodo_atual', '=', True)]}" />
+                        </group>
+                        <group>
+                            <field name="detalhar_contas_superiores"  />
+                            <field name="exibir_conta_raiz" attrs="{'invisible': [('detalhar_contas_superiores', '=', False)]}" />
+                        </group>
+                    </group>
+
+                    <notebook colspan="4">
+                        <page string="Lançamentos">
+                            <separator string="Lançamentos Contábeis no período" colspan="4"/>
+                            <field name="account_move_ids"  context="{'form_view_ref': 'l10n_br_contabilidade.l10n_br_contabilidade_view_account_move_form'}" nolabel="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="date"/>
+                                    <field name="amount"/>
+                                    <field name="state" class="oe_left"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Fechamento" attrs="{'invisible': [('account_move_fechamento_ids', '=', [])]}">
+                            <separator string="Lançamentos Contábeis de Fechamento" colspan="4"/>
+                            <field name="account_move_fechamento_ids" context="{'form_view_ref': 'l10n_br_contabilidade.l10n_br_contabilidade_view_account_move_form'}" nolabel="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="date"/>
+                                    <field name="amount"/>
+                                    <field name="state" class="oe_left"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Balancete">
+                            <separator string="Balancete do Período" colspan="4"/>
+                            <field name="account_saldo_ids" nolabel="1">
+                                <tree>
+                                    <field name="name" invisible="1" />
+                                    <field name="account_account_id" />
+                                    <field name="identificacao_saldo" string="Natureza" style="font-weight:bold" nolabel="1" />
+                                    <field name="saldo_inicial" />
+                                    <field name="debito_periodo" sum="Debitos"/>
+                                    <field name="credito_periodo" sum="Creditos"/>
+                                    <field name="saldo_periodo" invisible="1"/>
+                                    <field name="saldo_final" />
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="DRE">
+                            <separator string="DRE" colspan="4"/>
+                            <field name="account_account_report_line_ids" nolabel="1" />
+                        </page>
+
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="l10n_br_view_account_period_search" model="ir.ui.view">
+            <field name="name">account.period.search (in l10n_br_contabilidade)</field>
+            <field name="model">account.period</field>
+            <field name="inherit_id" ref="account.view_account_period_search" />
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <filter string="Fechado" name="fechado" domain="[('state','=','done')]" icon="terp-dialog-close"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

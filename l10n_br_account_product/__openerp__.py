@@ -15,6 +15,7 @@
         'account_product_fiscal_classification',
         'financial_account',
         'account_payment',
+        'l10n_br_contabilidade',
     ],
     'data': [
         'l10n_br_account_product_sequence.xml',

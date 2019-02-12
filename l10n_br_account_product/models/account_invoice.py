@@ -368,6 +368,9 @@ class AccountInvoice(models.Model):
     type = fields.Selection(
         states={'draft': [('readonly', False)]}
     )
+    tax_line = fields.One2many(
+        copy=False,
+    )
     serie_nfe = fields.Char(
         'Série NF', size=12, readonly=True, oldname='vendor_serie',
         states={'draft': [('readonly', False)]},
@@ -582,6 +585,9 @@ class AccountInvoice(models.Model):
         u'Espécie', size=60, readonly=True, states={
             'draft': [
                 ('readonly', False)]})
+    move_id = fields.Many2one(
+        copy=False,
+    )
     brand_of_packages = fields.Char(
         'Brand', size=60, readonly=True, states={
             'draft': [

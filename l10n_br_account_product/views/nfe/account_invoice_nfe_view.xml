@@ -97,8 +97,8 @@
                         <group>
                             <field name="internal_number" attrs="{'readonly': [('issuer', '=', '0')], 'required': [('issuer', '=', '1')]}" />
                             <field name="date_invoice" invisible="1" on_change="onchange_payment_term_date_invoice(payment_term, date_invoice)"/>
-                            <field name="date_hour_invoice" string="Data Emissão"/>
-                            <field name="date_in_out" string="Data de Entrada/Saida"/>
+                            <field name="date_hour_invoice" string="Data Emissão" attrs="{'required': [('type', 'in', ['in_invoice', 'in_refund'])]}"/>
+                            <field name="date_in_out" string="Data de Entrada/Saida" attrs="{'required': [('type', 'in', ['in_invoice', 'in_refund'])]}"/>
                             </group>
                     </group>
                     <separator string="Parceiro" />

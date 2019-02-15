@@ -1159,7 +1159,9 @@ class AccountInvoice(models.Model):
     def _get_invoice_event_data(self):
         vals = {}
         vals['company_id'] = self.company_id.id
+        vals['ref'] = 'nota_fiscal'
         vals['period'] = self.period_id
+        vals['data'] = self.date_hour_invoice.split(' ')[0]
         vals['account_event_id'] = self.fiscal_category_id.account_event_id.id
 
         return vals
@@ -1171,8 +1173,8 @@ class AccountInvoice(models.Model):
             if self[info_name]:
                 lines.append(
                     {
-                        'name': info_name,
-                        'value': self[info_name],
+                        'code': info_name,
+                        'valor': self[info_name],
                     }
                 )
 
@@ -1197,18 +1199,25 @@ class AccountInvoice(models.Model):
                 )
 
             if inv.move_id:
-                continue
+                inv.move_id.unlink()
 
             if not self.period_id:
                 self.period_id = self.env['account.period'].find(
                     self.date_hour_invoice)[0]
 
             account_event_data = self._get_invoice_event_data()
-            account_event_data['account_event_lines'] = \
+            account_event_data['lines'] = \
                 self._get_invoice_move_line_data()
 
-            inv.fiscal_category_id.account_event_id.criar_lancamento_roteiro(
-                account_event_data)
+            inv.move_id = \
+                inv.fiscal_category_id.account_event_id.gerar_contabilizacao(
+                    account_event_data
+                )
+
+            account_invoice_tax = self.env['account.invoice.tax']
+            compute_taxes = account_invoice_tax.compute(
+                inv.with_context(lang=inv.partner_id.lang))
+            inv.check_tax_lines(compute_taxes)
 
     # @api.multi
     # def finalize_invoice_move_lines(self, move_lines):

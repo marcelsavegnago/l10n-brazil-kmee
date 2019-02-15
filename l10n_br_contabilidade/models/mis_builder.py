@@ -112,7 +112,8 @@ class MisReportInstance(models.Model):
             lambda k: k.name == 'resultado_liquido_do_periodo'
         )
         row = next(d['cols'] and d['cols'][0] for d in res['content']
-                   if d['kpi_name'] == kpi[0].description) if kpi else None
+                   if d['kpi_name'] == kpi[0].description) \
+            if kpi and not self.report_id.matrix else None
 
         if row and self.considerations:
             val = float(row['val'])

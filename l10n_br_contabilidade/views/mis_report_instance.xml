@@ -19,11 +19,11 @@
             <field name="date" position="after">
                 <field name="incluir_lancamentos_de_fechamento"/>
             </field>
-            <sheet position="inside">
+            <form position="inside">
                 <group>
                     <field name="attachment_ids" widget="many2many_binary"/>
                 </group>
-            </sheet>
+            </form>
             <field name="period_to" position="after">
                 <field name="incluir_lancamentos_de_fechamento"/>
             </field>

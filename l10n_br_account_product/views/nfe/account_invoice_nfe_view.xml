@@ -388,14 +388,16 @@
                                         groups="account.group_account_manager"
                                         string="Accounting Period"
                                         placeholder="force period" options="{'no_quick_create': True, 'no_create_edit': True}" />
-                                    <field name="move_id" groups="account.group_account_user"/>
                                 </group>
+
                                 <group>
                                     <field name="origin" groups="base.group_user"/>
                                     <field name="name"/>
                                     <field name="user_id" groups="base.group_user" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'account.group_account_invoice']}" options="{'no_quick_create': True, 'no_create_edit': True}" />
                                 </group>
                             </group>
+                            <separator string="Lançamentos Contabéis"/>
+                            <field name="move_id" groups="account.group_account_user"/>
                             <field name="tax_line">
                                 <tree editable="bottom" string="Taxes">
                                     <field name="name"/>

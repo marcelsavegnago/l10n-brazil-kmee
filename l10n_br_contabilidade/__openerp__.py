@@ -52,6 +52,8 @@
         'views/mis_report_style.xml',
         'views/account_fiscalyear.xml',
         'views/res_partner.xml',
+        'views/account_event_template.xml',
+        'views/account_invoice.xml'
     ],
     'qweb': [
         'static/src/xml/*.xml'

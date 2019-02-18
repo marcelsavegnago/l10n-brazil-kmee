@@ -6,4 +6,4 @@ from openerp import api, models, fields
 from openerp.addons.l10n_br_account_product.constantes import \
     CAMPO_DOCUMENTO_FISCAL
 
-CAMPO_DOCUMENTO_FISCAL.append(('product_id', 'Produto'))
+# CAMPO_DOCUMENTO_FISCAL.append(('product_id', 'Produto'))

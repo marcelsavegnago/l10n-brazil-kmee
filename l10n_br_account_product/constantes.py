@@ -9,9 +9,9 @@ CAMPO_DOCUMENTO_FISCAL = [
     ('cofins_value_wh', 'COFINS retida'),
     ('csll_value', 'CSLL própria'),
     ('csll_value_wh', 'CSLL retida'),
-    ('discount_value', 'Desconto'),
+    ('amount_discount', 'Desconto'),
     ('icms_dest_value', 'Diferencial de alíquota (ICMS próprio)'),
-    ('freight_value', 'Frete'),
+    ('amount_freight', 'Frete'),
     ('icms_value', 'ICMS próprio'),  # vr_icms_proprio
     ('icms_st_value', 'ICMS ST'),  # vr_icms_st
     ('ii_value', 'Imposto de importação'),
@@ -20,19 +20,12 @@ CAMPO_DOCUMENTO_FISCAL = [
     ('irrf_value_wh', 'IRRF retido'),
     ('issqn_value', 'ISS próprio'),
     ('issqn_value_wh', 'ISS retido'),
-    ('other_costs_value', 'Outras despesas acessórias'),
+    ('amount_costs', 'Outras despesas acessórias'),
     ('pis_value', 'PIS próprio'),  # vr_pis_proprio
     ('pis_value_wh', 'PIS retido'),
-    ('insurance_value', 'Seguro'),
-    ('amount_net', 'Total da fatura'),
-    ('price_total', 'Total da NF'),
-    ('vr_operacao', 'Valor da operação'),
-    ('vr_custo_comercial', '# Custo (nas entradas/compras)'),
-    ('vr_custo_estoque', '# Custo médio (nas saídas/vendas)'),
-    # ('vr_icms_sn', '# Crédito de ICMS - SIMPLES Nacional'),
-    # ('vr_diferencial_aliquota_st', '# Diferencial de alíquota (ICMS ST)'),
-    # ('vr_irpj_proprio', '# IRPJ próprio'),
-    # ('vr_simples', '# SIMPLES'),
+    ('amount_insurance', 'Seguro'),
+    ('amount_net', 'Valor Fatura'),
+    ('amount_total', 'Total da NF'),
 ]
 
 CAMPO_DOCUMENTO_FISCAL_ITEM = (

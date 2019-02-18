@@ -368,6 +368,9 @@ class AccountInvoice(models.Model):
     type = fields.Selection(
         states={'draft': [('readonly', False)]}
     )
+    tax_line = fields.One2many(
+        copy=False,
+    )
     serie_nfe = fields.Char(
         'Série NF', size=12, readonly=True, oldname='vendor_serie',
         states={'draft': [('readonly', False)]},
@@ -582,6 +585,9 @@ class AccountInvoice(models.Model):
         u'Espécie', size=60, readonly=True, states={
             'draft': [
                 ('readonly', False)]})
+    move_id = fields.Many2one(
+        copy=False,
+    )
     brand_of_packages = fields.Char(
         'Brand', size=60, readonly=True, states={
             'draft': [
@@ -1188,12 +1194,12 @@ class AccountInvoice(models.Model):
                     raise ValidationError(
                         _('Warning!'),
                         _('No invoice date!'
-                            '\nThe invoice currency is not the same than the '
+                          '\nThe invoice currency is not the same than the '
                           'company currency.'
-                            ' An invoice date is required to determine '
+                          ' An invoice date is required to determine '
                           'the exchange rate to apply. Do not forget to update'
                           ' the taxes!'
-                        )
+                          )
                     )
                 inv.with_context(ctx).write(
                     {'date_invoice': fields.Date.context_today(self)})
@@ -1259,7 +1265,7 @@ class AccountInvoice(models.Model):
                 invoice_line.gera_account_move_line(
                     line_id, template_nao_contabilizados, move_template)
 
-            #import ipdb; ipdb.set_trace();
+            # import ipdb; ipdb.set_trace();
             #
             # Contabiliza os campos do cabeçalho do documento
             #

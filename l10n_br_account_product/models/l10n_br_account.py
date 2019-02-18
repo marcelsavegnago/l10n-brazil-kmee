@@ -46,6 +46,10 @@ class L10nBrAccountFiscalCategory(models.Model):
     payment_term_required = fields.Boolean(
         string=u'Condição de pagamento obrigatória'
     )
+    account_event_id = fields.Many2one(
+        string=u'Roteiro de Evento Contábil',
+        comodel_name='account.event.template',
+    )
 
 
 class L10nBrAccountDocumentSerie(models.Model):

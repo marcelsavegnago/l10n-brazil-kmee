@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2018 ABGF http://www.abgf.gov.br/
+    License AGPL-3 or later (http://www.gnu.org/licenses/agpl)
+-->
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="l10n_br_contabilidade_eventos_contabeis_form">
+            <field name="name">l10n_br_contabilidade_eventos_contabeis_form (in l10n_br_contabilidade)</field>
+            <field name="model">account.event.template</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="name"  attrs="{'required': True}"/>
+                        <field name="lote_lancamento_id" attrs="{'required': True}"/>
+                        <field name="account_formula" groups="base.group_no_one"/>
+                    </group>
+                    <separator string="Partidas"/>
+                    <field name="account_event_template_line_ids" widget="one2many_list">
+                        <tree editable="bottom">
+                            <field name="codigo"/>
+                            <field name="account_historico_padrao_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="account_debito_id" domain="[('type', '=', 'other')]" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="account_credito_id" domain="[('type', '=', 'other')]" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                        </tree>
+                    </field>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="l10n_br_contabilidade_eventos_contabeis_tree">
+            <field name="name">l10n_br_contabilidade_eventos_contabeis_tree (in l10n_br_contabilidade)</field>
+            <field name="model">account.event.template</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="account_formula"/>
+                    <field name="account_event_template_line_ids"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="l10n_br_contabilidade_eventos_contabeis_line_form">
+            <field name="name">l10n_br_contabilidade_eventos_contabeis_line_form (in l10n_br_contabilidade)</field>
+            <field name="model">account.event.template.line</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="res_id" options="{'no_quick_create': True, 'no_create_edit': True}" attrs="{'invisible': True}"/>
+                            <field name="codigo"/>
+                            <field name="account_historico_padrao_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="account_debito_id"/>
+                            <field name="account_credito_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="l10n_br_contabilidade_eventos_contabeis_line_tree">
+            <field name="name">l10n_br_contabilidade_eventos_contabeis_line_tree (in l10n_br_contabilidade)</field>
+            <field name="model">account.event.template.line</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="res_id" options="{'no_quick_create': True, 'no_create_edit': True}" attrs="{'required': [('codigo', '=', False)], 'invisible': True}"/>
+                    <field name="codigo" attrs="{'required': [('res_id', '=', False)]}"/>
+                    <field name="account_historico_padrao_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                    <field name="account_debito_id"/>
+                    <field name="account_credito_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="l10n_br_contabilidade_eventos_contabeis_action" model="ir.actions.act_window">
+            <field name="name">Roteiros de Eventos Contábeis</field>
+            <field name="res_model">account.event.template</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="l10n_br_contabilidade_eventos_contabeis_tree"/>
+        </record>
+
+        <menuitem
+            action="l10n_br_contabilidade_eventos_contabeis_action"
+            id="l10n_br_contabilidade_eventos_contabeis"
+            parent="l10n_br_contabilidade.menu_l10n_br_roteiro_eventos_contabeis"
+            sequence="10"
+        />
+
+    </data>
+</openerp>

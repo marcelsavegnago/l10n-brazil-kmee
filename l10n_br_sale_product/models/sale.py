@@ -8,6 +8,8 @@ from openerp.exceptions import ValidationError
 
 from openerp.addons import decimal_precision as dp
 from openerp.addons.l10n_br_base.tools.misc import calc_price_ratio
+from openerp.addons.l10n_br_account_product.models.account_invoice_term \
+    import FORMA_PAGAMENTO_SEM_PAGAMENTO
 
 
 class SaleOrder(models.Model):
@@ -256,13 +258,16 @@ class SaleOrder(models.Model):
         :return:
         """
         if (self.payment_term and self.amount_total and
-                self.date_order and not self.account_payment_ids):
+                self.date_order):
             payment_id = self.account_payment_ids.new()
             payment_id.payment_term_id = self.payment_term
-            payment_id.amount = self.amount_total
+            payment_id.amount = (
+                            self.amount_total if
+                            self.payment_term.forma_pagamento !=
+                            FORMA_PAGAMENTO_SEM_PAGAMENTO else 0.0)
             payment_id.date = self.date_order[:10]
             payment_id.onchange_payment_term_id()
-            self.account_payment_ids |= payment_id
+            self.account_payment_ids = payment_id
 
 
 class SaleOrderLine(models.Model):

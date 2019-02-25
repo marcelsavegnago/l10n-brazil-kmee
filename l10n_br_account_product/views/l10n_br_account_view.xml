@@ -17,7 +17,6 @@
 
                     <group string="Contábil">
                         <field name="account_move_template_id" />
-                        <field name="account_event_id" />
                     </group>
                     <group string="Financeiro">
                         <field name="financial_document_type_id"/>

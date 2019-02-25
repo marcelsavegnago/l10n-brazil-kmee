@@ -29,6 +29,7 @@
         # # Visão
         'wizards/fechamento_reabertura_justificativa_wizard.xml',
         'wizards/trial_balance_wizard.xml',
+        'wizards/general_ledger_wizard.xml',
         'views/account_account.xml',
         'views/account_account_report.xml',
         'views/account_account_report_line.xml',
@@ -53,7 +54,8 @@
         'views/account_fiscalyear.xml',
         'views/res_partner.xml',
         'views/account_event_template.xml',
-        'views/account_invoice.xml'
+        'views/account_invoice.xml',
+        'views/l10n_br_account.xml',
     ],
     'qweb': [
         'static/src/xml/*.xml'

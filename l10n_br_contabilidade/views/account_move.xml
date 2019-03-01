@@ -13,7 +13,6 @@
                     <field name="sequencia"/>
                     <field name="date"/>
                     <field name="resumo" string="Histórico"/>
-                    <field name="ref"/>
                     <field name="period_id" invisible="1"/>
                     <field name="journal_id" invisible="1" string="Lote"/>
                     <field name="partner_id" invisible="1"/>
@@ -79,7 +78,7 @@
                         </group>
                         <group>
                             <field name="period_id" attrs="{'readonly':[('state','=','posted')]}" options="{'no_create': True}" invisible="True"/>
-                            <field name="ref"  string="Módulo de Origem" attrs="{'readonly':[('state','!=','draft')]}" />
+                            <field name="ref"  string="Módulo de Origem" attrs="{'readonly': True}" />
                         </group>
                     </group>
 

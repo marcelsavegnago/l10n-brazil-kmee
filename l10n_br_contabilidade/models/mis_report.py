@@ -25,3 +25,21 @@ class MisReport(models.Model):
     considerations = fields.Text(
         string=u'Considerações finais'
     )
+
+    incluir_lancamentos_de_fechamento = fields.Boolean(
+        string=u'Incluir lançamentos de fechamento?'
+    )
+
+    @api.onchange('incluir_lancamentos_de_fechamento')
+    def _onchange_incluir_lancamentos_de_fechamento(self):
+        self.ensure_one()
+
+        for kpi_id in self.kpi_ids:
+            kpi_id.incluir_lancamentos_de_fechamento = \
+                self.incluir_lancamentos_de_fechamento
+            kpi_id._onchange_lancamentos_fechamento()
+
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'reload'
+        }

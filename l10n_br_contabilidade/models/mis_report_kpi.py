@@ -4,7 +4,8 @@
 
 from openerp import api, fields, models, _
 from openerp.exceptions import Warning as UserWarning
-
+import re
+from openerp.tools.safe_eval import safe_eval
 
 EXPRESSION_TYPES = [
     ('bal', u'Saldo no período'),
@@ -22,6 +23,16 @@ SELECTION_MODE = [
     ('auto', u'Conta Contábil'),
     ('manual', u'Formula'),
 ]
+
+ACC_RE = re.compile(r"(?P<field>\bbal|\bcrd|\bdeb)"
+                    r"(?P<mode>[pise])?"
+                    r"(?P<accounts>_[a-zA-Z0-9]+|\[.*?\])"
+                    r"(?P<domain>\[.*?\])?"
+                    )
+
+MODE_VARIATION = 'p'
+MODE_INITIAL = 'i'
+MODE_END = 'e'
 
 
 class MisReportKpi(models.Model):
@@ -90,8 +101,69 @@ class MisReportKpi(models.Model):
                     u"preencher as contas da linha"
                 )
 
+    def _parse_match_object(self, mo):
+        """Split a match object corresponding to an accounting variable
+
+        Returns field, mode, [account codes], (domain expression).
+        """
+        field, mode, account_codes, domain = mo.groups()
+        if not mode:
+            mode = MODE_VARIATION
+        elif mode == 's':
+            mode = MODE_END
+        if account_codes.startswith('_'):
+            account_codes = account_codes[1:]
+        else:
+            account_codes = account_codes[1:-1]
+        if account_codes.strip():
+            account_codes = [a.strip() for a in account_codes.split(',')]
+        else:
+            account_codes = [None]
+        domain = domain or '[]'
+        domain = tuple(safe_eval(domain))
+        return field, mode, account_codes, domain
+
+    @api.onchange('incluir_lancamentos_de_fechamento')
+    def _onchange_lancamentos_fechamento(self):
+        for record in self:
+            new_expression = record.expression
+
+            if not new_expression:
+                record._compute_kpi_expression()
+                continue
+
+            lancamento_fechamento_str = str(
+                [('move_id.lancamento_de_fechamento', '=', False)]
+                if not record.incluir_lancamentos_de_fechamento
+                else ''
+            )
+
+            for exp in ACC_RE.finditer(record.expression):
+                _, mode, account_codes, domain = \
+                    self._parse_match_object(exp)
+
+                if not _:
+                    record._compute_kpi_expression()
+                    continue
+
+                mode_str = mode if mode != MODE_VARIATION else ''
+                _str = _ + mode_str
+                domain_str = '[' + ''.join(str(d) for d in domain) + ']'
+
+                # Removes the old domains
+                new_expression = new_expression.replace(domain_str, '')
+
+                field = _str + '[' + ','.join(
+                    code for code in account_codes) + ']'
+
+                # Adds the new (or inexisting) domain
+                new_expression = new_expression.replace(
+                    field, field + lancamento_fechamento_str)
+
+            record.expression = new_expression
+
     @api.depends('account_ids.mis_report_kpi_ids', 'expression_type',
-                 'invert_signal', 'incluir_lancamentos_de_fechamento')
+                 'invert_signal')
     def _compute_kpi_expression(self):
         for record in self:
             if record.expression_mode == 'manual':

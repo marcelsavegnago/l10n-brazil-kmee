@@ -29,7 +29,17 @@
                     <field name="style_id"/>
                 </field>
                 <field name="expression" position="attributes">
-                    <attribute name="required">1</attribute>
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="expression" position="after">
+                    <field name="expression_auto" attrs="{
+                    'invisible': [('expression_mode','=','manual')],
+                    'required': [('expression_mode','=','auto')],
+                    }"/>
+                    <field name="expression_manual" attrs="{
+                    'invisible': [('expression_mode','=','auto')],
+                    'required': [('expression_mode','=','manual')],
+                    }"/>
                 </field>
                 <group position="after">
                     <group col="2" string="Legend (for kpi expressions)">

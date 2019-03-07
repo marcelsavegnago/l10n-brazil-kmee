@@ -67,6 +67,16 @@ class MisReportKpi(models.Model):
         default='bal'
     )
     expression = fields.Char(
+        compute='_compute_kpi_expression_auto_manual',
+        store=False,
+        required=False,
+    )
+    expression_manual = fields.Char(
+        string='Expressao',
+        required=False,
+    )
+    expression_auto = fields.Char(
+        string='Expressao',
         compute='_compute_kpi_expression',
         inverse='_inverse_kpi_expression',
         store=True,
@@ -160,22 +170,32 @@ class MisReportKpi(models.Model):
                 new_expression = new_expression.replace(
                     field, field + lancamento_fechamento_str)
 
-            record.expression = new_expression
+            record.expression_manual = record.expression_auto = new_expression
+
+
+
+    @api.depends('expression_manual', 'expression_auto', 'expression_mode',
+                 'account_ids.mis_report_kpi_ids', 'expression_type',
+                 'invert_signal')
+    def _compute_kpi_expression_auto_manual(self):
+        for record in self:
+            if record.expression_mode == 'manual':
+                record.expression = record.expression_manual
+            elif record.expression_mode == 'auto':
+                record.expression = record.expression_auto
 
     @api.depends('account_ids.mis_report_kpi_ids', 'expression_type',
                  'invert_signal')
     def _compute_kpi_expression(self):
         for record in self:
-            if record.expression_mode == 'manual':
-                continue
             if not record.invert_signal and not record.expression_type and not\
                     record.account_ids:
-                record.expression = ''
+                record.expression_auto = ''
             else:
                 signal = ''
                 if record.invert_signal:
                     signal = '-'
-                record.expression = (
+                record.expression_auto = (
                         signal +
                         record.expression_type +
                         '[{}]'.format(

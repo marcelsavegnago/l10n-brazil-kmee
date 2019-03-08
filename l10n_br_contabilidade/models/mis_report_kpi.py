@@ -133,10 +133,9 @@ class MisReportKpi(models.Model):
         domain = tuple(safe_eval(domain))
         return field, mode, account_codes, domain
 
-    @api.onchange('incluir_lancamentos_de_fechamento')
     def _onchange_lancamentos_fechamento(self):
         for record in self:
-            new_expression = record.expression
+            new_expression = record.expression_manual
 
             if not new_expression:
                 record._compute_kpi_expression()
@@ -149,7 +148,8 @@ class MisReportKpi(models.Model):
             )
 
             replaced_fields = []
-            for exp in ACC_RE.finditer(record.expression):
+            removed_domain = False
+            for exp in ACC_RE.finditer(record.expression_manual):
                 _, mode, account_codes, domain = \
                     self._parse_match_object(exp)
 
@@ -157,12 +157,15 @@ class MisReportKpi(models.Model):
                     record._compute_kpi_expression()
                     continue
 
-                mode_str = mode if mode != MODE_VARIATION else ''
-                _str = _ + mode_str
-                domain_str = '[' + ''.join(str(d) for d in domain) + ']'
+                if not removed_domain:
+                    mode_str = mode if mode != MODE_VARIATION else ''
+                    _str = _ + mode_str
+                    domain_str = '[' + ''.join(str(d) for d in domain) + ']'
 
-                # Removes the old domains
-                new_expression = new_expression.replace(domain_str, '')
+                    # Removes the old domains
+                    new_expression = new_expression.replace(domain_str, '')
+
+                    removed_domain = True
 
                 field = _str + '[' + ','.join(
                     code for code in account_codes) + ']'
@@ -173,22 +176,27 @@ class MisReportKpi(models.Model):
                         field, field + lancamento_fechamento_str)
                     replaced_fields.append(field)
 
-            record.expression_manual = record.expression_auto = new_expression
+            record.expression_manual = new_expression
 
     @api.depends('expression_manual', 'expression_auto', 'expression_mode',
-                 'account_ids.mis_report_kpi_ids', 'expression_type',
-                 'invert_signal')
+                 'incluir_lancamentos_de_fechamento')
     def _compute_kpi_expression_auto_manual(self):
         for record in self:
             if record.expression_mode == 'manual':
+                record._onchange_lancamentos_fechamento()
                 record.expression = record.expression_manual
+
             elif record.expression_mode == 'auto':
+                record._compute_kpi_expression()
                 record.expression = record.expression_auto
 
     @api.depends('account_ids.mis_report_kpi_ids', 'expression_type',
                  'invert_signal')
     def _compute_kpi_expression(self):
         for record in self:
+            if record.expression_mode == 'manual':
+                record.expression = record.expression_manual
+                continue
             if not record.invert_signal and not record.expression_type and not\
                     record.account_ids:
                 record.expression_auto = ''

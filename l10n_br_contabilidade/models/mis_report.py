@@ -37,9 +37,3 @@ class MisReport(models.Model):
         for kpi_id in self.kpi_ids:
             kpi_id.incluir_lancamentos_de_fechamento = \
                 self.incluir_lancamentos_de_fechamento
-            kpi_id._onchange_lancamentos_fechamento()
-
-        return {
-            'type': 'ir.actions.client',
-            'tag': 'reload'
-        }

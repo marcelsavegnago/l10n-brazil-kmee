@@ -2085,6 +2085,7 @@ class AccountInvoiceLine(models.Model):
 
     def _amount_tax_retcsll(self, tax=None):
         result = {
+            'csll_base': tax.get('total_base', 0.0),
             'csll_wh_value': tax.get('amount', 0.0),
         }
         return result

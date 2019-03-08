@@ -71,6 +71,10 @@ class MisReportKpi(models.Model):
         store=False,
         required=False,
     )
+    expression_show = fields.Char(
+        string='Expressao',
+        required=False,
+    )
     expression_manual = fields.Char(
         string='Expressao',
         required=False,
@@ -133,11 +137,26 @@ class MisReportKpi(models.Model):
         domain = tuple(safe_eval(domain))
         return field, mode, account_codes, domain
 
+    @api.onchange('expression_show')
+    def _onchange_expression_show(self):
+
+        lancamento_de_fechamento_domain = str(
+            [('move_id.lancamento_de_fechamento', '=', False)]
+        )
+        self.expression_show = self.expression.replace(
+            lancamento_de_fechamento_domain, '')
+
+        if self.expression_mode == 'manual':
+            self.expression_manual = self.expression_show
+
+        elif self.expression_mode == 'auto':
+            self.expression_auto = self.expression_show
+
     def _onchange_lancamentos_fechamento(self):
         for record in self:
             new_expression = record.expression_manual
 
-            if not new_expression:
+            if not new_expression or record.expression_mode == 'auto':
                 record._compute_kpi_expression()
                 continue
 
@@ -154,6 +173,8 @@ class MisReportKpi(models.Model):
             # removing old existing lancamento_fechamento domain
             expression_wo_domain = new_expression = new_expression.replace(
                 lancamento_de_fechamento_domain, '')
+
+            record.expression_show = expression_wo_domain
 
             replaced_fields = []
             for exp in ACC_RE.finditer(expression_wo_domain):
@@ -185,8 +206,7 @@ class MisReportKpi(models.Model):
 
             record.expression_manual = new_expression
 
-    @api.depends('expression_manual', 'expression_auto', 'expression_mode',
-                 'incluir_lancamentos_de_fechamento')
+    @api.depends('expression_manual', 'expression_auto', 'expression_mode')
     def _compute_kpi_expression_auto_manual(self):
         for record in self:
             if record.expression_mode == 'manual':
@@ -213,14 +233,13 @@ class MisReportKpi(models.Model):
                 signal = ''
                 if record.invert_signal:
                     signal = '-'
-                record.expression_auto = (
-                        signal +
-                        record.expression_type +
-                        '[{}]'.format(
-                            "".join([str(acc.code) + ','
-                                     if acc else ''
-                                     for acc in record.account_ids])
-                        ) + str(
+                expression_wo_domain = \
+                    signal + record.expression_type + \
+                    '[{}]'.format("".join([str(acc.code) +
+                                           ',' if acc else ''
+                                           for acc in record.account_ids]))
+                record.expression_show = expression_wo_domain
+                record.expression_auto = (expression_wo_domain + str(
                             [('move_id.lancamento_de_fechamento', '=', False)]
                             if not record.incluir_lancamentos_de_fechamento
                             else ''

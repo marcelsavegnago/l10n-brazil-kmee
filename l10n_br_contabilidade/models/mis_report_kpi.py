@@ -141,15 +141,22 @@ class MisReportKpi(models.Model):
                 record._compute_kpi_expression()
                 continue
 
-            lancamento_fechamento_str = str(
+            lancamento_de_fechamento_domain = str(
                 [('move_id.lancamento_de_fechamento', '=', False)]
+            )
+
+            lancamento_fechamento_str = (
+                lancamento_de_fechamento_domain
                 if not record.incluir_lancamentos_de_fechamento
                 else ''
             )
 
+            # removing old existing lancamento_fechamento domain
+            expression_wo_domain = new_expression = new_expression.replace(
+                lancamento_de_fechamento_domain, '')
+
             replaced_fields = []
-            removed_domain = False
-            for exp in ACC_RE.finditer(record.expression_manual):
+            for exp in ACC_RE.finditer(expression_wo_domain):
                 _, mode, account_codes, domain = \
                     self._parse_match_object(exp)
 
@@ -157,15 +164,15 @@ class MisReportKpi(models.Model):
                     record._compute_kpi_expression()
                     continue
 
-                if not removed_domain:
-                    mode_str = mode if mode != MODE_VARIATION else ''
-                    _str = _ + mode_str
+                mode_str = mode if mode != MODE_VARIATION else ''
+                _str = _ + mode_str
+
+                # Removing custom domains
+                if domain:
                     domain_str = '[' + ''.join(str(d) for d in domain) + ']'
 
-                    # Removes the old domains
+                    # Removes the custom domain
                     new_expression = new_expression.replace(domain_str, '')
-
-                    removed_domain = True
 
                 field = _str + '[' + ','.join(
                     code for code in account_codes) + ']'
@@ -185,10 +192,12 @@ class MisReportKpi(models.Model):
             if record.expression_mode == 'manual':
                 record._onchange_lancamentos_fechamento()
                 record.expression = record.expression_manual
+                record.expression_auto = False
 
             elif record.expression_mode == 'auto':
                 record._compute_kpi_expression()
                 record.expression = record.expression_auto
+                record.expression_manual= False
 
     @api.depends('account_ids.mis_report_kpi_ids', 'expression_type',
                  'invert_signal')

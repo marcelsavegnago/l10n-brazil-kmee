@@ -148,6 +148,7 @@ class MisReportKpi(models.Model):
                 else ''
             )
 
+            replaced_fields = []
             for exp in ACC_RE.finditer(record.expression):
                 _, mode, account_codes, domain = \
                     self._parse_match_object(exp)
@@ -167,12 +168,12 @@ class MisReportKpi(models.Model):
                     code for code in account_codes) + ']'
 
                 # Adds the new (or inexisting) domain
-                new_expression = new_expression.replace(
-                    field, field + lancamento_fechamento_str)
+                if field not in replaced_fields:
+                    new_expression = new_expression.replace(
+                        field, field + lancamento_fechamento_str)
+                    replaced_fields.append(field)
 
             record.expression_manual = record.expression_auto = new_expression
-
-
 
     @api.depends('expression_manual', 'expression_auto', 'expression_mode',
                  'account_ids.mis_report_kpi_ids', 'expression_type',

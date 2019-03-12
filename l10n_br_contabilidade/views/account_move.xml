@@ -9,11 +9,10 @@
             <field name="name">account.move.tree (in l10n_br_contabilidade)</field>
             <field name="model">account.move</field>
             <field name="arch" type="xml">
-                <tree colors="blue:state == 'draft';red:state == 'validacao_criacao';black:state == 'posted'" string="Journal Entries">
+                <tree colors="blue:state == 'draft';red:state == 'validacao_criacao';black:state == 'posted'" string="Journal Entries" default_order='date desc'>
                     <field name="sequencia"/>
                     <field name="date"/>
                     <field name="resumo" string="Histórico"/>
-                    <field name="ref"/>
                     <field name="period_id" invisible="1"/>
                     <field name="journal_id" invisible="1" string="Lote"/>
                     <field name="partner_id" invisible="1"/>
@@ -75,10 +74,11 @@
                             <field name="partner_id" invisible="1"/>
                             <field name="to_check" invisible="1" attrs="{'readonly':[('state','=','posted')]}" />
                             <field name="amount" invisible="1"/>
+                            <field name="account_event_id"/>
                         </group>
                         <group>
                             <field name="period_id" attrs="{'readonly':[('state','=','posted')]}" options="{'no_create': True}" invisible="True"/>
-                            <field name="ref"  string="Módulo de Origem" attrs="{'readonly':[('state','!=','draft')]}" />
+                            <field name="ref"  string="Módulo de Origem" attrs="{'readonly': True}" />
                         </group>
                     </group>
 

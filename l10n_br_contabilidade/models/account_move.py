@@ -44,6 +44,11 @@ class AccountMove(models.Model):
         string='Fechamnto relacionado',
     )
 
+    account_event_id = fields.Many2one(
+        string='Evento Contábil',
+        comodel_name='account.event',
+    )
+
     historico_padrao_id = fields.Many2one(
         comodel_name='account.historico.padrao',
         string=u'Modelo do Histórico Padrão',
@@ -89,24 +94,32 @@ class AccountMove(models.Model):
         store=True,
     )
 
+    account_event_line_ids = fields.One2many(
+        string='Linhas de eventos contábeis',
+        comodel_name='account.event.line',
+        inverse_name='account_move_id',
+    )
+
     @api.multi
     def button_cancel(self):
         for record in self:
-            record.state = 'cancel'
-            for line in record.line_id:
+            self.state = 'cancel'
+            for line in self.line_id:
                 line.state = 'cancel'
                 line.situacao_lancamento = 'cancel'
 
     @api.multi
     def button_return(self):
         for record in self:
-            record.state = 'draft'
-            for line in record.line_id:
-                line.state = 'draft'
-                line.situacao_lancamento = 'draft'
+            record.retornar_rascunho()
 
-            record.validado_por = False
-            record.validado_data = False
+    def retornar_rascunho(self):
+        self.state = 'draft'
+        for line in self.line_id:
+            line.state = 'draft'
+            line.situacao_lancamento = 'draft'
+        self.validado_por = False
+        self.validado_data = False
 
     @api.multi
     def verifica_status_periodo(self):

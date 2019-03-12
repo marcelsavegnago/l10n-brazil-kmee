@@ -2,7 +2,7 @@
 # Copyright 2018 ABGF
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import api, fields, models
+from openerp import api, fields, models, _
 from openerp.exceptions import Warning
 
 MODELS = [
@@ -45,6 +45,11 @@ class AccountEventTemplateLine(models.Model):
         string='Histórico Padrão'
     )
 
+    account_journal_id = fields.Many2one(
+        comodel_name='account.journal',
+        string=u'Lote de Lançamentos',
+    )
+
     def validar_identificacao_partida(self):
         if self.res_id and self.codigo:
             raise Warning(
@@ -74,3 +79,20 @@ class AccountEventTemplateLine(models.Model):
     #     res = super(AccountEventTemplateLine, self).write(vals)
     #     self.validar_partida()
     #     return res
+
+    @api.onchange('account_journal_id')
+    def set_journal_defaults(self):
+        self.account_debito_id = \
+            self.account_journal_id.default_debit_account_id.id if \
+            self.account_journal_id.default_debit_account_id else False
+        self.account_credito_id = \
+            self.account_journal_id.default_credit_account_id.id if \
+            self.account_journal_id.default_credit_account_id else False
+        self.account_historico_padrao_id = \
+            self.account_journal_id.template_historico_padrao_id.id if \
+            self.account_journal_id.template_historico_padrao_id else False
+
+    @api.constrains('codigo')
+    def _codigo_unique(self):
+        if len(self.search([('codigo', '=', self.codigo)])) > 1:
+            raise Warning(_('Codigo precisa ser único!'))

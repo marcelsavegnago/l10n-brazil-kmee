@@ -3,8 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from . import account_account
-from . import account_account_report
-from . import account_account_report_line
 from . import account_move
 from . import account_fechamento
 from . import account_fechamento_reabertura_justificativa
@@ -18,7 +16,6 @@ from . import account_journal
 from . import account_fiscalyear
 from . import account_mapeamento
 from . import account_period
-from . import account_saldo
 from . import account_divisao_resultado
 from . import mis_report_kpi
 from . import mis_report_style
@@ -30,6 +27,8 @@ from . import mis_report_instance
 from . import mis_builder_report_xls
 from . import ir_attachment
 from . import mis_report_instance_period
+from . import account_event
+from . import account_event_line
 from . import account_event_template_line
 from . import account_event_template
 from . import account_invoice

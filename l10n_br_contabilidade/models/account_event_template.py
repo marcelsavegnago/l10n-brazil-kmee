@@ -13,11 +13,6 @@ class AccountEventTemplate(models.Model):
         string='Nome',
     )
 
-    lote_lancamento_id = fields.Many2one(
-        string=u'Lote de Lançamentos',
-        comodel_name='account.journal',
-    )
-
     account_formula = fields.Selection(
         string=u'Fórmula',
         selection=[
@@ -158,14 +153,18 @@ class AccountEventTemplate(models.Model):
                 historico_padrao = line.get('code')
 
             account_move_debit_line = {
-                'account_id': account_template_line_id.account_debito_id.id,
+                'account_id': line.get('conta_debito_exclusivo_id') if
+                line.get('conta_debito_exclusivo_id') else
+                account_template_line_id.account_debito_id.id,
                 'debit': line.get('valor'),
                 'credit': 0.0,
                 'name': historico_padrao,
             }
 
             account_move_credit_line = {
-                'account_id': account_template_line_id.account_credito_id.id,
+                'account_id': line.get('conta_credito_exclusivo_id') if
+                line.get('conta_credito_exclusivo_id') else
+                account_template_line_id.account_credito_id.id,
                 'credit': line.get('valor'),
                 'debit': 0.0,
                 'name': historico_padrao,
@@ -173,7 +172,7 @@ class AccountEventTemplate(models.Model):
 
             account_move_id = {
                 'ref': dados.get('ref'),
-                'journal_id': self.lote_lancamento_id.id,
+                'journal_id': account_template_line_id.account_journal_id.id,
                 'narration': historico_padrao,
                 'resumo': historico_padrao,
                 'date': dados.get('data'),
@@ -183,21 +182,12 @@ class AccountEventTemplate(models.Model):
                     [
                         (0, 0, account_move_debit_line),
                         (0, 0, account_move_credit_line)
-                    ]
+                    ],
+                'account_event_line_ids': [(6, 0, [line.get('event_line_id')])],
             }
 
             account_move_ids.append(account_move_id)
 
-        return account_move_ids
-
-    def criar_lancamentos(self, vals):
-        """
-        :param vals:
-        :return:
-        """
-        account_move_ids = self.env['account.move']
-        for lancamento in vals:
-            account_move_ids += account_move_ids.create(lancamento)
         return account_move_ids
 
     def get_linha_roteiro(self, code):
@@ -208,16 +198,3 @@ class AccountEventTemplate(models.Model):
         linha = self.account_event_template_line_ids.\
             filtered(lambda x: x.codigo == code)
         return linha
-
-    def gerar_contabilizacao(self, dados):
-        """
-        Rotina principal:
-        """
-
-        self.validar_dados(dados)
-
-        account_move_ids = self.preparar_dados_lancamentos(dados)
-
-        account_move_ids = self.criar_lancamentos(account_move_ids)
-
-        return account_move_ids

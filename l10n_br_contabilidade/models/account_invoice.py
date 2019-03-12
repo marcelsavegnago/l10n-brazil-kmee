@@ -18,10 +18,9 @@ class AccountInvoice(models.Model):
         related=False,
     )
 
-    move_id = fields.One2many(
-        string=u'Lançamentos Contábeis',
-        comodel_name='account.move',
-        inverse_name='account_invoice_id',
+    account_event_id = fields.Many2one(
+        string=u'Eventos Contábeis',
+        comodel_name='account.event',
         copy=False,
     )
 
@@ -109,6 +108,9 @@ class AccountInvoice(models.Model):
         help='Código para roteiro contábil: "amount_total"',
     )
 
+    account_event_code_sufix = fields.Char(
+        string='Sufixo código rúbrica',
+    )
 
     @api.depends('internal_number')
     def _compute_number(self):
@@ -241,37 +243,50 @@ class AccountInvoice(models.Model):
 
     def _get_invoice_event_data(self):
         vals = {}
-        vals['company_id'] = self.company_id.id
-        vals['ref'] = 'nota_fiscal'
-        vals['period'] = self.period_id
+
+        # vals['company_id'] = self.company_id.id
+        vals['ref'] = 'NF-e: {} - {}'.format(
+            self.partner_id.name, self.internal_number)
         vals['data'] = self.date_hour_invoice.split(' ')[0]
-        vals['account_event_id'] = self.fiscal_category_id.account_event_id.id
+        vals['origem'] = '{},{}'.format('account.invoice', self.id)
+
+        if self.fiscal_category_id.account_event_template_id:
+            vals['account_event_template_id'] = \
+                self.fiscal_category_id.account_event_template_id.id
 
         return vals
 
     def _get_invoice_move_line_data(self):
         lines = []
+        vals = {}
         for info in CAMPO_DOCUMENTO_FISCAL:
             info_name = info[0]
             if self[info_name]:
-                lines.append(
-                    {
-                        'code': info_name,
-                        'valor': self[info_name],
-                        'mes': self.period_id.code,
-                        'num_documento': 'NF-e nº {} - {}'.format(
-                            self.internal_number, self.partner_id.name),
-                    }
-                )
+                vals = {
+                    'code': info_name,
+                    'valor': self[info_name],
+                    'name': info[1],
+                }
+                if info_name == 'amount_total':
+                    vals['code'] += self.account_event_code_sufix or ''
 
+                if info_name == 'amount_net':
+                    if self.type in ['out_invoice', 'out_refund']:
+                        if self.partner_id.property_account_receivable:
+                            vals['conta_debito_exclusivo_id'] = \
+                                self.partner_id.property_account_receivable.id
+                    else:
+                        if self.partner_id.property_account_payable:
+                            vals['conta_credito_exclusivo_id'] = \
+                                self.partner_id.property_account_payable.id
+
+                lines.append(vals)
+                vals = {}
         return lines
 
     @api.multi
     def action_move_create(self):
         for inv in self:
-            if not inv.fiscal_category_id.account_event_id:
-                return
-
             if not inv.invoice_line:
                 raise ValidationError(
                     _('No Invoice Lines!'),
@@ -287,13 +302,14 @@ class AccountInvoice(models.Model):
                     self.date_hour_invoice)[0]
 
             account_event_data = self._get_invoice_event_data()
-            account_event_data['lines'] = \
-                self._get_invoice_move_line_data()
+            account_event_line_data = self._get_invoice_move_line_data()
 
-            inv.move_id = \
-                inv.fiscal_category_id.account_event_id.gerar_contabilizacao(
-                    account_event_data
-                )
+            account_event_id = self.env['account.event'].create(
+                account_event_data
+            )
+            account_event_id.gerar_eventos(account_event_line_data)
+
+            inv.account_event_id = account_event_id
 
             account_invoice_tax = self.env['account.invoice.tax']
             compute_taxes = account_invoice_tax.compute(
@@ -303,13 +319,4 @@ class AccountInvoice(models.Model):
     @api.multi
     def gerar_contabilidade(self):
         for inv in self:
-            if not inv.fiscal_category_id.account_event_id:
-                raise Warning(
-                    _('Error!'),
-                    _(
-                        'Por favor defina um Roteiro de Evento Contábil '
-                        'na categoria fiscal!.'
-                    )
-                )
-
             inv.action_move_create()

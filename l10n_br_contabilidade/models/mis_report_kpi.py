@@ -246,7 +246,7 @@ class MisReportKpi(models.Model):
                         )
                 )
 
-    @api.onchange('expression')
+    @api.onchange('expression', 'expression_show')
     def _onchange_kpi_expression(self):
         self._inverse_kpi_expression()
 

@@ -655,8 +655,13 @@ class SpedCalculoImposto(SpedBase):
             dados.update(self.prepara_dados_documento())
             documento = self.env['sped.documento'].create(dados)
 
+
         documento.update(documento._onchange_empresa_id()['value'])
-        documento.update(documento._onchange_operacao_id()['value'])
+        dados_operacao = documento._onchange_operacao_id()['value']
+        if 'regime_tributario' in dados_operacao:
+            dados_operacao.pop('regime_tributario')
+
+        documento.update(dados_operacao)
 
         if self.presenca_comprador:
             documento.presenca_comprador = self.presenca_comprador
@@ -722,14 +727,17 @@ class SpedCalculoImposto(SpedBase):
 
         if documento.pagamento_ids:
             for pagamento in documento.pagamento_ids:
-                pagamento.update(
-                    pagamento._onchange_condicao_pagamento_id()['value']
-                )
+                dados_pagamento = pagamento._onchange_condicao_pagamento_id()['value']
+                if 'forma_pagamento' in dados_pagamento:
+                    dados_pagamento.pop('forma_pagamento')
+                pagamento.update(dados_pagamento)
         else:
-            documento.update(
-                documento._onchange_condicao_pagamento_id()['value']
-            )
+            dados_condicao = documento._onchange_condicao_pagamento_id()['value']
+            if 'forma_pagamento' in dados_condicao:
+                dados_condicao.pop('forma_pagamento')
+            documento.update(dados_condicao)
 
+        documento.env.cr.commit()
         return documento
 
     def gera_documento(self):

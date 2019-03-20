@@ -2,10 +2,7 @@
 # Copyright 2018 KMEE INFORMATICA LTDA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import re
-
 from openerp import api, fields, models, _
-from openerp.exceptions import Warning as UserWarning
 
 MIS_REPORT_MODE = [
     ('contabil', u'Contábil'),

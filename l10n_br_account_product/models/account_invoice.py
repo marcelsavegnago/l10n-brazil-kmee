@@ -1398,6 +1398,7 @@ class AccountInvoice(models.Model):
     @api.multi
     def invoice_validate(self):
         super(AccountInvoice, self).invoice_validate()
+        return
         for invoice in self:
             #
             #  Geração dos lançamentos financeiros

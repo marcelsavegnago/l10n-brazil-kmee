@@ -12,6 +12,7 @@
         <field name="arch" type="xml">
             <field name="description" position="after">
                 <field name="report_mode" required="1"/>
+                <field name="incluir_lancamentos_de_fechamento"/>
                 <field name="considerations"/>
             </field>
             <field name="kpi_ids" position="attributes">

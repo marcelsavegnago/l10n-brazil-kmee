@@ -22,14 +22,19 @@
                         </tree>
                     </field>
                     <field name="invert_signal" attrs="{'invisible': [('expression_mode','!=','auto')]}"/>
-                    <field name="incluir_lancamentos_de_fechamento" attrs="{'invisible': [('expression_mode','!=','auto')]}"/>
+                    <field name="incluir_lancamentos_de_fechamento" />
                     <field name="expression_type" attrs="{'invisible': [('expression_mode','!=','auto')]}"/>
                 </field>
                 <field name="compare_method" position="after">
                     <field name="style_id"/>
                 </field>
                 <field name="expression" position="attributes">
-                    <attribute name="required">1</attribute>
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="expression" position="after">
+                    <field name="expression_show" required="1"/>
+                    <field name="expression_auto" invisible="1"/>
+                    <field name="expression_manual" invisible="1"/>
                 </field>
                 <group position="after">
                     <group col="2" string="Legend (for kpi expressions)">
@@ -91,7 +96,13 @@
                 </field>
                 <field name="compare_method" position="after">
                     <field name="style_id"/>
+                </field>
+                <field name="expression" position="before">
                     <field name="incluir_lancamentos_de_fechamento"/>
+                    <field name="expression_show"/>
+                </field>
+                <field name="expression" position="attributes">
+                    <attribute name="invisible">1</attribute>
                 </field>
             </field>
         </record>

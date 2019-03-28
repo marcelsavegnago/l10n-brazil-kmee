@@ -143,7 +143,7 @@ class MisReportKpi(models.Model):
         lancamento_de_fechamento_domain = str(
             [('move_id.lancamento_de_fechamento', '=', False)]
         )
-        self.expression_show = self.expression.replace(
+        self.expression_show = self.expression_show.replace(
             lancamento_de_fechamento_domain, '')
 
         if self.expression_mode == 'manual':

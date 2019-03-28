@@ -667,6 +667,7 @@ class SpedCalculoImposto(SpedBase):
             documento.presenca_comprador = self.presenca_comprador
 
         documento.update(documento._onchange_serie()['value'])
+        documento.env.cr.commit()
         documento.update(documento._onchange_participante_id()['value'])
 
         #

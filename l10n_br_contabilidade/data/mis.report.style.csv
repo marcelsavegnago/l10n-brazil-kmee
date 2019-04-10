@@ -1,0 +1,2 @@
+id,dp,background_color,background_color_inherit,color,color_inherit,create_date,divider_inherit,dp_inherit,hide_always,hide_always_inherit,hide_empty,hide_empty_inherit,font_weight,font_weight_inherit,font_style,font_style_inherit,divider,name,indent_level,indent_level_inherit,prefix,prefix_inherit,suffix,suffix_inherit,font_size,font_size_inherit
+mis_report_style_negrito,0,#FFFFFF,True,#000000,True,2019-02-22 18:09:30,True,True,False,True,False,True,Negrito,False,Normal,False,1,Negrito,0,True,,True,,True,,True

@@ -22,6 +22,9 @@
         'security/ir.model.access.csv',
         #
         'data/natureza_conta_data.xml',
+        'data/mis.report.style.csv',
+        'data/mis.report.kpi.csv',
+        'data/mis.report.csv',
         # # Menus
         'views/menu_l10n_br_contabilidade.xml',
         # # Relatórios

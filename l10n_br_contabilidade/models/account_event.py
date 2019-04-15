@@ -211,9 +211,46 @@ class AccountEvent(models.Model):
 
     @api.multi
     def validar_evento(self):
+        '''
+        Valida se existe roteiro contábil selecionado e se os códigos dos
+        eventos a serem lançados estão contidos no roteiro.
+
+        :return:
+        '''
         for record in self:
             if not record.account_event_template_id:
-                raise Warning(u'Por favor selecionar Roteiro Contábil.')
+                raise Warning(u'Por favor, selecione um Roteiro Contábil.')
+
+            template = record.account_event_template_id
+            event_line_ids = record.account_event_line_ids.mapped('code')
+            template_event_line_ids = \
+                template.account_event_template_line_ids.mapped('codigo')
+
+            # Verifica se os códigos dos eventos estão contidos no template
+            if not set(event_line_ids).issubset(template_event_line_ids):
+                # Busca itens faltantes
+                falta_list = list(
+                    filter(lambda x: x not in template_event_line_ids,
+                           event_line_ids))
+
+                # Formata os itens em uma string para serem exibidos
+                falta = ''.join(
+                    '<li>{};</li>\n'.format(cod) if cod != falta_list[-1]
+                    else '<li>{}.</li>'.format(cod) for cod in falta_list)
+
+                account_event_wizard_id = self.env['account.event.wizard'].\
+                    create({'faltantes': falta})
+
+                return {
+                    'type': 'ir.actions.act_window',
+                    'name': 'Códigos faltando no roteiro',
+                    'res_model': 'account.event.wizard',
+                    'view_type': 'form',
+                    'view_mode': 'form',
+                    'res_id': account_event_wizard_id.id,
+                    'target': 'new',
+                }
+
             record.state = 'validate'
 
     @api.multi
@@ -239,3 +276,21 @@ class AccountEvent(models.Model):
             record.account_move_ids.unlink()
 
             record.state = 'open'
+
+
+class AccountEventWizard(models.TransientModel):
+    _name = 'account.event.wizard'
+
+    faltantes = fields.Html(string='Códigos que não constam no roteiro',
+                            readonly=True)
+
+    @api.multi
+    def validar_codigos_roteiro(self):
+        '''
+
+        Continua para alteração do status.
+        :return:
+        '''
+        active_ids = self._context.get('active_ids', [])
+
+        self.env['account.event'].browse(active_ids).state = 'validate'

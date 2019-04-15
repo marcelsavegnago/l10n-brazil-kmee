@@ -5,6 +5,7 @@
 from openerp import api, fields, models
 from openerp.exceptions import Warning
 
+
 class AccountJournal(models.Model):
     _inherit = 'account.journal'
 
@@ -43,14 +44,10 @@ class AccountJournal(models.Model):
     def _verifica_porcentagem_fechamento(self):
         for record in self:
             # Verifica se o somatório das sequencias ultrapassam 100%
-            for r in set([ja.sequencia for ja in record.divisao_resultado_ids]):
-                if sum(a.porcentagem for a in record.divisao_resultado_ids.filtered(lambda x: x.sequencia == r)) > 100:
-                    raise Warning(u'Porcentagem ultrapassa 100%.')
+            for r in set(
+                    [ja.sequencia for ja in record.divisao_resultado_ids]):
+                if sum(a.porcentagem for a in
+                       record.divisao_resultado_ids.filtered(
+                           lambda x: x.sequencia == r)) > 100:
 
-    # @api.model
-    # def write(self, vals):
-    #     res = super(AccountJournal, self).write(vals)
-    #
-    #     self._verifica_porcentagem_fechamento()
-    #
-    #     return res
+                    raise Warning(u'Porcentagem ultrapassa 100%.')

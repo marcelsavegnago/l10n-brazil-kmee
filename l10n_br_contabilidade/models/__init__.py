@@ -14,13 +14,15 @@ from . import account_ramo
 from . import account_historico_padrao
 from . import account_journal
 from . import account_fiscalyear
-from . import account_mapeamento
+from . import account_depara
+from . import account_depara_plano
 from . import account_period
 from . import account_divisao_resultado
 from . import mis_report_kpi
 from . import mis_report_style
 from . import gefin_custos
 from . import mis_report
+from . import aep
 from . import mis_builder
 from . import res_partner
 from . import mis_report_instance

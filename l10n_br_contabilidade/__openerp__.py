@@ -26,10 +26,13 @@
         'views/menu_l10n_br_contabilidade.xml',
         # # Relatórios
         'reports/report.xml',
-        # # Visão
+
+        # Wizard
         'wizards/fechamento_reabertura_justificativa_wizard.xml',
         'wizards/trial_balance_wizard.xml',
         'wizards/general_ledger_wizard.xml',
+        'wizards/import_account_account.xml',
+
         'views/account_account.xml',
         'views/account_journal.xml',
         'views/account_natureza.xml',
@@ -43,7 +46,8 @@
         'views/account_ramo.xml',
         'views/account_period.xml',
         'views/account_historico_padrao.xml',
-        'views/account_mapeamento.xml', # TODO: Refatorar usando constas de consolidação
+        'views/account_depara.xml',
+        'views/account_depara_plano.xml',
         'views/mis_report.xml',
         'views/mis_report_instance.xml',
         'views/mis_report_kpi.xml',

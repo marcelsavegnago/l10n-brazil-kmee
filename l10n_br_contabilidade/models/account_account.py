@@ -45,10 +45,18 @@ class AccountAccount(models.Model):
         string=u'É obrigatório definir Ramo?'
     )
 
-    depara_ids = fields.One2many(
-        string=u'Mapeamento DePara',
-        comodel_name='account.mapeamento',
-        inverse_name='conta_sistema_id',
+    parent_id = fields.Many2one(
+        comodel_name='account.account',
+        domain="[('type', '=', 'view'),"
+               "('account_depara_plano_id','=',account_depara_plano_id)]",
+    )
+
+    depara_ids = fields.Many2many(
+        string=u'DePara de Contas',
+        comodel_name='account.depara',
+        relation='account_depara_conta_sistema_rel',
+        column1='conta_sistema_id',
+        column2='account_depara_id',
     )
 
     divisao_resultado_ids = fields.One2many(
@@ -82,6 +90,13 @@ class AccountAccount(models.Model):
         comodel_name='mis.report.kpi',
         inverse_name='account_ids',
         readonly=True,
+    )
+
+    account_depara_plano_id = fields.Many2one(
+        comodel_name='account.depara.plano',
+        string='Referência Plano de Contas',
+        help='Essa conta pertence a qual Plano de Contas?\n '
+             'Se for o plano oficial deixar em branco',
     )
 
     @api.multi
@@ -122,7 +137,7 @@ class AccountAccount(models.Model):
         Utilizar a natureza da conta para manipular o valor de saldo
         calculado automáticamente pela funcionalidade do core.
 
-        obs: Este campo está subistituindo o cambo 'balance' do core na visão
+        obs: Este campo está substituindo o cambo 'balance' do core na visão
         """
         for record in self:
             record.saldo = abs(record.balance)
@@ -139,31 +154,17 @@ class AccountAccount(models.Model):
             return super(AccountAccount, self)._check_allow_code_change(
                 cr, uid, ids, context=context)
 
-    @api.model
-    def name_search(self, name, args=None, operator='ilike', limit=100):
-        def ignora_ponto(res):
-            request = "SELECT id, concat_ws(' ', code, name) " \
-                      "FROM account_account " \
-                      "WHERE " \
-                      "REPLACE(code, '.', '') LIKE " \
-                      "REPLACE('{}%', '.', '')".format(name)
+    @api.multi
+    def name_get(self):
+        """
+        Adicionar o nome do plano externo à conta
+        """
+        result = []
 
-            self.env.cr.execute(request)
+        for record in self:
+            name = "{} {}".format(record.code, record.name)
+            if record.account_depara_plano_id:
+                name += " ({})".format(record.account_depara_plano_id.name)
+            result.append((record.id, name))
 
-            for row in self.env.cr.fetchall():
-                res.append(row)
-
-            return res
-
-        res = super(AccountAccount, self).name_search(name)
-        if not res:
-            domain_name = '%{}%'.format(name)
-            res = self.search([('code', '=ilike', domain_name)])
-            res = res.name_get()
-            res = ignora_ponto(res)
-
-            return res
-
-        res = ignora_ponto(res)
-
-        return res
+        return result

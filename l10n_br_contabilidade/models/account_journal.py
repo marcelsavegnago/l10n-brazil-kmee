@@ -13,6 +13,12 @@ class AccountJournal(models.Model):
         string=u'Nome do Lote',
     )
 
+    move_ids = fields.One2many(
+        string=u'Lançamentos contábeis',
+        comodel_name='account.move',
+        inverse_name='journal_id',
+    )
+
     template_historico_padrao_id = fields.Many2one(
         string=u'Template Padrão do Lançamento',
         comodel_name='account.historico.padrao',
@@ -37,6 +43,11 @@ class AccountJournal(models.Model):
     ref = fields.Char(
         string='Origem do Lançamento',
         help='Definir Módulo de origem do lançamento.',
+    )
+
+    active = fields.Boolean(
+        string='Ativo',
+        default=True,
     )
 
     @api.multi

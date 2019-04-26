@@ -32,6 +32,7 @@
         'wizards/trial_balance_wizard.xml',
         'wizards/general_ledger_wizard.xml',
         'wizards/import_account_account.xml',
+        'wizards/print_journal_wizard.xml',
 
         'views/account_account.xml',
         'views/account_journal.xml',
@@ -59,6 +60,7 @@
         'views/account_event_template.xml',
         'views/account_invoice.xml',
         'views/l10n_br_account.xml',
+        'views/account_product.xml',
     ],
     'qweb': [
         'static/src/xml/*.xml'

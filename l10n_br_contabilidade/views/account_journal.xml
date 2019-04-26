@@ -17,6 +17,7 @@
                 </xpath>
                 <field name="name" position="replace">
                     <field name="name" />
+                    <h4><field name="active" /> Ativo</h4>
                 </field>
                 <xpath expr="//form[@string='Account Journal']" position="attributes">
                        <attribute name="string">Lote de Lançamento</attribute>
@@ -74,7 +75,6 @@
                 <field name="default_credit_account_id" position="attributes">
                     <attribute name="attrs">{'required':[('type','in',('cash', 'bank', 'situation'))]}</attribute>
                 </field>
-
             </field>
         </record>
 

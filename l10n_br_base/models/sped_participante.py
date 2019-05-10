@@ -25,7 +25,7 @@ try:
                                     valida_cpf, valida_inscricao_estadual)
     from pybrasil.telefone import (formata_fone, valida_fone_fixo,
                                    valida_fone_celular,
-                                   valida_fone_internacional)
+                                   valida_fone_internacional,valida_fone_especial)
 
 except (ImportError, IOError) as err:
     _logger.debug(err)
@@ -528,7 +528,8 @@ class SpedParticipante(SpedBase, models.Model):
 
         if self.fone:
             if (not valida_fone_internacional(self.fone)) and (
-                    not valida_fone_fixo(self.fone)):
+                    not valida_fone_fixo(self.fone)) and (
+                    not valida_fone_especial(self.fone)):
                 raise ValidationError(_('Telefone fixo inválido!'))
 
             valores['fone'] = formata_fone(self.fone)
@@ -536,7 +537,8 @@ class SpedParticipante(SpedBase, models.Model):
         if self.fone_comercial:
             if (not valida_fone_internacional(self.fone_comercial)) and (
                     not valida_fone_fixo(self.fone_comercial)) and (
-                    not valida_fone_celular(self.fone_comercial)):
+                    not valida_fone_celular(self.fone_comercial)) and (
+                    not valida_fone_especial(self.fone_comercial)):
                 raise ValidationError(_('Telefone comercial inválido!'))
 
             valores['fone_comercial'] = formata_fone(self.fone_comercial)

@@ -239,26 +239,6 @@ openerp.l10n_br_tef = function(instance){
         }
     }
 
-    function check_inserted_card(){
-        if((io_tags.automacao_coleta_palavra_chave === "transacao_valor") && (io_tags.automacao_coleta_tipo != "N")){
-            // Transaction Value
-            ls_transaction_global_value = this.pos.get('selectedOrder').selected_paymentline.amount
-
-            collect('');
-
-            this.screenPopupPagamento('Starting Operation');
-
-            // Reset the Value
-            ls_transaction_global_value = "";
-            io_tags.automacao_coleta_palavra_chave = '';
-            io_tags.automacao_coleta_tipo = '';
-            io_tags.automacao_coleta_retorno = '';
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     function check_filled_value_send(){
         // here the user must enter his password
     }
@@ -532,7 +512,7 @@ openerp.l10n_br_tef = function(instance){
 
                         // Credit with PinPad
                         // check_completed_send();
-                        if(check_inserted_card()) return;
+                        if(self.check_inserted_card()) return;
                         if(self.check_filled_value()) return;
                         check_filled_value_send();
 
@@ -568,7 +548,7 @@ openerp.l10n_br_tef = function(instance){
 
         check_authorized_operation: function(){
             // Authorized operation -- Without PinPad
-            if(io_tags.automacao_coleta_mensagem === "Transacao autorizada"){
+            if(io_tags.automacao_coleta_mensagem === "Transacao aprovada."){
                 collect('');
 
                 this.screenPopupPagamento('Transação Aprovada');
@@ -577,7 +557,7 @@ openerp.l10n_br_tef = function(instance){
                 return true;
             }
             // Authorized operation -- With PinPad
-            else if(io_tags.mensagem === "Transacao autorizada") {
+            else if(io_tags.mensagem === "Transacao aprovada.") {
 
                 this.screenPopupPagamento('Transação Aprovada');
 
@@ -592,7 +572,7 @@ openerp.l10n_br_tef = function(instance){
 
         check_removed_card: function(){
             var self = this;
-            if((io_tags.servico == "executar") && (io_tags.mensagem && io_tags.mensagem.search(/aprovada\s+\S*\s+,\s+retire o cartao/i) > -1)){
+            if((io_tags.servico == "executar") && (io_tags.mensagem && io_tags.mensagem.search(/aprovada\s+\S*\s+,\s+RETIRE/i) > -1)){
                 confirm(io_tags.sequencial);
 
                 setTimeout(function(){
@@ -720,7 +700,7 @@ openerp.l10n_br_tef = function(instance){
                 // Send the card number
                 collect(card_number);
 
-                this.screenPopupPagamento('Please, enter the password');
+                this.screenPopupPagamento('Por Favor, Insira sua Senha!');
 
                 io_tags.automacao_coleta_palavra_chave = '';
                 io_tags.automacao_coleta_tipo = '';
@@ -733,27 +713,27 @@ openerp.l10n_br_tef = function(instance){
         },
 
         check_completed_send_security_code: function(){
-            if((io_tags.automacao_coleta_palavra_chave == "transacao_valor") && (io_tags.automacao_coleta_tipo == "N")
-                && (io_tags.automacao_coleta_retorno == "0")){
-
-                // Send the value
-                if( cancellation_transaction_value ){
-                    ls_transaction_global_value = cancellation_transaction_value;
-                } else {
-                    ls_transaction_global_value = this.pos.get('selectedOrder').selected_paymentline.amount;
-                }
-                collect('');
-
-                // Reset the Value
-                ls_transaction_global_value = "";
-                io_tags.automacao_coleta_palavra_chave = '';
-                io_tags.automacao_coleta_tipo = '';
-                io_tags.automacao_coleta_retorno = '';
-                return true;
-            } else {
-                //Handle Exceptions Here
-                return false;
-            }
+            // if((io_tags.automacao_coleta_palavra_chave == "transacao_valor") && (io_tags.automacao_coleta_tipo == "N")
+            //     && (io_tags.automacao_coleta_retorno == "0")){
+            //
+            //     // Send the value
+            //     if( cancellation_transaction_value ){
+            //         ls_transaction_global_value = cancellation_transaction_value;
+            //     } else {
+            //         ls_transaction_global_value = this.pos.get('selectedOrder').selected_paymentline.amount;
+            //     }
+            //     collect('');
+            //
+            //     // Reset the Value
+            //     ls_transaction_global_value = "";
+            //     io_tags.automacao_coleta_palavra_chave = '';
+            //     io_tags.automacao_coleta_tipo = '';
+            //     io_tags.automacao_coleta_retorno = '';
+            //     return true;
+            // } else {
+            //     //Handle Exceptions Here
+            //     return false;
+            // }
         },
 
         check_completed_execution: function()
@@ -762,7 +742,7 @@ openerp.l10n_br_tef = function(instance){
                 && (io_tags.automacao_coleta_retorno == "0")) {
                 collect('');
 
-                this.screenPopupPagamento('Please, insert the Card');
+                this.screenPopupPagamento('Por Favor, Insira o Cartão!');
 
                 io_tags.automacao_coleta_palavra_chave = '';
                 io_tags.automacao_coleta_tipo = '';
@@ -774,12 +754,49 @@ openerp.l10n_br_tef = function(instance){
             }
         },
 
+        check_inserted_card: function(){
+            if((io_tags.automacao_coleta_palavra_chave == "transacao_valor") && (io_tags.automacao_coleta_tipo == "N")
+                    && (io_tags.automacao_coleta_retorno == "0")){
+                // Transaction Value
+                ls_transaction_global_value = this.pos.get('selectedOrder').selected_paymentline.amount;
+
+                collect('');
+
+                this.screenPopupPagamento('Iniciando Operação!');
+
+                // Reset the Value
+                ls_transaction_global_value = "";
+                io_tags.automacao_coleta_palavra_chave = '';
+                io_tags.automacao_coleta_tipo = '';
+                io_tags.automacao_coleta_retorno = '';
+                return true;
+            } else {
+                return false;
+            }
+            // if((io_tags.automacao_coleta_palavra_chave === "transacao_valor") && (io_tags.automacao_coleta_tipo != "N")){
+            //     // Transaction Value
+            //     ls_transaction_global_value = this.pos.get('selectedOrder').selected_paymentline.amount
+            //
+            //     collect('');
+            //
+            //     this.screenPopupPagamento('Iniciando Operação!');
+            //
+            //     // Reset the Value
+            //     ls_transaction_global_value = "";
+            //     io_tags.automacao_coleta_palavra_chave = '';
+            //     io_tags.automacao_coleta_tipo = '';
+            //     io_tags.automacao_coleta_retorno = '';
+            //     return true;
+            // } else {
+            //     return false;
+            // }
+        },
 
         check_filled_value: function(){
             if(io_tags.automacao_coleta_mensagem == "AGUARDE A SENHA"){
                 collect('');
 
-                this.screenPopupPagamento('Please, enter the password');
+                this.screenPopupPagamento('Por Favor, Entre com sua Senha!');
 
                 io_tags.automacao_coleta_mensagem = '';
                 return true;
@@ -888,13 +905,13 @@ openerp.l10n_br_tef = function(instance){
 
         screenPopupPagamento: function (msg) {
             this.pos_widget.screen_selector.show_popup('popupStatusPagamento', {
-                            message: _t('Please, wait!'),
+                            message: _t('Por Favor, Aguarde!'),
                             comment: _t(msg),
                             });
         },
 
         check_completed_start: function(){
-            if((io_tags.servico == "iniciar") && (io_tags.retorno == "1") && (io_tags.aplicacao_tela == "VBIAutomationTest")){
+            if((io_tags.servico == "iniciar") && (io_tags.retorno == "1")){
 
                 var payment_term = $('.paymentline-input.payment_term').get('0');
                 if(payment_term){
@@ -913,7 +930,7 @@ openerp.l10n_br_tef = function(instance){
                     return false;
                 }
                 this.execute();
-                this.screenPopupPagamento('Initializing Operation');
+                this.screenPopupPagamento('Inicializando Operação!');
                 io_tags.aplicacao_tela = '';
                 return true;
             } else {
@@ -1023,7 +1040,7 @@ openerp.l10n_br_tef = function(instance){
                 && (io_tags.automacao_coleta_tipo === "X")){
 
                 collect(ls_global_transaction_method);
-                this.screenPopupPagamento('Payment ' + ls_global_transaction_method);
+                this.screenPopupPagamento('Pagamento ' + ls_global_transaction_method);
                 io_tags.automacao_coleta_mensagem = '';
                 io_tags.automacao_coleta_palavra_chave = '';
                 io_tags.automacao_coleta_tipo = '';
@@ -1081,8 +1098,6 @@ openerp.l10n_br_tef = function(instance){
             }else if((io_tags.automacao_coleta_mensagem || false) && (io_tags.automacao_coleta_mensagem.startsWith("Transacao cancelada"))) {
                 io_tags.automacao_coleta_mensagem = '';
                 return true;
-            }else if(io_tags.automacao_coleta_mensagem === "INSIRA OU PASSE O CARTAO"){
-                return true;
             }else if(io_tags.automacao_coleta_mensagem === "RETIRE O CARTAO"){
                 this.screenPopupPagamento('Operação Cancelada - Retire o Cartão!!!');
                 return true;
@@ -1090,7 +1105,11 @@ openerp.l10n_br_tef = function(instance){
                 return true;
             }else if(io_tags.servico === "iniciar"){
                 return true;
-            }else if(io_tags.mensagem && io_tags.mensagem.startsWith("Sequencial invalido")){
+            }else if(io_tags.retorno === "2"){
+                // io_tags.mensagem = '';
+                this.redo_operation(io_tags.sequencial);
+                return true;
+            }else if(io_tags.mensagem && io_tags.mensagem.startsWith("Sequencial nao recebido")){
                 io_tags.mensagem = '';
                 this.redo_operation(io_tags.sequencial);
                 return true;
@@ -1128,12 +1147,13 @@ openerp.l10n_br_tef = function(instance){
             }
 
             if (ls_global_plots > 1){
-                if (ls_global_institution === "Administradora")
-                    ls_global_transaction_method = "2-Financ.Adm."
-                else if (ls_global_institution === "Estabelecimento")
-                    ls_global_transaction_method = "3-Financ.Loja"
+                ls_global_transaction_method = "Parcelado"
+                // if (ls_global_institution === "Administradora")
+                //     ls_global_transaction_method = "2-Financ.Adm."
+                // else if (ls_global_institution === "Estabelecimento")
+                //     ls_global_transaction_method = "3-Financ.Loja"
             } else {
-                ls_global_transaction_method = "1-A vista"
+                ls_global_transaction_method = "A vista"
             }
 
              if (ls_transaction_global_value !== "") {

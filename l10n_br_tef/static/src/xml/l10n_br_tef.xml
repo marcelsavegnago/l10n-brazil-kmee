@@ -35,6 +35,7 @@
         </div>
     </t>
 
+
     <t t-name="CancelamentoCompraPopup">
         <div class="modal-dialog">
             <div class="popup popup-confirm cancelamentoCompraPopup">

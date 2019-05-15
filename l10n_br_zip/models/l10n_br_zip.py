@@ -111,6 +111,8 @@ class L10nBrZip(models.Model):
 
         if len(zip_ids) == 1:
             result = self.set_result(zip_ids[0])
+            if obj.street_number:
+                result['street_number'] = obj.street_number
             obj.write(result)
             return True
         else:
@@ -127,6 +129,7 @@ class L10nBrZip(models.Model):
                     city_id=obj.city_id.id,
                     district=obj.district,
                     street=obj.street,
+                    street_number=obj.street_number or '',
                     zip_code=obj.zip,
                     zip_ids=[zip.id for zip in zip_ids]
                 )
@@ -135,12 +138,13 @@ class L10nBrZip(models.Model):
 
     def create_wizard(self, object_name, address_id, country_id=False,
                       state_id=False, city_id=False,
-                      district=False, street=False, zip_code=False,
-                      zip_ids=False):
+                      district=False, street=False, street_number=False,
+                      zip_code=False, zip_ids=False):
         context = dict(self.env.context)
         context.update({
             'zip': zip_code,
             'street': street,
+            'street_number': street_number,
             'district': district,
             'country_id': country_id,
             'state_id': state_id,

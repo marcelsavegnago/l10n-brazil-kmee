@@ -948,10 +948,13 @@ function l10n_br_pos_screens(instance, module) {
                     name: 'venda_sat',
                     icon: '/point_of_sale/static/src/img/icons/png48/validate.png',
                     click: function () {
-                        if(!cpf_na_nota || (cpf_na_nota && self.pos.config.crm_ativo))
-                            self.pos_widget.payment_screen.validate_order();
-                        else
-                            self.validar_cpf_nota();
+                        self.validar_cpf_nota();
+                        $('.busca-cpf-cnpj-popup').focus();
+                        // if(!cpf_na_nota || (cpf_na_nota && self.pos.config.crm_ativo))
+                        //     self.pos_widget.payment_screen.validate_order();
+                        // else{
+                        //     self.validar_cpf_nota();
+                        // }
                     }
                 });
                 this.update_payment_summary();

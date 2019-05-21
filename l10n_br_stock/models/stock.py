@@ -10,13 +10,17 @@ from openerp import models, fields
 class StockIncoterms(models.Model):
     _inherit = 'stock.incoterms'
 
-    freight_responsibility = fields.Selection([('0', u'Emitente'),
-                                               ('1', u'Destinatário'),
-                                               ('2', u'Terceiros'),
-                                               ('9', u'Sem Frete')],
-                                              'Frete por Conta',
-                                              required=True,
-                                              default='0')
+    freight_responsibility = fields.Selection(
+        [('0', u'Contratação do Frete por conta do Remetente'),
+         ('1', u'Contratação do Frete por conta do Destinatário'),
+         ('2', u'Contratação do Frete por conta de Terceiros'),
+         ('3', u'Transporte Próprio por conta do Remetente'),
+         ('4', u'Transporte Próprio por conta do Destinatário'),
+         ('9', u'Sem Ocorrência de Transporte')],
+        'Frete por Conta',
+        required=True,
+        default='0'
+    )
 
 
 class StockPicking(models.Model):

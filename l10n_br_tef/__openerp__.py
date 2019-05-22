@@ -21,6 +21,7 @@
     'data': [
         'views/l10n_br_tef.xml',
         'views/pos_config_view.xml',
+        'views/account_journal_view.xml',
         ],
     'qweb': ['static/src/xml/l10n_br_tef.xml'],
 }

@@ -36,6 +36,7 @@ openerp.l10n_br_tef = function(instance){
     var ls_global_environment = '';
     var transaction_queue = new Array();
     var payment_type;
+    var sat_payment_mode;
     var payment_name;
 
     var ls_global_operation = '';
@@ -64,13 +65,10 @@ openerp.l10n_br_tef = function(instance){
             var cancel_btn= $('.btn-cancelar-pagamento');
             cancel_btn.hide();
 
-            if(this.pos.config.iface_tef){
-                cancel_btn.show();
-                cancel_btn.unbind('click').on("click", function(event){
-                    self.pos_widget.payment_screen.cancel_payment()
-                });
-            }
-
+            cancel_btn.show();
+            cancel_btn.unbind('click').on("click", function(event){
+                self.pos_widget.payment_screen.cancel_payment()
+            });
         },
     });
 
@@ -170,8 +168,11 @@ openerp.l10n_br_tef = function(instance){
                     }
                 },
             });
-            this.pind_pad_button = new module.PindPadWidget(this,{});
-            this.pind_pad_button.appendTo(this.$('.pos-rightheader'));
+            if(this.pos.config.iface_tef) {
+                this.pind_pad_button = new module.PindPadWidget(this, {});
+                this.pind_pad_button.appendTo(this.$('.pos-rightheader'));
+            }
+
             $('.header-button').remove();
             this.close_button.appendTo(this.$('.pos-rightheader'));
 
@@ -409,12 +410,14 @@ openerp.l10n_br_tef = function(instance){
         init: function(parent,options){
             var self = this;
             this._super(parent,options);
-            this.connect();
-            set_interval_id =
-                setInterval(function(){
-                if (!connect_init)
-                    self.connect();
-            }, 10000);
+            if(this.pos.config.iface_tef){
+                this.connect();
+                set_interval_id =
+                    setInterval(function(){
+                    if (!connect_init)
+                        self.connect();
+                }, 10000);
+            }
         },
 
         connect: function()
@@ -439,6 +442,7 @@ openerp.l10n_br_tef = function(instance){
                     // Instantiate and initialize the tags for integration.
                     io_tags = new tags();
                     io_tags.initialize_tags();
+                    finish();
                     self.consult();
                 };
 
@@ -1135,7 +1139,9 @@ openerp.l10n_br_tef = function(instance){
 
             if(ls_global_operation === "purchase"){
                 var ls_transaction_type = "Cartao Vender";
-                ls_card_type = (payment_type === "CD01")? "Debito" : "Credito";
+                // ls_card_type = (payment_type === "CD01")? "Debito" : "Credito";
+
+                ls_card_type = (sat_payment_mode == "03")? "Credito" : "Debito";
 
                 if(ls_global_environment === "Homologacao")
                     ls_product_type = (payment_type === "CD01")? debit_server : credit_server;
@@ -1215,16 +1221,17 @@ openerp.l10n_br_tef = function(instance){
             var el_node = this._super(line);
             var self = this;
 
-            if (["CD01", "CC01"].indexOf(line.cashregister.journal.code) > -1 &&
-                this.pos.config.iface_tef) {
+            if (this.pos.config.iface_tef) {
                 ls_global_institution = this.pos.config.institution_selection;
                 ls_global_environment = this.pos.config.enviroment_selection;
 
                 payment_type = line.cashregister.journal.code;
+                sat_payment_mode = line.cashregister.journal.sat_payment_mode;
                 payment_name = line.cashregister.journal.name;
-                $( '.payment-terminal-transaction-start' ).unbind( 'click' );
+                var payment_terminal = $( '.payment-terminal-transaction-start' );
+                payment_terminal.unbind('click');
                 el_node.querySelector('.payment-terminal-transaction-start')
-                    .addEventListener('click', function(){
+                    .addEventListener('click', function () {
                         start_operation("purchase");
                     });
             }

@@ -19,8 +19,8 @@
         'l10n_br_pos',
     ],
     'data': [
-        'l10n_br_tef.xml',
-        'l10n_br_tef_view.xml',
+        'views/l10n_br_tef.xml',
+        'views/pos_config_view.xml',
         ],
     'qweb': ['static/src/xml/l10n_br_tef.xml'],
 }

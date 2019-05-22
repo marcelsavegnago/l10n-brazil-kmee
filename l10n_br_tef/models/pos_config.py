@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from openerp import models, fields, _
+from openerp import _, api, fields, models
+
+PAYMENT_MODES_TEF = [
+    '03', '04', '10', '11', '13',
+]
 
 
 class PosConfig(models.Model):

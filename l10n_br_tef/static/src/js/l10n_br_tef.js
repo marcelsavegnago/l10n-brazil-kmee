@@ -54,6 +54,17 @@ openerp.l10n_br_tef = function(instance){
     var connect_init = false;
     var set_interval_id = 0;
 
+
+    module.ProxyDevice = module.ProxyDevice.extend({
+        print_tef_extrato: function(tef_extrato){
+            var self = this;
+            this.message('imprimir_escpos',{ json: tef_extrato},{ timeout: 5000 })
+            .then(function(result){
+                console.log(result);
+            });
+        },
+    });
+
     module.PindPadWidget = module.StatusWidget.extend({
         template: 'PinPadStatusWidget',
 
@@ -401,7 +412,9 @@ openerp.l10n_br_tef = function(instance){
                         comment: 'Certifique-se de que o Cliente V$Pague está funcionando normalmente',
                     });
         } else {
+            console.log("IMPRIMIIIIU");
             ls_global_operation = operation;
+            self.proxy.print_tef_extrato("Hello Millerson");
             start();
         }
     }

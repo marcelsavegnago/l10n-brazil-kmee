@@ -576,7 +576,9 @@ openerp.l10n_br_tef = function(instance){
 
         check_removed_card: function(){
             var self = this;
-            if((io_tags.servico == "executar") && (io_tags.mensagem && io_tags.mensagem.search(/aprovada\s+\S*\s+,\s+RETIRE/i) > -1)){
+            if((io_tags.servico == "executar") &&
+                (io_tags.retorno == "0") && (io_tags.transacao_comprovante_1via != "") &&
+                (io_tags.transacao == "Cartao Vender")){
                 confirm(io_tags.sequencial);
 
                 setTimeout(function(){
@@ -584,6 +586,7 @@ openerp.l10n_br_tef = function(instance){
                 }, 1500);
 
                 io_tags.mensagem = "";
+                io_tags.transacao_comprovante_1via = "";
                 return true;
             } else {
                 // Handle Exceptions Here
@@ -1115,7 +1118,8 @@ openerp.l10n_br_tef = function(instance){
                 return true;
             }else if(io_tags.mensagem && io_tags.mensagem.startsWith("Sequencial nao recebido")){
                 io_tags.mensagem = '';
-                this.redo_operation(io_tags.sequencial);
+                // this.redo_operation(io_tags.sequencial);
+                this.finishes_operation();
                 return true;
             }else{
                 var message = io_tags.message || io_tags.automacao_coleta_mensagem;

@@ -21,6 +21,49 @@ function l10n_br_pos_widgets(instance, module){
     var QWeb = instance.web.qweb;
 	var _t = instance.web._t;
 
+	function isEntryVisible(entry) {
+        if(entry.clientWidth > 0){
+            entry.focus();
+            return true;
+        }
+        return false;
+    }
+
+	module.NumpadWidget = module.NumpadWidget.extend({
+
+        clickDeleteLastChar: function() {
+            var entry = $('.busca-cpf-cnpj-popup')[0];
+            if(isEntryVisible(entry)){
+                entry.value = entry.value.slice(0, -1) || "";
+            } else{
+                return this._super();
+            }
+        },
+        clickSwitchSign: function() {
+            var entry = $('.busca-cpf-cnpj-popup')[0];
+            if(!isEntryVisible(entry)){
+                return this._super();
+            }
+        },
+        clickAppendNewChar: function(event) {
+            var newChar;
+            newChar = event.currentTarget.innerText || event.currentTarget.textContent;
+
+            var entry = $('.busca-cpf-cnpj-popup')[0];
+            if(isEntryVisible(entry)){
+                entry.value += newChar;
+            } else {
+                return this._super(event);
+            }
+        },
+        clickChangeMode: function(event) {
+            var entry = $('.busca-cpf-cnpj-popup')[0];
+            if(!isEntryVisible(entry)){
+                return this._super(event);
+            }
+        },
+    });
+
     module.ProxyStatusWidget = module.ProxyStatusWidget.extend({
         template: 'ProxyStatusWidget',
     	set_smart_status: function(status){

@@ -2,9 +2,19 @@
 <templates id="template" xml:space="preserve">
     <t t-extend="Paymentline">
         <t t-jquery=".paymentline-input" t-operation="append">
-            <t t-if="['CD01', 'CC01'].indexOf(line.cashregister.journal.code) > -1">
+            <t t-if="line.cashregister.journal.sat_payment_mode == '03'">
                 <span class="payment-terminal-transaction-start">
-                    <button>Start transaction</button>
+                    <button>TEF - Crédito</button>
+                </span>
+            </t>
+            <t t-if="line.cashregister.journal.sat_payment_mode == '04'">
+                <span class="payment-terminal-transaction-start">
+                    <button>TEF - Débito</button>
+                </span>
+            </t>
+            <t t-if="line.cashregister.journal.sat_payment_mode in ['10','11','13']">
+                <span class="payment-terminal-transaction-start">
+                    <button>TEF - Vales</button>
                 </span>
             </t>
         </t>

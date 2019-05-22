@@ -1225,12 +1225,15 @@ openerp.l10n_br_tef = function(instance){
             var el_node = this._super(line);
             var self = this;
 
-            if (this.pos.config.iface_tef) {
+            sat_payment_mode = line.cashregister.journal.sat_payment_mode;
+
+            if ((this.pos.config.iface_tef) &&
+                (['03', "04", '10','11','13'].indexOf(sat_payment_mode) > -1)) {
+
                 ls_global_institution = this.pos.config.institution_selection;
                 ls_global_environment = this.pos.config.enviroment_selection;
 
                 payment_type = line.cashregister.journal.code;
-                sat_payment_mode = line.cashregister.journal.sat_payment_mode;
                 payment_name = line.cashregister.journal.name;
                 var payment_terminal = $( '.payment-terminal-transaction-start' );
                 payment_terminal.unbind('click');

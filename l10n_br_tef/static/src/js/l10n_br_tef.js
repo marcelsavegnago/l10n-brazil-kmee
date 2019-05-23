@@ -1260,9 +1260,11 @@ openerp.l10n_br_tef = function(instance){
                 payment_name = line.cashregister.journal.name;
                 var payment_terminal = $( '.payment-terminal-transaction-start' );
                 payment_terminal.unbind('click');
-                el_node.querySelector('.payment-terminal-transaction-start')
+                var node_payment_terminal = el_node.querySelector('.payment-terminal-transaction-start')
+                node_payment_terminal
                     .addEventListener('click', function () {
                         start_operation("purchase");
+                        node_payment_terminal.style.display = 'none';
                     });
             }
             return el_node;

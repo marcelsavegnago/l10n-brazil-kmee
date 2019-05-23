@@ -39,6 +39,8 @@ openerp.l10n_br_tef = function(instance){
     var sat_payment_mode;
     var payment_name;
 
+    var transacao_comprovante_1via = "";
+
     var ls_global_operation = '';
 
     var card_number;
@@ -412,9 +414,7 @@ openerp.l10n_br_tef = function(instance){
                         comment: 'Certifique-se de que o Cliente V$Pague está funcionando normalmente',
                     });
         } else {
-            console.log("IMPRIMIIIIU");
             ls_global_operation = operation;
-            self.proxy.print_tef_extrato("Hello Millerson");
             start();
         }
     }
@@ -560,6 +560,7 @@ openerp.l10n_br_tef = function(instance){
             }
             catch (err){
                 console.log('Could not connect to server');
+                console.log('Error: ' + err.message);
             }
         },
 
@@ -592,6 +593,9 @@ openerp.l10n_br_tef = function(instance){
             if((io_tags.servico == "executar") &&
                 (io_tags.retorno == "0") && (io_tags.transacao_comprovante_1via != "") &&
                 (io_tags.transacao == "Cartao Vender")){
+
+                transacao_comprovante_1via = io_tags.transacao_comprovante_1via;
+
                 confirm(io_tags.sequencial);
 
                 setTimeout(function(){
@@ -599,7 +603,6 @@ openerp.l10n_br_tef = function(instance){
                 }, 1500);
 
                 io_tags.mensagem = "";
-                io_tags.transacao_comprovante_1via = "";
                 return true;
             } else {
                 // Handle Exceptions Here
@@ -853,6 +856,13 @@ openerp.l10n_br_tef = function(instance){
                 self.pos_widget.popupStatusPagamento.hide();
 
                 io_tags.transacao = '';
+
+                var payment_terminal = $( '.payment-terminal-transaction-start' );
+                console.log(payment_terminal);
+
+                self.pos.proxy.print_tef_extrato(transacao_comprovante_1via + "\n\n\n\n\n\n\n\n\n\n");
+
+
                 setTimeout(function(){
                     self.consult();
                 }, 2000);

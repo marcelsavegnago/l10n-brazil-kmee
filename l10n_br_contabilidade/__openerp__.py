@@ -4,7 +4,7 @@
 
 
 {
-    'name': 'L10nBR Contabilidade',
+    'name': 'Contabilidade Brasileira',
     'category': 'ABGF',
     'license': 'AGPL-3',
     'author': 'ABGF, Odoo Community Association (OCA)',
@@ -32,6 +32,7 @@
         'wizards/trial_balance_wizard.xml',
         'wizards/general_ledger_wizard.xml',
         'wizards/import_account_account.xml',
+        'wizards/import_account_depara.xml',
         'wizards/print_journal_wizard.xml',
 
         'views/account_account.xml',

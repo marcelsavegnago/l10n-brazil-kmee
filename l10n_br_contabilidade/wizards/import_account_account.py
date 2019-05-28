@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
-# Copyright 2018 ABGF
+# Copyright 2019 ABGF
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import base64
 import logging
+
+import pandas as pd
 
 _logger = logging.getLogger(__name__)
 
 from openerp import api, fields, models
 from openerp.exceptions import Warning
+from tempfile import TemporaryFile
 
 
 class WizardImportAccountAccount(models.TransientModel):
@@ -27,190 +31,321 @@ class WizardImportAccountAccount(models.TransientModel):
     )
 
     instrucao = fields.Html(
-        string='Instrução de Importação',
-        compute='compute_instrucao',
+        string='Instrução para Importação',
+        default=lambda self: self._get_default_instrucao(),
+        readonly=True,
     )
 
-    config_nivel_ids = fields.One2many(
-        string='Configuração dos níveis',
-        comodel_name='wizard.import.account.nivel',
-        inverse_name='wizard_import_account_account_id',
-    )
-
-    @api.multi
-    def compute_instrucao(self):
-        for record in self:
-            record.instrucao = \
-                "<h2>A primeira Linha do CSV deverá ser a header indicando " \
-                "os campos: code,name </h2>"
+    def _get_default_instrucao(self):
+        return """
+        
+        <h3>Para importação analisar o plano de contas (CSV) e preencher a configuração de níveis conforme exemplo:</h3> 
+        <br />
+        
+        <style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;border-color:#aabcfe;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#669;background-color:#e8edff;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#039;background-color:#b9c9fe;}
+.tg .tg-phtq{background-color:#D2E4FC;border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-baqh{text-align:center;vertical-align:top}
+.tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-svo0{background-color:#D2E4FC;border-color:inherit;text-align:center;vertical-align:top}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+<table class="tg" class="oe_center">
+    <tr>
+        <th class="tg-0pky">code</th>
+        <th class="tg-0pky">name</th>
+        <th class="tg-0pky">parent</th>
+        <th class="tg-0pky">type (visão/comum)</th>
+        <th class="tg-0pky">natureza (devedora/credora)</th>
+        <th class="tg-0pky">user_type (ativo/passivo/receita/despesa)</th>
+    </tr>
+    <tr>
+        <td class="tg-phtq">1</td>
+        <td class="tg-phtq">Ativo</td>
+        <td class="tg-phtq">0</td>
+        <td class="tg-phtq">visão</td>
+        <td class="tg-phtq">devedora</th>
+        <td class="tg-phtq">ativo</th>
+    </tr>
+    <tr>
+        <td class="tg-0pky">1.1</td>
+        <td class="tg-0pky">Ativo Circulante</td>
+        <td class="tg-0pky">1</td>
+        <td class="tg-0pky">visão</td>
+        <td class="tg-0pky">devedora</th>
+        <td class="tg-0pky">ativo</th>
+    </tr>
+    <tr>
+        <td class="tg-phtq">1.1.01</td>
+        <td class="tg-phtq">Disponibilidades</td>
+        <td class="tg-phtq">1.1</td>
+        <td class="tg-phtq">visão</td>
+        <td class="tg-phtq">devedora</th>
+        <td class="tg-phtq">ativo</th>
+    </tr>
+    <tr>
+        <td class="tg-0pky">1.1.01.0001</td>
+        <td class="tg-0pky">Caixa</td>
+        <td class="tg-0pky">1.1.01</td>
+        <td class="tg-0pky">comum</td>
+        <td class="tg-0pky">devedora</th>
+        <td class="tg-0pky">ativo</th>
+    </tr>
+</table>
+<br />
+<br />PS1.: Tipo de Conta pode ser Ativo/Passivo/Patrimônio Líquido/Receita/Despesa/Apuração do Resultado
+<br />PS2.: A planilha não pode conter quebras manuais (\\n) e nem aspas (")
+nas células pois a estrutura do CSV entenderá como uma coluna a mais.
+        
+        """
 
     @api.multi
     def import_account_account(self):
         """
-
-        :param data:
-        :return:
+        Rotina para importação de um plano de contas externa
         """
 
-        for record in self:
-            if record.plano_de_contas_file:
+        if self.plano_de_contas_file:
 
-                # import csv
-                import base64
-                qtd_max_colunas = 0
-                erro = ''
+            qtd_max_colunas = 0
+            erro = ''
 
-                conta_raiz_id = \
-                    record.account_depara_plano_id.account_account_id.id
+            conta_raiz_id = \
+                self.account_depara_plano_id.account_account_id.id
 
-                xml_id_root = record.env['ir.model.data'].search(
-                    [
-                        ('model', '=', 'account.account'),
-                        ('res_id', '=', conta_raiz_id)
-                    ]
-                )
+            xml_id_root = self.env['ir.model.data'].search([
+                ('model', '=', 'account.account'),
+                ('res_id', '=', conta_raiz_id),
+            ])
 
-                if not xml_id_root:
-                    xml_id_root = 'account_account_{}_{}'.format(
-                        record.account_depara_plano_id.name.upper(), '0')
+            parent_ids = {
+                '0': {'xml_id': xml_id_root, 'id': conta_raiz_id}
+            }
 
-                    self.env['ir.model.data'].create({
-                        'module': 'account',
-                        'name': xml_id_root,
-                        'model': 'account.account',
-                        'res_id': conta_raiz_id,
-                    })
+            arq = base64.b64decode(self.plano_de_contas_file)
+            linhas = arq.splitlines(True)
 
-                parent_ids = {
-                    0: {
-                        'xml_id': xml_id_root,
-                        'id': conta_raiz_id
-                    }
-                }
+            # HEADER da planilha Validar HEADER
+            cabecalho = linhas[0]
+            # if cabecalho.split(',')[0] in ['code', 'name']:
+            #     qtd_max_colunas = len(cabecalho.split(','))
+            # else:
+            #     raise Warning(
+            #     'Primeira linha deverá ser header com code, name, parent')
 
-                arq = base64.b64decode(record.plano_de_contas_file)
-                linhas = arq.splitlines(True)
+            # Pular primeira por ser cabeçalho
+            for linha in linhas[1:]:
 
-                # HEADER da planilha
-                cabecalho = linhas[0]
-                if cabecalho.split(',')[0] in ['id', 'code', 'name']:
-                    qtd_max_colunas = len(cabecalho.split(','))
+                l = linha.replace('\n', '').split(',')
+
+                # As linhas só serão processadas
+                if qtd_max_colunas and len(l) != qtd_max_colunas:
+                    for linha_texto in l[2:]:
+                        l[1] += ' ' + linha_texto.replace('"', '')
+
+                # Validar Coluna 0 - code
+                #
+                code = l[0]
+                code = \
+                    code.replace('#', '').replace('@', '').replace('!', '')
+                if not code:
+                    raise Warning(
+                        'ERRO Linha deverá conter code {}'.format(l))
+
+                # Validar Coluna 1 - name
+                #
+                name = l[1]
+                if not name:
+                    erro += ' Erro linha: {} \n'.format(l)
+                    continue
+
+                # Validar Coluna 2 - parent
+                #
+                try:
+                    parent_code = l[2]
+                except IndexError:
+                    raise ValueError(
+                        'PAI inexistente ou nao preenchido. '
+                        'Conta: {} - {} '.format(code, name))
+
+                # Validar Coluna 3 - tipo_interno - type
+                #
+                tipo_interno = l[3].lower()
+
+                if tipo_interno in ['visão', 'visao', 'view']:
+                    tipo_interno = 'view'
+
+                elif tipo_interno in ['other', 'comum']:
+                    tipo_interno = 'other'
 
                 else:
+                    raise Warning('Tipo Interno não localizado: {} \n'
+                                  'Linha: {} '
+                                  .format(tipo_interno, linha))
+
+                # Validar Coluna 4 - natureza
+                natureza = l[4].lower().strip()
+                if natureza not in ['credora', 'devedora', 'd/c']:
                     raise Warning(
-                        'Primeira linha deverá ser header com id,nome ou'
-                        ' code e em seguida informar as colunas')
+                        'Natureza da Conta deverá ser credora ou devedora')
+                if natureza == 'devedora':
+                    natureza_id = self.env.ref(
+                        'l10n_br_contabilidade.'
+                        'l10n_br_account_natureza_devedora')
+                elif natureza == 'credora':
+                    natureza_id = \
+                        self.env.ref('l10n_br_contabilidade.'
+                                     'l10n_br_account_natureza_credora')
+                elif natureza == 'd/c':
+                    natureza_id = \
+                        self.env.ref('l10n_br_contabilidade.'
+                                     'l10n_br_account_natureza_credora')
+                else:
+                    raise Warning('Natureza de Conta não localizada: {} \n'
+                                  'Linha: {} '
+                                  .format(natureza, linha))
 
-                dicionario_niveis = record._get_dicionario_niveis_conta_pai()
+                # Validar Coluna 5 - tipo_conta - user_type
+                tipo_conta = l[5].lower()
+                tipos_validos = \
+                    ['ativo', 'passivo', 'despesa', 'receita', 'resultado']
+                if tipo_conta in tipos_validos:
+                    if tipo_conta == 'ativo':
+                        tipo_conta = \
+                            self.env.ref('account.data_account_type_asset')
+                    elif tipo_conta == 'passivo':
+                        tipo_conta = \
+                            self.env.ref('l10n_br.passivo')
+                    elif tipo_conta == 'receita':
+                        tipo_conta = \
+                            self.env.ref('account.data_account_type_income')
+                    elif tipo_conta == 'despesa':
+                        tipo_conta = \
+                            self.env.ref('account.data_account_type_expense')
+                    elif tipo_conta == 'resultado':
+                        tipo_conta = self.env.ref('l10n_br.resultado')
+                    else:
+                        raise Warning('Tipo de Conta não localizado: {} \n'
+                                      'Linha: {} '
+                                      .format(tipo_conta, linha))
 
-                # Pular primeira por ser cabeçalho
-                for linha in linhas[1:]:
+                xml_id = 'account_account_{}_{}'.format(
+                    self.account_depara_plano_id.name.upper(),
+                    code.replace('.', ''))
 
-                    l = linha.split(',')
+                parent_ids[code] = {'xml_id': xml_id, 'id': False}
 
-                    # As linnhas só serão processadas
-                    if qtd_max_colunas and len(l) != qtd_max_colunas:
-                        for linha_texto in l[2:]:
-                            l[1] += ' ' + linha_texto.replace('"', '')
+                if not parent_ids.get(parent_code):
+                    raise Warning(
+                        'Conta pai não localizada '
+                        'para a conta {} - {}'.format(code, name))
 
-                    name = l[1]
-                    code = l[0]
+                vals = {
+                    'code': code,
+                    'name': name,
+                    'parent_id': parent_ids[parent_code]['id'],
+                    'user_type': tipo_conta.id if tipo_conta else False,
+                    'account_depara_plano_id': self.account_depara_plano_id.id,
+                    'type': tipo_interno,
+                    'natureza_conta_id':
+                        natureza_id.id if natureza_id else False,
+                }
 
-                    code = code.replace('#', '').replace('@', '').replace('!', '')
+                account_account_id = \
+                    self.env['account.account'].create(vals)
 
-                    if not name or not code:
-                        erro += ' Erro linha: {} \n'.format(l)
-                        continue
+                parent_ids[code]['id'] = account_account_id.id
 
-                    code = code.replace('.', '')
+                _logger.info('Conta Criada: {} - {}'.format(code, name))
 
-                    xml_id = 'account_account_{}_{}'.format(
-                        record.account_depara_plano_id.name.upper(), code)
+        _logger.info(erro)
 
-                    parent_ids[code] = {'xml_id': xml_id, 'id': False}
-                    parent_code = self._get_parent_code(code, dicionario_niveis)
+    @api.multi
+    def analise_account_account(self):
+        """
+        Validação de um plano de contas externo
+        """
 
-                    if not parent_ids.get(parent_code):
-                        raise Warning(
-                            'Conta pai não localizada '
-                            'para a conta {} - {}'.format(code, name)
-                        )
+        if not self.plano_de_contas_file:
+            raise Warning('Plano de Contas Externo é obrigatório')
 
-                    vals = {
-                        'code': code,
-                        'name': name,
-                        'parent_id': parent_ids[parent_code]['id'],
-                        'user_type':
-                            self.env.ref('account.data_account_type_view').id,
-                        'account_depara_plano_id':
-                            record.account_depara_plano_id.id,
-                    }
+        plano_de_contas_decoded = \
+            self.plano_de_contas_file.decode('base64')
+        fileobj = TemporaryFile('wb+')
+        fileobj.write(plano_de_contas_decoded)
+        fileobj.seek(0)
+        df = pd.read_csv(fileobj)
+        erro = ''
 
-                    account_account_id = \
-                        self.env['account.account'].create(vals)
+        # Validar
+        # l[2] - parent
+        df['result_parent'] = df['parent'].apply(
+            lambda x: x in df['code'].values)
 
-                    parent_ids[code]['id'] = account_account_id.id
+        df_erro_parent = df[(df.result_parent != True)]
+        if not df_erro_parent.empty:
+            df_erro_parent['erro'] = \
+                df_erro_parent['code'].apply(str) + ' - ' + \
+                df_erro_parent['name']
 
-                    self.env['ir.model.data'].create({
-                        'module': 'account',
-                        'name': xml_id,
-                        'model': 'account.account',
-                        'res_id': account_account_id.id,
-                    })
-                    _logger.info('COnta Criada: {} - {}'.format(code, name))
+            erro += '\n'.join(map(
+                lambda x:
+                'Conta sem pai: {}'.format(x), df_erro_parent['erro'].values))
 
-            _logger.info(erro)
+        # Validar
+        # l[3] - type []
+        valid_types = ['visão', 'visao', 'view', 'other', 'comum']
+        df['result_type'] = df['type'].apply(
+            lambda x: x.lower() in valid_types)
 
-    def _get_dicionario_niveis_conta_pai(self):
-        niveis = {}
-        valor_inicial = 0
-        somatorio_niveis = 1
-        for line in self.config_nivel_ids:
-            if line.nivel == 1:
-                niveis[somatorio_niveis] = 0
-            else:
-                niveis[somatorio_niveis] = somatorio_niveis - valor_inicial
-            valor_inicial = line.algarismos
-            somatorio_niveis += line.algarismos
+        df_erro_type = df[(df.result_type != True)]
+        if not df_erro_type.empty:
+            df_erro_type['erro'] = \
+                df_erro_type['type'].apply(str) + ' - ' + \
+                df_erro_type['code'].apply(str) + ' ' + df_erro_type['name']
 
-        return niveis
+            erro += '\n'.join(map(
+                lambda x:
+                'Tipo inválido: {}'.format(x), df_erro_type['erro'].values))
 
-    def _get_parent_code(self, code, dicionario_niveis):
-        code_result = False
-        if code in ['1', '2', '3', '4', '5']:
-            code_result = 0
-            return code_result
+        # Validar
+        # l[4] - Natureza []
+        valid_types = ['credora', 'devedora', 'd', 'c', 'd/c']
+        df['result_natureza'] = df['natureza'].apply(
+            lambda x: x.lower().replace('\n', '').strip() in valid_types)
 
-        code_result = code[:dicionario_niveis[len(code)]]
+        df_erro_natureza = df[(df.result_natureza != True)]
+        if not df_erro_natureza.empty:
+            df_erro_natureza['erro'] = \
+                df_erro_natureza['natureza'].apply(str) + ' - ' + \
+                df_erro_natureza['code'].apply(str) + ' ' + \
+                df_erro_natureza['name']
 
-        return code_result
+            erro += '\n'.join(map(
+                lambda x: 'Natureza inválida: {} '.
+                    format(x), df_erro_natureza['erro'].values))
 
+        # Validar
+        # l[5] - User_type []
+        valid_types = ['ativo', 'passivo', 'receita', 'depesa', 'resultado']
+        df['result_default_type'] = df['user_type'].apply(
+            lambda x: x.lower().replace('\n', '').strip() in valid_types)
 
-class WizardImportAccountNivel(models.TransientModel):
-    _name = 'wizard.import.account.nivel'
+        df_erro_user_type = df[(df.result_natureza != True)]
+        if not df_erro_user_type.empty:
+            df_erro_user_type['erro'] = \
+                df_erro_user_type['user_type'].apply(str) + ' - ' + \
+                df_erro_user_type['code'].apply(str) + ' ' + \
+                df_erro_user_type['name']
 
-    nivel = fields.Selection(
-        string=u'Nível',
-        selection=[
-            (1, '1'),
-            (2, '2'),
-            (3, '3'),
-            (4, '4'),
-            (5, '5'),
-            (6, '6'),
-            (7, '7'),
-            (8, '8'),
-            (9, '9'),
-            (10, '10'),
-            (11, '11'),
-            (12, '12'),
-        ],
-    )
+            erro += '\n'.join(map(
+                lambda x: 'Tipo de Conta inválida: {} '.
+                    format(x), df_erro_user_type['erro'].values))
 
-    algarismos = fields.Integer(
-        string=u'Quantidade de Algarismos',
-    )
+        if not erro:
+            'OK! Tudo parece válido'
 
-    wizard_import_account_account_id = fields.Many2one(
-        comodel_name='wizard.import.account.account',
-    )
+        raise Warning(erro)

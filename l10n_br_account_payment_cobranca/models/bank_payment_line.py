@@ -89,6 +89,15 @@ class BankPaymentLine(models.Model):
         string=u'Código de finalidade complementar',
         help=u'Campo P013 do CNAB',
     )
+    nosso_numero = fields.Char(
+        string=u'Nosso Numero',
+    )
+    numero_documento = fields.Char(
+        string=u'Número documento'
+    )
+    identificacao_titulo_empresa = fields.Char(
+        string=u'Identificação Titulo Empresa',
+    )
 
     @api.model
     def same_fields_payment_line_and_bank_payment_line(self):
@@ -101,6 +110,7 @@ class BankPaymentLine(models.Model):
         same_fields = super(
             BankPaymentLine, self
         ).same_fields_payment_line_and_bank_payment_line()
+
 
         # TODO: Implementar campo brasileiros que permitem mesclar linhas
 

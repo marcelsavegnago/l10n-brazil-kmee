@@ -71,6 +71,23 @@ class PaymentOrder(models.Model):
         default='0',
     )
 
+    @api.model
+    def _prepare_bank_payment_line(self, paylines):
+        result = super(PaymentOrder, self)._prepare_bank_payment_line(paylines)
+        result['nosso_numero'] = paylines.nosso_numero
+        result['numero_documento'] = paylines.numero_documento
+        result['identificacao_titulo_empresa'] = \
+            paylines.identificacao_titulo_empresa
+        return result
+
+    @api.multi
+    def open2generated(self):
+        action = super(PaymentOrder, self).open2generated()
+        if self.state == 'generated':
+            for payment_line in self.payment_line_ids:
+                payment_line.move_line_id.state_cnab = 'exported'
+        return action
+
     @api.multi
     def generate_payment_file(self):
         """Returns (payment file as string, filename)"""

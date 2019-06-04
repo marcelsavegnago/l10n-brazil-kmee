@@ -96,7 +96,8 @@ class WizardImportAccountAccount(models.TransientModel):
     </tr>
 </table>
 <br />
-<br />PS1.: Tipo de Conta pode ser Ativo/Passivo/Patrimônio Líquido/Receita/Despesa/Apuração do Resultado
+<br />PS1.: Tipo de Conta pode ser Ativo/Passivo/Patrimônio 
+Líquido/Receita/Despesa/Apuração do Resultado
 <br />PS2.: A planilha não pode conter quebras manuais (\\n) e nem aspas (")
 nas células pois a estrutura do CSV entenderá como uma coluna a mais.
         
@@ -282,18 +283,11 @@ nas células pois a estrutura do CSV entenderá como uma coluna a mais.
 
         # Validar
         # l[2] - parent
-        df['result_parent'] = df['parent'].apply(
-            lambda x: x in df['code'].values)
-
-        df_erro_parent = df[(df.result_parent != True)]
-        if not df_erro_parent.empty:
-            df_erro_parent['erro'] = \
-                df_erro_parent['code'].apply(str) + ' - ' + \
-                df_erro_parent['name']
-
-            erro += '\n'.join(map(
-                lambda x:
-                'Conta sem pai: {}'.format(x), df_erro_parent['erro'].values))
+        for index in df.index:
+            if not df.loc[index]['parent'] in df[:index]['code'].values and \
+                    len(str(df.loc[index]['code'])) > 1 :
+                erro += '\n Pai inválido. ' \
+                        'Conta: {}'.format(df.loc[index]['code'])
 
         # Validar
         # l[3] - type []
@@ -313,7 +307,7 @@ nas células pois a estrutura do CSV entenderá como uma coluna a mais.
 
         # Validar
         # l[4] - Natureza []
-        valid_types = ['credora', 'devedora', 'd', 'c', 'd/c']
+        valid_types = ['credora', 'devedora', 'd/c']
         df['result_natureza'] = df['natureza'].apply(
             lambda x: x.lower().replace('\n', '').strip() in valid_types)
 

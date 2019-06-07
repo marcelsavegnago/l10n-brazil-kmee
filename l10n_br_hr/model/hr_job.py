@@ -8,4 +8,8 @@ from openerp import models, fields
 class HrJob(models.Model):
     _inherit = 'hr.job'
 
-    cbo_id = fields.Many2one('l10n_br_hr.cbo', 'CBO')
+    cbo_id = fields.Many2one(
+        comodel_name='l10n_br_hr.cbo',
+        string='CBO',
+        help='Classificação Brasileira de Ocupações',
+    )

@@ -34,7 +34,7 @@
                     <field name="monthly_hours"/>
                     <field name="weekly_hours"/>
                 </xpath>
-
+                
                 <xpath expr="//page[@string='Work Permit']" position="after">
                     <page string="Resignation">
                         <group string="Resignation">

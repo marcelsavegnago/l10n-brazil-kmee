@@ -39,6 +39,7 @@
 
         # Menus
         'views/sped_esocial_menu.xml',
+        'views/hr_menu.xml',
 
         # Views
         'wizards/s2299_desligamento_wizard_view.xml',
@@ -60,6 +61,20 @@
         'views/inherited_hr_holidays_status_view.xml',
         'views/inherited_hr_holidays_view.xml',
         'views/inherited_sped_registro.xml',
+        'views/hr_ambiente_trabalho.xml',
+        'views/hr_condicao_ambiente_trabalho.xml',
+        'views/hr_informativo_atividade_trabalho.xml',
+        'views/hr_fator_risco.xml',
+        'views/hr_equipamento_protecao.xml',
+        'views/hr_responsavel_ambiental.xml',
+        'views/hr_saude_trabalhador.xml',
+        'views/hr_exame_aso.xml',
+        'views/hr_acidente_trabalho.xml',
+        'views/hr_acidente_parte_atingida.xml',
+        'views/hr_agente_causador.xml',
+        'views/hr_atestado_medico.xml',
+        'views/hr_treinamentos_capacitacoes.xml',
+        'views/hr_professor_treinamento.xml',
 
         # Intermediarios
         'views/intermediarios/s1000_informacoes_do_empregador_contribuinte_orgao_publico.xml',
@@ -68,6 +83,7 @@
         'views/intermediarios/s1020_lotacao_tributaria_view.xml',
         'views/intermediarios/s1030_cargos_empregos_publicos_view.xml',
         'views/intermediarios/s1050_turnos_trabalho_view.xml',
+        'views/intermediarios/s1060_ambiente_trabalho.xml',
         'views/intermediarios/s1200_remuneracao_de_trabalhador_rgps.xml',
         'views/intermediarios/s1202_remuneracao_de_servidor_rpps.xml',
         'views/intermediarios/s1210_pagamento.xml',
@@ -77,7 +93,11 @@
         'views/intermediarios/s2200_cadastramento_inicial_vinculo_admissao_trabalhador_view.xml',
         'views/intermediarios/s2205_alteracao_dados_cadastrais_trabalhador_view.xml',
         'views/intermediarios/s2206_alteracao_contrato_trabalho_view.xml',
+        'views/intermediarios/s2210_comunicacao_acidente_trabalho.xml',
+        'views/intermediarios/s2220_saude_trabalhador.xml',
         'views/intermediarios/s2230_afastamento_temporario_view.xml',
+        'views/intermediarios/s2240_condicao_ambiente_trabalho.xml',
+        'views/intermediarios/s2245_treinamento_capacitacao.xml',
         'views/intermediarios/s2299_desligamento_view.xml',
         'views/intermediarios/s2300_cadastramento_inicial_trabalhador_sem_vinculo.xml',
         'views/intermediarios/s2306_alteracao_contrato_trabalhador_sem_vinculo.xml',

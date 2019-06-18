@@ -152,12 +152,16 @@ class PosOrder(models.Model):
             ], limit=5, order="id DESC"
         )
         for order in orders:
+            order_date_datetime = fields.Datetime.from_string(order.date_order)
+            datetime_converted = fields.Datetime.context_timestamp(
+                order, order_date_datetime)
+            converted_date_str = fields.Datetime.to_string(datetime_converted)
             order_vals = {
                 'id': order.id,
                 'name': order.name,
                 'pos_reference': order.pos_reference,
                 'partner': order.partner_id.name,
-                'date': order.date_order,
+                'date': converted_date_str,
                 'total': '%.2f' % order.amount_total,
                 'chave_cfe': order.chave_cfe,
                 'canceled_order': order.canceled_order,

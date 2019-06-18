@@ -91,6 +91,13 @@ function l10n_br_pos_devices(instance, module) {
             self.message('cancelar_cfe',{ json: order },{ timeout: 5000 })
             .then(function(result){
                 if (result){
+                    if (typeof result === "string") {
+                        self.pos.pos_widget.screen_selector.show_popup('error-traceback', {
+                            'message': _t('Erro SAT: '),
+                            'comment': _t(result)
+                        });
+                        return;
+                    };
                     var posOrderModel = new instance.web.Model('pos.order');
                     var posOrder = posOrderModel.call('refund', {'ids': result.order_id, 'dados': result})
                     .then(function (orders) {

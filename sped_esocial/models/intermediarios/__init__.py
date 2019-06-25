@@ -9,6 +9,7 @@ from . import s1010_rubrica
 from . import s1020_lotacao_tributaria
 from . import s1030_cargos_empregos_publicos
 from . import s1050_turnos_trabalho
+from . import s1060_ambiente_trabalho
 
 # Registros Periódicos
 from . import s1200_remuneracao_de_trabalhador_rgps
@@ -19,10 +20,14 @@ from . import s1298_reaberturaPeriodo
 from . import s1299_fechamento
 
 # Registros Não Periódicos
+from . import s2210_comunicacao_acidente_trabalho
 from . import s2200_cadastramento_inicial_vinculo_admissao_trabalhador
 from . import s2205_alteracao_dados_cadastrais_trabalhador
 from . import s2206_alteracao_contrato_trabalho
+from . import s2220_saude_trabalhador
 from . import s2230_afastamento_temporario
+from . import s2240_condicao_ambiente_trabalho
+from . import s2245_treinamento_capacitacao
 from . import s2299_desligamento
 from . import s2300_inicio_trabalhador_sem_vinculo_de_emprego
 from . import s2306_alteracao_contrato_sem_vinculo

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="hr_treinamentos_capacitacoes_form_view">
+            <field name="name">hr.treinamentos.capacitacoes.form</field>
+            <field name="model">hr.treinamentos.capacitacoes</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="button_enviar_esocial" string="Enviar para e-Social" type="object" class="oe_highlight" attrs="{'invisible': [('sped_intermediario_id', '!=', False)]}"/>
+                        <field name="state" widget="statusbar" select="1" nolabel="1" readonly="1" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="contract_id" required="True"/>
+                            <field name="cod_treinamento_cap_id" required="True"/>
+                            <field name="obs"/>
+                            <field name="codigo_treinamento" invisible="True"/>
+                            <field name="data_treinamento" attrs="{'invisible': [('codigo_treinamento', 'in', ['1006', '1207'])], 'required': [('codigo_treinamento', 'not in', ['1006', '1207'])]}"/>
+                            <field name="duracao" attrs="{'invisible': [('codigo_treinamento', 'in', ['1006', '1207'])], 'required': [('codigo_treinamento', 'not in', ['1006', '1207'])]}"/>
+                            <field name="modalidade" attrs="{'invisible': [('codigo_treinamento', 'in', ['1006', '1207'])], 'required': [('codigo_treinamento', 'not in', ['1006', '1207'])]}"/>
+                            <field name="tipo" attrs="{'invisible': [('codigo_treinamento', 'in', ['1006', '1207'])], 'required': [('codigo_treinamento', 'not in', ['1006', '1207'])]}"/>
+                            <field name="treinamento_antes_admissao" attrs="{'invisible': [('codigo_treinamento', 'in', ['1006', '1207'])], 'required': [('codigo_treinamento', 'not in', ['1006', '1207'])]}"/>
+                        </group>
+                        <separator string="Professores" attrs="{'invisible': [('codigo_treinamento', 'in', ['1006', '1207'])]}"/>
+                        <field name="professor_ids" attrs="{'invisible': [('codigo_treinamento', 'in', ['1006', '1207'])], 'required': [('codigo_treinamento', 'not in', ['1006', '1207'])]}"/>
+                        <group>
+                            <field name="sped_intermediario_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_treinamentos_capacitacoes_tree_view">
+            <field name="name">hr.treinamentos.capacitacoes.tree</field>
+            <field name="model">hr.treinamentos.capacitacoes</field>
+            <field name="arch" type="xml">
+                <tree string="Treinamentos e Capacitações" >
+                    <field name="contract_id"/>
+                    <field name="cod_treinamento_cap_id"/>
+                    <field name="obs"/>
+                    <field name="professor_ids"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_hr_treinamentos_capacitacoes">
+            <field name="name">Treinamentos e Capacitações</field>
+            <field name="res_model">hr.treinamentos.capacitacoes</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.ui.menu" id="menu_hr_treinamentos_capacitacoes">
+            <field name="name">Treinamentos e Capacitações</field>
+            <field name="parent_id" ref="sped_esocial.menu_hr_root_treinamento_capacitacao" />
+            <field name="action" ref="sped_esocial.action_hr_treinamentos_capacitacoes" />
+            <field name="sequence" eval="1" />
+        </record>
+
+    </data>
+</openerp>

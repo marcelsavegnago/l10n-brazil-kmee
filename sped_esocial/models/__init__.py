@@ -38,3 +38,17 @@ from . import inherited_hr_holidays
 from . import hr_turnos_trabalho
 from . import sped_esocial
 from . import inherited_sped_registro
+from . import hr_ambiente_trabalho
+from . import hr_condicao_ambiente_trabalho
+from . import hr_informativo_atividade_trabalho
+from . import hr_fator_risco
+from . import hr_equipamento_protecao
+from . import hr_responsavel_ambiental
+from . import hr_saude_trabalhador
+from . import hr_exame_aso
+from . import hr_acidente_trabalho
+from . import hr_acidente_parte_atingida
+from . import hr_agente_causador
+from . import hr_atestado_medico
+from . import hr_treinamentos_capacitacoes
+from . import hr_professor_treinamento

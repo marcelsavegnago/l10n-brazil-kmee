@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <menuitem
+                id="menu_hr_root_sst"
+                parent="hr.menu_hr_root"
+                name="Segurança e Saúde no Trabalho"
+                sequence="49"
+                groups="base.group_user"
+        />
+
+        <menuitem
+                id="menu_hr_root_condicao_ambiente_trabalho"
+                parent="sped_esocial.menu_hr_root_sst"
+                name="Condição do Ambiente de Trabalho"
+                sequence="2"
+                groups="base.group_user"
+        />
+
+        <menuitem
+                id="menu_hr_root_saude_trabalhador"
+                parent="sped_esocial.menu_hr_root_sst"
+                name="Saúde do Trabalhador"
+                sequence="3"
+                groups="base.group_user"
+        />
+
+        <menuitem
+                id="menu_hr_root_acidente_trabalho"
+                parent="sped_esocial.menu_hr_root_sst"
+                name="Acidente de Trabalho"
+                sequence="4"
+                groups="base.group_user"
+        />
+
+        <menuitem
+                id="menu_hr_root_treinamento_capacitacao"
+                parent="sped_esocial.menu_hr_root_sst"
+                name="Treinamentos e Capacitações"
+                sequence="5"
+                groups="base.group_user"
+        />
+
+    </data>
+</openerp>

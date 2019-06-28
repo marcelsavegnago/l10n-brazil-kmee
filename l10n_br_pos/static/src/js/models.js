@@ -181,6 +181,9 @@ function l10n_br_pos_models(instance, module) {
         set_client: function(client){
             PosOrderSuper.prototype.set_client.apply(this, arguments);
             var self = this;
+            if (this.attributes.client === null){
+                this.attributes.client = {'id': false};
+            }
             new instance.web.Model('res.partner').call('get_credit_limit', [this.attributes.client['id']]).then(function (result) {
                 self.attributes.client['credit_limit'] = result;
             });

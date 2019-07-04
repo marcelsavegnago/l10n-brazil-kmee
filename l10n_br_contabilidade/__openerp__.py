@@ -21,6 +21,7 @@
     'data': [
         'security/ir.model.access.csv',
         'security/account_security.xml',
+        'security/account_groups.xml',
         #
         'data/natureza_conta_data.xml',
         # # Menus
@@ -30,6 +31,7 @@
 
         # Wizard
         'wizards/fechamento_reabertura_justificativa_wizard.xml',
+        'wizards/periodo_reabertura_justificativa_wizard.xml',
         'wizards/trial_balance_wizard.xml',
         'wizards/general_ledger_wizard.xml',
         'wizards/import_account_account.xml',
@@ -44,6 +46,7 @@
         'views/account_move.xml',
         'views/account_fechamento.xml',
         'views/account_fechamento_reabertura_justificativa.xml',
+        'views/account_reabertura_periodo_justificativa.xml',
         'views/account_account_type.xml',
         'views/account_reports.xml',  # já presente no meu account.final_accounting_reports
         'views/account_grupo.xml',

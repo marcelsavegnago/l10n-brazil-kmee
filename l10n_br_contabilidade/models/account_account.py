@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from openerp import _, api, fields, models
+from openerp.exceptions import Warning
 
 
 class AccountAccount(models.Model):
@@ -203,11 +204,28 @@ class AccountAccount(models.Model):
     @api.multi
     def unlink(self):
         for record in self:
+            for child_id in record.child_parent_ids:
+                child_id.unlink()
+
             ir_model_data = record.env['ir.model.data'].search([
                 ('model', '=', 'account.account'),
                 ('res_id', '=', record.id)
             ])
 
             ir_model_data.unlink()
+
+            de_para_id = self.env['account.depara'].search(
+                    [('conta_referencia_id', '=', record.id)])
+
+            if de_para_id:
+                depara_nomes = ''
+                for conta in de_para_id.conta_sistema_id:
+                    depara_nomes += ' {} - {},'.format(
+                        conta.code, conta.name)
+
+                raise Warning(
+                    'Esta conta está relacionada em um De-Para,'
+                    + depara_nomes + ' por isso não pode ser Excluída!'
+                )
 
             return super(AccountAccount, record).unlink()

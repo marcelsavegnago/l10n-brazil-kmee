@@ -85,6 +85,6 @@
         'demo/financial_demo.yml'
     ],
     'test': [
-        'test/financial_move_test.yml',
+        # 'test/financial_move_test.yml',
     ]
 }

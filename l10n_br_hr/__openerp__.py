@@ -20,6 +20,7 @@
         'view/hr_employee_dependent_view.xml',
         'view/hr_employee_view.xml',
         'view/hr_job_view.xml',
+        'view/inherited_hr_contract.xml',
 
         'wizard/hr_employee_timesheet_wizard_views.xml',
     ],

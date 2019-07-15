@@ -37,7 +37,10 @@ class HrEmployeeTimeSheetWizard(models.TransientModel):
         self.ensure_one()
 
         hr_contract_ids = self.env['hr.contract'].search(
-            [('employee_id.company_id', '=', self.company_id.id)])
+            [
+                ('employee_id.company_id', '=', self.company_id.id),
+                ('compose_lot', '=', True)
+            ])
 
         call_result = {
             'contract_ids': [

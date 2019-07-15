@@ -8,7 +8,7 @@
     'author': 'KMEE, Odoo Community Association (OCA)',
     'website': 'http://www.kmee.com.br',
     'version': '8.0.0.0.0',
-    'depends': ['hr', 'l10n_br_base'],
+    'depends': ['hr', 'l10n_br_base', 'hr_contract'],
     'data': [
         'data/l10n_br_hr.cbo.csv',
         'data/dependent_type_data.xml',
@@ -20,6 +20,8 @@
         'view/hr_employee_dependent_view.xml',
         'view/hr_employee_view.xml',
         'view/hr_job_view.xml',
+
+        'wizard/hr_employee_timesheet_wizard_views.xml',
     ],
     'test': [
         'test/l10n_br_hr_demo.yml'

@@ -12,12 +12,17 @@
     'depends': [
         'hr_contract',
         'l10n_br_hr',
+        'report_py3o',
     ],
     'data': [
         'views/hr_contract_view.xml',
         'data/l10n_br_hr_contract_data.xml',
         'data/l10n_br_hr_contract_resignation_data.xml',
-        'security/ir.model.access.csv'
+        'security/ir.model.access.csv',
+
+        'wizard/hr_employee_timesheet_wizard_views.xml',
+
+        'reports/report_employees_timesheet_py3o.xml',
     ],
     'test': [
         'test/l10n_br_hr_contract_demo.yml'

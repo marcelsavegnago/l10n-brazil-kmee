@@ -55,8 +55,7 @@
         <menuitem id="hr_employee_timesheet_menuitem"
                   name="Employees Timesheet"
                   action="action_hr_employee_timesheet_wizard"
-                  parent="hr.menu_hr_main"
-                  groups="base.group_hr_user"
+                  parent="l10n_br_hr.menu_l10n_br_hr_relatorios_root"
                   sequence="4"
         />
     </data>

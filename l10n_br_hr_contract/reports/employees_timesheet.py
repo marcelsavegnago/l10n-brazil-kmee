@@ -41,7 +41,7 @@ def employees_timesheet(pool, cr, uid, localcontext, context):
 
     contratos = []
     i = 0
-    for contract_id in self.contract_ids:
+    for contract_id in sorted(self.contract_ids, key=lambda c: c.employee_id.name):
         contrato = Contrato()
         i = i + 1
         attendance_id = contract_id.working_hours.attendance_ids[:1]

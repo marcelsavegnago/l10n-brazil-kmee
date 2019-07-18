@@ -21,6 +21,17 @@ class Contrato(object):
         self.intervalo = ''
         self.saida = ''
 
+class Empresa(object):
+    def _init_(self):
+        self.nome = ''
+        self.rua = ''
+        self.rua2 = ''
+        self.zip = ''
+        self.cidade = ''
+        self.uf = ''
+        self.cnpj = ''
+        self.logo = ''
+        self.footer = ''
 
 @api.model
 @py3o_report_extender(
@@ -53,11 +64,20 @@ def employees_timesheet(pool, cr, uid, localcontext, context):
 
         contratos.append(contrato)
 
+    empresa = Empresa()
+    empresa.nome = self.company_id.partner_id.name or ''
+    empresa.rua = self.company_id.street or ''
+    empresa.rua2 = self.company_id.street2 or ''
+    empresa.zip = self.company_id.zip or ''
+    empresa.cidade = self.company_id.l10n_br_city_id.name or ''
+    empresa.uf = self.company_id.state_id.code or ''
+    empresa.cnpj = self.company_id.partner_id.cnpj_cpf or ''
+    empresa.logo = self.company_id.logo or ''
+    empresa.footer = self.company_id.rml_footer or ''
+
     data = {
         "data_hoje": datetime.now().strftime('%d/%m/%Y'),
-        "company_logo": self.company_id.logo,
-        "company_logo2": self.company_id.logo,
-        "footer": self.company_id.rml_footer,
+        "empresa": empresa,
         "contratos": contratos,
     }
 

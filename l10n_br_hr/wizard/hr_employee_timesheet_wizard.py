@@ -6,7 +6,7 @@
 from openerp import api, fields, models
 
 STATE_SELECTION = [
-    ('draft', 'Initial'),
+    ('draft', 'Inicial'),
     ('done', 'Final')
 ]
 
@@ -15,20 +15,20 @@ class HrEmployeeTimeSheetWizard(models.TransientModel):
     _name = 'hr.employee.timesheet.wizard'
 
     state = fields.Selection(
-        string='State',
+        string='Estado',
         selection=STATE_SELECTION,
         default='draft',
     )
 
     company_id = fields.Many2one(
         comodel_name='res.company',
-        string='Company',
+        string='Empresa',
         required=True,
         default=lambda self: self.env.user.company_id.id,
     )
 
     contract_ids = fields.Many2many(
-        string='Contracts',
+        string='Contratos',
         comodel_name='hr.contract',
     )
 

@@ -7,7 +7,7 @@
             <field name="name">hr.employee.timesheet.wizard.form</field>
             <field name="model">hr.employee.timesheet.wizard</field>
             <field name="arch" type="xml">
-                <form string="Employees Timesheet">
+                <form string="Quadro de Horários">
                 <header>
                     <field name="state" widget="statusbar"/>
                 </header>
@@ -16,23 +16,23 @@
                             <field name="company_id" states="draft"/>
                         </group>
                     </group>
-                    <group string="Contracts" colspan="4" col="1" states="done">
+                    <group string="Contratos" colspan="4" col="1" states="done">
                         <field name="contract_ids" nolabel="1"/>
                     </group>
 
                     <footer>
                         <button name="action_process_hr_contracts" class="btn oe_highlight pull-right mb32"
-                                 string="Next" type="object" states="draft">
+                                 string="Próximo" type="object" states="draft">
                             <span class="fa fa-long-arrow-right" />
                         </button>
 
                         <button name="action_previous_hr_contracts" class="btn oe_highlight pull-left mb32"
-                                 string="Previous" type="object" states="done">
+                                 string="Anterior" type="object" states="done">
                             <span class="fa fa-long-arrow-left" />
                         </button>
 
                         <button special="cancel" class="btn oe_highlight pull-left mb32"
-                            string="Close">
+                            string="Fechar">
                         <span class="fa fa-close" />
                     </button>
                     </footer>
@@ -53,7 +53,7 @@
 
         <!-- MenuItems -->
         <menuitem id="hr_employee_timesheet_menuitem"
-                  name="Employees Timesheet"
+                  name="Quadro de Horários"
                   action="action_hr_employee_timesheet_wizard"
                   parent="l10n_br_hr.menu_l10n_br_hr_relatorios_root"
                   sequence="4"

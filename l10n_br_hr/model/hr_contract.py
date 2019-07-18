@@ -10,6 +10,6 @@ class HrContract(models.Model):
     _inherit = 'hr.contract'
 
     compose_lot = fields.Boolean(
-        string='Compose Lot?',
+        string='Compor Lote?',
         default=True,
     )

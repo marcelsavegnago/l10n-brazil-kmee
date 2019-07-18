@@ -10,7 +10,7 @@
                 <footer position="inside">
                     <button name="action_print_hr_contracts_py3o" icon="gtk-print"
                             class="btn oe_highlight pull-right mb32"
-                            string="Print Report" type="object" states="done">
+                            string="Imprimir Relatório" type="object" states="done">
                     </button>
                 </footer>
             </field>

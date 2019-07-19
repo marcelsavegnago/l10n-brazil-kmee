@@ -21,8 +21,6 @@
         'view/hr_employee_view.xml',
         'view/hr_job_view.xml',
         'view/inherited_hr_contract.xml',
-
-        'wizard/hr_employee_timesheet_wizard_views.xml',
     ],
     'test': [
         'test/l10n_br_hr_demo.yml'

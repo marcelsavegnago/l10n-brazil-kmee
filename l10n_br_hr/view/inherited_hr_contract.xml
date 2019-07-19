@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <data>
                     <xpath expr="//field[@name='wage']" position="after">
-                        <field name="compose_lot"/>
+                        <field name="compor_relatorio"/>
                     </xpath>
                 </data>
             </field>

@@ -9,7 +9,8 @@ from openerp import fields, models
 class HrContract(models.Model):
     _inherit = 'hr.contract'
 
-    compose_lot = fields.Boolean(
-        string='Compor Lote?',
+
+    compor_relatorio = fields.Boolean(
+        string='Compor Relatório?',
         default=True,
     )

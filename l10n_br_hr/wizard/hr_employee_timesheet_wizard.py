@@ -39,7 +39,7 @@ class HrEmployeeTimeSheetWizard(models.TransientModel):
         hr_contract_ids = self.env['hr.contract'].search(
             [
                 ('employee_id.company_id', '=', self.company_id.id),
-                ('compose_lot', '=', True)
+                ('compor_relatorio', '=', True)
             ])
 
         call_result = {

@@ -35,7 +35,7 @@ class Empresa(object):
 
 @api.model
 @py3o_report_extender(
-    'l10n_br_hr_contract.employees_timesheet_py3o_report')
+    'sped_esocial.employees_timesheet_py3o_report')
 def employees_timesheet(pool, cr, uid, localcontext, context):
     self = localcontext['objects']
 
@@ -49,24 +49,21 @@ def employees_timesheet(pool, cr, uid, localcontext, context):
         contrato.idx = idx
 
         attendance_id = contract_id.working_hours.attendance_ids[:1]
-        if hasattr(attendance_id, "turno_id"):
-            turno_id = attendance_id.turno_id
-            horario_intervalo = turno_id.horario_intervalo_ids[:1]
-            contrato.entrada = turno_id.hr_entr + 'h' if turno_id else ''
-            contrato.intervalo = \
-                ('%sh às %sh' %
-                 (horario_intervalo.ini_interv,
-                  horario_intervalo.term_interv)) if horario_intervalo else '',
-            contrato.saida = turno_id.hr_saida + 'h' if turno_id else ''
+        turno_id = attendance_id.turno_id
+        horario_intervalo = turno_id.horario_intervalo_ids[:1]
 
-        if hasattr(contract_id, "matricula_contrato"):
-            contrato.matricula_contrato = contract_id.matricula_contrato or ''
+        contrato.matricula_contrato = contract_id.matricula_contrato or ''
 
         contrato.nome_empregado = contract_id.employee_id.name or ''
         contrato.cargo = contract_id.job_id.name or ''
+        contrato.lotacao = company_id.cod_lotacao or ''
 
-        if hasattr(company_id, "cod_lotacao"):
-            contrato.lotacao = company_id.cod_lotacao or ''
+        contrato.entrada = turno_id.hr_entr + 'h' if turno_id else ''
+        contrato.intervalo = \
+            ('%sh às %sh' %
+             (horario_intervalo.ini_interv,
+              horario_intervalo.term_interv)) if horario_intervalo else '',
+        contrato.saida = turno_id.hr_saida + 'h' if turno_id else ''
 
         contrato.ctps_numero = contract_id.employee_id.ctps or ''
         contrato.ctps_serie = contract_id.employee_id.ctps_series or ''
@@ -86,9 +83,7 @@ def employees_timesheet(pool, cr, uid, localcontext, context):
     empresa.footer = company_id.rml_footer or ''
 
     company_logo = company_id.logo
-    company_nfe_logo = ''
-    if hasattr(company_id, "nfe_logo"):
-        company_nfe_logo = company_id.nfe_logo
+    company_nfe_logo = company_id.nfe_logo
 
     data = {
         "data_hoje": datetime.now().strftime('%d/%m/%Y'),

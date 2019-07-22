@@ -65,7 +65,7 @@ class HrEmployeeTimeSheetWizard(models.TransientModel):
 
     def return_action_wizard(self):
         view_rec = self.env['ir.model.data'].get_object_reference(
-            'l10n_br_hr_contract',
+            'sped_esocial',
             'hr_employee_timesheet_wizard_form')
         view_id = view_rec and view_rec[1] or False
 
@@ -84,5 +84,5 @@ class HrEmployeeTimeSheetWizard(models.TransientModel):
     def action_print_hr_contracts_py3o(self):
         return self.env['report'].get_action(
             self,
-            "l10n_br_hr_contract.report_employees_timesheet"
+            "sped_esocial.report_employees_timesheet"
         )

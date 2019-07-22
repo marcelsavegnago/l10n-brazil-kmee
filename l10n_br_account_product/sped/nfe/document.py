@@ -350,7 +350,7 @@ class NFe200(FiscalDocument):
         if invoice_line.product_id:
             self.det.prod.cProd.valor = invoice_line.product_id.code or ''
             self.det.prod.cEAN.valor = invoice_line.product_id.ean13 or 'SEM GTIN'
-            self.det.prod.cEANTrib.valor = invoice_line.product_id.ean13 or ''
+            self.det.prod.cEANTrib.valor = invoice_line.product_id.ean13 or 'SEM GTIN'
             self.det.prod.xProd.valor = (normalize('NFKD', unicode(
                 invoice_line.product_id.name[:120] or ''
             )).encode('ASCII', 'ignore'))

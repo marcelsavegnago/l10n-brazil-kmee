@@ -19,6 +19,23 @@ class StockReturnPicking(models.TransientModel):
             picking_devolucao = self.assign_returning_picking(
                 result)
 
+            if not picking_devolucao.fiscal_position:
+                obj_fp_rule = self.env['account.fiscal.position.rule']
+
+                kwargs = {
+                    'partner_id':
+                        picking_devolucao.partner_id.id,
+                    'partner_shipping_id':
+                        picking_devolucao.partner_id.id,
+                    'fiscal_category_id':
+                        picking_devolucao.fiscal_category_id.id,
+                    'company_id': picking_devolucao.company_id.id,
+                }
+                picking_devolucao.fiscal_position = \
+                    obj_fp_rule.apply_fiscal_mapping(
+                        {'value': {}}, **kwargs
+                    )['value']['fiscal_position']
+
             if picking_devolucao.state != u'confirmed':
                 self.transfer_returning_picking(picking_devolucao)
 
@@ -34,7 +51,7 @@ class StockReturnPicking(models.TransientModel):
             res_domain_invoice = wizard_invoice.open_invoice()
 
             # Confirm and send to SEFAZ the created returning invoice
-            picking_devolucao.invoice_id.signal_workflow('invoice_validate')
+            # picking_devolucao.invoice_id.signal_workflow('invoice_validate')
 
             return res_domain_invoice
         else:

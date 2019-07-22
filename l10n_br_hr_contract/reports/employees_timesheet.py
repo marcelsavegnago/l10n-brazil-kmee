@@ -39,46 +39,64 @@ class Empresa(object):
 def employees_timesheet(pool, cr, uid, localcontext, context):
     self = localcontext['objects']
 
+    company_id = self.company_id
     contratos = []
-    i = 0
-    for contract_id in sorted(self.contract_ids, key=lambda c: c.employee_id.name):
+    notes = ""
+    sorted_contracts = \
+        sorted(self.contract_ids, key=lambda c: c.employee_id.name)
+    for idx, contract_id in enumerate(sorted_contracts, start=1):
         contrato = Contrato()
-        i = i + 1
-        attendance_id = contract_id.working_hours.attendance_ids[:1]
-        turno_id = attendance_id.turno_id
-        horario_intervalo = attendance_id.turno_id.horario_intervalo_ids[:1]
+        contrato.idx = idx
 
-        contrato.idx = i
-        contrato.matricula_contrato = contract_id.matricula_contrato or ''
+        attendance_id = contract_id.working_hours.attendance_ids[:1]
+        if hasattr(attendance_id, "turno_id"):
+            turno_id = attendance_id.turno_id
+            horario_intervalo = turno_id.horario_intervalo_ids[:1]
+            contrato.entrada = turno_id.hr_entr + 'h' if turno_id else ''
+            contrato.intervalo = \
+                ('%sh às %sh' %
+                 (horario_intervalo.ini_interv,
+                  horario_intervalo.term_interv)) if horario_intervalo else '',
+            contrato.saida = turno_id.hr_saida + 'h' if turno_id else ''
+
+        if hasattr(contract_id, "matricula_contrato"):
+            contrato.matricula_contrato = contract_id.matricula_contrato or ''
+
         contrato.nome_empregado = contract_id.employee_id.name or ''
         contrato.cargo = contract_id.job_id.name or ''
-        contrato.lotacao = self.company_id.cod_lotacao or ''
+
+        if hasattr(company_id, "cod_lotacao"):
+            contrato.lotacao = company_id.cod_lotacao or ''
+
         contrato.ctps_numero = contract_id.employee_id.ctps or ''
         contrato.ctps_serie = contract_id.employee_id.ctps_series or ''
-        contrato.entrada = turno_id.hr_entr + 'h' if turno_id else ''
-        contrato.intervalo = \
-            ('%sh às %sh' %
-             (horario_intervalo.ini_interv,
-              horario_intervalo.term_interv)) if horario_intervalo else '',
-        contrato.saida = turno_id.hr_saida + 'h' if turno_id else ''
 
         contratos.append(contrato)
+        notes += "#{}- {} .".format(idx, contract_id.notes) \
+            if contract_id.notes else ''
 
     empresa = Empresa()
-    empresa.nome = self.company_id.partner_id.name or ''
-    empresa.rua = self.company_id.street or ''
-    empresa.rua2 = self.company_id.street2 or ''
-    empresa.zip = self.company_id.zip or ''
-    empresa.cidade = self.company_id.l10n_br_city_id.name or ''
-    empresa.uf = self.company_id.state_id.code or ''
-    empresa.cnpj = self.company_id.partner_id.cnpj_cpf or ''
-    empresa.logo = self.company_id.logo or ''
-    empresa.footer = self.company_id.rml_footer or ''
+    empresa.nome = company_id.partner_id.name or ''
+    empresa.rua = company_id.street or ''
+    empresa.rua2 = company_id.street2 or ''
+    empresa.zip = company_id.zip or ''
+    empresa.cidade = company_id.l10n_br_city_id.name or ''
+    empresa.uf = company_id.state_id.code or ''
+    empresa.cnpj = company_id.partner_id.cnpj_cpf or ''
+    empresa.footer = company_id.rml_footer or ''
+
+    company_logo = company_id.logo
+    company_nfe_logo = ''
+    if hasattr(company_id, "nfe_logo"):
+        company_nfe_logo = company_id.nfe_logo
 
     data = {
         "data_hoje": datetime.now().strftime('%d/%m/%Y'),
         "empresa": empresa,
         "contratos": contratos,
+        "notes": notes,
+        "company_logo": company_nfe_logo if company_nfe_logo else company_logo,
+        "company_logo2": company_nfe_logo if company_nfe_logo else company_logo
     }
 
     localcontext.update(data)

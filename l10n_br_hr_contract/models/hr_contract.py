@@ -118,6 +118,7 @@ class HrContractNoticeTermination(models.Model):
 
 class HrContract(models.Model):
     _inherit = 'hr.contract'
+    _order = 'employee_id'
 
     admission_type_id = fields.Many2one(
         string='Admission type',

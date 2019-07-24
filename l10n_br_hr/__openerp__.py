@@ -20,6 +20,7 @@
         'view/hr_employee_dependent_view.xml',
         'view/hr_employee_view.xml',
         'view/hr_job_view.xml',
+        'view/inherited_hr_contract.xml',
     ],
     'test': [
         'test/l10n_br_hr_demo.yml'

@@ -41,6 +41,9 @@
                         />
                     </header>
                 </xpath>
+                <field name="compor_lote" position="after">
+                    <field name="compor_quadro_horario"/>
+                </field>
                 <field name="employee_id" position="attributes">
                     <attribute name="options">{'no_quick_create': True}</attribute>
                 </field>
@@ -176,9 +179,6 @@
                     <separator string="Treinamentos, Capacitações, Exercícios Simulados e Outras Anotações"/>
                     <field name="treinamento_capacitacao_ids"/>
                 </xpath>
-                <field name="exame_ids" positon="attributes">
-                    <attribute name="attrs">{'invisible': True}</attribute>
-                </field>
                 <field name="estado_crm" positon="attributes">
                     <attribute name="attrs">{'invisible': True}</attribute>
                 </field>

@@ -15,26 +15,8 @@ class StockReturnPicking(models.TransientModel):
         if self.mapped('product_return_moves.move_id.picking_id.pos_order_ids'):
             # Create the return process if the product came from
             # a pos.order.
-
             picking_devolucao = self.assign_returning_picking(
                 result)
-
-            if not picking_devolucao.fiscal_position:
-                obj_fp_rule = self.env['account.fiscal.position.rule']
-
-                kwargs = {
-                    'partner_id':
-                        picking_devolucao.partner_id.id,
-                    'partner_shipping_id':
-                        picking_devolucao.partner_id.id,
-                    'fiscal_category_id':
-                        picking_devolucao.fiscal_category_id.id,
-                    'company_id': picking_devolucao.company_id.id,
-                }
-                picking_devolucao.fiscal_position = \
-                    obj_fp_rule.apply_fiscal_mapping(
-                        {'value': {}}, **kwargs
-                    )['value']['fiscal_position']
 
             if picking_devolucao.state != u'confirmed':
                 self.transfer_returning_picking(picking_devolucao)
@@ -50,11 +32,13 @@ class StockReturnPicking(models.TransientModel):
             # Generate the returning invoice
             res_domain_invoice = wizard_invoice.open_invoice()
 
-            # Confirm and send to SEFAZ the created returning invoice
-            # picking_devolucao.invoice_id.signal_workflow('invoice_validate')
+            picking_devolucao.invoice_id.onchange_fiscal()
+            for line in picking_devolucao.invoice_id.invoice_line:
+                line.onchange_fiscal()
 
             return res_domain_invoice
         else:
+            self.assign_returning_picking(result)
             return result
 
     def transfer_returning_picking(self, picking_devolucao):
@@ -73,5 +57,22 @@ class StockReturnPicking(models.TransientModel):
         picking_ids = result_domain and result_domain[0] and \
                       result_domain[0][2]
         picking_devolucao = self.env['stock.picking'].browse(picking_ids)
+        if not picking_devolucao.fiscal_position:
+            obj_fp_rule = self.env['account.fiscal.position.rule']
+
+            kwargs = {
+                'partner_id':
+                    picking_devolucao.partner_id.id,
+                'partner_shipping_id':
+                    picking_devolucao.partner_id.id,
+                'fiscal_category_id':
+                    picking_devolucao.fiscal_category_id.id,
+                'company_id': picking_devolucao.company_id.id,
+            }
+            picking_devolucao.fiscal_position = \
+                obj_fp_rule.apply_fiscal_mapping(
+                    {'value': {}}, **kwargs
+                )['value']['fiscal_position']
+
         picking_devolucao.action_assign()
         return picking_devolucao

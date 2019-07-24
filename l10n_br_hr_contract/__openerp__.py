@@ -12,7 +12,6 @@
     'depends': [
         'hr_contract',
         'l10n_br_hr',
-        'report_py3o',
     ],
     'data': [
         'views/hr_contract_view.xml',

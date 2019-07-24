@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+    <data>
+
+        <menuitem id="menu_l10n_br_hr_relatorios_root"
+                  name="Relatórios"
+                  sequence="9"
+                  groups="base.group_hr_manager"
+                  parent="hr.menu_hr_root"/>
+    </data>
+</openerp>

@@ -101,10 +101,11 @@ class AccountFiscalPosition(models.Model):
         result = {}
         product = self.env['product.product'].browse(product_id)
         product_fc = product.fiscal_classification_id
-        if self.company_id and \
+        company_id = self.company_id or self.env.user.company_id
+        if company_id and \
                 self.env.context.get('type_tax_use') in ('sale', 'all'):
             if self.env.context.get('fiscal_type', 'product') == 'product':
-                company_taxes = self.company_id.product_tax_definition_line
+                company_taxes = company_id.product_tax_definition_line
                 for tax_def in company_taxes:
                     if tax_def.tax_id:
                         taxes |= tax_def.tax_id
@@ -130,7 +131,7 @@ class AccountFiscalPosition(models.Model):
         else:
             if self.env.context.get('fiscal_type', 'product') == 'product':
                 company_taxes = \
-                    self.company_id.purchase_product_tax_definition_line
+                    company_id.purchase_product_tax_definition_line
                 for tax_def in company_taxes:
                     if tax_def.tax_id:
                         taxes |= tax_def.tax_id

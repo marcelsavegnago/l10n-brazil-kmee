@@ -10,8 +10,8 @@
                     <sheet>
                         <field name="id" invisible="1"/>
                         <separator string="Dependent Infos" colspan="4"/>
-                        <group>
-                            <group>
+                        <group name="dados_dependente_geral">
+                            <group name="dados_dependente_1">
                                 <field name="name"/>
                                 <field name="dependent_dob"/>
                                 <field name="dependent_type_id"/>
@@ -20,7 +20,7 @@
                                 <field name="partner_id" readonly="1"
                                        required="0" attrs="{'invisible': [('id', '=', False)]}"/>
                             </group>
-                            <group>
+                            <group name="dados_dependente_2">
                                 <field name="dependent_gender"/>
                                 <field name="pension_benefits"/>
                                 <field name="health_verification"/>
@@ -28,7 +28,7 @@
                                 <field name="have_alimony"/>
                             </group>
                         </group>
-                        <group attrs="{'invisible':[('have_alimony', '!=', True)]}">
+                        <group attrs="{'invisible':[('have_alimony', '!=', True)]}" name="alimony_dependent">
                             <separator string="Bank account for alimony"
                                        colspan="4"/>
                             <field name="partner_id_bank_ids"/>

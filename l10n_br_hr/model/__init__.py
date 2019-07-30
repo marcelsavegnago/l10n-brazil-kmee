@@ -7,3 +7,4 @@ from . import l10n_br_hr
 from . import hr_employee
 from . import hr_job
 from . import res_company
+from . import res_partner

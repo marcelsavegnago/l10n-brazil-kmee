@@ -90,14 +90,11 @@
                 </xpath>
 
                 <xpath expr="//page[@string='Personal Information']" position="after">
-                    <page string="Spouse and Dependents" groups="base.group_hr_manager,base.group_hr_user">
-                        <form string="Spouse and Dependents" version="7.0">
-                            <group colspan="4" col="4">
-                                <field name="have_dependent"/>
-                            </group>
-                            <field name="dependent_ids" widget="one2many_list"
-                                   attrs="{'invisible':[('have_dependent', '!=', True)]}" />
-                        </form>
+                    <page string="Spouse and Dependents" name="page_dependentes"
+                          groups="base.group_hr_manager,base.group_hr_user">
+                        <group colspan="4" col="4" name="group_dependentes" string="Dependentes">
+                            <field name="dependent_ids" nolabel="1"/>
+                        </group>
                     </page>
                     <page string="Health" groups="base.group_hr_manager,base.group_hr_user">
                         <group>

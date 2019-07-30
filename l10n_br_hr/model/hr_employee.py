@@ -31,7 +31,7 @@ class HrEmployee(models.Model):
         for dependent in self.dependent_ids:
             if datetime.strptime(
                     dependent.dependent_dob, DEFAULT_SERVER_DATE_FORMAT
-                    ).date() > datetime.now().date():
+            ).date() > datetime.now().date():
                 raise ValidationError(_('Invalid birth date for dependent %s'
                                         % dependent.name))
 
@@ -78,7 +78,7 @@ class HrEmployee(models.Model):
     educational_attainment = fields.Many2one(
         string='Educational attainment',
         comodel_name='hr.educational.attainment'
-        )
+    )
     dependent_ids = fields.One2many(comodel_name='hr.employee.dependent',
                                     inverse_name='employee_id',
                                     string='Dependents')
@@ -168,7 +168,7 @@ class HrEmployeeDependent(models.Model):
                                         required=True,
                                         comodel_name='hr.dependent.type')
     pension_benefits = fields.Float(string='Allowance value')
-    dependent_verification = fields.Boolean(string='Is dependent')
+    dependent_verification = fields.Boolean(string='IRPF (é dependente)')
     health_verification = fields.Boolean(string='Healthcare plan')
     dependent_gender = fields.Selection(string='Gender', selection=[
         ('m', 'Male'),
@@ -181,6 +181,36 @@ class HrEmployeeDependent(models.Model):
         string='Info Bank',
         related='partner_id.bank_ids',
     )
+    dep_sf = fields.Boolean(
+        string='Salário Família?',
+    )
+    inc_trab = fields.Boolean(
+        string='Incapacidade Física ou Mental?',
+    )
+    inc_trab_inss_file = fields.Binary(
+        string='Atestado de incapacidade INSS',
+    )
+    precisa_cpf = fields.Boolean(
+        string='Precisa passar cpf?',
+        compute='_precisa_preencher_cpf'
+    )
+    relative_file = fields.Binary(
+        string='Documento comprobatório da relação',
+        help='Certidão de Nascimento / Casamento / etc'
+    )
+
+    @api.multi
+    @api.depends('dependent_dob', 'dependent_verification')
+    def _precisa_preencher_cpf(self):
+        for record in self:
+            precisa_cpf = False
+            if record.dependent_verification and record.dependent_dob:
+                data_atual = fields.Datetime.from_string(fields.Datetime.now())
+                data_aniversario = fields.Datetime.from_string(
+                    record.dependent_dob)
+                if (data_atual - data_aniversario).days / 365 >= 8:
+                    precisa_cpf = True
+            record.precisa_cpf = precisa_cpf
 
     @api.model
     def create(self, vals):

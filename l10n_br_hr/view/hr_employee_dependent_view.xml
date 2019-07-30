@@ -6,32 +6,44 @@
             <field name="model">hr.employee.dependent</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form>
+                <form string="Dependente">
                     <sheet>
                         <field name="id" invisible="1"/>
-                        <separator string="Dependent Infos" colspan="4"/>
                         <group name="dados_dependente_geral">
                             <group name="dados_dependente_1">
+                                <field name="precisa_cpf" invisible="1"/>
+                                <field name="partner_id" readonly="1"
+                                       required="0"
+                                       attrs="{'invisible': [('id', '=', False)]}"/>
                                 <field name="name"/>
                                 <field name="dependent_dob"/>
-                                <field name="dependent_type_id"/>
-                                <field name="inscr_est" string="RG"/>
-                                <field name="cnpj_cpf" string="CPF"/>
-                                <field name="partner_id" readonly="1"
-                                       required="0" attrs="{'invisible': [('id', '=', False)]}"/>
+                                <field name="dependent_gender"/>
                             </group>
                             <group name="dados_dependente_2">
-                                <field name="dependent_gender"/>
-                                <field name="pension_benefits"/>
-                                <field name="health_verification"/>
                                 <field name="dependent_verification"/>
-                                <field name="have_alimony"/>
+                                <field name="inc_trab"/>
+                                <field name="cnpj_cpf" string="CPF" attrs="{'required':['|', ('dependent_verification', '=', True),('precisa_cpf', '=', True)]
+                                    }"/>
+                                <field name="inscr_est" string="RG"/>
+                                <!--<field name="pension_benefits"/>-->
+                                <!--<field name="health_verification"/>-->
+                                <!--<field name="dep_sf" />-->
+                                <!--<field name="have_alimony"/>-->
                             </group>
                         </group>
-                        <group attrs="{'invisible':[('have_alimony', '!=', True)]}" name="alimony_dependent">
+                        <label for="dependent_type_id"/>
+                        <field name="dependent_type_id" colspan="4"
+                               nolabel="1"/>
+                        <group string="Atestados / Certificados" attrs="{'invisible': [('dependent_verification', '=', False), ('inc_trab', '=', False) ]}" >
+                            <field name="relative_file"
+                               attrs="{'required':[('dependent_verification', '=', True)], 'invisible': [('dependent_verification', '=', False)]}"/>
+                            <field name="inc_trab_inss_file"
+                               attrs="{'required':[('inc_trab', '=', True)], 'invisible': [('inc_trab', '=', False)]}"/>
+                        </group>
+                        <group name="alimony_dependent">
                             <separator string="Bank account for alimony"
                                        colspan="4"/>
-                            <field name="partner_id_bank_ids"/>
+                            <field name="partner_id_bank_ids" nolabel="1"/>
                         </group>
                     </sheet>
                 </form>
@@ -48,8 +60,8 @@
                     <field name="dependent_dob"/>
                     <field name="dependent_type_id"
                            options="{'no_create': True, 'no_open': True}"/>
-                    <field name="pension_benefits"/>
-                    <field name="health_verification"/>
+                    <!--<field name="pension_benefits"/>-->
+                    <!--<field name="health_verification"/>-->
                     <field name="dependent_verification"/>
                 </tree>
             </field>

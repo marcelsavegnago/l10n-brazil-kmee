@@ -137,6 +137,19 @@ class HrEmployee(models.Model):
     arrival_year = fields.Integer(string="Arrival year in Brazil")
     country_id = fields.Many2one(comodel_name='res.country',
                                  default=_default_country)
+    tipo = fields.Selection(
+        string="Tipo de Colaborador",
+        selection=[
+            # S2200
+            ('funcionario', 'Funcionário'),
+            # S2300 Sem vinculo
+            ('autonomo', 'Autônomo'),
+            ('terceirizado', 'Terceirizado'),
+            ('cedido', 'Funcionário Cedido'),
+        ],
+        default='funcionario',
+        required=True,
+    )
 
 
 class HrEmployeeDependent(models.Model):

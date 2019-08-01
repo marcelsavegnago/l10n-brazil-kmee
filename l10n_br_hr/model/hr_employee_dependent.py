@@ -60,6 +60,11 @@ class HrEmployeeDependent(models.Model):
         ctx = self.env.context.copy()
         ctx['create_depentent'] = True
         ctx['depentent_employee_id'] = vals.get('employee_id', False)
+        #
+        # O sudo foi utilizado para evitar a permissão de criação de contato
+        # para o funcionário.
+        #
         patient = super(
-            HrEmployeeDependent, self.with_context(ctx)).create(vals)
+            HrEmployeeDependent, self.with_context(ctx)
+        ).with_sudo().create(vals)
         return patient

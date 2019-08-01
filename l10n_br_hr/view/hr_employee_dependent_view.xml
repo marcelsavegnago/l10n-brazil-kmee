@@ -11,7 +11,6 @@
                         <field name="id" invisible="1"/>
                         <group name="dados_dependente_geral">
                             <group name="dados_dependente_1">
-                                <field name="precisa_cpf" invisible="1"/>
                                 <field name="partner_id" readonly="1"
                                        required="0"
                                        attrs="{'invisible': [('id', '=', False)]}"/>
@@ -22,13 +21,8 @@
                             <group name="dados_dependente_2">
                                 <field name="dependent_verification"/>
                                 <field name="inc_trab"/>
-                                <field name="cnpj_cpf" string="CPF" attrs="{'required':['|', ('dependent_verification', '=', True),('precisa_cpf', '=', True)]
-                                    }"/>
+                                <field name="cnpj_cpf" string="CPF" required="1"/>
                                 <field name="inscr_est" string="RG"/>
-                                <!--<field name="pension_benefits"/>-->
-                                <!--<field name="health_verification"/>-->
-                                <!--<field name="dep_sf" />-->
-                                <!--<field name="have_alimony"/>-->
                             </group>
                         </group>
                         <label for="dependent_type_id"/>

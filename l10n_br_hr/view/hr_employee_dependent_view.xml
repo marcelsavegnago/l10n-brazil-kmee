@@ -34,7 +34,7 @@
                             <field name="inc_trab_inss_file"
                                attrs="{'required':[('inc_trab', '=', True)], 'invisible': [('inc_trab', '=', False)]}"/>
                         </group>
-                        <group name="alimony_dependent">
+                        <group name="alimony_dependent" invisible="1">
                             <separator string="Bank account for alimony"
                                        colspan="4"/>
                             <field name="partner_id_bank_ids" nolabel="1"/>

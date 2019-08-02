@@ -11,10 +11,11 @@
                         <field name="id" invisible="1"/>
                         <group name="dados_dependente_geral">
                             <group name="dados_dependente_1">
+                                <field name="employee_id" groups="base.group_hr_user"/>
                                 <field name="partner_id" readonly="1"
                                        required="0"
                                        attrs="{'invisible': [('id', '=', False)]}"/>
-                                <field name="name"/>
+                                <field name="name" attrs="{'invisible': [('id', '!=', False)]}"/>
                                 <field name="dependent_dob"/>
                                 <field name="dependent_gender"/>
                             </group>

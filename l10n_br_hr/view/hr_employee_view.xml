@@ -93,7 +93,7 @@
                     <page string="Spouse and Dependents" name="page_dependentes"
                           groups="base.group_hr_manager,base.group_hr_user">
                         <group colspan="4" col="4" name="group_dependentes" string="Dependentes">
-                            <field name="dependent_ids" nolabel="1"/>
+                            <field name="dependent_ids" nolabel="1" context="{'default_employee_id': id}"/>
                         </group>
                     </page>
                     <page string="Health" groups="base.group_hr_manager,base.group_hr_user">

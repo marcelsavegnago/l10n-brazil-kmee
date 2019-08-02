@@ -8702,12 +8702,6 @@ msgid "Músico regente"
 msgstr "Músico regente"
 
 #. module: l10n_br_hr
-#: field:hr.employee.dependent,dependent_name:0
-#: field:l10n_br_hr.cbo,name:0
-msgid "Name"
-msgstr "Nome"
-
-#. module: l10n_br_hr
 #: model:l10n_br_hr.cbo,name:0
 #: model:l10n_br_hr.cbo,name:l10n_br_hr.726
 msgid "Narrador em programas de rádio e televisão"

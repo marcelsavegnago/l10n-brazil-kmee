@@ -11,10 +11,11 @@
                         <field name="id" invisible="1"/>
                         <group name="dados_dependente_geral">
                             <group name="dados_dependente_1">
+                                <field name="employee_id" groups="base.group_hr_user"/>
                                 <field name="partner_id" readonly="1"
                                        required="0"
                                        attrs="{'invisible': [('id', '=', False)]}"/>
-                                <field name="name"/>
+                                <field name="name" attrs="{'invisible': [('id', '!=', False)]}"/>
                                 <field name="dependent_dob"/>
                                 <field name="dependent_gender"/>
                             </group>
@@ -34,7 +35,7 @@
                             <field name="inc_trab_inss_file"
                                attrs="{'required':[('inc_trab', '=', True)], 'invisible': [('inc_trab', '=', False)]}"/>
                         </group>
-                        <group name="alimony_dependent">
+                        <group name="alimony_dependent" invisible="1">
                             <separator string="Bank account for alimony"
                                        colspan="4"/>
                             <field name="partner_id_bank_ids" nolabel="1"/>

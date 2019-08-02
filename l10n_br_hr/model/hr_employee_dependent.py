@@ -13,6 +13,11 @@ class HrEmployeeDependent(models.Model):
     _rec_name = "name"
     _inherits = {'res.partner': 'partner_id'}
 
+    def _get_default_employee(self):
+        if self.env.user.has_group('base.group_hr_user'):
+            return False
+        return self.env.user.employee_ids[0]
+
     partner_id = fields.Many2one(
         string='Partner',
         comodel_name='res.partner',
@@ -22,7 +27,8 @@ class HrEmployeeDependent(models.Model):
         help="Parceiro do dependente"
     )
     employee_id = fields.Many2one(comodel_name='hr.employee',
-                                  string='Employee')
+                                  string='Employee',
+                                  default=_get_default_employee)
     dependent_dob = fields.Date(string='Date of birth', required=True)
     dependent_type_id = fields.Many2one(string='Relatedness',
                                         required=True,
@@ -65,6 +71,6 @@ class HrEmployeeDependent(models.Model):
         # para o funcionário.
         #
         patient = super(
-            HrEmployeeDependent, self.with_context(ctx)
-        ).with_sudo().create(vals)
+            HrEmployeeDependent, self.sudo().with_context(ctx)
+        ).create(vals)
         return patient

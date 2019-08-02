@@ -65,6 +65,6 @@ class HrEmployeeDependent(models.Model):
         # para o funcionário.
         #
         patient = super(
-            HrEmployeeDependent, self.with_context(ctx)
-        ).with_sudo().create(vals)
+            HrEmployeeDependent, self.sudo().with_context(ctx)
+        ).create(vals)
         return patient

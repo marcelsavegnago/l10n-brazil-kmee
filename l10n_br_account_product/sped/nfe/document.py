@@ -360,7 +360,7 @@ class NFe200(FiscalDocument):
             self.det.prod.cEAN.valor = 'SEM GTIN'
             self.det.prod.cEANTrib.valor = 'SEM GTIN'
             self.det.prod.xProd.valor = (normalize('NFKD', unicode(
-                invoice_line.product_id.name[:120] or ''
+                invoice_line.name[:120] or ''
             )).encode('ASCII', 'ignore'))
         else:
             self.det.prod.cProd.valor = invoice_line.code or ''

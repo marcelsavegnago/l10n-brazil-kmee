@@ -81,36 +81,18 @@ class AccounMoveLine(models.Model):
 
         for move_line in self:
 
-            if move_line.state_cnab != 'accepted':
-                if move_line.state_cnab == 'not_accepted':
-                    raise UserError(_(
-                        u'O arquivo CNAB relacionado a essa nota foi '
-                        u'transmitido com erro, é necessário corrigi-lo '
-                        u'e reenviá-lo'
-                    ))
-                raise UserError(_(
-                    u'É necessário transmitir e processar o retorno do CNAB'
-                    u' referente a essa nota para garantir que o '
-                    u'boleto está registrado no banco'
-                ))
-            # try:
-
-                # if move_line.payment_mode_id.type_payment == '00':
-                #     number_type = move_line.company_id.own_number_type
-                #     if not move_line.boleto_own_number:
-                #         if number_type == '0':
-                #             nosso_numero = self.env['ir.sequence'].next_by_id(
-                #                 move_line.company_id.own_number_sequence.id)
-                #         elif number_type == '1':
-                #             nosso_numero = \
-                #                 move_line.transaction_ref.replace('/', '')
-                #         else:
-                #             nosso_numero = self.env['ir.sequence'].next_by_id(
-                #                 move_line.payment_mode_id.
-                #                 internal_sequence_id.id
-                #             )
-                #     else:
-                #         nosso_numero = move_line.boleto_own_number
+            # if move_line.state_cnab != 'accepted':
+            #     if move_line.state_cnab == 'not_accepted':
+            #         raise UserError(_(
+            #             u'O arquivo CNAB relacionado a essa nota foi '
+            #             u'transmitido com erro, é necessário corrigi-lo '
+            #             u'e reenviá-lo'
+            #         ))
+            #     raise UserError(_(
+            #         u'É necessário transmitir e processar o retorno do CNAB'
+            #         u' referente a essa nota para garantir que o '
+            #         u'boleto está registrado no banco'
+            #     ))
 
             boleto = Boleto.getBoleto(
                 move_line, move_line.transaction_ref.replace('/','')

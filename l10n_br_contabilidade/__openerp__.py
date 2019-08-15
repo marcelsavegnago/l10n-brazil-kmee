@@ -17,11 +17,12 @@
         'account_chart_report',
         'account_financial_report_webkit',
         'mis_builder',
+        'financial_account',
     ],
     'data': [
+        'security/account_groups.xml',
         'security/ir.model.access.csv',
         'security/account_security.xml',
-        'security/account_groups.xml',
         #
         'data/natureza_conta_data.xml',
         # # Menus
@@ -67,6 +68,7 @@
         'views/account_invoice.xml',
         'views/l10n_br_account.xml',
         'views/account_product.xml',
+        'views/inherited_financial_move.xml',
     ],
     'qweb': [
         'static/src/xml/*.xml'

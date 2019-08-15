@@ -9,8 +9,21 @@ from openerp.addons.l10n_br_account_product.constantes import (
 from openerp.exceptions import Warning, ValidationError
 
 
+TYPE = {
+    'out_invoice': 'Fatura de Cliente',
+    'in_invoice': 'Fatura de Fornecedor',
+    'out_refund': 'Fatura Reembolso Cliente',
+    'in_refund': 'Fatura Reembolso Fornecedor',
+}
+
+
 class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
+
+    name = fields.Char(
+        string='Nome',
+        compute='_compute_name'
+    )
 
     number = fields.Char(
         string='number',
@@ -20,12 +33,6 @@ class AccountInvoice(models.Model):
 
     account_event_entrada_id = fields.Many2one(
         string=u'Evento Contábil Entrada',
-        comodel_name='account.event',
-        copy=False,
-    )
-
-    account_event_pagamento_id = fields.Many2one(
-        string=u'Evento Contábil Pagamento',
         comodel_name='account.event',
         copy=False,
     )
@@ -113,6 +120,15 @@ class AccountInvoice(models.Model):
     amount_total = fields.Float(
         help='Código para roteiro contábil: "amount_total"',
     )
+
+    @api.multi
+    def _compute_name(self):
+        for record in self:
+            record.name = '{} - {} - {}'.format(
+                TYPE[record.type],
+                record.partner_id.name,
+                record.internal_number
+            )
 
     @api.depends('internal_number')
     def _compute_number(self):
@@ -348,3 +364,55 @@ class AccountInvoice(models.Model):
     def gerar_contabilidade(self):
         for inv in self:
             inv.action_move_create()
+
+    @api.multi
+    def button_create_financial_move(self):
+        for record in self:
+            if not record.payment_term:
+                raise Warning(
+                    "É necessário escolher a condição de pagamento!"
+                )
+            record.action_financial_create()
+
+    @api.multi
+    def action_financial_create(self):
+        """ Cria o lançamento financeiro do documento fiscal
+        :return:
+        """
+        for documento in self:
+            if documento.state not in 'open':
+                Warning(
+                    'Não é possível não gerar financeiro para uma '
+                    'nota fiscal em um estágio diferente de "Aberto"'
+                )
+
+            documento.financial_ids.unlink()
+
+            for duplicata in documento.duplicata_ids:
+                dados = duplicata.prepara_financial_move()
+                self.env['financial.move'].create(dados)
+
+    def get_linhas_evento_contabeis(self, valor_pago):
+        linhas = []
+
+        proporcional = valor_pago/self.amount_net
+
+        for parametro_nota in CAMPO_DOCUMENTO_FISCAL:
+            if '_wh' not in parametro_nota[0] and self[parametro_nota[0]]:
+                vals = {
+                    'name': parametro_nota[1],
+                    'code': parametro_nota[0],
+                    'valor': self[parametro_nota[0]] * proporcional,
+                }
+
+                if parametro_nota[0] == 'amount_net':
+                    if self.type == 'out_invoice' and self.partner_id.property_account_receivable:
+                        vals['conta_credito_exclusivo_id'] = \
+                                self.partner_id.property_account_receivable.id
+                    else:
+                        vals['conta_debito_exclusivo_id'] = \
+                            self.partner_id.property_account_payable.id
+
+                linhas.append((0, 0, vals))
+
+        return linhas

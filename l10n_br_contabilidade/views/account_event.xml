@@ -20,16 +20,16 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button string="Reverter Evento" name="button_reverter_lancamentos" type="object" class="oe_highlight"
+                        <button string="Reverter Evento" name="button_reverter_lancamentos" type="object"
                                 attrs="{'invisible': ['|', ('account_event_reversao_id', '!=', False), ('state', '!=', 'done')]}"/>
                         <button string="Validar" name="validar_evento" states="open" type="object" class="oe_highlight"/>
                         <button string="Gerar Lançamentos" name="gerar_contabilizacao" states="validate" type="object" class="oe_highlight"/>
                         <button string="Postar Lançamentos" name="postar_lancamentos" type="object" class="oe_highlight" attrs="{'invisible': ['|', ('account_move_ids', '=', False), ('state', '!=', 'generated')]}"/>
-                        <button string="Voltar para início" name="retornar_aberto" states="done,validate" type="object" class="oe_highlight"
+                        <button string="Voltar para início" name="retornar_aberto" states="done,validate" type="object"
                                 confirm="Esta ação irá excluir os lançamentos já contabilizados. Deseja prosseguir?" />
                         <field name="state" widget="statusbar"
-                               statusbar_visible="open,validate,generated,done,reversed"
-                               statusbar_colors="{'open':'blue','validate':'blue','generated':'blue','done':'blue', 'reversed':'reversed'}"/>
+                               statusbar_visible="open,validate,generated,done"
+                               statusbar_colors="{'open':'blue','validate':'blue','generated':'blue','done':'blue', 'reversed':'red'}"/>
                     </header>
                     <sheet class="custom-sheet-account-event">
                         <h2>
@@ -38,6 +38,8 @@
                         <group>
                             <field name="origem" />
                             <field name="data" attrs="{'required': True}"/>
+                            <field name="tipo" />
+                            <field name="company_id" />
                             <field name="account_event_template_id"/>
                             <field name="account_event_reversao_id" attrs="{'invisible': [('account_event_reversao_id', '=', False)]}"/>
                             <field name="account_event_revert" invisible="1"/>
@@ -77,6 +79,7 @@
             <field name="arch" type="xml">
                 <tree colors="blue:state == 'done';red:state == 'reversed';">
                     <field name="name"/>
+                    <field name="tipo" invisible="1"/>
                     <field name="data"/>
                     <field name="account_event_template_id"/>
                     <field name="state"/>
@@ -135,6 +138,7 @@
                     <group expand="0" string="Group By">
                         <filter name="group_by_data" string="Data" context="{'group_by': 'data'}" />
                         <filter name="group_by_origem" string="Origem" context="{'group_by': 'origem'}" />
+                        <filter name="group_by_tipo" string="Tipo de Evento" context="{'group_by': 'tipo'}" />
                     </group>
 		        </search>
             </field>
@@ -142,7 +146,7 @@
 
         <record id="l10n_br_contabilidade_account_event_action" model="ir.actions.act_window">
             <field name="name">Eventos Contábeis</field>
-            <field name="context">{'search_default_open': 1, 'search_default_validate': 1, 'search_default_generated': 1}</field>
+            <field name="context">{'search_default_open': 1, 'search_default_validate': 1, 'search_default_generated': 1, 'search_default_group_by_data':1, 'search_default_group_by_tipo':1,}</field>
             <field name="res_model">account.event</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>

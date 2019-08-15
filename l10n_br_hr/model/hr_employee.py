@@ -31,9 +31,9 @@ class HrEmployee(models.Model):
         for dependent in self.dependent_ids:
             if datetime.strptime(
                     dependent.dependent_dob, DEFAULT_SERVER_DATE_FORMAT
-                    ).date() > datetime.now().date():
+            ).date() > datetime.now().date():
                 raise ValidationError(_('Invalid birth date for dependent %s'
-                                        % dependent.dependent_name))
+                                        % dependent.name))
 
     def _check_dependent_type(self):
         seen = set()
@@ -50,7 +50,7 @@ class HrEmployee(models.Model):
                 raise ValidationError(
                     _('A dependent with the same level of relatedness'
                       ' already exists for dependent %s'
-                      % dependent.dependent_name))
+                      % dependent.name))
 
     @api.constrains('pis_pasep')
     def _validate_pis_pasep(self):
@@ -78,8 +78,7 @@ class HrEmployee(models.Model):
     educational_attainment = fields.Many2one(
         string='Educational attainment',
         comodel_name='hr.educational.attainment'
-        )
-    have_dependent = fields.Boolean('Has dependents')
+    )
     dependent_ids = fields.One2many(comodel_name='hr.employee.dependent',
                                     inverse_name='employee_id',
                                     string='Dependents')
@@ -138,46 +137,16 @@ class HrEmployee(models.Model):
     arrival_year = fields.Integer(string="Arrival year in Brazil")
     country_id = fields.Many2one(comodel_name='res.country',
                                  default=_default_country)
-
-
-class HrEmployeeDependent(models.Model):
-    _name = 'hr.employee.dependent'
-    _description = 'Employee\'s Dependents'
-    _rec_name = "dependent_name"
-
-    @api.constrains('dependent_cpf')
-    def _validate_cpf(self):
-        if self.dependent_cpf:
-            if not fiscal.validate_cpf(self.dependent_cpf):
-                raise ValidationError(_('Invalid CPF for dependent %s'
-                                        % self.dependent_name))
-
-    employee_id = fields.Many2one(comodel_name='hr.employee',
-                                  string='Employee')
-    dependent_name = fields.Char(string='Name', size=64, required=True)
-    dependent_dob = fields.Date(string='Date of birth', required=True)
-    dependent_type_id = fields.Many2one(string='Relatedness',
-                                        required=True,
-                                        comodel_name='hr.dependent.type')
-    pension_benefits = fields.Float(string='Allowance value')
-    dependent_verification = fields.Boolean(string='Is dependent')
-    health_verification = fields.Boolean(string='Healthcare plan')
-    dependent_gender = fields.Selection(string='Gender', selection=[
-        ('m', 'Male'),
-        ('f', 'Female')])
-    dependent_rg = fields.Char(string='RG')
-    dependent_cpf = fields.Char(string='CPF')
-
-    have_alimony = fields.Boolean(string='Tem Pensão?')
-
-    partner_id = fields.Many2one(
-        comodel_name='res.partner',
-        string='Partner',
-        help="Parceiro que contem as informações de banco do dependente."
-    )
-
-    partner_id_bank_ids = fields.One2many(
-        comodel_name='res.partner.bank',
-        string='Info Bank',
-        related='partner_id.bank_ids',
+    tipo = fields.Selection(
+        string="Tipo de Colaborador",
+        selection=[
+            # S2200
+            ('funcionario', 'Funcionário'),
+            # S2300 Sem vinculo
+            ('autonomo', 'Autônomo'),
+            ('terceirizado', 'Terceirizado'),
+            ('cedido', 'Funcionário Cedido'),
+        ],
+        default='funcionario',
+        required=True,
     )

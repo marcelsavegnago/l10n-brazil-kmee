@@ -208,3 +208,11 @@ class HrContract(models.Model):
                     not record.job_id == record.employee_id.job_id:
                 record.employee_id.with_context(alteracaocontratual=True).\
                     write({'job_id': record.job_id.id,})
+
+    @api.model
+    def create(self, vals):
+        res = super(HrContract, self).create(vals)
+        if vals.get('department_id') and vals.get('employee_id'):
+            employee = self.env['hr.employee'].browse(vals.get('employee_id'))
+            employee.department_id = vals.get('department_id')
+        return res

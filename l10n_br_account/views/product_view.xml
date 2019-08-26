@@ -9,6 +9,7 @@
             <field name="arch" type="xml">
                 <field name="type" position="after">
                     <field name="fiscal_type" invisible="1"/>
+                    <field name="tipo_item" required="1"/>
                 </field>
                 <notebook position="inside">
                     <page string="Fiscal">

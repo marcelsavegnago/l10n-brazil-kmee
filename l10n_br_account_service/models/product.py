@@ -11,5 +11,6 @@ class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     fiscal_type = fields.Selection(
-        PRODUCT_FISCAL_TYPE, 'Tipo Fiscal', required=True,
-        default=PRODUCT_FISCAL_TYPE_DEFAULT)
+        PRODUCT_FISCAL_TYPE, 'Tipo Fiscal',
+        default=PRODUCT_FISCAL_TYPE_DEFAULT,
+    )

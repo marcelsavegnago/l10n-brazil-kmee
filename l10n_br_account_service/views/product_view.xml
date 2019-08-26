@@ -9,7 +9,6 @@
             <field name="arch" type="xml">
                 <field name="fiscal_type" position="attributes">
                     <attribute name="invisible">0</attribute>
-                    <attribute name="required">1</attribute>
                 </field>
             </field>
         </record>

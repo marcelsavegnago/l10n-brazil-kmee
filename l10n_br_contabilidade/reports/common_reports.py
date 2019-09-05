@@ -80,7 +80,7 @@ FROM account_move_line l
 
 
 def _compute_initial_balances(self, account_ids, start_period, fiscalyear,
-                              situacao_lancamento=False):
+                              situacao_lancamento=False, ramo_id=False):
     """We compute initial balance.
     If form is filtered by date all initial balance are equal to 0
     This function will sum pear and apple in currency amount if account as
@@ -118,7 +118,7 @@ def _compute_initial_balances(self, account_ids, start_period, fiscalyear,
 
 def _compute_init_balance(self, account_id=None, period_ids=None,
                           mode='computed', default_values=False,
-                          situacao_lancamento=False):
+                          situacao_lancamento=False, ramo_id=False):
     if not isinstance(period_ids, list):
         period_ids = [period_ids]
     res = {}
@@ -161,14 +161,17 @@ def _compute_init_balance(self, account_id=None, period_ids=None,
                 if situacao_lancamento == 'posted' \
                 else " AND state != 'cancel' "
 
-            domain_query = "SELECT sum(debit) AS debit, sum(credit) AS credit,"\
-                           " {} AS balance, sum(amount_currency) " \
-                           "AS curr_balance FROM account_move_line " \
-                           "WHERE period_id in {} AND move_id in (" \
-                           "SELECT id FROM account_move WHERE " \
-                           "period_id in {}{}) AND {}".format(
-                            BALANCE, tuple(period_ids), tuple(period_ids),
-                            state_move, where_clause_domain_query)
+            domain_query = \
+                "SELECT sum(debit) AS debit, sum(credit) AS credit,"\
+                " {} AS balance, sum(amount_currency) " \
+                "AS curr_balance FROM account_move_line " \
+                "WHERE period_id in {} AND move_id in (" \
+                "SELECT id FROM account_move WHERE " \
+                "period_id in {}{}) AND {} {}".format(
+                    BALANCE, tuple(period_ids), tuple(period_ids),
+                    state_move, where_clause_domain_query,
+                    'AND ramo_id = {}'.format(ramo_id) if ramo_id else ''
+                )
 
             self.cursor.execute(domain_query)
             res = self.cursor.dictfetchone()

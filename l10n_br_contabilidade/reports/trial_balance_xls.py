@@ -41,6 +41,10 @@ def generate_xls_report(self, _p, _xs, data, objects, wb):
 
     # write empty row to define column sizes
     c_sizes = self._column_sizes
+    if _p.ramos:
+        c_sizes[0] = 17
+        c_sizes.insert(1, 17)
+
     c_specs = [('empty%s' % i, 1, c_sizes[i], 'text', None)
                for i in range(0, len(c_sizes))]
     row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
@@ -149,10 +153,11 @@ def generate_xls_report(self, _p, _xs, data, objects, wb):
         account_span = 3
     else:
         account_span = _p.initial_balance_mode and 2 or 3
-    c_specs = [
-        ('code', 1, 0, 'text', _('Code')),
-        ('account', account_span, 0, 'text', _('Account')),
-    ]
+    c_specs = [('code', 1, 0, 'text', _('Code'))]
+    if _p.ramos:
+        c_specs.append(('ramo', 1, 0, 'text', _('Ramo')))
+    c_specs.append(('account', account_span, 0, 'text', _('Account')))
+
     if _p.comparison_mode == 'no_comparison':
         if _p.initial_balance_mode:
             c_specs += [('init_bal', 1, 0, 'text',
@@ -245,10 +250,11 @@ def generate_xls_report(self, _p, _xs, data, objects, wb):
                 child_consol_id.id for child_consol_id in
                 current_account.child_consol_ids]
 
-        c_specs = [
-            ('code', 1, 0, 'text', current_account.code),
-            ('account', account_span, 0, 'text', current_account.name),
-        ]
+        c_specs = [('code', 1, 0, 'text', current_account.code)]
+        if _p.ramos:
+            c_specs.append(('Ramo', 1, 0, 'text', ''))
+        c_specs.append(('account', account_span, 0, 'text', current_account.name))
+
         if _p.comparison_mode == 'no_comparison':
             if _p.initial_balance_mode:
                 c_specs += [('init_bal', 1, 0, 'number',
@@ -295,6 +301,29 @@ def generate_xls_report(self, _p, _xs, data, objects, wb):
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_pos = self.xls_write_row(
             ws, row_pos, row_data, row_style=cell_style)
+
+        if _p.contas_by_ramos.get(current_account.id):
+            for account_ramo in _p.contas_by_ramos.get(current_account.id):
+                cell_style = regular_cell_style
+                cell_style_center = regular_cell_style_center
+                cell_style_decimal = regular_cell_style_decimal
+
+                c_specs = [
+                    ('code', 1, 0, 'text', _p.contas_by_ramos[current_account.id][account_ramo]['account_code']),
+                    ('Ramo', 1, 0, 'text', _p.contas_by_ramos[current_account.id][account_ramo]['ramo']),
+                    ('account', account_span, 0, 'text', _p.contas_by_ramos[current_account.id][account_ramo]['account_name']),
+                    ('init_bal', 1, 0, 'number', _p.contas_by_ramos[current_account.id][account_ramo]['init_balance'], None, cell_style_decimal),
+                    ('natureza_init_bal', 1, 0, 'text', _p.natureza_init_balance_accounts[current_account.id]),
+                    ('debit', 1, 0, 'number', _p.contas_by_ramos[current_account.id][account_ramo]['debit'], None, cell_style_decimal),
+                    ('credit', 1, 0, 'number', _p.contas_by_ramos[current_account.id][account_ramo]['credit'], None, cell_style_decimal),
+                    ('balance', 1, 0, 'number', _p.contas_by_ramos[current_account.id][account_ramo]['balance'], None, cell_style_decimal),
+                    ('natureza_bal', 1, 0, 'text', _p.natureza_balance_accounts[current_account.id], None, cell_style_center)
+                ]
+
+                c_specs += []
+                row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
+                row_pos = self.xls_write_row(
+                    ws, row_pos, row_data, row_style=cell_style)
 
 
 TrialBalanceXls.generate_xls_report = generate_xls_report

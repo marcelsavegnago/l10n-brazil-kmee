@@ -2669,10 +2669,11 @@ class AccountInvoiceLine(models.Model):
 
     # TODO comentado por causa deste bug
     # https://github.com/odoo/odoo/issues/2197
-    # @api.multi
-    # def write(self, vals):
-    #    vals.update(self._validate_taxes(vals))
-    #    return super(AccountInvoiceLine, self).write(vals)
+    @api.multi
+    def write(self, vals):
+        if len(self) == 1:
+            vals.update(self._validate_taxes(vals))
+        return super(AccountInvoiceLine, self).write(vals)
 
     @api.multi
     def gera_account_move_line(

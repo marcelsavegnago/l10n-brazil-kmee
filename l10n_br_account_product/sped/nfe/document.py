@@ -581,16 +581,16 @@ class NFe200(FiscalDocument):
                 dup.vDup.valor = str("%.2f" % value)
                 cobr.dup.append(dup)
 
-        if invoice.type in ('out_invoice', 'in_refund'):
-            value = move_line.debit
-        else:
-            value = move_line.credit
+                if invoice.type in ('out_invoice', 'in_refund'):
+                    value = move_line.debit
+                else:
+                    value = move_line.credit
 
-        self.dup.nDup.valor = move_line.name
-        self.dup.dVenc.valor = (move_line.date_maturity or
-                                invoice.date_due or
-                                invoice.date_invoice)
-        self.dup.vDup.valor = str("%.2f" % value)
+                self.dup.nDup.valor = move_line.name
+                self.dup.dVenc.valor = (move_line.date_maturity or
+                                        invoice.date_due or
+                                        invoice.date_invoice)
+                self.dup.vDup.valor = str("%.2f" % value)
 
     def _carrier_data(self, invoice):
         """Dados da Transportadora e veiculo"""
@@ -957,7 +957,7 @@ class NFe400(NFe310):
         if FORMA_PAGAMENTO_SEM_PAGAMENTO in invoice.account_payment_ids.mapped('forma_pagamento'):
             return
 
-        cobr.fat.nFat.valor = invoice.number
+        cobr.fat.nFat.valor = str(invoice.number)
         cobr.fat.vOrig.valor = str("%.2f" % invoice.amount_payment_original)
         cobr.fat.vDesc.valor = str("%.2f" % invoice.amount_payment_discount)
         cobr.fat.vLiq.valor = str("%.2f" % invoice.amount_payment_net)

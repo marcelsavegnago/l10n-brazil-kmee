@@ -12,11 +12,11 @@
                                                         attrs="{'invisible':['|',('nfe_export_date','=',False),('state','!=','sefaz_export')]}"
                                                         string="Validate" class="oe_highlight"/>
                                         <button name="action_confirm_invoice" string="Confirmar Fatura"
-                                                        states="draft,proforma2,sefaz_export,sefaz_exception,open"
+                                                        states="draft,proforma2,sefaz_exception,open"
                                                         groups="base.group_user"
                                                         type="object"/>
                                         <button name="action_invoice_send_nfe" string="Enviar Fatura"
-                                                        states="draft,proforma2,sefaz_export,sefaz_exception,open"
+                                                        states="sefaz_export,sefaz_exception,open"
                                                         groups="base.group_user"
                                                         type="object"/>
                                         <button name="button_cancel" string="Cancelar Fatura"

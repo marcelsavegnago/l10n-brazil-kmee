@@ -1121,3 +1121,17 @@ class AccountInvoice(models.Model):
             move.post()
         # self._log_event()
         return True
+
+    def edoc_export(self):
+        pass
+
+    def action_confirm_invoice(self):
+        self.nfe_check()
+        self.action_date_assign()
+        self.action_number()
+        self.action_move_create()
+        self.edoc_export()
+        return True
+
+    def action_invoice_send_nfe(self):
+        pass

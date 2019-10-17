@@ -135,6 +135,11 @@ class ResCompany(models.Model):
         size=18,
         string=u'CNPJ/CPF Contador')
 
+    processador_edoc = fields.Selection(
+        selection=[],
+        string=u'Processador documentos eletrônicos',
+    )
+
 
 class L10nBrTaxDefinitionCompanyProduct(L10nBrTaxDefinitionCompanyProduct,
                                         models.Model):

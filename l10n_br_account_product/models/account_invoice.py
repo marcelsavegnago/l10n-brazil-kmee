@@ -1123,6 +1123,9 @@ class AccountInvoice(models.Model):
         return True
 
     def edoc_export(self):
+        for record in self:
+            record._edoc_export()
+            record.state = 'sefaz_export'
         pass
 
     def action_confirm_invoice(self):

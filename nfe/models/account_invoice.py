@@ -103,7 +103,7 @@ class AccountInvoice(models.Model):
         return NfeFactory().get_nfe(nfe_version)
 
     @api.multi
-    def edoc_export(self):
+    def _edoc_export(self):
         self.ensure_one()
 
         if not self.company_id.processador_edoc == PROCESSADOR:
@@ -156,7 +156,6 @@ class AccountInvoice(models.Model):
                     'state': 'draft',
                     'document_event_ids': self.id
                 })
-                self.write({'state': 'sefaz_export'})
 
     @api.multi
     def action_invoice_send_nfe(self):

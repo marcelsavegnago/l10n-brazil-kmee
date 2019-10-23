@@ -24,7 +24,8 @@ class HrEmployeeDependent(models.Model):
 
     employee_id = fields.Many2one(
         comodel_name='hr.employee',
-        string='Employee ID')
+        string='Employee ID'
+    )
 
     dependent_name = fields.Char(
         string='Dependent name',

@@ -22,11 +22,6 @@ class HrEmployeeDependent(models.Model):
                 raise ValidationError(_('Invalid CPF for dependent %s')
                                       % self.dependent_name)
 
-    def _get_default_employee(self):
-        if self.env.user.has_group('base.group_hr_user'):
-            return False
-        return self.env.user.employee_ids[0]
-
     employee_id = fields.Many2one(
         comodel_name='hr.employee',
         string='Employee ID')

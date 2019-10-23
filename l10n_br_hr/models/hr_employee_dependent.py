@@ -4,33 +4,18 @@
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
 from erpbrasil.base.fiscal import cnpj_cpf
-from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
+from odoo import models, fields, api
 
 
 class HrEmployeeDependent(models.Model):
     _name = 'hr.employee.dependent'
     _description = 'Employee\'s Dependents'
-
-    _rec_name = "dependent_name"
     _inherits = {'res.partner': 'partner_id'}
-
-    @api.constrains('dependent_cpf')
-    def _validate_cpf(self):
-        if self.dependent_cpf:
-            if not cnpj_cpf.validar(self.dependent_cpf):
-                raise ValidationError(_('Invalid CPF for dependent %s')
-                                      % self.dependent_name)
 
     employee_id = fields.Many2one(
         comodel_name='hr.employee',
         string='Employee ID'
     )
-
-    dependent_name = fields.Char(
-        string='Dependent name',
-        size=64,
-        required=True)
 
     dependent_dob = fields.Date(
         string='Date of birth',
@@ -55,12 +40,6 @@ class HrEmployeeDependent(models.Model):
         selection=[
             ('m', 'Male'),
             ('f', 'Female')])
-
-    dependent_rg = fields.Char(
-        string='RG')
-
-    dependent_cpf = fields.Char(
-        string='CPF')
 
     have_alimony = fields.Boolean(
         string='Tem Pensão?')
@@ -107,8 +86,8 @@ class HrEmployeeDependent(models.Model):
         ).create(vals)
         return patient
 
-    @api.onchange('dependent_cpf')
+    @api.onchange('cnpj_cpf')
     def onchange_cpf(self):
-        cpf = cnpj_cpf.formata(str(self.dependent_cpf))
+        cpf = cnpj_cpf.formata(str(self.cnpj_cpf))
         if cpf:
-            self.dependent_cpf = cpf
+            self.cnpj_cpf = cpf

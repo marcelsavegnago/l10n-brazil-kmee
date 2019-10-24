@@ -32,9 +32,6 @@ class HrEmployeeDependent(models.Model):
     employee_id = fields.Many2one(comodel_name="hr.employee",
                                   string="Employee ID")
 
-    dependent_name = fields.Char(string="Dependent name", size=64,
-                                 required=True)
-
     dependent_dob = fields.Date(string="Date of birth", required=True)
 
     dependent_type_id = fields.Many2one(
@@ -50,10 +47,6 @@ class HrEmployeeDependent(models.Model):
     dependent_gender = fields.Selection(
         string="Gender", selection=[("m", "Male"), ("f", "Female")]
     )
-
-    dependent_rg = fields.Char(string="RG")
-
-    dependent_cpf = fields.Char(string="CPF")
 
     have_alimony = fields.Boolean(string="Tem Pensão?")
 
@@ -88,9 +81,10 @@ class HrEmployeeDependent(models.Model):
         # O sudo foi utilizado para evitar a permissão de criação de contato
         # para o funcionário.
         #
-        patient = super(HrEmployeeDependent,
-                        self.sudo().with_context(ctx)).create(vals)
-        return patient
+        dependent = super(HrEmployeeDependent,
+                          self.sudo().with_context(ctx)
+                          ).create(vals)
+        return dependent
 
     @api.onchange('cnpj_cpf')
     def onchange_cpf(self):

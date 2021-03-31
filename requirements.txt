@@ -6,7 +6,7 @@ unidecode
 email_validator
 py3o.template==0.9.11
 sh==1.12.13
-lxml==3.7.3
+lxml==4.6.3
 signxml==2.3.0
 python-dateutil==2.6.0
 pytz==2016.10

@@ -1,6 +1,6 @@
 suds
 num2words
-pillow==3.4.2
+pillow==9.0.1
 reportlab
 unidecode
 email_validator
